@@ -18,8 +18,8 @@ drawList = (ls) ->
 	for item in ls
 		l.append '<section id='+item+'>'+item+'</section>'
 	if $('#me') then $('#me').click =>
-		#location.replace 'https://plus.google.com/100168721734212748375'
-		console.log 'fobbiden'
+		location.replace 'https://plus.google.com/100168721734212748375'
+		#console.log 'fobbiden'
 	if $('#ideas') then $('#ideas').click =>
 		drawList index
 		drawIdeas()

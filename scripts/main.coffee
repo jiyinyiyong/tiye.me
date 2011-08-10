@@ -18,7 +18,7 @@ drawList = (ls) ->
 	for item in ls
 		l.append '<section id='+item+'>'+item+'</section>'
 	if $('#me') then $('#me').click =>
-		#location.replace 'http://plus.google.com'
+		#location.replace 'https://plus.google.com/100168721734212748375'
 		console.log 'fobbiden'
 	if $('#ideas') then $('#ideas').click =>
 		drawList index
@@ -108,10 +108,10 @@ drawInitial = ->
 		r.append '<nav class="x">'+item+'</nav>'
 	r.append '<nav class="x lin" id="initial2">最多可以看看在知乎(link)写的问题和描述, 算是心得体会和困惑吧</nav>'
 	$('#initial2').click =>
-		location.replace 'http://zhihu.com'
+		location.replace 'http://www.zhihu.com/people/jiyinyiyong'
 	r.append '<nav class="x lin" id="initial3">回到本页面的主题, 关于无穷巷, 已有我的笔记(link)说明</nav>'
 	$('#initial3').click =>
-		location.replace 'http://zhihu.com'
+		location.replace 'http://jiyinyiyong.blog.163.com/blog/static/64699876201152124822536/'
 	for item in initial4
 		r.append '<nav class="x">'+item+'</nav>'
 drawUntitled = ->

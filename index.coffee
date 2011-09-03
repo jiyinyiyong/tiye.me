@@ -8,6 +8,7 @@ html ->
 		script src: 'scripts/coffee-script.js'
 		script src: 'scripts/jquery.js'
 		coffeescript src: 'scripts/main.coffee'
+		coffeescript src: 'scripts/map.coffee'
 		#script src: 'scripts/main.js'
 	body ->
 		nav ->

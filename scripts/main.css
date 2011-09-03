@@ -68,3 +68,5 @@ nav {
 				background: hsl(20,90%,90%); }
 			.lin:hover {
 				-moz-transform: scale(1.02); }
+img {
+	border: 10px, solid, hsl(300, 80%, 30%);}

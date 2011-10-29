@@ -1,0 +1,12 @@
+
+p{
+	width: 400px;
+	height: 30px;
+	text-align: center;
+	font-family: 'Ubuntu';
+	font-weight: bold;
+	-moz-border-radius: 8px;
+	-moz-transition-duration: 1s;}
+	p:hover {
+		background: hsl(320,70%,50%);
+		-moz-transition-duration: 0s;}

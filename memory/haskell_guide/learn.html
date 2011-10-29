@@ -1,0 +1,514 @@
+<html>
+	<head>
+	<meta charset='utf-8'/>
+	<title>haskell notes</title>
+	<link rel='stylesheet' href='guide.css'/>
+	</head>
+	<body>
+	<pre>
+
+还没认真开始学, 所以没内容.. 待笔记..
+
+http://learnyouahaskell.com/introduction#about-this-tutorial
+
+http://projecteuler.net/index.php?section=problems
+
+ 
+
+代码后跟文字采用 Haskell 注释"--", 文字中代码使用双引号包裹,
+
+代码中可变的参数, 双引号中使用"#{}", 执行输出结果用"-->"引出.
+
+比如"cd #{filename}"表示进入自己指定目录.
+
+ 
+
+交互式命令行可用 GHC 或者 Hugs, 我用的 GHC, 安装 ghc6,
+
+在同一个目录建立文件夹内建立文件"#{filename}.hs", 把代码写成脚本,
+
+用"ghci"命令启动, "Ctrl+d"以及":quit"和":q"退出 ghci.
+
+输入":l  #{filename}"载入, 修改文件后, 运行":r"重新载入.
+
+ghci 命令冒号":"开头, 输入":?"获取 help, ":{"和":}"开始和结束多行输入.
+
+":! #{command}"执行终端命令, ":set prompt #{string_prompt}"来改提示.
+
+"$HOME/.ghci"或者"$HOME/.ghc/ghci.conf"存放配置,
+
+更多没弄懂, 包括编译, 上面提及内容文档在这里:
+
+http://www.haskell.org/ghc/docs/7.0.4/html/users_guide/index.html
+
+
+
+逻辑运算: && , || , not , True , False , == , /= , 不同类型不能进行比较.
+
+backticks, infix, prefix: "div 20 4"也可以写作"20 `div` 4". 也可以用 let `div` a b 定义, 不影响.
+
+Haskell 中定义变量定义函数不需要严格的先后顺序来保证调用.
+
+if 语句必须有 else 结尾, 测试没有 then 也是 prase error 的, 不含缩进写法如下:
+
+doubleSmallNumber x = if x > 100 then x else x*2   -- 或者把 then 和 else 换一行用缩进.
+
+函数名不能以大写字母开头, 单引号可以在函数中间或者结尾, 表示严格版本.
+
+函数可以没有参数, 输出字符串时需要双引号,
+
+交互式命令行当中使用 let 来定义变量和函数, 脚本当中不需要.
+
+ 
+
+[1, 2] ++ [3,4] -- 连接列表, --> [1, 2, 3, 4]
+
+"hello" ++ " " ++ "world" -- 字符串是列表, 必须使用双引号, --> "hello world"
+
+1: [2, 3, 4] -- 冒号在列表之前加入元素, 同理字符和字符串; 只能用在开头.
+
+1: 2: 3: [] -- 其实等同于 [1, 2, 3], 可以连写的.
+
+[1, 2, 3] !! 1 -- 取出'1'位置的数字, 从 0 开始计数, 因此是 --> 2
+
+[[1, 2], [3, 4]] -- 可以用":{ #{list} }:"输入为多行, "!!"连写可以取出.
+
+数组可按字典序比较大小, > , < , >= , <= , == , /=
+
+ 
+
+"#{function} #{list}"操作的数组的函数:
+
+head 取出第一个; tail head其余; last 最后一个; init last其余.
+
+length [1, 2, 3] -- 取长度 --> 3
+
+null [] -- 判断是否空数组 --> True
+
+reverse [1, 2, 3] -- 倒转顺序 --> [3, 2, 1]
+
+take 3 [1, 2, 3, 4] -- 取出前3个生成数组 --> [1, 2, 3]
+
+drop 3 [1, 2, 3, 4] -- 去掉前3个剩下组成数组 --> [4]
+
+maximum , minimum , sum , product , 对应运算.
+
+elem 4 [3, 4] -- 判断是否存在 --> True
+
+ 
+
+[1.. 3] --数组自动生成, 同理 ['1'.. '9'] , ['a'.. 'z'] , ['A'.. 'z']
+
+[6, 4.. 1] -- 按照规律生成, 不支持幂次的规律, 可以倒置 --> [6, 4, 2]
+
+take 3 [1, 3..] -- 支持无穷数列, 常用 take 取出 --> [1, 3, 5]
+
+take 10 (cycle [1,2,3]) -- cycle 函数,也支持字符串 --> [1,2,3,1,2,3,1,2,3,1]
+
+take 10 (repeat 5) -- repeat 也是无穷, 同理字符串 --> [5,5,5,5,5,5,5,5,5,5]
+
+replicate 3 10 -- -> [10,10,10]
+
+
+
+[x * 2 | x <- [1.. 3]] -- 竖线左边是取出的结果, 右边限制条件 --> [2, 4, 6]
+
+[x * 2 | x <- [1.. 10], x*2 >= 12] -- 多个限制条件用逗号 --> [12, 14, 16, 18, 20]
+
+[x | x <- [1..10], odd x] -- 条件 oddd x 结果为 True 时输出 --> [1, 3, 5, 7, 9]
+
+[ x*y | x <- [2,5,10], y <- [8,10,11]] -- 注意结合顺序, 列表类似 --> [16,20,22,40,50,55,80,100,110]
+
+length' xs = sum [1 | _ <- xs] -- 注意 "_" 表示任意物件
+
+[ [ x | x <- xs, even x ] | xs <- xxs] -- 过滤二维数组的语法, 其中 xxs 未给出.
+
+
+
+[(1, 2), (2, 3)] -- 用列表内嵌元组限制列表内的元素格式相同, 否则报错.
+
+fst , snd 函数, 仅仅支持 pair, 但元组可以有不同数据类型.
+
+zip [1,2,3,4,5] [5,5,5,5,5] -- 按照数量少的个数 --> [(1,5),(2,5),(3,5),(4,5),(5,5)]
+
+[ (a,b,c) | c <- [1..10], b <- [1..c], a <- [1..b], a^2 + b^2 == c^2, a+b+c == 24] -- 强大 --> [(6, 8, 10)]
+
+[a + b | (a, b) <- xs] -- 对于元组实用 List Comprehension.
+
+
+
+static type system 编译前差错, type inference 不用每次声明
+
+:t 'a' -> 'a' :: Char -- ":t #{char}"用来察看类型, 这是字符串
+
+:t "a" -> "a" :: [Char] -- 字符串和字符串数组的区别
+
+removeNonUppercase :: [Char] -> [Char] -- 定义类型
+
+removeNonUppercase st = [ c | c <- st, c `elem` ['A'..'Z']] -- 定义函数, 可以自动推断
+
+addThree :: Int -> Int -> Int -> Int -- 经常就,, 最后一个 Int 是返回值
+
+addThree x y z = x + y + z -- 提到如果不懂, 先写函数, 用":t"查看
+
+ 
+
+Int -2147483648 ~ 2147483647
+
+Interger not bounded 无界的
+
+Float is a real floating point with single precision,
+
+Double is a real floating point with double the precision!
+
+Bool is a boolean type. It can have only two values: True and False.
+
+Char represents a character. It's denoted by single quotes. A list of characters is a string.
+
+( ) 是类型, 元组和列表的类型只能看了.
+
+fst :: (a, b) -> a -- a 和 b 称为: type variable, 函数称为 polymorphic functions
+
+(+) 是 infix function ,可以通过"(+) 1 2"调用"--> 3"
+
+(==) :: (Eq a) => a -> a -> Bool  -- "=>" 表示: "class constraint"
+
+意思是, 参数满足类型约束,  a 属于 Eq 这个类, 只有 Eq 这个类里数相互可以比较.
+
+All standard Haskell types except for IO and functions are a part of the Eq typeclass.
+
+Eq is used for types that support equality testing. == and /=
+
+Ord is for types that have an ordering. >, <, >= and <=
+
+All the types we covered so far except for functions are part of Ord.
+
+compare :: (Ord a) => a -> a -> Ordering , Ordering is a type that can be GT, LT or EQ
+
+show :: (Show a) => a -> String , Members of Show can be presented as strings.
+
+All types covered so far except for functions are a part of Show.
+
+read "[1,2,3,4]" ++ [3] -- Read is sort of the opposite typeclass of Show. --> [1, 2, 3, 4]
+
+read :: (Read a) => String -> a , read 要求是字符串, 单引号 Char 不行
+
+read "[1,2,3,4]" :: [Int] -- read 用法 --> [1, 2, 3, 4]
+
+
+
+Enum members are sequentially ordered types — they can be enumerated.
+
+['a'.. 'z'] -- 按照说明给出的都是该类表达式生成的, 可是":t"查看却不像前面几个类型的显示.
+
+minBound :: (Bounded a) => a -- 看不懂这句: In a sense they are polymorphic constants.
+
+minBound :: Int -- 看去是最大最小边界两个函数, 元组中类似, 列表不接受 --> -2147483648
+
+20 :: (Num t) => t , 这个地方还是看不懂的
+
+Num is a numeric typeclass. Its members have the property of being able to act like numbers. 
+
+20 :: Float  20.0 -- It appears that whole numbers are also polymorphic constants.
+
+(*) :: (Num a) => a -> a -> a , (*) accepts all numbers, 与数值相似, (疑问)
+
+Integral is also a numeric typeclass. In this typeclass are Int and Integer.
+
+Floating includes only floating point numbers, so Float and Double.
+
+fromIntegral (length [1,2,3,4]) + 3.2 -- 还有这个(怀疑): (Num b) => length :: [a] -> b
+
+
+
+Haskell 定义函数可以用 let , 指定类型只能在文件中进行, 至少 let 用上去报错.
+
+注意定义 7 和定义 x 不可以调换顺序, 会发生覆盖, 似乎下往上读的, 匹配又是上往下的,
+
+lucky :: (Integral a) => a -> String
+
+lucky 7 = "LUCKY NUMBER SEVEN!"
+
+lucky x = "Sorry, you're out of luck, pal!"
+
+函数调用时会去匹配写好的模式, 注意尽可能将需要的模式涵盖以免出错.
+
+factorial :: (Integral a) => a -> a  factorial 0 = 1
+
+factorial n = n * factorial (n - 1)
+
+注意用法, 操作元组可以直接用变量, 也可以像下面这样:
+
+addVectors :: (Num a) => (a, a) -> (a, a) -> (a, a)
+
+addVectors (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
+
+可以自己定义超过二维的数组取头部, 注意下划线的用法, 忽略类型的区别:
+
+first :: (a, b, c) -> a
+
+first (x, _, _) = x
+
+因为 [1, 2, 3] 实际上是 1:2:3:[] 的语法糖, 有下面写法, 另外注意 error 用法.
+
+head' :: [a] -> a
+
+head' [] = error "Can't call head on an empty list, dummy!"
+
+head' (x:_) = x
+
+下面的用法更有趣, 不过类型 Show 很让我费解, 函数以外都属于 Show.
+
+tell :: (Show a) => [a] -> String
+
+tell [] = "The list is empty"
+
+tell (x:[]) = "The list has one element: " ++ show x
+
+tell (x:y:[]) = "The list has two elements: " ++ show x ++ " and " ++ show y
+
+tell (x:y:_) = "This list is long. The first two elements are: " ++ show x ++ " and " ++ show y
+
+于是还有了用递归方式求数组长度的, 个人没有感想.
+
+length' :: (Num b) => [a] -> b
+
+length' [] = 0
+
+length' (_:xs) = 1 + length' xs
+
+形如 xs@(x:y:ys) 来限定 xs 的类型, 用法
+
+capital :: String -> String
+
+capital "" = "Empty string, whoops!"
+
+capital all@(x:xs) = "The first letter of " ++ all ++ " is " ++ [x] 
+
+符号 ++ 用在连接列表, 不能用在 Patten Match 当中, 不合理.
+
+ 
+
+称为 Guard 的选择语句, 相当 switch/case, 可以缩进或不缩进, 可以嵌套.
+
+max' :: (Ord a) => a -> a -> a  max' a b
+
+       | a > b     = a
+
+       | otherwise = b
+
+case 意思大概那样, 实际上和 where 和其他的用法可对转, 具体看教程.
+
+head' :: [a] -> a
+
+head' xs = case xs of [] -> error "No head for empty lists!"
+
+                        (x:_) -> x
+
+
+where 关键字用来简化函数当中某个频繁语句的书写, 可以缩进或者不缩进,
+
+f x = x * y where y = y * 4 -- 还可以用 where (a, b) = (1, 3) 的方式简化表达式.
+
+where 绑定的内容是私有的, 仅函数内部可见, 不能在函数间共用.
+
+教程提到了 global 的用法, 实际上等同于定义函数作为关键字.
+
+下面例子有迷惑性, 实际是直接完成了 pattern matching, 疯狂.
+
+initials :: String -> String -> String
+
+initials firstname lastname = [f] ++ ". " ++ [l] ++ "."
+
+      where (f:_) = firstname
+
+            (l:_) = lastname
+
+细看 where 还被用来定义函数.
+
+calcBmis :: (RealFloat a) => [(a, a)] -> [a]
+
+calcBmis xs = [bmi w h | (w, h) <- xs]
+
+      where bmi weight height = weight / height ^ 2
+
+
+
+let 对比 where, 不局限于函数; 但不能跨越 guard 使用, 非常 local,
+
+cylinder :: (RealFloat a) => a -> a -> a
+
+cylinder r h =
+
+      let sideArea = 2 * pi * r * h
+
+           topArea = pi * r ^2
+
+      in  sideArea + 2 * topArea
+
+where 属于语法构造, 而 let 是独立的表达式, 可以用在各种位置,
+
+4 * (let a = 9 in a + 1) + 2 --> 42
+
+[let square x = x * x in (square 5, square 3, square 2)] --> [(25, 9, 4)]
+
+(let a = 100; b = 200; c = 300 in a*b*c, let foo="Hey "; bar = "there!" in foo ++ bar)
+
+--> (6000000,"Hey there!")  这一句当中分号不可以省略, 最后一个绑定可以省略.
+
+(let (a,b,c) = (1,2,3) in a+b+c) * 100  --> 600
+
+let 还可以用在 list comprehension 里边, 这里没有看到 in 关键词了.
+
+calcBmis :: (RealFloat a) => [(a, a)] -> [a]
+
+calcBmis xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2, bmi >= 25.0]
+
+let 可以用在定义函数当中, 这也就是 ghci 里的常用.
+
+let boot x y z = x * y + z in boot 3 4 2
+
+就因为 let 过于 local, 所以不能代替 where 用在定义函数.
+
+ 
+
+Haskell 没有 for 和 while, 思维上用递归 recursion 理解, 天旋地转.
+
+maximum' :: (Ord a) => [a] -> a
+
+maximum' [] = error "maximum of empty list"
+
+maximum' [x] = x
+
+maximum' (x:xs) = max x (maximum' xs)
+
+例子比如, 递归生成 n 个 x 的列表:
+
+replicate' :: (Num i, Ord i) => i -> a -> [a]
+
+replicate' n x
+
+      | n <= 0    = []
+
+      | otherwise = x:replicate' (n-1) x
+
+用了 Num 和 Ord 两者的原因作者写到 Num 不是 Ord 的子集.
+
+take 作为例子:
+
+take' :: (Num i, Ord i) => i -> [a] -> [a]
+
+take' n _
+
+     | n <= 0   = []
+
+take' _ []     = []
+
+take' n (x:xs) = x : take' (n-1) xs  
+
+reverse 作为例子:
+
+reverse' :: [a] -> [a]
+
+reverse' [] = []
+
+reverse' (x:xs) = reverse' xs ++ [x]  
+
+repeat 作为例子:
+
+repeat' :: a -> [a]
+
+repeat' x = x:repeat' x
+
+zip 作为例子:
+
+zip' :: [a] -> [b] -> [(a,b)] 
+
+zip' _ [] = [] 
+
+zip' [] _ = [] 
+
+zip' (x:xs) (y:ys) = (x,y):zip' xs ys
+
+elem 作为例子:
+
+elem' :: (Eq a) => a -> [a] -> Bool  
+
+elem' a [] = False  
+
+elem' a (x:xs)
+
+      | a == x    = True
+
+      | otherwise = a `elem'` xs
+
+quicksort 被很多人用来展示 Haskell 的优雅,
+
+运行这段代码发现 ghc 有必要将 smallerSorted 进行对应缩进, 而不是连写在 let 后面:
+
+quicksort :: (Ord a) => [a] -> [a]  
+
+quicksort [] = [] 
+
+quicksort (x:xs) =
+
+      let
+
+            smallerSorted = quicksort [a | a <- xs, a <= x]
+
+            biggerSorted = quicksort [a | a <- xs, a > x]
+
+      in  smallerSorted ++ [x] ++ biggerSorted
+
+递归的方式往往是设定规则和边缘, 对于列表往往上头尾部和空列表.
+
+
+高阶函数 higher order function 是 Haskell 体验中不可少的一部分,
+
+多参数函数相当于函数接受参数返回另一函数来接收下一个参数, 称为 curried functions.
+
+max 4 5 --> 5 -- 和 (max 4) 5 是一致的, 因为 (max 4) 结束返回了一个函数 (->)
+
+max :: (Ord a) => a -> a -> a -- 可理解为每接受一个参数 a返回一个函数 (->), 再接受参数,
+
+max :: (Ord a) => a -> (a -> a) -- 这个写法意思一样, 可我不明白那里区别了..
+
+还提到可以将只部分执行的函数作为参数传递的用法, 没有详解.
+
+multThree :: (Num a) => a -> (a -> (a -> a)) -- 像把后面括号部分作为前面已执行部分的参数(?)
+
+let m x y z = x*y*z -- 来看具体的效果
+
+:t m --> m :: Num a => a -> a -> a -> a
+
+:t (m 9) --> (m 9) :: Num a => a -> a -> a -- 表明返回了函数, 注意参数个数.
+
+let m'9 = m 9 -- 将一个部分执行的函数结果传递给 m'9
+
+:t m'9 --> m'9 :: Integer -> Integer -> Integer -- 类型改变倒是在意料之外, 对浮点数报错了..
+
+(/10) 200 --> 20.0 -- 因此还有 let divide'10 = (/10) 的写法, 将其写作函数.
+
+具体写法如下, 这个类型, 函数接受一个参数返回浮点数, 根据实际来了..
+
+divideByTen :: (Floating a) => a -> a
+
+divideByTen = (/10)
+
+看来, 几乎所有, 中置表达式都可以括号家简写,,
+
+isUpperAlphanum :: Char -> Bool
+
+isUpperAlphanum = (`elem` ['A'..'Z'])
+
+作者说减号'-'例外, 因为负数, 因而只能用 subtrsct
+
+(subtract 4) 3 --> -1 -- 注意参数顺序, (4) (3) (-1)
+
+部分执行的函数如 (subtract 4) 直接在 ghci 执行会报错, --> No instance for (Show (a0 -> a0)) ...
+
+因为返回的 (->) 不是类型 Show 的某个实例, 看来 ghci 的输出都这么搞的.
+
+
+</pre>
+</html>

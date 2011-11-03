@@ -242,13 +242,10 @@ let m'9 = m 9 -- 将一个部分执行的函数结果传递给 m'9
 具体写法如下, 这个类型, 函数接受一个参数返回浮点数, 根据实际来了..
 divideByTen :: (Floating a) => a -> a
 divideByTen = (/10)
-看来, 几乎所有, 中置表达式都可以括号家简写,,
+看来, 几乎所有, 中置表达式都可以括号加简写,,
 isUpperAlphanum :: Char -> Bool
 isUpperAlphanum = (`elem` ['A'..'Z'])
 作者说减号'-'例外, 因为负数, 因而只能用 subtrsct
 (subtract 4) 3 --> -1 -- 注意参数顺序, (4) (3) (-1)
 部分执行的函数如 (subtract 4) 直接在 ghci 执行会报错, --> No instance for (Show (a0 -> a0)) ...
 因为返回的 (->) 不是类型 Show 的某个实例, 看来 ghci 的输出都这么搞的.
-goo
-	main
-	md

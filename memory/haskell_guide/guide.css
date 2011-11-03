@@ -1,9 +1,10 @@
 body {
-  background: #3d3029;
-  color: #fccffc;
-  line-height: 25px;
-  font-size: 15px;
+  background: #f5f5d6;
+  color: #000;
+  line-height: 26px;
+  font-size: 13px;
 }
 pre {
   font-family: "wenquanyi micro hei mono";
+  margin: 60px 200px;
 }

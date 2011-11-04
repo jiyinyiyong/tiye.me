@@ -9,11 +9,11 @@
 还没认真开始学, 所以没内容.. 待笔记..
 http://learnyouahaskell.com/introduction#about-this-tutorial
 http://projecteuler.net/index.php?section=problems
- 
+
 代码后跟文字采用 Haskell 注释"--", 文字中代码使用双引号包裹,
 代码中可变的参数, 双引号中使用"#{}", 执行输出结果用"-->"引出.
 比如"cd #{filename}"表示进入自己指定目录.
- 
+
 交互式命令行可用 GHC 或者 Hugs, 我用的 GHC, 安装 ghc6,
 在同一个目录建立文件夹内建立文件"#{filename}.hs", 把代码写成脚本,
 用"ghci"命令启动, "Ctrl+d"以及":quit"和":q"退出 ghci.
@@ -31,7 +31,7 @@ doubleSmallNumber x = if x > 100 then x else x*2   -- 或者把 then 和 else �
 函数名不能以大写字母开头, 单引号可以在函数中间或者结尾, 表示严格版本.
 函数可以没有参数, 输出字符串时需要双引号,
 交互式命令行当中使用 let 来定义变量和函数, 脚本当中不需要.
- 
+
 [1, 2] ++ [3,4] -- 连接列表, --> [1, 2, 3, 4]
 "hello" ++ " " ++ "world" -- 字符串是列表, 必须使用双引号, --> "hello world"
 1: [2, 3, 4] -- 冒号在列表之前加入元素, 同理字符和字符串; 只能用在开头.
@@ -39,7 +39,7 @@ doubleSmallNumber x = if x > 100 then x else x*2   -- 或者把 then 和 else �
 [1, 2, 3] !! 1 -- 取出'1'位置的数字, 从 0 开始计数, 因此是 --> 2
 [[1, 2], [3, 4]] -- 可以用":{ #{list} }:"输入为多行, "!!"连写可以取出.
 数组可按字典序比较大小, > , < , >= , <= , == , /=
- 
+
 "#{function} #{list}"操作的数组的函数:
 head 取出第一个; tail head其余; last 最后一个; init last其余.
 length [1, 2, 3] -- 取长度 --> 3
@@ -49,7 +49,7 @@ take 3 [1, 2, 3, 4] -- 取出前3个生成数组 --> [1, 2, 3]
 drop 3 [1, 2, 3, 4] -- 去掉前3个剩下组成数组 --> [4]
 maximum , minimum , sum , product , 对应运算.
 elem 4 [3, 4] -- 判断是否存在 --> True
- 
+
 [1.. 3] --数组自动生成, 同理 ['1'.. '9'] , ['a'.. 'z'] , ['A'.. 'z']
 [6, 4.. 1] -- 按照规律生成, 不支持幂次的规律, 可以倒置 --> [6, 4, 2]
 take 3 [1, 3..] -- 支持无穷数列, 常用 take 取出 --> [1, 3, 5]
@@ -74,7 +74,7 @@ removeNonUppercase :: [Char] -> [Char] -- 定义类型
 removeNonUppercase st = [ c | c <- st, c `elem` ['A'..'Z']] -- 定义函数, 可以自动推断
 addThree :: Int -> Int -> Int -> Int -- 经常就,, 最后一个 Int 是返回值
 addThree x y z = x + y + z -- 提到如果不懂, 先写函数, 用":t"查看
- 
+
 Int -2147483648 ~ 2147483647
 Interger not bounded 无界的
 Float is a real floating point with single precision,
@@ -101,7 +101,7 @@ Enum members are sequentially ordered types — they can be enumerated.
 minBound :: (Bounded a) => a -- 看不懂这句: In a sense they are polymorphic constants.
 minBound :: Int -- 看去是最大最小边界两个函数, 元组中类似, 列表不接受 --> -2147483648
 20 :: (Num t) => t , 这个地方还是看不懂的
-Num is a numeric typeclass. Its members have the property of being able to act like numbers. 
+Num is a numeric typeclass. Its members have the property of being able to act like numbers.
 20 :: Float  20.0 -- It appears that whole numbers are also polymorphic constants.
 (*) :: (Num a) => a -> a -> a , (*) accepts all numbers, 与数值相似, (疑问)
 Integral is also a numeric typeclass. In this typeclass are Int and Integer.
@@ -138,9 +138,9 @@ length' (_:xs) = 1 + length' xs
 形如 xs@(x:y:ys) 来限定 xs 的类型, 用法
 capital :: String -> String
 capital "" = "Empty string, whoops!"
-capital all@(x:xs) = "The first letter of " ++ all ++ " is " ++ [x] 
+capital all@(x:xs) = "The first letter of " ++ all ++ " is " ++ [x]
 符号 ++ 用在连接列表, 不能用在 Patten Match 当中, 不合理.
- 
+
 称为 Guard 的选择语句, 相当 switch/case, 可以缩进或不缩进, 可以嵌套.
 max' :: (Ord a) => a -> a -> a  max' a b
 	 | a > b     = a
@@ -180,7 +180,7 @@ calcBmis xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2, bmi >= 25.0]
 let 可以用在定义函数当中, 这也就是 ghci 里的常用.
 let boot x y z = x * y + z in boot 3 4 2
 就因为 let 过于 local, 所以不能代替 where 用在定义函数.
- 
+
 Haskell 没有 for 和 while, 思维上用递归 recursion 理解, 天旋地转.
 maximum' :: (Ord a) => [a] -> a
 maximum' [] = error "maximum of empty list"
@@ -197,39 +197,40 @@ take' :: (Num i, Ord i) => i -> [a] -> [a]
 take' n _
      | n <= 0   = []
 take' _ []     = []
-take' n (x:xs) = x : take' (n-1) xs  
+take' n (x:xs) = x : take' (n-1) xs
 reverse 作为例子:
 reverse' :: [a] -> [a]
 reverse' [] = []
-reverse' (x:xs) = reverse' xs ++ [x]  
+reverse' (x:xs) = reverse' xs ++ [x]
 repeat 作为例子:
 repeat' :: a -> [a]
 repeat' x = x:repeat' x
 zip 作为例子:
-zip' :: [a] -> [b] -> [(a,b)] 
-zip' _ [] = [] 
-zip' [] _ = [] 
+zip' :: [a] -> [b] -> [(a,b)]
+zip' _ [] = []
+zip' [] _ = []
 zip' (x:xs) (y:ys) = (x,y):zip' xs ys
 elem 作为例子:
-elem' :: (Eq a) => a -> [a] -> Bool  
-elem' a [] = False  
+elem' :: (Eq a) => a -> [a] -> Bool
+elem' a [] = False
 elem' a (x:xs)
 	| a == x    = True
 	| otherwise = a `elem'` xs
 quicksort 被很多人用来展示 Haskell 的优雅,
 运行这段代码发现 ghc 有必要将 smallerSorted 进行对应缩进, 而不是连写在 let 后面:
-quicksort :: (Ord a) => [a] -> [a]  
-quicksort [] = [] 
+quicksort :: (Ord a) => [a] -> [a]
+quicksort [] = []
 quicksort (x:xs) =
 	let
 		smallerSorted = quicksort [a | a <- xs, a <= x]
 		biggerSorted = quicksort [a | a <- xs, a > x]
 	in  smallerSorted ++ [x] ++ biggerSorted
 递归的方式往往是设定规则和边缘, 对于列表往往上头尾部和空列表.
+
 高阶函数 higher order function 是 Haskell 体验中不可少的一部分,
 多参数函数相当于函数接受参数返回另一函数来接收下一个参数, 称为 curried functions.
 max 4 5 --> 5 -- 和 (max 4) 5 是一致的, 因为 (max 4) 结束返回了一个函数 (->)
-max :: (Ord a) => a -> a -> a -- 可理解为每接受一个参数 a返回一个函数 (->), 再接受参数,
+max :: (Ord a) => a -> a -> a -- 可理解为每接受一个参数 a 返回一个函数 (->), 再接受参数,
 max :: (Ord a) => a -> (a -> a) -- 这个写法意思一样, 可我不明白那里区别了..
 还提到可以将只部分执行的函数作为参数传递的用法, 没有详解.
 multThree :: (Num a) => a -> (a -> (a -> a)) -- 像把后面括号部分作为前面已执行部分的参数(?)
@@ -249,3 +250,120 @@ isUpperAlphanum = (`elem` ['A'..'Z'])
 (subtract 4) 3 --> -1 -- 注意参数顺序, (4) (3) (-1)
 部分执行的函数如 (subtract 4) 直接在 ghci 执行会报错, --> No instance for (Show (a0 -> a0)) ...
 因为返回的 (->) 不是类型 Show 的某个实例, 看来 ghci 的输出都这么搞的.
+
+可以用函数作为参数, 注意类型定义的括号是必须的:
+applyTwice :: (a -> a) -> a -> a
+applyTwice f x = f (f x)
+applyTwice (+3) 10 --> 16
+applyTwice ("HAHA " ++) "HEY" --> "HAHA HAHA HEY"
+applyTwice (++ " HAHA") "HEY" --> "HEY HAHA HAHA"
+applyTwice (3:) [1] --> [3,3,1]
+zipWith 是高阶函数编程中一个重要函数, 接受一个函数/ 两个变量作为参数,
+a, b, c 未必要相同的类型, 不确定时先写出内容再 :t 看类型,
+边缘的情况, 数列长度不同时用 _ 表示:
+zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWith' _ [] _ = []
+zipWith' _ _ [] = []
+zipWith' f [x:xs] [y:ys] = f x y : zipWith' f xs ys
+准确基本的告诫函数可以广泛使用, zipWith' 函数:
+zipWith' (+) [4, 2, 5, 6] [2, 6, 2, 3] --> [6,8,7,9]
+zipWith' max [6, 3, 2, 1] [7, 3, 1, 5] --> [7,3,2,5]
+zipWith' (++) ["foo ", "bar ", "baz "] ["fighters", "hoppers", "aldrin"]
+--> ["foo fighters","bar hoppers","baz aldrin"]
+zipWith' (*) (replicate 5 2) [1..] --> [2,4,6,8,10]
+zipWith' (zipWith' (*)) [[1,2,3],[3,5,6],[2,3,4]] [[3,2,2],[3,4,5],[5,4,3]]
+--> [[3,4,6],[9,20,30],[10,12,12]]
+对比命令式编程那种循环加检测来判断是否符合条件的方式,
+函数式编程用抽象的方式探测和过滤是否满足条件并完成计算.
+另一个 flip 函数, 接受一个缺两参数的函数将两参数顺序调换,
+这里 x, y 是 f, g 隐含的参数, 看去有些突兀:
+flip' :: (a -> b -> c) -> (b -> a -> c)
+flip' f = g
+	where g x y = f y x
+而类型定义中后一个括号可有可无, 不影响接收参数,
+另外直接明写也是可以的:
+flip' :: (a -> b -> c) -> b -> a ->c
+flip' f x y = f y x
+看下用例, (flip' div) 作为参数传给 zipWith:
+flip' zip [1..5] "hello" -> [('h',1),('e',2),('l',3),('l',4),('o',5)]
+zipWith (flip' div) [2, 2..] [10, 8.. 2] --> [5, 4, 3, 2, 1]
+
+map 函数接收一个函数和一个列表作为参数,
+返回列表中元素逐个用函数处理的值的列表:
+map' :: (a -> b) -> [a] -> [b]
+map' _ [] = []
+map' f (x:xs) => f x : map' f xs
+map 函数属于高阶函数少有的广泛使用, 看例子:
+map (+3) [1, 5, 3, 1, 6] --> [4,8,6,4,9]
+map (++ "!") ["BIFF", "BANG", "POW"] --> ["BIFF!","BANG!","POW!"]
+map (replicate 3) [3..6] --> [[3,3,3],[4,4,4],[5,5,5],[6,6,6]]
+map (map (^2)) [[1,2],[3,4,5,6],[7,8]] --> [[1,4],[9,16,25,36],[49,64]]
+map fst [(1,2),(3,5),(6,3),(2,6),(2,5)] --> [1,3,6,2,2]
+map 函数的功能用列表解析模拟, 比如:
+[x+3 | x <- [1,5,3,1,6]] --> [4,8,6,4,9]
+map 的写法相较更清晰, 特别嵌套使用不会因为括号而糊涂.
+filter函数接收一个判断函数 p 加一个列表,
+返回经函数 p 判断为真的值所组成的列表:
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' _ [] = []
+filter' p (x:xs)
+	| p x = x : filter' p xs
+	| otherwise = filter' p xs
+当 p x 返回 True 时, 和非时分开两个结果:
+filter (>3) [1,5,3,2,1,6,4,3,2,1] --> [5,6,4]
+filter (==3) [1,2,3,4,5] --> [3]
+filter even [1..10] --> [2,4,6,8,10]
+let notNull x = not (null x) in filter notNull [[1,2,3],[],[3,4,5],[2,2],[],[],[]]
+--> [[1,2,3],[3,4,5],[2,2]]
+filter (`elem` ['a'..'z']) "u LaUgH aT mE BeCaUsE I aM diFfeRent"
+--> "uagameasadifeent"
+filter (`elem` ['A'..'Z']) "i lauGh At You BecAuse u r aLL the Same"
+--> "GAYBALLS"
+filter 和列表解析选取还是考虑可读性, 因为功能相近,
+列表解析中可以用 && 来模拟多层的筛选, 或者多层列表解析.
+quicksort 算法因此稍微简化一些来写:
+quicksort :: (Ord a) => [a] -> [a]
+quicksort [] = []
+quicksort (x:xs) =
+	let
+		smallerSorted = quicksort (filter (<=x) xs)
+		biggerSorted = quicksort (filter (>x) xs)
+	in smallerSorted ++ [x] ++ biggerSorted
+列表解析和高阶函数有时轻松处理命令式编程中大量循环的判断,
+而且由于惰性计算, 多余的 filter 和 map 也能避免重复执行(?).
+largestDivisible :: (Integral a) => a
+largestDivisible = head (filter p [100000, 99999..])
+	where p x = x `mod` 3829 == 0
+例子中当取出第一个满足的数时不再计算, 得益于惰性计算.
+
+takeWhile 函数接收一个判断和一个列表作为参数,
+顺序判断每个元素, 将返回错误前的元素组成列表返回:
+takeWhile' :: (a -> Bool) -> [a] -> [a]
+takeWhile' p (x:xs)
+	| p x = x : takeWhile' p xs
+	| otherwise = []
+takeWhile 与 filter 相仿, 但前者在第一次产生 false 时即终止的.
+sum (takeWhile (<10000) (filter odd (map (^2) [1..]))) --> 166650
+sum (takeWhile (<10000) [n^2 | n <- [1..], odd (n^2)]) --> 166650
+列表解析的方式也可以写出该函数, 然而完全用列表解析会成为无限.
+然后来考虑角谷猜想, 即: 取一自然数(不含零)判断(mod x 2),
+真则取 x/2, 否则取(3*x+1), 继续对所取得数进行此步骤, 直到取出 1.
+记录此过程步骤, 问[1..100]有几个数步长(>15)?
+chain :: (Integral a) => a -> [a]
+chain n
+	| even n = n : chain (n `div` 2)
+	| odd n = n : chain (n*3 + 1)
+注意了不能用(/2)代替上面的除以 2, 似乎是浮点数问题,
+另外 1 在程序中特别处理, 看例子:
+chain 10 --> [10,5,16,8,4,2,1]
+chain 1 --> [1]
+然后用 numLongChains 来返回结果, 用 isLong 来判断长短:
+numLongChains :: Int
+numLongChains = length (filter isLong (map chain [1..100]))
+	where isLong xs = length xs > 15
+使用 Int 的原因是 length 返回值是 Int 类型的, 具体看原文.
+另外还能使用(map (*) [1..]), 返回元素函数的列表,
+[(0*),(1*),(2*),(3*),(4*),(5*)...
+然而这不属于 Show 于是不能打印. 用以下方式探测:
+let listOfFuns = map (*) [0..]
+(listOfFuns !! 4) 5 --> 20

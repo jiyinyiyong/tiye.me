@@ -21,6 +21,7 @@ http://projecteuler.net/index.php?section=problems
 ghci 命令冒号":"开头, 输入":?"获取 help, ":{"和":}"开始和结束多行输入.
 ":! #{command}"执行终端命令, ":set prompt #{string_prompt}"来改提示.
 "$HOME/.ghci"或者"$HOME/.ghc/ghci.conf"存放配置,
+注意可能要设置配置文件权限只给 owner 可写, 如出错, ghci 中会提示.
 更多没弄懂, 包括编译, 上面提及内容文档在这里:
 http://www.haskell.org/ghc/docs/7.0.4/html/users_guide/index.html
 逻辑运算: && , || , not , True , False , == , /= , 不同类型不能进行比较.
@@ -229,6 +230,7 @@ quicksort (x:xs) =
 
 高阶函数 higher order function 是 Haskell 体验中不可少的一部分,
 多参数函数相当于函数接受参数返回另一函数来接收下一个参数, 称为 curried functions.
+Haskell B. Curry 的名字被使用了, curried 函数简单说是参数分步代入.
 max 4 5 --> 5 -- 和 (max 4) 5 是一致的, 因为 (max 4) 结束返回了一个函数 (->)
 max :: (Ord a) => a -> a -> a -- 可理解为每接受一个参数 a 返回一个函数 (->), 再接受参数,
 max :: (Ord a) => a -> (a -> a) -- 这个写法意思一样, 可我不明白那里区别了..
@@ -367,3 +369,132 @@ numLongChains = length (filter isLong (map chain [1..100]))
 然而这不属于 Show 于是不能打印. 用以下方式探测:
 let listOfFuns = map (*) [0..]
 (listOfFuns !! 4) 5 --> 20
+Lambdas 基本用来写一次性匿名函数代入高阶函数当中,
+书写时先用'\'再写参数再写"->"再写函数体最后包围以括号,
+在上面的例子中直接用 Lambdas 代替 filter 的判断:
+numLongChains :: Int
+numLongChains = length (filter (\xs -> length xs > 15) (map chain [1..100]))
+像(+3)与(\x -> x+3)等价, 前者的简洁, 后者没有必要.
+Lambdas 就像一般函数, 可以带有任意多个参数:
+zipWith (\a b -> (a * 30 + 3) / b) [5,4,3,2,1] [1,2,3,4,5]
+--> [153.0,61.5,31.0,15.75,6.6]
+Lambdas 中的模式匹配不能匹配两种模式, 比如[]和[x:xs], 慎用.
+map (\(a,b) -> a + b) [(1,2),(3,5),(6,3),(2,6),(2,5)]
+--> [3,8,9,8,7]
+不用括号的情况, 因函数本身被 curried, 有如下后三行等价:
+addThree :: a -> a -> a -> a
+addThree x y z = x+y+z
+addThree = \x -> \y -> \z -> x+y+z
+addThree = \x y z -> x+y+z
+借助 Lambdas 函数 flip 还可以这样写:
+flip' :: (a -> b -> c) -> b -> a -> c
+flip' f = \x y -> f y x
+
+前文中(x:xs)广泛使用, 因而制造 fold 一类函数来做此类事情,
+一个 fold 函数接收一个二元函数一个初值和一个列表为参数,
+逐个抽取列表元素与初值代入函数中运算, 返回值代入初值直到结束,
+比如 foldl 从左边开始取列表的元素,
+foldl' (a -> b -> a) -> a -> [b] -> a
+foldl' _ x [] = x
+foldl' f y (x:xs) = f y (foldl' x xs)
+再来写 sum 函数累加列表各元素:
+sum' :: (Num a) => [a] -> a
+sum' xs = foldl' (\acc x -> acc + x) 0 xs
+考虑到函数是 curried, 并且(+)可以简化, 简写:
+sum' :: (Num a) => [a] -> a
+sum' = foldl (+) 0
+一般出于 curried 特性, (foo a = bar b a)简写(foo = bar b).
+用 foldl 再现 elem 函数, 遍历一次列表:
+elem' :: (Eq a) => a  -> [a] -> Bool
+elem' y ys = foldl (\acc x -> if x==y then True else acc) False ys
+foldr 顾名思义是从列表右侧开始遍历, 解释不大懂,
+因为没有现成的(x:xs)模式匹配, 我用了 init/last 来:
+foldr' :: (a -> b -> b) -> b -> [a] -> b
+foldr' _ x [] = x
+foldr' f x xs = f x (foldr' f (last xs) (init xs))
+然后用来实现 map 函数:
+map' :: (a -> b) -> [a] -> [b]
+map' f xs = foldr (\x acc -> f x : acc) [] xs
+上面的 map 也能用 foldl 实现, 因为(++)非常灵活:
+map' f xs = foldl (\acc x -> acc ++ [f x]) [] xs
+foldl 和 foldr 区别在于无穷列表处理上, 未给例子.
+foldl1 与 foldr1 不用给初值, 因而对 [] 会出错.
+sum' = foldl1 (+)
+maximum' :: (Ord a) => [a] -> a
+maximum' = foldl1 (\x y -> if x>y then x else y)
+reverse' :: [a] -> [a]
+reverse' = foldl (\acc x -> x: acc) []
+product' :: (Num a) => [a] -> a
+product' = foldl1 (*)
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' p = foldr (\x acc -> if p x then x:acc else acc) []
+head' :: [a] -> a
+head' = foldl (\x _ -> x)
+last' :: [a] -> a
+last' = foldl (\_ y -> y)
+按最后意思, fold 将结果作为参数放置后, 这需要注意.
+其中 reverse 还可以写成 reverse' = foldl (flip (:)) []
+然后引入 scanl/ scanr 相近 fold 但打印每一步结果成数列:
+scanl' :: (a -> b -> a) -> a -> [b] -> [a]
+let scanl' f x xs = reverse $ foldl (\acc y -> f x y : acc) [x] xs
+scanl (+) 0 [3,5,2,1] --> [0,3,8,10,11]
+scanr (+) 0 [3,5,2,1] --> [11,8,3,1,0]
+scanl1 (\acc x -> if x > acc then x else acc) [3,4,5,3,7,9,2,1]
+--> [3,4,5,5,7,9,9,9]
+scanl (flip (:)) [] [3,2,1] --> [[],[3],[2,3],[1,2,3]]
+scan 常用在监测那写 fold 方式开展的运算过程,
+题目: 多少个自然数平方根和刚好(<1000)?
+sqrtSums :: Int
+sqrtSums = length (takeWhile (<1000) (scanl1 (+) (map sqrt [1..]))) + 1 --> 131
+这里不能用 filter 因其不能处理无穷列表, 而用 takeWhile.
+运算过程转化为列表在 Haskell 更容易处理.
+
+'$'称为"function application", 也直接是个函数:
+($) :: (a -> b) -> a -> b
+f $ x = f x
+其优先级最低, 其他操作符左联, ($)是右联的, 下面两两等效:
+sum (map sqrt [1..100])
+sum $ map sqrt [1..100]
+sqrt (3+4+9)
+sqrt $ 3+4+9
+sum (filter (> 10) (map (*2) [2..10]))
+sum $ filter (> 10) $ map (*2) [2..10]
+注意下面用法, 比如"($ 3) (4 +) --> 7":
+map ($ 3) [(4+), (10*), (^2), sqrt]
+--> [7.0,30.0,9.0,1.7320508075688772]
+复合函数: f (g x) , 其定义为;
+(.) :: (b -> c) -> (a -> b) -> a -> c
+f . g =\x -> f (g x)
+注意前一个函数接受的与后一个返回的类型应当一致,
+Lambdas 功能强大, 但很多时候用符合函数更为明了:
+map (\x -> negate (abs x)) [5,-3,-6,7,-3,2,-19,24]
+map (negate . abs) [5,-3,-6,7,-3,2,-19,24]
+--> [-5,-3,-6,-7,-3,-2,-19,-24]
+map (\xs -> negate (sum (tail xs))) [[1..5],[3..6],[1..7]]
+map (negate . sum . tail) [[1..5],[3..6],[1..7]]
+--> [-14,-15,-27]
+连续嵌套的带多个参数的表达式将末尾一个用($)隔开:
+sum (replicate 5 (max 6.7 8.9))
+(sum . replicate 5 . max 6.7) 8.9
+sum . replicate 5 . max 6.7 $ 8.9
+replicate 100 (product (map (*3) (zipWith max [1,2,3,4,5] [4,5,6,7,8])))
+replicate 100 . product . map (*3) . zipWith max [1,2,3,4,5] $ [4,5,6,7,8]
+replicate 100 $ product $ map (*3) $ zipWith max [1,2,3,4,5] [4,5,6,7,8]
+但其实($)隔开也是挺相似的, 上三句等价.
+sum' :: (Num a) => [a] -> a
+sum' xs = foldl (+) 0 xs
+不明白为甚这叫无点样式, 直接看以下成对对比的简写:
+fn x = ceiling (negate (tan (cos (max 50 x))))
+fn = ceiling . negate . tan . cos . max 50
+oddSquareSum :: Integer
+oddSquareSum = sum (takeWhile (<10000) (filter odd (map (^2) [1..])))
+oddSquareSum :: Integer
+oddSquareSum = sum . takeWhile (<10000) . filter odd . map (^2) $ [1..]
+作者为了可读性更好建议最后一条用 let/ in 写, 比较特别:
+oddSqureSum :: Int
+oddSqureSum =
+	let
+		oddSquares = filter odd $ map (^2) [1..]
+		belowLimit = takeWhile (<1000) oddSquares
+	in sum belowLimit
+

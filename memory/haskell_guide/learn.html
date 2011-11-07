@@ -6,9 +6,10 @@
 	</head>
 	<body>
 	<pre>
-还没认真开始学, 所以没内容.. 待笔记..
+本文为 Learn You Haskell 笔记, 摘录代码, 记录理解:
 http://learnyouahaskell.com/introduction#about-this-tutorial
-http://projecteuler.net/index.php?section=problems
+协议了解不多, 总之主干和内容都按原作者:
+http://creativecommons.org/licenses/by-nc-sa/3.0/
 
 代码后跟文字采用 Haskell 注释"--", 文字中代码使用双引号包裹,
 代码中可变的参数, 双引号中使用"#{}", 执行输出结果用"-->"引出.
@@ -498,3 +499,221 @@ oddSqureSum =
 		belowLimit = takeWhile (<1000) oddSquares
 	in sum belowLimit
 
+module 模块是相关函数/ 类型/ 类型类的组合,
+程序一般就是主程序加载模块, 从中获取函数来处理事务,
+模块可以重用, 自足的模块可以被别的意图的程序使用,
+Haskell 若干个不同功能的模块组成,
+前面涉及属于默认自动装载的 Prelude (前奏?)模块.
+载入模块的语法为: import #{模块名} , 在使用函数之前,
+下面载入 Data.List 模块处理列表, 找出不重复的元素个数,
+nub 是 Data.List 模块中除去重复元素返回列表的函数:
+import Data.List
+numUniqeus :: (Eq a) => [a] -> Int
+numUniqeus = length . nub
+执行 import 之后, 所有 Data.List 模块的函数可以在全局命名空间使用,
+(length . nub)符合函数等价于(\xs -> length $ nub xs).
+GHCI 当中可用 :m + Data.List 来载入模块, 同时载入多个比如:
+:m + Data.List Data.Map Data.Set
+对应大致有个 :m - 来释放模块, 在脚本中载入模块亦可.
+只想载入某些函数, 比如 nub 和 sort, 如下(Haskell 语法怎么会有逗号?):
+import Data.List (nub, sort)
+若自定义了 nub, 不想从模块加载, 用:
+import Data.List hiding (nub)
+像 Data.Map 里 filter, null 函数与 Prelude 冲突的话,
+冲突时使用, 当尝试指定载入 import Data.list (filter)
+会报错询问选 Predule.filter 还 Data.List.filter,
+下面语句照常用 filter, 而载入另一个到 Data.List.filter:
+import qualified Data.Map
+因为 Data.List.filter 太长, 想简化 M.filter:
+import qualified Data.List as M
+下面链接查阅标准库中有哪些模块, 看去真复杂:
+http://www.haskell.org/ghc/docs/latest/html/libraries/
+也可以去 Hoogle 搜索函数名, 模块名, 类型声明:
+http://haskell.org/hoogle/
+
+来看 Data.List , 因 Prelude 是从这里取的, filter 等一般不冲突,
+intersperse 接收一个字符一个列表, 用字符散开列表:
+intersperse '.' "MONKEY" --> "M.O.N.K.E.Y"
+intersperse 0 [1,2,3,4,5,6] --> [1,0,2,0,3,0,4,0,5,0,6]
+intercalate 接受一字符串和一字符串列表, 以前者间隔后者返回字符串:
+intercalate " " ["hey","there","guys"] --> "hey there guys"
+intercalate [0,0,0] [[1,2,3],[4,5,6],[7,8,9]]
+--> [1,2,3,0,0,0,4,5,6,0,0,0,7,8,9]
+transpose 将二维列表看作矩阵, 行列互换后返回:
+transpose [[1,2,3],[4,5,6],[7,8,9]] --> [[1,4,7],[2,5,8],[3,6,9]]
+transpose ["hey","there","guys"] --> ["htg","ehu","yey","rs","e"]
+当下列多项式相加, 将各多项式系数相加在一起:
+(3x^2 + 5^x + 9)+(10x^3 + 9)+(8x^3 + 5x^2 + x - 1)
+map sum $ transpose [[0,3,5,9],[10,0,0,9],[8,5,1,-1]]
+模块带了 foldl' 和 foldl1' 两个更严格的函数,
+两者用于处理大型列表时容易犯错, 详见原文.
+concat 将列表的列表扁平化为列表:
+concat ["foo","bar","car"] --> "foobarcar"
+concat [[3,4,5],[2,3,4],[2,1,1]] --> [3,4,5,2,3,4,2,1,1]
+只能处理一层列表, 多层需要使用多次.
+concatMap 相当于(concat . map), 先执行 map:
+concatMap (replicate 4) [1..3] --> [1,1,1,1,2,2,2,2,3,3,3,3]
+and 接收布尔值的列表作为参数, 全为 True 时返回 True:
+and $ map (>4) [5,6,7,8] --> True
+and $ map (==4) [4,4,4,3,4] --> False
+or 接收布尔值列表作为参数, 存在 True 时返回 True:
+or $ map (==4) [2,3,4,5,6,1] --> True
+or $ map (>4) [1,2,3] --> False
+any 接收一判断加一列表, 当列表存在判断真则返回 True:
+any (==4) [2,3,5,6,1,4] --> True
+all (>4) [6,9,10] --> True
+all (`elem` ['A'..'Z']) "HEYGUYSwhatsup" --> False
+any (`elem` ['A'..'Z']) "HEYGUYSwhatsup" --> True
+iterate 接收一函数加一初值, 重复将初值代入计算, 返回结果列表:
+take 10 $ iterate (*2) 1 --> [1,2,4,8,16,32,64,128,256,512]
+take 3 $ iterate (++ "haha") "haha" --> ["haha","hahahaha","hahahahahaha"]
+splitAt 接收一数值加一列表, 按数值进行一次截断, 返回元组:
+splitAt 3 "heyman" --> ("hey","man")
+splitAt 100 "heyman" --> ("heyman","")
+splitAt (-3) "heyman" --> ("","heyman")
+let (a,b) = splitAt 3 "foobar" in b ++ a --> "barfoo"
+takeWhile 接收一判断加一列表, 返回判断出错前部分的列表:
+takeWhile (>3) [6,5,4,3,2,1,2,3,4,5,4,3,2,1] --> [6,5,4]
+takeWhile (/=' ') "This is a sentence" --> "This"
+比如计算 10000 以内三次方之和:
+sum $ takeWhile (<10000) $ map (^3) [1..] --> 53361
+dropWhile 接收一判断加一列表, 从判断错误开始返回列表, 与上互补:
+dropWhile (/=' ') "This is a sentence" --> " is a sentence"
+dropWhile (<3) [1,2,2,2,3,4,5,4,3,2,1] --> [3,4,5,4,3,2,1]
+下面例子按列表中元组首个元素大于 1000 筛选元组, 给出首个结果:
+let stock = [(994.4,2008,9,1),(995.2,2008,9,2),(999.2,2008,9,3),(1001.4,2008,9,4),(998.3,2008,9,5)]
+head (dropWhile (\(val,y,m,d) -> val < 1000) stock) --> (1001.4,2008,9,4)
+span 接收一判断加一列表, 开始连续否和其余部分, 用元组中列表返回,
+break 接收一判断一列表, 开始连续真和其余部分, 用元组中列表返回:
+(break p)与(span $ not . p)等价:
+break (==4) [1,2,3,4,5,6,7]  --> ([1,2,3],[4,5,6,7])
+span (/=4) [1,2,3,4,5,6,7] --> ([1,2,3],[4,5,6,7])
+sort 接受一列表排序后返回一列表, 元素需是 Ord 类型的:
+sort [8,5,3,2,1,6,4,2] --> [1,2,2,3,4,5,6,8]
+sort "This will be sorted soon" --> "    Tbdeehiillnooorssstw"
+group 接收一列表, 将相邻相同元素合并为列表, 返回列表嵌列表:
+group [1,1,1,1,2,2,2,2,3,3,2,2,2,5,6,7]  
+--> [[1,1,1,1],[2,2,2,2],[3,3],[2,2,2],[5],[6],[7]]
+先 sort, 然后 groups, 用来统计列表相同元素数量:
+map (\l@(x:xs) -> (x,length l)) . group . sort $ [1,1,1,1,2,2,2,2,3,3,2,2,2,5,6,7]
+--> [(1,4),(2,7),(3,2),(5,1),(6,1),(7,1)]
+inits "w00t" --> ["","w","w0","w00","w00t"]
+tails "w00t" --> ["w00t","00t","0t","t",""]
+let w = "w00t" in zip (inits w) (tails w)  
+--> [("","w00t"),("w","00t"),("w0","0t"),("w00","t"),("w00t","")]
+tails 可以用在搜索片断中, 编写下函数:
+search :: (Eq a) => [a] -> [a] -> Bool
+search needle haystack =
+	let nlen = length needle
+	in foldl (\acc x -> if take nlen x == needle then True else acc) False (tails haystack)
+isInfixOf 接收两字符串判断后者是否包含前者, 返回布尔值:
+"cat" `isInfixOf` "im a cat burglar" --> True
+"Cat" `isInfixOf` "im a cat burglar" --> False
+"cats" `isInfixOf` "im a cat burglar" --> False
+isPrefixOf 和 isSuffixOf 判断是否在头部或尾部:
+"hey" `isPrefixOf` "hey there!" --> True
+"hey" `isPrefixOf` "oh hey there!" --> False
+"there!" `isSuffixOf` "oh hey there!" --> True
+"there!" `isSuffixOf` "oh hey there" --> False
+elem 和 notElem 检测元素是否在列表当中:
+notElem '3' "3.1415" --> False
+partition 接收一判断一列表, 按条件分成两列表, 以元组返回:
+partition (`elem` ['A'..'Z']) "BOBsidneyMORGANeddy"  
+--> ("BOBMORGAN","sidneyeddy")
+partition (>3) [1,3,5,6,3,2,1,0,3,7]  
+--> ([5,6,7],[1,3,3,2,1,0,3])
+find 接收一判断一数组, 返回第一个判断为真的元素, 只是:
+find (>4) [1,2,3,4,5,6] --> Just 5
+find (>9) [1,2,3,4,5,6] --> Nothing
+:t find --> find :: (a -> Bool) -> [a] -> Maybe a
+Maybe 类型将在后面章节解释, 可对有值无值做返回, 较安全.
+elemIndex 似 elem, 但返回索引值, 也用 Maybe 类型:
+:t elemIndex --> elemIndex :: (Eq a) => a -> [a] -> Maybe Int
+4 `elemIndex` [1,2,3,4,5,6] --> Just 3
+10 `elemIndex` [1,2,3,4,5,6] --> Nothing
+elemIndices 类似上条, 但返回多个索引的列表:
+' ' `elemIndices` "Where are the spaces?" --> [5,9,13]
+findIndex 似 find, 但返回多个索引的列表或 Nothing:
+findIndex (==4) [5,3,2,1,6,4] --> Just 5
+findIndex (==7) [5,3,2,1,6,4] --> Nothing
+findIndices (`elem` ['A'..'Z']) "Where Are The Caps?" --> [0,6,10,14]
+
+多个列表的有[3..8]的 zip 和 zipWith, 比如 zip3:
+zipWith3 (\x y z -> x + y + z) [1,2,3] [4,5,2,2] [2,2,3] --> [7,8,9]
+zip4 [2,3,3] [2,2,2] [5,5,3] [2,2,2] --> [(2,2,5,2),(3,2,5,2),(3,2,3,2)]
+lines 在处理文件或文本时将带'\n'的字符串分开返回列表:
+lines "first line\nsecond line\nthird line"
+--> ["first line","second line","third line"]
+unlines 与 lines 相反, 但注意结尾多出'\n'
+unlines ["first line", "second line", "third line"]
+"first line\nsecond line\nthird line\n"
+words 和 unwords 转换句子到单词, 以及相反, 通过空格和'\n'识别:
+words "hey these are the words in this sentence"
+--> ["hey","these","are","the","words","in","this","sentence"]
+words "hey these           are    the words in this\nsentence"
+--> ["hey","these","are","the","words","in","this","sentence"]
+unwords ["hey","there","mate"] --> "hey there mate"
+delete 接收一字符一字符串, 删去第一个匹配字符后返回:
+delete 'h' "hey there ghang!" --> "ey there ghang!"
+'h' . delete 'h' $ "hey there ghang!" --> "ey tere ghang!"
+delete 'h' . delete 'h' . delete 'h' $ "hey there ghang!"
+--> "ey tere gang!"
+(\\)接受两列表, 从及一个列表减去第二个, 似 delete 只删除一次:
+[1..10] \\ [2,5,9] --> [1,3,4,6,7,8,10]
+"Im a big baby" \\ "big" --> "Im a  baby"
+union 接收两列表检查逐个后者在前者不含时追加:
+"hey man" `union` "man what's up" --> "hey manwt'sup"
+[1..7] `union` [5..10] --> [1,2,3,4,5,6,7,8,9,10]
+intersect 接收两列表返回交集:
+[1..7] `intersect` [5..10] --> [5,6,7]
+insert 接收一字符一列表, 插入到首个不小于自身的元素前:
+insert 4 [3,5,1,2,8,2] --> [3,4,5,1,2,8,2]
+insert 4 [1,3,4,4,1] --> [1,3,4,4,4,1]
+insert 4 [1,2,3,5,6,7] --> [1,2,3,4,5,6,7]
+insert 'g' $ ['a'..'f'] ++ ['h'..'z'] --> "abcdefghijklmnopqrstuvwxyz"
+insert 3 [1,2,4,3,2,1] --> [1,2,3,4,3,2,1]
+历史原因上面有些函数返回 Int, 不能用于出除法, 于是另有 Num 类型以下函数:
+length, take, drop, splitAt, !!, replicate
+genericLength, genericTake, genericDrop, genericSplitAt, genericIndex, genericReplicate
+nub, delete, union, intersect, group 存在对应更通用版本,
+nubBy, deleteBy, unionBy, intersectBy, groupBy
+前者限定条件(==), 后者接收一个函数作为分组的条件:
+比如 group 等价(groupBy (==)):
+let values = [-4.3, -2.4, -1.2, 0.4, 2.3, 5.9, 10.5, 29.1, 5.3, -2.4, -14.5, 2.9, 2.3]
+groupBy (\x y -> (x > 0) == (y > 0)) values
+--> [[-4.3,-2.4,-1.2],[0.4,2.3,5.9,10.5,29.1,5.3],[-2.4,-14.5],[2.9,2.3]]
+使用 Data.Function 模块的 on 函数更简洁:
+on :: (b -> b -> c) -> (a -> b) -> a -> a -> c
+f `on` g = \x y -> f (g x) (g y)
+groupBy ((==) `on` (> 0)) values
+--> [[-4.3,-2.4,-1.2],[0.4,2.3,5.9,10.5,29.1,5.3],[-2.4,-14.5],[2.9,2.3]]
+另几函数类似, 比如 sort 和 sortBy:
+sortBy :: (a -> a -> Ordering) -> [a] -> [a]
+Ordering 可以是 LT, EQ, GT. sort 等价 (sortBy compare)
+let xs = [[5,4,5,4,4],[1,2,3],[3,5,4,3],[],[2],[2,2]]
+sortBy (compare `on` length) xs
+--> [[],[2],[2,2],[1,2,3],[3,5,4,3],[5,4,5,4,4]]
+(compare `on` length)等价(\x y -> length x `compare` length y).
+
+Data.Char 处理函数字符, 甚至过滤以及映射.
+isControl 判断是否是控制字符, 具体看链接:
+http://book.realworldhaskell.org/read/characters-strings-and-escaping-rules.html
+isSpace 判断是否 Unicode 空白或换行之类 \t, \n, \r, \f, \v.
+isLower 是否 Unicode 小写,
+isUpper 是否 Unicode 大写,
+isAlpha 是否 Unicode 字母, 英文解释一大串不懂,
+isAlphaNum 是否 Unicode 字母或数字,
+isPrint 是否 Unicode 可打印, 控制字符不可打印,
+isDigit 是否 ASCII 数字, ['0'..'9']中的数字,
+isOctDigit 是否 ASCII 八进制数字['0'..'7']中,
+isHexDigit 是否 ASCII 十六进制数字['0'..'9'], ['a'..'f'], ['A'..'F'],
+isLetter 是否 ASCII 字母, 和 isAlpha 等价,
+isMark 是否 Unicode 注音字符, 关于法语, 跳过,
+isNumber 是否 Unicode 数字, 关系到罗马数字, 等,
+isPunctuation 是否 Unicode 标点, 如连接号括号引号,
+isSymbol 是否 Unicode 符号, 如数学或货币符号,
+isSeparator 是否 Unicode 空格或分隔符,
+isAscii 是否 Unicode 前 128 字符, 也对应 ASCII,
+isLatin1 是否 Unicode 前 256 字符, 对应 ISO 8859-1 (Latin-1),
+isAsciiUpper 是否 ASCII 大写,
+isAsciiLower 是否 ASCII 小写.

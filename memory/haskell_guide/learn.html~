@@ -408,7 +408,8 @@ sum' = foldl (+) 0
 用 foldl 再现 elem 函数, 遍历一次列表:
 elem' :: (Eq a) => a  -> [a] -> Bool
 elem' y ys = foldl (\acc x -> if x==y then True else acc) False ys
-foldr 顾名思义是从列表右侧开始遍历, 解释不大懂,
+foldr 顾名思义是从列表右侧开始遍历, 同时,
+Lambdas 中参数顺序需要改为(\x acc), 与 foldl 相反.
 因为没有现成的(x:xs)模式匹配, 我用了 init/last 来:
 foldr' :: (a -> b -> b) -> b -> [a] -> b
 foldr' _ x [] = x
@@ -771,3 +772,180 @@ decode 3 "Lp#d#olwwoh#whdsrw" --> "Im a little teapot"
 decode 5 . encode 5 $ "This is a sentence" --> "This is a sentence"
 
 关联列表也叫字典, 近似散列哈希表, 存放顺序无关的键值对,
+phoneBook =
+	[("betty","555-2938")
+	,("bonnie","452-2928")
+	,("patsy","493-2928")
+	,("lucille","205-2928")
+	,("wendy","939-8282")
+	,("penny","853-2492")]
+上面是字典的例子, 常用任务是获取给定键对应的值:
+findKey :: (Eq k) => k -> [(k,v)] -> v
+findKey key xs = snd . head . filter (\(k,v) -> key == k) $ xs
+上面函数当不含对应键, 给出空列表时, 会出现运行时错误, 换 Maybe 类型:
+findKey :: (Eq k) => k -> [(k,v)] -> Maybe v
+findKey key [] = Nothing
+findKey key ((k,v):xs) = if key == k then Just v else findKey key xs
+该函数明显递归, 有边界条件, 有递归的调用, 换 fold 实现:
+findKey :: (Eq k) => k -> [(k,v)] -> Maybe v
+findKey key = foldr (\(k,v) acc -> if key == k then Just v else acc) Nothing
+findKey "penny" phoneBook --> Just "853-2492"
+findKey "betty" phoneBook --> Just "555-2938"
+findKey "wilma" phoneBook --> Nothing
+lookup 函数即对应上述 findKey, 上述函数将遍历一遍列表,
+Data.Map 内部用树部署数据, 处理更快, 另有操作工具.
+因此从此不再用字典称呼, 而称呼其为 map.
+lookup 等某些函数从 Data.Map 导入到 Prelude, 这里载入模块:
+import qualified Data.Map as Map
+fromList 接收一个字典覆盖相同键的重复值返回一个 map,
+猜测前面用 fromList 标明是内部储存用的 map (?), 不能(!!)取出:
+Map.fromList [("betty","555-2938"),("bonnie","452-2928"),("lucille","205-2928")]
+--> fromList [("betty","555-2938"),("bonnie","452-2928"),("lucille","205-2928")]
+Map.fromList [(1,2),(3,4),(3,2),(5,5)] --> fromList [(1,2),(3,2),(5,5)]
+其类型声明, k 在存储时需要是 Ord 来排序, Map.Map 存疑(?):
+Map.fromList :: (Ord k) => [(k, v)] -> Map.Map k v
+empty 返回一个空的 map:
+Map.empty --> fromList []
+insert 接收一键一值一 map, 返回加入键值后的 map:
+Map.insert 3 100 Map.empty --> fromList [(3,100)]
+Map.insert 5 600 (Map.insert 4 200 ( Map.insert 3 100  Map.empty))
+--> fromList [(3,100),(4,200),(5,600)]
+Map.insert 5 600 . Map.insert 4 200 . Map.insert 3 100 $ Map.empty
+--> fromList [(3,100),(4,200),(5,600)]
+用 insert 可以实现 fromList 的功能, 去掉重复返回 map:
+fromList' :: (Ord k) => [(k,v)] -> Map.Map k v
+fromList' = foldr (\(k,v) acc -> Map.insert k v acc) Map.empty
+null 用来判断 map 是否为空:
+Map.null Map.empty --> True
+Map.null $ Map.fromList [(2,3),(5,5)] --> False
+size 用来探测长度, 和 length 类似:
+Map.size Map.empty --> 0
+Map.size $ Map.fromList [(2,4),(3,3),(4,2),(5,4),(6,4)] --> 5
+singleton 接受一键一值创建一个 map:
+Map.singleton 3 9 --> fromList [(3,9)]
+Map.insert 5 9 $ Map.singleton 3 9 --> fromList [(3,9),(5,9)]
+lookup 类似 Data.List.lookup , 但可操作 map:
+Map.lookup 2 $ Map.fromList [(2,'4')] --> Just '4'
+member 接收一键一 map, 检查键是否在 map 中:
+Map.member 3 $ Map.fromList [(3,6),(4,3),(6,9)] --> True
+Map.member 3 $ Map.fromList [(2,5),(4,5)] --> False
+map 和 filter 与 Data.List 中类似, 独作用于 map:
+Map.map (*100) $ Map.fromList [(1,1),(2,4),(3,9)]
+--> fromList [(1,100),(2,400),(3,900)]
+Map.filter isUpper $ Map.fromList [(1,'a'),(2,'A'),(3,'b'),(4,'B')]
+--> fromList [(2,'A'),(4,'B')]
+toList 是 fromList 的反演, 特别看类型声明:
+Map.toList :: Map.Map k a -> [(k, a)]
+Map.toList . Map.insert 9 2 $ Map.singleton 4 3 --> [(4,3),(9,2)]
+keys 和 elems 分别打印出键值为列表,
+keys 等价(map fst . Map.toList), elems 等价(map snd . Map.toList).
+fromListWith 接收一函数一列表返回一 map, 相当与戴上函数的 fromList:
+phoneBook =   
+	[("betty","555-2938")
+	,("betty","342-2492")
+	,("bonnie","452-2928")
+	,("patsy","493-2928")
+	,("patsy","943-2929")
+	,("patsy","827-9162")
+	,("lucille","205-2928")
+	,("wendy","939-8282")
+	,("penny","853-2492")
+	,("penny","555-2111")]
+借助 fromListWith 写函数将重复的值用','连接或组成列表, 或最大值/ 总和:
+phoneBookToMap :: (Ord k) => [(k, String)] -> Map.Map k String
+phoneBookToMap xs = Map.fromListWith (\number1 number2 -> number1 ++ ", " ++ number2) xs
+Map.lookup "patsy" $ phoneBookToMap phoneBook
+--> "827-9162, 943-2929, 493-2928"
+Map.lookup "wendy" $ phoneBookToMap phoneBook
+--> "939-8282"
+Map.lookup "betty" $ phoneBookToMap phoneBook
+--> "342-2492, 555-2938"
+phoneBookToMap :: (Ord k) => [(k, a)] -> Map.Map k [a]
+phoneBookToMap xs = Map.fromListWith (++) $ map (\(k,v) -> (k,[v])) xs
+Map.lookup "patsy" $ phoneBookToMap phoneBook
+--> ["827-9162","943-2929","493-2928"]
+Map.fromListWith max [(2,3),(2,5),(2,100),(3,29),(3,22),(3,11),(4,22),(4,15)]
+--> fromList [(2,100),(3,29),(4,22)]
+Map.fromListWith (+) [(2,3),(2,5),(2,100),(3,29),(3,22),(3,11),(4,22),(4,15)]
+--> fromList [(2,108),(3,62),(4,37)]
+insertWith 类似上函数, 出现重复键时调用函数处理:
+Map.insertWith (+) 3 100 $ Map.fromList [(3,4),(5,103),(6,339)]
+--> fromList [(3,104),(5,103),(6,339)]
+全部函数见下, 可用 import Data.Map (Map) 代替加载:
+http://www.haskell.org/ghc/docs/latest/html/libraries/containers/Data-Map.html
+
+Data.Set 模块提供集合的处理, 其中元素唯一,
+内部为了高效排序, 因此要 Ord 类型, 速度很快,
+常用操作是插入元素/ 检查成员关系/ 转换为列表.
+Data.Set 与 Prelude 和 Data.List 命名冲突多, 用:
+import qualified Data.Set as Set
+text1 = "I just had an anime dream. Anime... Reality... Are they so different?"
+text2 = "The old man left his garbage can out and now his trash is all over my lawn!"
+let set1 = Set.fromList text1
+let set2 = Set.fromList text2
+set1 --> fromList " .?AIRadefhijlmnorstuy"
+set2 --> fromList " !Tabcdefghilmnorstuvwy"
+intersection 函数可检查两集合的交集:
+Set.intersection set1 set2 --> fromList " adefhilmnorstuy"
+difference 检测两集合前者有后者没有的部分:
+Set.difference set1 set2 --> fromList ".?AIRj"
+Set.difference set2 set1 --> fromList "!Tbcgvw"
+union 返回两集合并集:
+Set.union set1 set2 --> fromList " !.?AIRTabcdefghijlmnorstuvwy"
+null, size, member, empty, singleton, insert, delete 可从字面理解:
+Set.null Set.empty --> True
+Set.null $ Set.fromList [3,4,5,5,4,3] --> False
+Set.size $ Set.fromList [3,4,5,3,4,5] --> 3
+Set.singleton 9 --> fromList [9]
+Set.insert 4 $ Set.fromList [9,3,8,1] --> fromList [1,3,4,8,9]
+Set.insert 8 $ Set.fromList [5..10] --> fromList [5,6,7,8,9,10]
+Set.delete 4 $ Set.fromList [3,4,5,4,3,4,5] --> fromList [3,5]
+isSubsetOf 和 isProperSubsetOf 判断两集合前者是否后者子集和真子集,
+Set.fromList [2,3,4] `Set.isSubsetOf` Set.fromList [1,2,3,4,5] --> True
+Set.fromList [1,2,3,4,5] `Set.isSubsetOf` Set.fromList [1,2,3,4,5] --> True
+Set.fromList [1,2,3,4,5] `Set.isProperSubsetOf` Set.fromList [1,2,3,4,5] --> False
+Set.fromList [2,3,4,8] `Set.isSubsetOf` Set.fromList [1,2,3,4,5] --> False
+同样 filter 和 map 的功能:
+Set.filter odd $ Set.fromList [3,4,5,6,7,2,3,4] --> fromList [3,5,7]
+Set.map (+1) $ Set.fromList [3,4,5,6,7,2,3,4] --> fromList [3,4,5,6,7,8]
+集合常用 fromList 去重再借 toList 返回到列表,
+Data.List.nub 也可对列表去重, 但相比速度用集合更快, 代价是,
+集合需要 Ord 类型限定, 而 nub 仅需要 Eq 类型限定.
+let setNub xs = Set.toList $ Set.fromList xs
+setNub "HEY WHATS CRACKALACKIN" --> " ACEHIKLNRSTWY"
+nub "HEY WHATS CRACKALACKIN" --> "HEY WATSCRKLIN"
+相较而言 nub 保持了列表原先规则, 而 setNub 不保持(?).
+
+和很多语言一样, Haskell 可以自己写模块重用,
+想这个计算体积面积的模块, 先命名为 Geomerty.hs,
+文件末尾'r'开头的函数使用但不输出, 不影响:
+module Geometry
+( sphereVolume
+, sphereArea
+, cubeVolume
+, cubeArea
+, cuboidArea
+, cuboidVolume
+) where
+sphereVolume :: Float -> Float
+sphereVolume radius = (4.0 / 3.0) * pi * (radius ^ 3)
+sphereArea :: Float -> Float
+sphereArea radius = 4 * pi * (radius ^ 2)
+cubeVolume :: Float -> Float
+cubeVolume side = cuboidVolume side side side
+cubeArea :: Float -> Float
+cubeArea side = cuboidArea side side side
+cuboidVolume :: Float -> Float -> Float -> Float
+cuboidVolume a b c = rectangleArea a b * c
+cuboidArea :: Float -> Float -> Float -> Float
+cuboidArea a b c = rectangleArea a b * 2 + rectangleArea a c * 2 + rectangleArea c b * 2
+rectangleArea :: Float -> Float -> Float
+rectangleArea a b = a * b
+注意需要在同一个目录, 大写开头, 加载模块似乎 ghci 不行, 脚本里正常:
+import Geometry
+或, 建立 Geometry 目录, 分别创建文件 Sphere.hs, Cuboid.hs, Cube.hs,
+import Geometry.Sphere -- 用来导入, 另两类似. 或者:
+import qualified Geometry.Sphere as Sphere 
+import qualified Geometry.Cuboid as Cuboid 
+import qualified Geometry.Cube as Cube
+然后以 Sphere.area, Sphere.volume, Cuboid.area 调用.

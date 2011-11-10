@@ -5,87 +5,95 @@
 </head>
 <body>
 <pre>
-Node.Js 教程: http://nodebeginner.org/index.html
-coffee 是 CoffeeScript, 对应 "$ node server.js" 的命令是 "$ coffee server.coffee"
-如果不会写,就 "$ npm install js2coffee" 从 js 编译到 coffee 看看:
-更多命令和教程参照, 但是好像有 bug: https://github.com/rstacruz/js2coffee
-https://github.com/rstacruz/js2coffee/issues/54#issuecomment-1935144
-命令 "$ cat << EOF | js2coffee" 然后粘贴 js, 再回车输入 EOF 回车..
+Node.Js 入门以及中文翻译:
+http://nodebeginner.org/index.html
+http://nodebeginner.org/index-zh-cn.html
+CoffeeScript, 对应 "$ node s.js" 是 "$ coffee s.coffee"
+"$ npm install js2coffee", "$ js2coffee << EOF" 用来即时编译,
+https://github.com/rstacruz/js2coffee
+例子中的输出, 比如 coffee 测试部分, 用 # --> 引出输出内容.
 
-原理看这个: http://www.ibm.com/developerworks/cn/linux/l-lpic1-v3-103-4/
 整个使用 listen 方法时不能在 createServer 后空格, 否则报错没用 listen method,
 为了习惯空格, 我把第一个左圆括号放到开头, createServer 返回的对象就有 listen 了,
+无参数执行函数 f() 语法不好, 我用(f 0)或(f '')等代替, 不注明.
 
+首先有个被 Node.js 执行的主文件, 保持各种功能的代码的模块分离和干净,
+这里只创建一个主文件 server.coffee , 用"$ coffee server.coffee"执行,
+运行之后访问 http://localhost:8888/ 
+内容如下:
 http = require "http"
 (http.createServer (request, response) ->
     response.writeHead 200, "Content-Type": "text/plain"
     response.write "hello world!"
     response.end ''
 ).listen 8888
+require... 一行请求 node 自带的 http 模块, 赋值给 http ,
+调用 http 模块的 createServer 方法返回一个对象, 含 listen 方法,
+之后用参数指定 8888 为监听端口, 这个服务器只打开端口, 不能处理请求.
 
-保存为 server.coffee , 再命令: "$ coffee server.coffee", 访问 http://localhost:8888/
-response.end 需要执行, 所以要传入参数或者 () , 我偷懒传入了空的字符.
-coffee 中使用匿名函数作为参数, 执行匿名函数, 与教程中的例子对应:
+javascript 中像函数式编程一样, 可以将函数作为参数传递.
+上面的例子用到将括号及缩进部分作为参数传给 createServer.
+coffee 中使用匿名函数作为参数, 执行匿名函数:
+excute1 = (f, v) -> f v
+excute1 ((word) -> console.log word),
+	'hello' # --> hello
+excute2 = (v1, v2) -> console.log v1, v2
+excute2 'hello', 'world' # --> hello world
+((w) -> console.log w) 'word' # --> word
 
-excute = (someFunction, value) ->
-    someFunction value
-excute ((word) ->
-    console.log word)
-    "hello"
-
-下面这样写也是可以的, 为什么用前面那种方式写呢? 好像是为了 node 更自然之类...
-
+下面将作为参数传递的函数取出写, 效果相同, 
 http = require "http"
 onRequest = (requset, response) ->
     response.writeHead 200, "Context-Type": "text/plain"
     response.write "hello world!"
     response.end ''
 (http.createServer onRequest).listen 8888
-
-这一段用来测试时间是否被触发的, 有时为了 favicon.ico 会多出现一次请求,
-
+这样写因为 node 是"事件驱动"的, 当接收到请求, 才执行参数传入的函数.
+我们创建服务器, 并传递一个函数, 服务器收到一个请求, 函数就会被调用, 称为回调.
+下面一段代码进行测试, 实际中有时为了 favicon.ico 会多出现一次请求,
 http = require "http"
 onRequest = (request, response) ->
     console.log "Request received."
-    response.writeHead 200,
-        "Content-Type": "text/plain"
+    response.writeHead 200, "Content-Type": "text/plain"
     response.write "hello world"
     response.end ''
 (http.createServer onRequest).listen 8888
 console.log "Server has started"
-
+运行之后先打印"started", 浏览器访问时打印"recieved".
+再看回调函数 onRequest 的参数, 他们包含处理 http 请求的细节,
 其中的 request 和 response 是 object, 可以用 cosole.log 打印查看.
-写成模块 coffee 直接识别了, 注意代码中的 exports.start = start .
 
-$ cat server.coffee
+require 'http' 表示 node 自带了'http'模块被我们调用了,
+变量名与模块名相同是一个惯例, 但使用其他名字也是可以的.
+将自己写的模块导出不用多修改, 主要是结尾添加 exports.funcName = funcName .
+比如创建 index.coffee 使其调用 server.coffee 作为模块:
+# server.coffee
 http = require "http"
 start = ->
     onRequest = (requset, response) ->
-        response.writeHead 200,
-            "Content-Type": "text/plain"
+        response.writeHead 200, "Content-Type": "text/plain"
         response.write "hi"
         response.end ''
     (http.createServer onRequest).listen 8888
     console.log "started"
 exports.start = start
-
-$ cat index.coffee
+# index.coffee
 server = require "./server"
 server.start ''
+执行"$ coffee index.coffee", 服务器运行, 加载成功.
+通过这种办法将不同函数放不同文件, 通过模块组合到一起.
 
+为了针对不同 URL 返回不同的结果, 来处理"路由"模块.
 对于这样一个 URL,  http://localhost:8888/start?foo=bar&hello=world
-
-url.parse(string).pathname == "start" , url.parse(string).query == "foo=bar&hello=world"
-
+url.parse(string).pathname == "start"
+url.parse(string).query == "foo=bar&hello=world"
 需要 url 模块, pathname = (url.parse request.url).pathname
-
 使用 route 来将 url 执行处理的程序, 三个文件如下:
-
-$ cat router.coffee
+# router.coffee
 route = (pathname) ->
     console.log "About to route a request for " + pathname
 exports.route = route
-$ cat server.coffee
+# server.coffee
 http = require "http"
 url = require "url"
 start = (route) ->
@@ -100,8 +108,7 @@ start = (route) ->
     (http.createServer onRequest).listen 8888
     console.log "Server has started"
 exports.start = start
-
-$ cat index.coffee
+# index.coffee
 server = require "./server"
 router = require "./router"
 server.start router.route

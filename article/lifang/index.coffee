@@ -4,7 +4,7 @@ html ->
 	head ->
 		title 'nothing'
 		meta charset: 'utf-8'
-		link rel: 'stylesheet', href: '../article.css'
+		link rel: 'stylesheet', href: 'article.css'
 	body ->
 		side = 'sidebar'
 		article id: 'article', ->

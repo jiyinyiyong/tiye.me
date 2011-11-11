@@ -1,0 +1,27 @@
+
+html {
+   background: hsl(85,90%,205%);
+	}
+#s {
+  margin: 40px 200px;
+	color: white;
+}
+.red{
+  letter-spacing: 0px;
+  font-family: 'wenquanyi micro hei mono';
+  font-size: 14px;
+  line-height: 28px;
+  text-shadow: 0px 0px 12px #db3118,
+	0px 0px 12px #db3118,
+	0px 0px 12px #db3118,
+	0px 0px 12px #db3118,
+	0px 0px 12px #db3118,
+	0px 0px 12px #db3118,
+	0px 0px 12px #db3118,
+	0px 0px 12px #db3118,
+	0px 0px 12px #db3118,
+	0px 0px 12px #db3118,
+	0px 0px 12px #db3118,
+	0px 0px 12px #db3118,
+	0px 0px 12px #db3118;
+}

@@ -1,10 +1,12 @@
 body {
-  background: #e3f9fd;
+  background: #fff;
   padding: 20px 140px;
 }
 pre {
-  font-family: "文泉驿等宽微米黑", "Monospace";
-  color: #161823;
-  font-size: 13px;
-  line-height: 26px;
+  font-family: "wenquanyi micro hei mono", "Monospace";
+  letter-spacing: 0px;
+  color: #fff;
+  text-shadow: 0px 0px 10px #db3118, 0px 0px 10px #db3118, 0px 0px 10px #db3118, 0px 0px 10px #db3118, 0px 0px 10px #db3118, 0px 0px 10px #db3118, 0px 0px 10px #db3118, 0px 0px 10px #db3118, 0px 0px 10px #db3118, 0px 0px 10px #db3118, 0px 0px 10px #db3118, 0px 0px 10px #db3118, 0px 0px 10px #db3118;
+  font-size: 14px;
+  line-height: 35px;
 }

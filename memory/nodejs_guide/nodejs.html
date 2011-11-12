@@ -194,3 +194,40 @@ handle['/'] = requestHandlers.start
 handle['/start'] = requestHandlers.start
 handle['/upload'] = requestHandlers.upload
 server.start router.route, handle
+
+修改 requestHandlers.coffee 文件, 添加 sleep() ,
+while 一行下的分号为了不执行任何动作,
+start = ->
+	console.log 'requset for start'
+	sleep = (ms) ->
+		startTime = new Date().getTime()
+		while new Date().getTime() < startTime + ms
+			;
+	sleep 10000
+	console.log 'end sleep'
+	"Hello Start"
+upload = ->
+	console.log 'request for upload'
+	'Hello Upload'
+exports.start = start
+exports.upload = upload
+打开浏览器访问 /start , 会开始延迟, 期间访问 /upload 也延迟,
+Node.js 是单线程的, start 函数包含阻塞操作 sleep, 发生阻塞.
+Node 只有代码是顺序进行的, 通过事件轮询来进行并行操作,
+要执行非阻塞操作, 将参数传给其他函数进行回调.
+继续修改 requestHandlers.coffee 文件, 尝试非阻塞,
+先用 chile_proces 模块的 exec 执行一个 Shell 命令,
+exec = (require 'child_process').exec
+start = ->
+	console.log 'requset for start'
+	content = 'empty'
+	exec 'ls -lah', (error, stdout, stderr) ->
+		content = stdout
+		console.log 'end, ' + content
+	content
+upload = ->
+	console.log 'request for upload'
+	'Hello Upload'
+exports.start = start
+exports.upload = upload
+访问 /start 返回 empty, 说明程序并没有在执行 exec 时等待.

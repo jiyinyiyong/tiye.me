@@ -22,11 +22,11 @@ https://github.com/rstacruz/js2coffee
 运行之后访问 http://localhost:8888/ 
 内容如下:
 http = require "http"
-(http.createServer (request, response) ->
+http.createServer (request, response) ->
     response.writeHead 200, "Content-Type": "text/plain"
     response.write "hello world!"
     response.end ''
-).listen 8888
+.listen 8888
 require... 一行请求 node 自带的 http 模块, 赋值给 http ,
 调用 http 模块的 createServer 方法返回一个对象, 含 listen 方法,
 之后用参数指定 8888 为监听端口, 这个服务器只打开端口, 不能处理请求.
@@ -370,3 +370,84 @@ handle['/upload'] = requestHandlers.upload
 server.start router.route, handle
 浏览器文本框输入内容, 会在 /upload 被请求时显示出来,
 这时显示的是 text=#{输入的内容}, 借助 querystring 过滤.
+
+上传/ 显示图片整个服务的代码, 具体还没弄懂:
+# requestHandler.coffee
+querystring = require 'querystring'
+fs = require 'fs'
+formidable = require 'formidable'
+start = (res) ->
+	console.log 'requset handler for /start was called'
+	body = '<html>'+
+    '<head>'+
+    '<meta http-equiv="Content-Type" content="text/html; '+
+    'charset=UTF-8" />'+
+    '</head>'+
+    '<body>'+
+    '<form action="/upload" enctype="multipart/form-data" '+
+    'method="post">'+
+    '<input type="file" name="upload" multiple="multiple">'+
+    '<input type="submit" value="Upload file" />'+
+    '</form>'+
+    '</body>'+
+    '</html>'
+    res.writeHead 200, 'Content-Type': 'text/html'
+    res.write body
+    res.end ''
+upload = (res, req) ->
+    console.log "Request handler 'upload' was called."
+    form = new formidable.IncomingForm()
+    console.log "about to parse"
+    form.parse req, (error, fields, files) ->
+        console.log "parsing done"
+        fs.renameSync files.upload.path, "/tmp/test.png"
+        res.writeHead 200, "Content-Type": "text/html"
+        res.write "received image:<br/>"
+        res.write "<img src='/show' />"
+        res.end()
+show = (res) ->
+    console.log 'request for /show was called'
+    fs.readFile '/tmp/test.png', 'binary', (error, file) ->
+        if error
+            res.writeHead 500, 'Content-Type': 'text/plain'
+            res.write error, '\n'
+            res.end ''
+        else
+            res.writeHead 200, 'Content-Type': 'img/png'
+            res.write file, 'binary'
+            res.end ''
+exports.start = start
+exports.upload = upload
+exports.show = show
+# route.coffee
+route = (handle, pathname, res, req) ->
+	console.log 'about to route a request for ' + pathname
+	if typeof handle[pathname] == 'function'
+		handle[pathname] res, req
+	else
+		console.log 'no handler found for ' + pathname
+		res.writeHead 404, 'Content-Type': 'text/plain'
+		res.write '404 not found'
+		res.end ''
+exports.route = route
+# server.coffee
+url = require 'url'
+http = require 'http'
+start = (route, handle) ->
+	onRequest = (req, res) ->
+		pathname = (url.parse req.url).pathname
+		console.log "request for #{pathname} received"
+		route handle, pathname, res, req
+	(http.createServer onRequest).listen 8888
+	console.log 'server has started'
+exports.start = start
+# server.coffee
+server = require './server'
+router = require './router'
+requestHandlers = require './requestHandlers'
+handle = {}
+handle['/'] = requestHandlers.start
+handle['/start'] = requestHandlers.start
+handle['/upload'] = requestHandlers.upload
+handle['/show'] = requestHandlers.show
+server.start router.route, handle

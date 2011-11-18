@@ -142,6 +142,11 @@ capital :: String -> String
 capital "" = "Empty string, whoops!"
 capital all@(x:xs) = "The first letter of " ++ all ++ " is " ++ [x]
 符号 ++ 用在连接列表, 不能用在 Patten Match 当中, 不合理.
+重载运算符时先确定结合性(infixl|infixr|infix), 然后优先级:
+infixr 3  &&
+(&&)  :: Bool -> Bool -> Bool
+False && x   = False
+True  && x   = x
 
 称为 Guard 的选择语句, 相当 switch/case, 可以缩进或不缩进, 可以嵌套.
 max' :: (Ord a) => a -> a -> a  max' a b
@@ -228,6 +233,15 @@ quicksort (x:xs) =
 		biggerSorted = quicksort [a | a <- xs, a > x]
 	in  smallerSorted ++ [x] ++ biggerSorted
 递归的方式往往是设定规则和边缘, 对于列表往往上头尾部和空列表.
+再来看无穷数列, 注意定义函数时将函数本身用于递归,
+iterate 作为例子:
+iterate' :: (a -> a) -> a -> a
+iterate' f x = x: iterate' f (f x)
+几个重要的例子, 体会下怎样处理递归的:
+isSquare n = elem n (takeWhile (<=n) squares) where squares = [x^2| x <- [0..]]
+fibs = fibgen 1 1 where fibgen n1 n2 = n1 : fibgen n2 (n1+n2)
+prime = sieve [2..] where sieve (x:xs) = x: sieve (filter (\y -> rem y x /=0) xs)
+
 
 高阶函数 higher order function 是 Haskell 体验中不可少的一部分,
 多参数函数相当于函数接受参数返回另一函数来接收下一个参数, 称为 curried functions.

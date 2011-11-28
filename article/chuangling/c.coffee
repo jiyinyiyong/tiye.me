@@ -90,11 +90,14 @@ draw = (ctx, bg, fg, p, scale) ->
 	ctx.drawImage bg, 0, 0, bg.width, bg.width/16*9, bgx, bgy, wall.x*bgrate, wall.y*bgrate
 	ctx.save()
 	ctx.globalAlpha = 0.96
+	# ctx.shadowBlur = 10
+	# ctx.shadowColor = 'black'
 	for xn in [-2,-1,0,1,2]
 		for yn in [-2,-1,0,1,2]
 			x = center.x + (- p.x - tile.x/2 + xn*(tile.x + space))*rate
 			y = center.y + (- p.y - tile.y/2 + yn*(tile.y + space))*rate
 			ctx.drawImage fg, fg.width*(xn+2)/5, fg.width/16*9*(yn+2)/5, fg.width/5, fg.width/16*9/5, x, y, tile.x*rate, tile.y*rate
 	ctx.globalAlpha = 1
+	# ctx.shadowBlur = 0
 
 window.onload = main

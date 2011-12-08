@@ -1,20 +1,10 @@
 body {
-  background: #f5f5d6;
+  background: #f7f7d4;
   color: #000;
-  line-height: 26px;
+  line-height: 19px;
   font-size: 13px;
-  font-family: "文泉驿等宽微米黑", "宋体";
+  font-family: "文泉驿等宽微米黑", "wenquanyi micro mono", "宋体";
 }
-article {
-  margin: 60px 200px;
-}
-p {
-  margin: 0px;
-  padding: 0px;
-}
-#p {
-  margin: 0px;
-  padding: 0px;
-  height: 26px;
-  opacity: 0.2;
+pre {
+  margin: 40px 160px;
 }

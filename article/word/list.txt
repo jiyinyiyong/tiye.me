@@ -1,14 +1,19 @@
+
+文档为 "挑花" 字符集与中古音拟音的映射
+做了不少修改以适应输入, 一般会标记 '?'
+
+---------------------------------
+
 幫 p	    滂 ph	並 b	    明 m 
 端 t	    透 th	定 d	    泥 n
-知 tr	    徹 thr	澄 dr	    娘 nr		    來 l
+知 tr	    徹 thr	澄 dr	    娘 nr		    來 l?
 精 c	    清 ch	從 z			心 s	    邪 zs
 莊 cr	    初 chr	崇 zr			生 sr	    俟 zsr
 章 cj	    昌 chj	常 zj	    日 nj	書 sj	    船 zsj
 見 k	    谿 kh	群 g	    疑 ng
 影 q				    云(無)以j	曉 h	    匣 gh
 
-
-
+----------------------------------
 
 	一等		二等		三等	        四等
 
@@ -28,8 +33,8 @@
 合口	泰uad		夬ruad		祭*yed廢yad
 
 止攝
-開口	支*ie		脂*ii		之i		微ioi
-合口	支*ye		脂*yi				微yoi
+開口	支*ie?		脂*ii?		之i		微ioi?
+合口	支*ye?		脂*yi?				微yoi?
 
 效攝
 開合	豪au		肴rau		宵*ieu		蕭eu
@@ -61,3 +66,4 @@
 通攝,江攝
 開合	東ung		江rung?	        鍾yung	
 開合	冬uung				東iung
+

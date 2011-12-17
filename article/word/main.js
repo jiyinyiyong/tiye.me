@@ -1,4 +1,4 @@
-var Text;
+var Text, o, refer, shengmu, yunmu;
 
 Text = (function() {
 
@@ -12,13 +12,15 @@ Text = (function() {
 
   Text.prototype.line = 0;
 
-  Text.prototype.lineHeight = 30;
+  Text.prototype.lineHeight = 50;
+
+  Text.prototype.lineHistory = [];
 
   Text.prototype.cha = 0;
 
-  Text.prototype.chaSize = 20;
+  Text.prototype.chaSize = 24;
 
-  Text.prototype.chaSpace = 8;
+  Text.prototype.chaSpace = 30;
 
   Text.prototype.place = 0;
 
@@ -28,13 +30,29 @@ Text = (function() {
 
   Text.prototype.posY = Text.baseY;
 
+  Text.prototype.strings = '';
+
   Text.prototype.newPosition = function() {
     this.posX = this.baseX + this.cha * (this.chaSize + this.chaSpace) + this.chaSize / 2 * this.col;
     return this.posY = this.baseY + this.line * this.lineHeight + this.place * this.chaSize / 4;
   };
 
-  Text.prototype.forword = function(code) {
+  Text.prototype.forward = function(code) {
+    this.strings += code;
+    console.log(this.strings);
+    if (this.strings.length === 32) {
+      this.draw.fillStyle = 'black';
+      this.draw.font = '10px Ubuntu';
+      this.draw.fillText(refer(this.strings), this.baseX + (this.chaSize + this.chaSpace) * this.cha, this.baseY + this.line * this.lineHeight + this.chaSize + 12);
+      this.strings = '';
+      console.log('drawing');
+    }
     this.newPosition();
+    if (this.place === 0 && this.col === 0) {
+      this.draw.fillStyle = 'hsl(240,80%,90%)';
+      this.draw.fillRect(this.posX, this.posY, this.chaSize, this.chaSize);
+    }
+    this.draw.strokeStyle = 'black';
     this.draw.beginPath();
     if (code[0] === '1') {
       this.draw.moveTo(this.posX, this.posY);
@@ -68,8 +86,47 @@ Text = (function() {
   };
 
   Text.prototype.changeLine = function() {
+    this.lineHistory.push([this.cha, this.col, this.place]);
+    console.log(this.lineHistory);
     this.line += 1;
-    return this.cha = 0;
+    this.cha = 0;
+    this.col = 0;
+    return this.place = 0;
+  };
+
+  Text.prototype.backward = function() {
+    var _ref;
+    if (this.place !== 0) {
+      this.place -= 1;
+    } else {
+      this.place = 3;
+      if (this.col !== 0) {
+        this.col = 0;
+      } else {
+        this.col = 1;
+        if (this.cha !== 0) {
+          this.cha -= 1;
+        } else {
+          if (this.line === 0) {
+            this.col = 0;
+            this.place = 0;
+            return 'ended';
+          } else {
+            _ref = this.lineHistory.pop(), this.cha = _ref[0], this.col = _ref[1], this.place = _ref[2];
+            this.line -= 1;
+          }
+        }
+      }
+    }
+    this.newPosition();
+    if (this.col === 0 && this.place === 0) {
+      this.draw.fillStyle = 'white';
+      this.draw.fillRect(this.posX, this.posY, this.chaSize + 40, this.chaSize + 40);
+    } else {
+      this.draw.fillStyle = 'hsl(240,80%,90%)';
+      this.draw.fillRect(this.posX, this.posY, this.chaSize / 2 + 1, this.chaSize / 4 + 1);
+    }
+    return console.log('backward');
   };
 
   return Text;
@@ -87,39 +144,52 @@ window.onload = function() {
       case 13:
         return t.changeLine();
       case 49:
-        return t.forword('0000');
+        return t.forward('0000');
       case 50:
-        return t.forword('0100');
+        return t.forward('0100');
       case 51:
-        return t.forword('1000');
+        return t.forward('1000');
       case 52:
-        return t.forword('1100');
+        return t.forward('1100');
       case 81:
-        return t.forword('0001');
+        return t.forward('0001');
       case 87:
-        return t.forword('0101');
+        return t.forward('0101');
       case 69:
-        return t.forword('1001');
+        return t.forward('1001');
       case 82:
-        return t.forword('1101');
+        return t.forward('1101');
       case 65:
-        return t.forword('0010');
+        return t.forward('0010');
       case 83:
-        return t.forword('0110');
+        return t.forward('0110');
       case 68:
-        return t.forword('1010');
+        return t.forward('1010');
       case 70:
-        return t.forword('1110');
+        return t.forward('1110');
       case 90:
-        return t.forword('0011');
+        return t.forward('0011');
       case 88:
-        return t.forword('0111');
+        return t.forward('0111');
       case 67:
-        return t.forword('1011');
+        return t.forward('1011');
       case 86:
-        return t.forword('1111');
+        return t.forward('1111');
+      case 8:
+        return t.backward();
       default:
-        return t.forword();
+        return console.log(e.keyCode);
     }
   };
+};
+
+o = '_';
+
+shengmu = ['p', 'ph', 'b', 'm', o, o, o, o, 't', 'th', 'd', 'n', o, o, o, o, 'c', 'ch', 'z', o, 's', o, 'zs', o, 'cj', 'chj', 'zj', 'nj', 'sj', o, 'zsj', 'j', o, o, o, 'l', 'k', 'kh', 'g', 'ng', 'h', 'q', 'gh', o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o];
+
+yunmu = ['a', 'ra', 'ia', o, 'o', o, 'io', o, 'ua', 'rua', 'ya', o, o, o, 'yo', o, 'an', 'ren', 'ian', 'en', 'on', o, 'ion', o, 'uan', 'ruen', 'yan', 'uen', 'uon', o, 'yon', o, 'am', 'rem', 'iam', 'em', 'om', o, o, o, o, o, 'yam', o, o, o, 'im', o, 'ang', 'rang', 'iang', o, 'ong', o, 'ing', o, 'uang', 'ruang', 'yang', o, 'uong', o, 'yk', o, 'ai', 'rai', 'ied', 'e', 'au', 'rau', 'ieu', 'eu', 'uai', 'ruai', 'yed', 'ue', o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, 'ie', 'ii', o, 'ioi', 'u', o, 'iu', o, 'ye', 'yi', o, 'yoi', o, o, 'y', o, o, 'reng', 'ieng', 'eng', 'ung', 'rung', 'yung', o, o, 'rueng', 'yeng', 'ueng', 'uung', o, 'iung', o];
+
+refer = function(str) {
+  console.log(shengmu.length, yunmu.length);
+  return 'returned';
 };

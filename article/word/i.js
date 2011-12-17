@@ -1,4 +1,4 @@
-var main, main2, one, unit;
+var main, main2, one0, one1, unit;
 
 main = function() {
   var ctx, cvs;
@@ -21,7 +21,7 @@ main = function() {
 
 main2 = function(ctx, sp, bg) {
   var i, j, n, size;
-  size = 24;
+  size = 18;
   n = 20;
   ctx.clearRect(0, 0, 800, 800);
   ctx.fillStyle = '#ddd';
@@ -36,8 +36,8 @@ main2 = function(ctx, sp, bg) {
   ctx.fillStyle = '#ddd';
   for (i = 1; 1 <= n ? i <= n : i >= n; 1 <= n ? i++ : i--) {
     for (j = 1; 1 <= n ? j <= n : j >= n; 1 <= n ? j++ : j--) {
-      one(ctx, size / 2, (size + sp) * i, (size + sp) * j);
-      one(ctx, size / 2, (size + sp) * i + size / 2, (size + sp) * j);
+      one1(ctx, size / 2, (size + sp) * i, (size + sp) * j);
+      one1(ctx, size / 2, (size + sp) * i + size / 2, (size + sp) * j);
     }
   }
   ctx.closePath();
@@ -53,7 +53,7 @@ unit = function(ctx, x, y, xt, yt) {
   }
 };
 
-one = function(ctx, s, x, y) {
+one0 = function(ctx, s, x, y) {
   var dx, dy, j, _results;
   dx = s / 2;
   dy = s / 2;
@@ -63,6 +63,22 @@ one = function(ctx, s, x, y) {
     unit(ctx, x + 2 * dx, y + j * dy, x + dx, y + j * dy + dy);
     unit(ctx, x + dx, y + j * dy, x, y + j * dy + dy);
     _results.push(unit(ctx, x + dx, y + j * dy, x + 2 * dx, y + j * dy + dy));
+  }
+  return _results;
+};
+
+one1 = function(ctx, s, x, y) {
+  var ddx, ddy, dx, dy, j, _results;
+  dx = s / 2;
+  ddx = s / 4;
+  dy = s / 2;
+  ddy = s / 4;
+  _results = [];
+  for (j = 0; j <= 3; j++) {
+    unit(ctx, x + ddx, y + j * dy, x + ddx, y + j * dy + dy);
+    unit(ctx, x, y + j * dy + ddy, x + dx, y + j * dy + ddy);
+    unit(ctx, x + dx + ddx, y + j * dy, x + dx + ddx, y + j * dy + dy);
+    _results.push(unit(ctx, x + dx, y + j * dy + ddy, x + 2 * dx, y + j * dy + ddy));
   }
   return _results;
 };

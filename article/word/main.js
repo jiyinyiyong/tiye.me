@@ -91,7 +91,8 @@ Text = (function() {
     this.line += 1;
     this.cha = 0;
     this.col = 0;
-    return this.place = 0;
+    this.place = 0;
+    return this.strings = '';
   };
 
   Text.prototype.backward = function() {
@@ -190,6 +191,26 @@ shengmu = ['p', 'ph', 'b', 'm', o, o, o, o, 't', 'th', 'd', 'n', o, o, o, o, 'c'
 yunmu = ['a', 'ra', 'ia', o, 'o', o, 'io', o, 'ua', 'rua', 'ya', o, o, o, 'yo', o, 'an', 'ren', 'ian', 'en', 'on', o, 'ion', o, 'uan', 'ruen', 'yan', 'uen', 'uon', o, 'yon', o, 'am', 'rem', 'iam', 'em', 'om', o, o, o, o, o, 'yam', o, o, o, 'im', o, 'ang', 'rang', 'iang', o, 'ong', o, 'ing', o, 'uang', 'ruang', 'yang', o, 'uong', o, 'yk', o, 'ai', 'rai', 'ied', 'e', 'au', 'rau', 'ieu', 'eu', 'uai', 'ruai', 'yed', 'ue', o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, 'ie', 'ii', o, 'ioi', 'u', o, 'iu', o, 'ye', 'yi', o, 'yoi', o, o, 'y', o, o, 'reng', 'ieng', 'eng', 'ung', 'rung', 'yung', o, o, 'rueng', 'yeng', 'ueng', 'uung', o, 'iung', o];
 
 refer = function(str) {
+  var diao, sm, ym;
+  str = str.slice(16);
   console.log(shengmu.length, yunmu.length);
-  return 'returned';
+  sm = 0;
+  if (str[0] === '1') sm += 32;
+  if (str[1] === '1') sm += 16;
+  if (str[2] === '1') sm += 8;
+  if (str[3] === '1') sm += 4;
+  if (str[4] === '1') sm += 2;
+  if (str[5] === '1') sm += 1;
+  ym = 0;
+  if (str[6] === '1') ym += 64;
+  if (str[7] === '1') ym += 32;
+  if (str[8] === '1') ym += 16;
+  if (str[9] === '1') ym += 8;
+  if (str[10] === '1') ym += 4;
+  if (str[11] === '1') ym += 2;
+  if (str[12] === '1') ym += 1;
+  diao = 0;
+  if (str[14] === '1') diao += 2;
+  if (str[15] === '1') diao += 1;
+  return shengmu[sm] + yunmu[ym] + diao;
 };

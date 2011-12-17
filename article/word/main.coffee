@@ -58,6 +58,7 @@ class Text
 		@cha = 0
 		@col = 0
 		@place = 0
+		@strings = ''
 	backward: ->
 		if @place isnt 0 then @place -= 1 else
 			@place = 3
@@ -140,5 +141,24 @@ yunmu = [
 	o,'reng','ieng','eng','ung','rung','yung',o,
 	o,'rueng','yeng','ueng','uung',o,'iung',o]
 refer = (str) ->
+	str = str.slice 16
 	console.log shengmu.length, yunmu.length
-	'returned'
+	sm = 0
+	if str[0] is '1' then sm += 32
+	if str[1] is '1' then sm += 16
+	if str[2] is '1' then sm += 8
+	if str[3] is '1' then sm += 4
+	if str[4] is '1' then sm += 2
+	if str[5] is '1' then sm += 1
+	ym = 0
+	if str[6] is '1' then ym += 64
+	if str[7] is '1' then ym += 32
+	if str[8] is '1' then ym += 16
+	if str[9] is '1' then ym += 8
+	if str[10] is '1' then ym += 4
+	if str[11] is '1' then ym += 2
+	if str[12] is '1' then ym += 1
+	diao = 0
+	if str[14] is '1' then diao += 2
+	if str[15] is '1' then diao += 1
+	shengmu[sm] + yunmu[ym] + diao

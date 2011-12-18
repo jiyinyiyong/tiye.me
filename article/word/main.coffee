@@ -19,13 +19,12 @@ class Text
 		@posY = @baseY + @line * @lineHeight + @place*@chaSize/4
 	forward: (code) ->
 		@strings += code
-		console.log @strings
 		if @strings.length is 32
+			console.log @strings.slice 16
 			@draw.fillStyle = 'black'
 			@draw.font = '10px Ubuntu'
 			@draw.fillText (refer @strings), @baseX+(@chaSize+@chaSpace)*@cha, @baseY+@line*@lineHeight+@chaSize+12
 			@strings = ''
-			console.log 'drawing'
 		@newPosition()
 		if @place is 0 and @col is 0
 			@draw.fillStyle = 'hsl(240,80%,90%)'
@@ -52,15 +51,17 @@ class Text
 				@col = 0
 				@cha += 1
 	changeLine: ->
-		@lineHistory.push [@cha, @col, @place]
-		console.log @lineHistory
+		@lineHistory.push [@cha, @col, @place, @strings]
 		@line += 1
 		@cha = 0
 		@col = 0
 		@place = 0
 		@strings = ''
 	backward: ->
-		if @place isnt 0 then @place -= 1 else
+		@strings = @strings.slice 0, @strings.length-4
+		if @place isnt 0
+			@place -= 1;
+		else
 			@place = 3
 			if @col isnt 0 then @col=0 else
 				@col = 1
@@ -68,9 +69,10 @@ class Text
 					if @line is 0
 						@col = 0
 						@place = 0
+						@strings = ''
 						return 'ended'
 					else
-						[@cha, @col, @place] = @lineHistory.pop()
+						[@cha, @col, @place, @strings] = @lineHistory.pop()
 						@line -= 1
 		@newPosition()
 		if @col is 0 and @place is 0
@@ -79,7 +81,6 @@ class Text
 		else
 			@draw.fillStyle = 'hsl(240,80%,90%)'
 			@draw.fillRect @posX, @posY, @chaSize/2+1, @chaSize/4+1
-		console.log 'backward'
 window.onload = ->
 	cvs = document.getElementById 'cvs'
 	x = cvs.getContext '2d'
@@ -89,20 +90,20 @@ window.onload = ->
 		switch e.keyCode
 			when 13 then t.changeLine() # Enter to change line
 			when 49 then t.forward '0000' # key '1' means '  '
-			when 50 then t.forward '0100' # key '2' means '\ '
-			when 51 then t.forward '1000' # key '3' means '/ '
+			when 50 then t.forward '1000' # key '2' means '\ '
+			when 51 then t.forward '0100' # key '3' means '/ '
 			when 52 then t.forward '1100' # key '4' means 'X '
-			when 81 then t.forward '0001' # key 'q' means ' \'
-			when 87 then t.forward '0101' # key 'w' means '\\'
-			when 69 then t.forward '1001' # key 'e' means '/\'
-			when 82 then t.forward '1101' # key 'r' means 'X\'
-			when 65 then t.forward '0010' # key 'a' means ' /'
-			when 83 then t.forward '0110' # key 's' means '\/'
-			when 68 then t.forward '1010' # key 'd' means '//'
-			when 70 then t.forward '1110' # key 'f' means 'X/'
+			when 81 then t.forward '0010' # key 'q' means ' \'
+			when 87 then t.forward '1010' # key 'w' means '\\'
+			when 69 then t.forward '0110' # key 'e' means '/\'
+			when 82 then t.forward '1110' # key 'r' means 'X\'
+			when 65 then t.forward '0001' # key 'a' means ' /'
+			when 83 then t.forward '1001' # key 's' means '\/'
+			when 68 then t.forward '0101' # key 'd' means '//'
+			when 70 then t.forward '1101' # key 'f' means 'X/'
 			when 90 then t.forward '0011' # key 'z' means ' X'
-			when 88 then t.forward '0111' # key 'x' means '\X'
-			when 67 then t.forward '1011' # key 'c' means '/X'
+			when 88 then t.forward '1011' # key 'x' means '\X'
+			when 67 then t.forward '0111' # key 'c' means '/X'
 			when 86 then t.forward '1111' # key 'v' means 'XX'
 			when 8 then t.backward() # key Backspace means 'Cancel'
 			else console.log e.keyCode
@@ -143,7 +144,6 @@ yunmu = [
 	o,'rueng','yeng','ueng','uung',o,'iung',o]
 refer = (str) ->
 	str = str.slice 16
-	console.log shengmu.length, yunmu.length
 	sm = 0
 	if str[0] is '1' then sm += 32
 	if str[1] is '1' then sm += 16
@@ -152,16 +152,16 @@ refer = (str) ->
 	if str[4] is '1' then sm += 2
 	if str[5] is '1' then sm += 1
 	ym = 0
-	if str[6] is '1' then ym += 64
-	if str[7] is '1' then ym += 32
-	if str[8] is '1' then ym += 16
-	if str[9] is '1' then ym += 8
-	if str[10] is '1' then ym += 4
-	if str[11] is '1' then ym += 2
-	if str[12] is '1' then ym += 1
+	if str[6] is '1' then ym += 2
+	if str[7] is '1' then ym += 1
+	if str[8] is '1' then ym += 64
+	if str[9] is '1' then ym += 4
+	if str[10] is '1' then ym += 32
+	if str[11] is '1' then ym += 16
+	if str[12] is '1' then ym += 8
 	diao = 0
-	if str[14] is '1' then diao += 2
-	if str[15] is '1' then diao += 1
+	if str[14] is '1' then diao += 1
+	if str[15] is '1' then diao += 2
 	shengmu[sm] + yunmu[ym] + diao
 guide = (x) ->
 	x.fillStyle = 'black'
@@ -173,14 +173,14 @@ guide = (x) ->
 	beginY = 50
 	chaSize = 24
 	for i in [0..shengmu.length-1]
-		x.fillText shengmu[i], beginX+(i%4)*width, beginY+(Math.floor i/4)*height
+		x.fillText shengmu[i], beginX+(i%4)*width + 10, beginY+(Math.floor i/4)*height
 	x.fillStyle = 'hsl(240,80%,90%)'
 	for i in [0..shengmu.length-1]
 		x.fillRect beginX+(i%4)*width-chaSize, beginY+(Math.floor i/4)*height, chaSize, chaSize
-	x.fillStyle = 'balck'
+	x.fillStyle = 'black'
 	x.beginPath()
 	for j in [0..shengmu.length-1]
-		px = beginX + (j%4)*width - chaSize
+		px = beginX + (j%4)*width - chaSize/2
 		py = beginY+(Math.floor j/4)*height
 		i = j
 		if i >= 32
@@ -214,7 +214,7 @@ guide = (x) ->
 	beginX += 400
 	x.fillStyle = 'black'
 	for i in [0..yunmu.length-1]
-		x.fillText yunmu[i], beginX+(i%8)*width, beginY+(Math.floor i/8)*height
+		x.fillText yunmu[i], beginX+(i%8)*width + 10, beginY+(Math.floor i/8)*height
 	x.fillStyle = 'hsl(240,80%,90%)'
 	console.log yunmu.length
 	for i in [0..yunmu.length-1]
@@ -222,7 +222,7 @@ guide = (x) ->
 	x.fillStyle ='black'
 	x.beginPath()
 	for j in [0..yunmu.length-1]
-		px = beginX + (j%8)*width - chaSize
+		px = beginX + (j%8)*width - chaSize/2
 		py = beginY+(Math.floor j/8)*height
 		i = j
 		if i >= 64
@@ -248,7 +248,7 @@ guide = (x) ->
 		if i >= 2
 			i -= 2
 			x.moveTo px+chaSize/4, py+chaSize/4
-			x.moveTo px+chaSize/2, py+chaSize/2
+			x.lineTo px+chaSize/2, py+chaSize/2
 		if i >= 1
 			i -= 1
 			x.moveTo px+chaSize/2, py+chaSize/4

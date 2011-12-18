@@ -39,13 +39,12 @@ Text = (function() {
 
   Text.prototype.forward = function(code) {
     this.strings += code;
-    console.log(this.strings);
     if (this.strings.length === 32) {
+      console.log(this.strings.slice(16));
       this.draw.fillStyle = 'black';
       this.draw.font = '10px Ubuntu';
       this.draw.fillText(refer(this.strings), this.baseX + (this.chaSize + this.chaSpace) * this.cha, this.baseY + this.line * this.lineHeight + this.chaSize + 12);
       this.strings = '';
-      console.log('drawing');
     }
     this.newPosition();
     if (this.place === 0 && this.col === 0) {
@@ -86,8 +85,7 @@ Text = (function() {
   };
 
   Text.prototype.changeLine = function() {
-    this.lineHistory.push([this.cha, this.col, this.place]);
-    console.log(this.lineHistory);
+    this.lineHistory.push([this.cha, this.col, this.place, this.strings]);
     this.line += 1;
     this.cha = 0;
     this.col = 0;
@@ -97,6 +95,7 @@ Text = (function() {
 
   Text.prototype.backward = function() {
     var _ref;
+    this.strings = this.strings.slice(0, this.strings.length - 4);
     if (this.place !== 0) {
       this.place -= 1;
     } else {
@@ -111,9 +110,10 @@ Text = (function() {
           if (this.line === 0) {
             this.col = 0;
             this.place = 0;
+            this.strings = '';
             return 'ended';
           } else {
-            _ref = this.lineHistory.pop(), this.cha = _ref[0], this.col = _ref[1], this.place = _ref[2];
+            _ref = this.lineHistory.pop(), this.cha = _ref[0], this.col = _ref[1], this.place = _ref[2], this.strings = _ref[3];
             this.line -= 1;
           }
         }
@@ -122,12 +122,11 @@ Text = (function() {
     this.newPosition();
     if (this.col === 0 && this.place === 0) {
       this.draw.fillStyle = 'white';
-      this.draw.fillRect(this.posX, this.posY, this.chaSize + 40, this.chaSize + 40);
+      return this.draw.fillRect(this.posX, this.posY, this.chaSize + 40, this.chaSize + 40);
     } else {
       this.draw.fillStyle = 'hsl(240,80%,90%)';
-      this.draw.fillRect(this.posX, this.posY, this.chaSize / 2 + 1, this.chaSize / 4 + 1);
+      return this.draw.fillRect(this.posX, this.posY, this.chaSize / 2 + 1, this.chaSize / 4 + 1);
     }
-    return console.log('backward');
   };
 
   return Text;
@@ -148,33 +147,33 @@ window.onload = function() {
       case 49:
         return t.forward('0000');
       case 50:
-        return t.forward('0100');
-      case 51:
         return t.forward('1000');
+      case 51:
+        return t.forward('0100');
       case 52:
         return t.forward('1100');
       case 81:
-        return t.forward('0001');
-      case 87:
-        return t.forward('0101');
-      case 69:
-        return t.forward('1001');
-      case 82:
-        return t.forward('1101');
-      case 65:
         return t.forward('0010');
-      case 83:
-        return t.forward('0110');
-      case 68:
+      case 87:
         return t.forward('1010');
-      case 70:
+      case 69:
+        return t.forward('0110');
+      case 82:
         return t.forward('1110');
+      case 65:
+        return t.forward('0001');
+      case 83:
+        return t.forward('1001');
+      case 68:
+        return t.forward('0101');
+      case 70:
+        return t.forward('1101');
       case 90:
         return t.forward('0011');
       case 88:
-        return t.forward('0111');
-      case 67:
         return t.forward('1011');
+      case 67:
+        return t.forward('0111');
       case 86:
         return t.forward('1111');
       case 8:
@@ -194,7 +193,6 @@ yunmu = ['a', 'ra', 'ia', o, 'o', o, 'io', o, 'ua', 'rua', 'ya', o, o, o, 'yo', 
 refer = function(str) {
   var diao, sm, ym;
   str = str.slice(16);
-  console.log(shengmu.length, yunmu.length);
   sm = 0;
   if (str[0] === '1') sm += 32;
   if (str[1] === '1') sm += 16;
@@ -203,16 +201,16 @@ refer = function(str) {
   if (str[4] === '1') sm += 2;
   if (str[5] === '1') sm += 1;
   ym = 0;
-  if (str[6] === '1') ym += 64;
-  if (str[7] === '1') ym += 32;
-  if (str[8] === '1') ym += 16;
-  if (str[9] === '1') ym += 8;
-  if (str[10] === '1') ym += 4;
-  if (str[11] === '1') ym += 2;
-  if (str[12] === '1') ym += 1;
+  if (str[6] === '1') ym += 2;
+  if (str[7] === '1') ym += 1;
+  if (str[8] === '1') ym += 64;
+  if (str[9] === '1') ym += 4;
+  if (str[10] === '1') ym += 32;
+  if (str[11] === '1') ym += 16;
+  if (str[12] === '1') ym += 8;
   diao = 0;
-  if (str[14] === '1') diao += 2;
-  if (str[15] === '1') diao += 1;
+  if (str[14] === '1') diao += 1;
+  if (str[15] === '1') diao += 2;
   return shengmu[sm] + yunmu[ym] + diao;
 };
 
@@ -227,16 +225,16 @@ guide = function(x) {
   beginY = 50;
   chaSize = 24;
   for (i = 0, _ref = shengmu.length - 1; 0 <= _ref ? i <= _ref : i >= _ref; 0 <= _ref ? i++ : i--) {
-    x.fillText(shengmu[i], beginX + (i % 4) * width, beginY + (Math.floor(i / 4)) * height);
+    x.fillText(shengmu[i], beginX + (i % 4) * width + 10, beginY + (Math.floor(i / 4)) * height);
   }
   x.fillStyle = 'hsl(240,80%,90%)';
   for (i = 0, _ref2 = shengmu.length - 1; 0 <= _ref2 ? i <= _ref2 : i >= _ref2; 0 <= _ref2 ? i++ : i--) {
     x.fillRect(beginX + (i % 4) * width - chaSize, beginY + (Math.floor(i / 4)) * height, chaSize, chaSize);
   }
-  x.fillStyle = 'balck';
+  x.fillStyle = 'black';
   x.beginPath();
   for (j = 0, _ref3 = shengmu.length - 1; 0 <= _ref3 ? j <= _ref3 : j >= _ref3; 0 <= _ref3 ? j++ : j--) {
-    px = beginX + (j % 4) * width - chaSize;
+    px = beginX + (j % 4) * width - chaSize / 2;
     py = beginY + (Math.floor(j / 4)) * height;
     i = j;
     if (i >= 32) {
@@ -276,7 +274,7 @@ guide = function(x) {
   beginX += 400;
   x.fillStyle = 'black';
   for (i = 0, _ref4 = yunmu.length - 1; 0 <= _ref4 ? i <= _ref4 : i >= _ref4; 0 <= _ref4 ? i++ : i--) {
-    x.fillText(yunmu[i], beginX + (i % 8) * width, beginY + (Math.floor(i / 8)) * height);
+    x.fillText(yunmu[i], beginX + (i % 8) * width + 10, beginY + (Math.floor(i / 8)) * height);
   }
   x.fillStyle = 'hsl(240,80%,90%)';
   console.log(yunmu.length);
@@ -286,7 +284,7 @@ guide = function(x) {
   x.fillStyle = 'black';
   x.beginPath();
   for (j = 0, _ref6 = yunmu.length - 1; 0 <= _ref6 ? j <= _ref6 : j >= _ref6; 0 <= _ref6 ? j++ : j--) {
-    px = beginX + (j % 8) * width - chaSize;
+    px = beginX + (j % 8) * width - chaSize / 2;
     py = beginY + (Math.floor(j / 8)) * height;
     i = j;
     if (i >= 64) {
@@ -317,7 +315,7 @@ guide = function(x) {
     if (i >= 2) {
       i -= 2;
       x.moveTo(px + chaSize / 4, py + chaSize / 4);
-      x.moveTo(px + chaSize / 2, py + chaSize / 2);
+      x.lineTo(px + chaSize / 2, py + chaSize / 2);
     }
     if (i >= 1) {
       i -= 1;

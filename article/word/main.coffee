@@ -2,7 +2,7 @@
 class Text
 	constructor: (@draw) ->
 	baseX: 20
-	baseY: 20
+	baseY: 600
 	line: 0
 	lineHeight: 50
 	lineHistory: []
@@ -83,6 +83,7 @@ class Text
 window.onload = ->
 	cvs = document.getElementById 'cvs'
 	x = cvs.getContext '2d'
+	guide x
 	t = new Text x
 	document.onkeydown = (e) =>
 		switch e.keyCode
@@ -110,7 +111,7 @@ shengmu = [
 	'p','ph','b','m',
 	o,o,o,o,
 	't','th','d','n',
-	o,o,o,o,
+	'cr','chr','zr','sr',
 	'c','ch','z',o,
 	's',o,'zs',o,
 	'cj','chj','zj','nj',
@@ -162,3 +163,94 @@ refer = (str) ->
 	if str[14] is '1' then diao += 2
 	if str[15] is '1' then diao += 1
 	shengmu[sm] + yunmu[ym] + diao
+guide = (x) ->
+	x.fillStyle = 'black'
+	x.font = '16px Ubuntu'
+	x.textBaseline = 'top'
+	height = 30
+	width = 80
+	beginX = 50
+	beginY = 50
+	chaSize = 24
+	for i in [0..shengmu.length-1]
+		x.fillText shengmu[i], beginX+(i%4)*width, beginY+(Math.floor i/4)*height
+	x.fillStyle = 'hsl(240,80%,90%)'
+	for i in [0..shengmu.length-1]
+		x.fillRect beginX+(i%4)*width-chaSize, beginY+(Math.floor i/4)*height, chaSize, chaSize
+	x.fillStyle = 'balck'
+	x.beginPath()
+	for j in [0..shengmu.length-1]
+		px = beginX + (j%4)*width - chaSize
+		py = beginY+(Math.floor j/4)*height
+		i = j
+		if i >= 32
+			i -= 32
+			console.log 'once'
+			x.moveTo px, py
+			x.lineTo px+chaSize/4, py+chaSize/4
+		if i >= 16
+			i -= 16
+			x.moveTo px+chaSize/4, py
+			x.lineTo px, py+chaSize/4
+		if i >= 8
+			i -= 8
+			x.moveTo px+chaSize/4, py
+			x.lineTo px+chaSize/2, py+chaSize/4
+		if i >= 4
+			i -= 4
+			x.moveTo px+chaSize/2, py
+			x.lineTo px+chaSize/4, py+chaSize/4
+		if i >= 2
+			i -= 2
+			x.moveTo px, py+chaSize/4
+			x.lineTo px+chaSize/4, py+chaSize/2
+		if i >= 1
+			i -= 1
+			x.moveTo px+chaSize/4, py+chaSize/4
+			x.lineTo px, py+chaSize/2
+	x.closePath()
+	x.stroke()
+	# for yunmu
+	beginX += 400
+	x.fillStyle = 'black'
+	for i in [0..yunmu.length-1]
+		x.fillText yunmu[i], beginX+(i%8)*width, beginY+(Math.floor i/8)*height
+	x.fillStyle = 'hsl(240,80%,90%)'
+	console.log yunmu.length
+	for i in [0..yunmu.length-1]
+		x.fillRect beginX+(i%8)*width-chaSize, beginY+(Math.floor i/8)*height, chaSize, chaSize
+	x.fillStyle ='black'
+	x.beginPath()
+	for j in [0..yunmu.length-1]
+		px = beginX + (j%8)*width - chaSize
+		py = beginY+(Math.floor j/8)*height
+		i = j
+		if i >= 64
+			i -= 64
+			x.moveTo px, py+chaSize/2
+			x.lineTo px+chaSize/4, py+chaSize*3/4
+		if i >= 32
+			i -= 32
+			x.moveTo px+chaSize/4, py+chaSize/2
+			x.lineTo px+chaSize/2, py+chaSize*3/4
+		if i >= 16
+			i -= 16
+			x.moveTo px+chaSize/2, py+chaSize/2
+			x.lineTo px+chaSize/4, py+chaSize*3/4
+		if i >= 8
+			i -= 8
+			x.moveTo px, py+chaSize*3/4
+			x.lineTo px+chaSize/4, py+chaSize
+		if i >= 4
+			i -= 4
+			x.moveTo px+chaSize/4, py+chaSize/2
+			x.lineTo px, py+chaSize*3/4
+		if i >= 2
+			i -= 2
+			x.moveTo px+chaSize/4, py+chaSize/4
+			x.moveTo px+chaSize/2, py+chaSize/2
+		if i >= 1
+			i -= 1
+			x.moveTo px+chaSize/2, py+chaSize/4
+			x.lineTo px+chaSize/4, py+chaSize/2
+	x.stroke()

@@ -4,7 +4,16 @@ html
 		title 挑花
 		script(src='main.js')
 		:stylus
+			p
+				height 0px
 			canvas
 				border 1px solid black
 	body
-		canvas(id='cvs',width='1200px',height='600px') 如果这行字显示出来了, 就是说不支持 Canvas 的
+		p 这里是可用的快捷键的说明
+		p 1(__) ; 2(\\_) ; 3(/_) ; 4(X_)
+		p q(_\\) ; w(\\\\) ; e(/\\) ; r(X\\)
+		p a(_/) ; s(\\/) ; d(//) ; f(X/)
+		p z(_X) ; x(\\X) ; c(/X) ; v(XX)
+		p '<'Enter> 换行
+		p '<'backspace> 退格
+		canvas(id='cvs',width='1200px',height='3000px') 如果这行字显示出来了, 就是说不支持 Canvas 的

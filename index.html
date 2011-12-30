@@ -2,36 +2,21 @@
 layout: default
 title: '@题叶'
 ---
-{% for i in ["a", "中"] %}
-	<span> {{ i }} <span>
-{% endfor %}
-<span class="tag">
-	中文
-</span>
-{% for post in site.tags.["中文"] %}
-<div class="posts">
-		<span class="date">
-			{{ post.date | date: "%y-%m-%d"}}
-		</span>
-		<span class="title">
-			<a href="{{ post.url }}">
-				{{ post.title }}
-			</a>
-		</span>
-</div>
-{% endfor %}
-<span class="tag">
-	new
-</span>
-{% for post in site.tags.new %}
-<div class="posts">
-		<span class="date">
-			{{ post.date | date: "%y-%m-%d"}}
-		</span>
-		<span class="title">
-			<a href="{{ post.url }}">
-				{{ post.title }}
-			</a>
-		</span>
-</div>
+{% for tag in site.tags %}
+	<span class="tag">
+		{{ tag[0] }}
+	</span>
+	{% for post in tag[1] %}
+		<div class="posts">
+			<span class="date">
+				{{ post.date | date: "%y-%m-%d"}}
+				&nbsp;
+			</span>
+			<span class="title">
+				<a href="{{ post.url }}">
+					{{ post.title }}
+				</a>
+			</span>
+		</div>
+	{% endfor %}
 {% endfor %}

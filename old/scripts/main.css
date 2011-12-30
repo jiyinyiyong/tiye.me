@@ -1,0 +1,72 @@
+
+body, body * {
+	font-family: Ubuntu, 文泉驿等款微米黑, 微软雅黑;
+	font-weight: normal;
+	box-sizing: border-box;
+	display: -moz-box;
+		-moz-box-pack: center;
+		-moz-box-align: center;
+	display: -webkit-box;
+		-webkit-box-pack: center;
+		-webkit-box-align: center; }
+nav {
+	width: 1300px;
+	height: 640px;
+	position: relative;
+	top: 10px;
+	display: -moz-box;
+	-moz-box-orient: horizontal;
+	display: -webkit-box;	
+	-webkit-box-orient: hotizontal;
+	box-sizing: border-box; }
+	#left {
+		background: hsl(50,100%,90%);
+		padding: 10px 20px 0 40px;
+		width: 400px;
+		height: 640px;
+		display: -moz-box;
+		-moz-box-orient: vertical;
+		display: -webkit-box;
+		-webkit-box-orient: vertical; }
+		#left>section {
+			opacity: 0.6;
+			height: 30px;
+			width: 300px;
+			margin: 6px;
+			-moz-border-radius: 8px;
+			-webkit-border-radius: 8px;
+			background: hsl(120,100%,50%); }
+			#left>*:hover {
+				opacity: 1;
+				background: hsl(120,100%,80%); }
+			#left>section:first-child {
+				opacity: 0.2; }
+	#right {
+		padding: 60px 50px;
+		overflow: auto;
+		-moz-box-orient: vertical;
+		-webkit-box-orient: vertical;
+		-moz-box-align: center;
+		-moz-box-pack: center;
+		-webkit-box-align: center;
+		height: 640px;
+		background: hsl(100,100%,90%);
+		width: 900px; }
+		.x {
+			-moz-box-pack: start;
+			-webkit-box-pack: start;
+			padding: 4px 0px 4px 40px;
+			line-height: 28px;
+			background: hsl(20,90%,80%);
+			-moz-border-radius: 8px;
+			-webkit-border-radius: 8px;
+			margin: 4px;
+			height: 35px;
+			width: 600px; }
+			.x:hover {
+				opacity: 1;
+				background: hsl(20,90%,90%); }
+			.lin:hover {
+				-moz-transform: scale(1.02); }
+img {
+	border: 10px, solid, hsl(300, 80%, 30%);}

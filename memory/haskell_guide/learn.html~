@@ -1,0 +1,951 @@
+<html>
+	<head>
+	<meta charset='utf-8'/>
+	<title>haskell notes</title>
+	<link rel='stylesheet' href='guide.css'/>
+	</head>
+	<body>
+	<pre>
+本文为 Learn You Haskell 笔记, 摘录代码, 记录理解:
+http://learnyouahaskell.com/introduction#about-this-tutorial
+协议了解不多, 总之主干和内容都按原作者:
+http://creativecommons.org/licenses/by-nc-sa/3.0/
+
+代码后跟文字采用 Haskell 注释"--", 文字中代码使用双引号包裹,
+代码中可变的参数, 双引号中使用"#{}", 执行输出结果用"-->"引出.
+比如"cd #{filename}"表示进入自己指定目录.
+
+交互式命令行可用 GHC 或者 Hugs, 我用的 GHC, 安装 ghc6,
+在同一个目录建立文件夹内建立文件"#{filename}.hs", 把代码写成脚本,
+用"ghci"命令启动, "Ctrl+d"以及":quit"和":q"退出 ghci.
+输入":l  #{filename}"载入, 修改文件后, 运行":r"重新载入.
+ghci 命令冒号":"开头, 输入":?"获取 help, ":{"和":}"开始和结束多行输入.
+":! #{command}"执行终端命令, ":set prompt #{string_prompt}"来改提示.
+"$HOME/.ghci"或者"$HOME/.ghc/ghci.conf"存放配置,
+注意可能要设置配置文件权限只给 owner 可写, 如出错, ghci 中会提示.
+更多没弄懂, 包括编译, 上面提及内容文档在这里:
+http://www.haskell.org/ghc/docs/7.0.4/html/users_guide/index.html
+逻辑运算: && , || , not , True , False , == , /= , 不同类型不能进行比较.
+backticks, infix, prefix: "div 20 4"也可以写作"20 `div` 4". 也可以用 let `div` a b 定义, 不影响.
+Haskell 中定义变量定义函数不需要严格的先后顺序来保证调用.
+if 语句必须有 else 结尾, 测试没有 then 也是 prase error 的, 不含缩进写法如下:
+doubleSmallNumber x = if x > 100 then x else x*2   -- 或者把 then 和 else 换一行用缩进.
+函数名不能以大写字母开头, 单引号可以在函数中间或者结尾, 表示严格版本.
+函数可以没有参数, 输出字符串时需要双引号,
+交互式命令行当中使用 let 来定义变量和函数, 脚本当中不需要.
+
+[1, 2] ++ [3,4] -- 连接列表, --> [1, 2, 3, 4]
+"hello" ++ " " ++ "world" -- 字符串是列表, 必须使用双引号, --> "hello world"
+1: [2, 3, 4] -- 冒号在列表之前加入元素, 同理字符和字符串; 只能用在开头.
+1: 2: 3: [] -- 其实等同于 [1, 2, 3], 可以连写的.
+[1, 2, 3] !! 1 -- 取出'1'位置的数字, 从 0 开始计数, 因此是 --> 2
+[[1, 2], [3, 4]] -- 可以用":{ #{list} }:"输入为多行, "!!"连写可以取出.
+数组可按字典序比较大小, > , < , >= , <= , == , /=
+
+"#{function} #{list}"操作的数组的函数:
+head 取出第一个; tail head其余; last 最后一个; init last其余.
+length [1, 2, 3] -- 取长度 --> 3
+null [] -- 判断是否空数组 --> True
+reverse [1, 2, 3] -- 倒转顺序 --> [3, 2, 1]
+take 3 [1, 2, 3, 4] -- 取出前3个生成数组 --> [1, 2, 3]
+drop 3 [1, 2, 3, 4] -- 去掉前3个剩下组成数组 --> [4]
+maximum , minimum , sum , product , 对应运算.
+elem 4 [3, 4] -- 判断是否存在 --> True
+
+[1.. 3] --数组自动生成, 同理 ['1'.. '9'] , ['a'.. 'z'] , ['A'.. 'z']
+[6, 4.. 1] -- 按照规律生成, 不支持幂次的规律, 可以倒置 --> [6, 4, 2]
+take 3 [1, 3..] -- 支持无穷数列, 常用 take 取出 --> [1, 3, 5]
+take 10 (cycle [1,2,3]) -- cycle 函数,也支持字符串 --> [1,2,3,1,2,3,1,2,3,1]
+take 10 (repeat 5) -- repeat 也是无穷, 同理字符串 --> [5,5,5,5,5,5,5,5,5,5]
+replicate 3 10 -- -> [10,10,10]
+[x * 2 | x <- [1.. 3]] -- 竖线左边是取出的结果, 右边限制条件 --> [2, 4, 6]
+[x * 2 | x <- [1.. 10], x*2 >= 12] -- 多个限制条件用逗号 --> [12, 14, 16, 18, 20]
+[x | x <- [1..10], odd x] -- 条件 oddd x 结果为 True 时输出 --> [1, 3, 5, 7, 9]
+[ x*y | x <- [2,5,10], y <- [8,10,11]] -- 注意结合顺序, 列表类似 --> [16,20,22,40,50,55,80,100,110]
+length' xs = sum [1 | _ <- xs] -- 注意 "_" 表示任意物件
+[ [ x | x <- xs, even x ] | xs <- xxs] -- 过滤二维数组的语法, 其中 xxs 未给出.
+[(1, 2), (2, 3)] -- 用列表内嵌元组限制列表内的元素格式相同, 否则报错.
+fst , snd 函数, 仅仅支持 pair, 但元组可以有不同数据类型.
+zip [1,2,3,4,5] [5,5,5,5,5] -- 按照数量少的个数 --> [(1,5),(2,5),(3,5),(4,5),(5,5)]
+[ (a,b,c) | c <- [1..10], b <- [1..c], a <- [1..b], a^2 + b^2 == c^2, a+b+c == 24] -- 强大 --> [(6, 8, 10)]
+[a + b | (a, b) <- xs] -- 对于元组实用 List Comprehension.
+static type system 编译前差错, type inference 不用每次声明
+:t 'a' -> 'a' :: Char -- ":t #{char}"用来察看类型, 这是字符串
+:t "a" -> "a" :: [Char] -- 字符串和字符串数组的区别
+removeNonUppercase :: [Char] -> [Char] -- 定义类型
+removeNonUppercase st = [ c | c <- st, c `elem` ['A'..'Z']] -- 定义函数, 可以自动推断
+addThree :: Int -> Int -> Int -> Int -- 经常就,, 最后一个 Int 是返回值
+addThree x y z = x + y + z -- 提到如果不懂, 先写函数, 用":t"查看
+
+Int -2147483648 ~ 2147483647
+Interger not bounded 无界的
+Float is a real floating point with single precision,
+Double is a real floating point with double the precision!
+Bool is a boolean type. It can have only two values: True and False.
+Char represents a character. It's denoted by single quotes. A list of characters is a string.
+( ) 是类型, 元组和列表的类型只能看了.
+fst :: (a, b) -> a -- a 和 b 称为: type variable, 函数称为 polymorphic functions
+(+) 是 infix function ,可以通过"(+) 1 2"调用"--> 3"
+(==) :: (Eq a) => a -> a -> Bool  -- "=>" 表示: "class constraint"
+意思是, 参数满足类型约束,  a 属于 Eq 这个类, 只有 Eq 这个类里数相互可以比较.
+All standard Haskell types except for IO and functions are a part of the Eq typeclass.
+Eq is used for types that support equality testing. == and /=
+Ord is for types that have an ordering. >, <, >= and <=
+All the types we covered so far except for functions are part of Ord.
+compare :: (Ord a) => a -> a -> Ordering , Ordering is a type that can be GT, LT or EQ
+show :: (Show a) => a -> String , Members of Show can be presented as strings.
+All types covered so far except for functions are a part of Show.
+read "[1,2,3,4]" ++ [3] -- Read is sort of the opposite typeclass of Show. --> [1, 2, 3, 4]
+read :: (Read a) => String -> a , read 要求是字符串, 单引号 Char 不行
+read "[1,2,3,4]" :: [Int] -- read 用法 --> [1, 2, 3, 4]
+Enum members are sequentially ordered types — they can be enumerated.
+['a'.. 'z'] -- 按照说明给出的都是该类表达式生成的, 可是":t"查看却不像前面几个类型的显示.
+minBound :: (Bounded a) => a -- 看不懂这句: In a sense they are polymorphic constants.
+minBound :: Int -- 看去是最大最小边界两个函数, 元组中类似, 列表不接受 --> -2147483648
+20 :: (Num t) => t , 这个地方还是看不懂的
+Num is a numeric typeclass. Its members have the property of being able to act like numbers.
+20 :: Float  20.0 -- It appears that whole numbers are also polymorphic constants.
+(*) :: (Num a) => a -> a -> a , (*) accepts all numbers, 与数值相似, (疑问)
+Integral is also a numeric typeclass. In this typeclass are Int and Integer.
+Floating includes only floating point numbers, so Float and Double.
+fromIntegral (length [1,2,3,4]) + 3.2 -- 还有这个(怀疑): (Num b) => length :: [a] -> b
+Haskell 定义函数可以用 let , 指定类型只能在文件中进行, 至少 let 用上去报错.
+注意定义 7 和定义 x 不可以调换顺序, 会发生覆盖, 似乎下往上读的, 匹配又是上往下的,
+lucky :: (Integral a) => a -> String
+lucky 7 = "LUCKY NUMBER SEVEN!"
+lucky x = "Sorry, you're out of luck, pal!"
+函数调用时会去匹配写好的模式, 注意尽可能将需要的模式涵盖以免出错.
+factorial :: (Integral a) => a -> a  factorial 0 = 1
+factorial n = n * factorial (n - 1)
+注意用法, 操作元组可以直接用变量, 也可以像下面这样:
+addVectors :: (Num a) => (a, a) -> (a, a) -> (a, a)
+addVectors (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
+可以自己定义超过二维的数组取头部, 注意下划线的用法, 忽略类型的区别:
+first :: (a, b, c) -> a
+first (x, _, _) = x
+因为 [1, 2, 3] 实际上是 1:2:3:[] 的语法糖, 有下面写法, 另外注意 error 用法.
+head' :: [a] -> a
+head' [] = error "Can't call head on an empty list, dummy!"
+head' (x:_) = x
+下面的用法更有趣, 不过类型 Show 很让我费解, 函数以外都属于 Show.
+tell :: (Show a) => [a] -> String
+tell [] = "The list is empty"
+tell (x:[]) = "The list has one element: " ++ show x
+tell (x:y:[]) = "The list has two elements: " ++ show x ++ " and " ++ show y
+tell (x:y:_) = "This list is long. The first two elements are: " ++ show x ++ " and " ++ show y
+于是还有了用递归方式求数组长度的, 个人没有感想.
+length' :: (Num b) => [a] -> b
+length' [] = 0
+length' (_:xs) = 1 + length' xs
+形如 xs@(x:y:ys) 来限定 xs 的类型, 用法
+capital :: String -> String
+capital "" = "Empty string, whoops!"
+capital all@(x:xs) = "The first letter of " ++ all ++ " is " ++ [x]
+符号 ++ 用在连接列表, 不能用在 Patten Match 当中, 不合理.
+
+称为 Guard 的选择语句, 相当 switch/case, 可以缩进或不缩进, 可以嵌套.
+max' :: (Ord a) => a -> a -> a  max' a b
+	 | a > b     = a
+	 | otherwise = b
+case 意思大概那样, 实际上和 where 和其他的用法可对转, 具体看教程.
+head' :: [a] -> a
+head' xs = case xs of [] -> error "No head for empty lists!"
+				(x:_) -> x
+where 关键字用来简化函数当中某个频繁语句的书写, 可以缩进或者不缩进,
+f x = x * y where y = y * 4 -- 还可以用 where (a, b) = (1, 3) 的方式简化表达式.
+where 绑定的内容是私有的, 仅函数内部可见, 不能在函数间共用.
+教程提到了 global 的用法, 实际上等同于定义函数作为关键字.
+下面例子有迷惑性, 实际是直接完成了 pattern matching, 疯狂.
+initials :: String -> String -> String
+initials firstname lastname = [f] ++ ". " ++ [l] ++ "."
+	where (f:_) = firstname
+		(l:_) = lastname
+细看 where 还被用来定义函数.
+calcBmis :: (RealFloat a) => [(a, a)] -> [a]
+calcBmis xs = [bmi w h | (w, h) <- xs]
+	where bmi weight height = weight / height ^ 2
+let 对比 where, 不局限于函数; 但不能跨越 guard 使用, 非常 local,
+cylinder :: (RealFloat a) => a -> a -> a
+cylinder r h =
+	let sideArea = 2 * pi * r * h
+	     topArea = pi * r ^2
+	in  sideArea + 2 * topArea
+where 属于语法构造, 而 let 是独立的表达式, 可以用在各种位置,
+4 * (let a = 9 in a + 1) + 2 --> 42
+[let square x = x * x in (square 5, square 3, square 2)] --> [(25, 9, 4)]
+(let a = 100; b = 200; c = 300 in a*b*c, let foo="Hey "; bar = "there!" in foo ++ bar)
+--> (6000000,"Hey there!")  这一句当中分号不可以省略, 最后一个绑定可以省略.
+(let (a,b,c) = (1,2,3) in a+b+c) * 100  --> 600
+let 还可以用在 list comprehension 里边, 这里没有看到 in 关键词了.
+calcBmis :: (RealFloat a) => [(a, a)] -> [a]
+calcBmis xs = [bmi | (w, h) <- xs, let bmi = w / h ^ 2, bmi >= 25.0]
+let 可以用在定义函数当中, 这也就是 ghci 里的常用.
+let boot x y z = x * y + z in boot 3 4 2
+就因为 let 过于 local, 所以不能代替 where 用在定义函数.
+
+Haskell 没有 for 和 while, 思维上用递归 recursion 理解, 天旋地转.
+maximum' :: (Ord a) => [a] -> a
+maximum' [] = error "maximum of empty list"
+maximum' [x] = x
+maximum' (x:xs) = max x (maximum' xs)
+例子比如, 递归生成 n 个 x 的列表:
+replicate' :: (Num i, Ord i) => i -> a -> [a]
+replicate' n x
+	| n <= 0    = []
+	| otherwise = x:replicate' (n-1) x
+用了 Num 和 Ord 两者的原因作者写到 Num 不是 Ord 的子集.
+take 作为例子:
+take' :: (Num i, Ord i) => i -> [a] -> [a]
+take' n _
+     | n <= 0   = []
+take' _ []     = []
+take' n (x:xs) = x : take' (n-1) xs
+reverse 作为例子:
+reverse' :: [a] -> [a]
+reverse' [] = []
+reverse' (x:xs) = reverse' xs ++ [x]
+repeat 作为例子:
+repeat' :: a -> [a]
+repeat' x = x:repeat' x
+zip 作为例子:
+zip' :: [a] -> [b] -> [(a,b)]
+zip' _ [] = []
+zip' [] _ = []
+zip' (x:xs) (y:ys) = (x,y):zip' xs ys
+elem 作为例子:
+elem' :: (Eq a) => a -> [a] -> Bool
+elem' a [] = False
+elem' a (x:xs)
+	| a == x    = True
+	| otherwise = a `elem'` xs
+quicksort 被很多人用来展示 Haskell 的优雅,
+运行这段代码发现 ghc 有必要将 smallerSorted 进行对应缩进, 而不是连写在 let 后面:
+quicksort :: (Ord a) => [a] -> [a]
+quicksort [] = []
+quicksort (x:xs) =
+	let
+		smallerSorted = quicksort [a | a <- xs, a <= x]
+		biggerSorted = quicksort [a | a <- xs, a > x]
+	in  smallerSorted ++ [x] ++ biggerSorted
+递归的方式往往是设定规则和边缘, 对于列表往往上头尾部和空列表.
+
+高阶函数 higher order function 是 Haskell 体验中不可少的一部分,
+多参数函数相当于函数接受参数返回另一函数来接收下一个参数, 称为 curried functions.
+Haskell B. Curry 的名字被使用了, curried 函数简单说是参数分步代入.
+max 4 5 --> 5 -- 和 (max 4) 5 是一致的, 因为 (max 4) 结束返回了一个函数 (->)
+max :: (Ord a) => a -> a -> a -- 可理解为每接受一个参数 a 返回一个函数 (->), 再接受参数,
+max :: (Ord a) => a -> (a -> a) -- 这个写法意思一样, 可我不明白那里区别了..
+还提到可以将只部分执行的函数作为参数传递的用法, 没有详解.
+multThree :: (Num a) => a -> (a -> (a -> a)) -- 像把后面括号部分作为前面已执行部分的参数(?)
+let m x y z = x*y*z -- 来看具体的效果
+:t m --> m :: Num a => a -> a -> a -> a
+:t (m 9) --> (m 9) :: Num a => a -> a -> a -- 表明返回了函数, 注意参数个数.
+let m'9 = m 9 -- 将一个部分执行的函数结果传递给 m'9
+:t m'9 --> m'9 :: Integer -> Integer -> Integer -- 类型改变倒是在意料之外, 对浮点数报错了..
+(/10) 200 --> 20.0 -- 因此还有 let divide'10 = (/10) 的写法, 将其写作函数.
+具体写法如下, 这个类型, 函数接受一个参数返回浮点数, 根据实际来了..
+divideByTen :: (Floating a) => a -> a
+divideByTen = (/10)
+看来, 几乎所有, 中置表达式都可以括号加简写,,
+isUpperAlphanum :: Char -> Bool
+isUpperAlphanum = (`elem` ['A'..'Z'])
+作者说减号'-'例外, 因为负数, 因而只能用 subtrsct
+(subtract 4) 3 --> -1 -- 注意参数顺序, (4) (3) (-1)
+部分执行的函数如 (subtract 4) 直接在 ghci 执行会报错, --> No instance for (Show (a0 -> a0)) ...
+因为返回的 (->) 不是类型 Show 的某个实例, 看来 ghci 的输出都这么搞的.
+
+可以用函数作为参数, 注意类型定义的括号是必须的:
+applyTwice :: (a -> a) -> a -> a
+applyTwice f x = f (f x)
+applyTwice (+3) 10 --> 16
+applyTwice ("HAHA " ++) "HEY" --> "HAHA HAHA HEY"
+applyTwice (++ " HAHA") "HEY" --> "HEY HAHA HAHA"
+applyTwice (3:) [1] --> [3,3,1]
+zipWith 是高阶函数编程中一个重要函数, 接受一个函数/ 两个变量作为参数,
+a, b, c 未必要相同的类型, 不确定时先写出内容再 :t 看类型,
+边缘的情况, 数列长度不同时用 _ 表示:
+zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWith' _ [] _ = []
+zipWith' _ _ [] = []
+zipWith' f [x:xs] [y:ys] = f x y : zipWith' f xs ys
+准确基本的告诫函数可以广泛使用, zipWith' 函数:
+zipWith' (+) [4, 2, 5, 6] [2, 6, 2, 3] --> [6,8,7,9]
+zipWith' max [6, 3, 2, 1] [7, 3, 1, 5] --> [7,3,2,5]
+zipWith' (++) ["foo ", "bar ", "baz "] ["fighters", "hoppers", "aldrin"]
+--> ["foo fighters","bar hoppers","baz aldrin"]
+zipWith' (*) (replicate 5 2) [1..] --> [2,4,6,8,10]
+zipWith' (zipWith' (*)) [[1,2,3],[3,5,6],[2,3,4]] [[3,2,2],[3,4,5],[5,4,3]]
+--> [[3,4,6],[9,20,30],[10,12,12]]
+对比命令式编程那种循环加检测来判断是否符合条件的方式,
+函数式编程用抽象的方式探测和过滤是否满足条件并完成计算.
+另一个 flip 函数, 接受一个缺两参数的函数将两参数顺序调换,
+这里 x, y 是 f, g 隐含的参数, 看去有些突兀:
+flip' :: (a -> b -> c) -> (b -> a -> c)
+flip' f = g
+	where g x y = f y x
+而类型定义中后一个括号可有可无, 不影响接收参数,
+另外直接明写也是可以的:
+flip' :: (a -> b -> c) -> b -> a ->c
+flip' f x y = f y x
+看下用例, (flip' div) 作为参数传给 zipWith:
+flip' zip [1..5] "hello" -> [('h',1),('e',2),('l',3),('l',4),('o',5)]
+zipWith (flip' div) [2, 2..] [10, 8.. 2] --> [5, 4, 3, 2, 1]
+
+map 函数接收一个函数和一个列表作为参数,
+返回列表中元素逐个用函数处理的值的列表:
+map' :: (a -> b) -> [a] -> [b]
+map' _ [] = []
+map' f (x:xs) => f x : map' f xs
+map 函数属于高阶函数少有的广泛使用, 看例子:
+map (+3) [1, 5, 3, 1, 6] --> [4,8,6,4,9]
+map (++ "!") ["BIFF", "BANG", "POW"] --> ["BIFF!","BANG!","POW!"]
+map (replicate 3) [3..6] --> [[3,3,3],[4,4,4],[5,5,5],[6,6,6]]
+map (map (^2)) [[1,2],[3,4,5,6],[7,8]] --> [[1,4],[9,16,25,36],[49,64]]
+map fst [(1,2),(3,5),(6,3),(2,6),(2,5)] --> [1,3,6,2,2]
+map 函数的功能用列表解析模拟, 比如:
+[x+3 | x <- [1,5,3,1,6]] --> [4,8,6,4,9]
+map 的写法相较更清晰, 特别嵌套使用不会因为括号而糊涂.
+filter函数接收一个判断函数 p 加一个列表,
+返回经函数 p 判断为真的值所组成的列表:
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' _ [] = []
+filter' p (x:xs)
+	| p x = x : filter' p xs
+	| otherwise = filter' p xs
+当 p x 返回 True 时, 和非时分开两个结果:
+filter (>3) [1,5,3,2,1,6,4,3,2,1] --> [5,6,4]
+filter (==3) [1,2,3,4,5] --> [3]
+filter even [1..10] --> [2,4,6,8,10]
+let notNull x = not (null x) in filter notNull [[1,2,3],[],[3,4,5],[2,2],[],[],[]]
+--> [[1,2,3],[3,4,5],[2,2]]
+filter (`elem` ['a'..'z']) "u LaUgH aT mE BeCaUsE I aM diFfeRent"
+--> "uagameasadifeent"
+filter (`elem` ['A'..'Z']) "i lauGh At You BecAuse u r aLL the Same"
+--> "GAYBALLS"
+filter 和列表解析选取还是考虑可读性, 因为功能相近,
+列表解析中可以用 && 来模拟多层的筛选, 或者多层列表解析.
+quicksort 算法因此稍微简化一些来写:
+quicksort :: (Ord a) => [a] -> [a]
+quicksort [] = []
+quicksort (x:xs) =
+	let
+		smallerSorted = quicksort (filter (<=x) xs)
+		biggerSorted = quicksort (filter (>x) xs)
+	in smallerSorted ++ [x] ++ biggerSorted
+列表解析和高阶函数有时轻松处理命令式编程中大量循环的判断,
+而且由于惰性计算, 多余的 filter 和 map 也能避免重复执行(?).
+largestDivisible :: (Integral a) => a
+largestDivisible = head (filter p [100000, 99999..])
+	where p x = x `mod` 3829 == 0
+例子中当取出第一个满足的数时不再计算, 得益于惰性计算.
+
+takeWhile 函数接收一个判断和一个列表作为参数,
+顺序判断每个元素, 将返回错误前的元素组成列表返回:
+takeWhile' :: (a -> Bool) -> [a] -> [a]
+takeWhile' p (x:xs)
+	| p x = x : takeWhile' p xs
+	| otherwise = []
+takeWhile 与 filter 相仿, 但前者在第一次产生 false 时即终止的.
+sum (takeWhile (<10000) (filter odd (map (^2) [1..]))) --> 166650
+sum (takeWhile (<10000) [n^2 | n <- [1..], odd (n^2)]) --> 166650
+列表解析的方式也可以写出该函数, 然而完全用列表解析会成为无限.
+然后来考虑角谷猜想, 即: 取一自然数(不含零)判断(mod x 2),
+真则取 x/2, 否则取(3*x+1), 继续对所取得数进行此步骤, 直到取出 1.
+记录此过程步骤, 问[1..100]有几个数步长(>15)?
+chain :: (Integral a) => a -> [a]
+chain n
+	| even n = n : chain (n `div` 2)
+	| odd n = n : chain (n*3 + 1)
+注意了不能用(/2)代替上面的除以 2, 似乎是浮点数问题,
+另外 1 在程序中特别处理, 看例子:
+chain 10 --> [10,5,16,8,4,2,1]
+chain 1 --> [1]
+然后用 numLongChains 来返回结果, 用 isLong 来判断长短:
+numLongChains :: Int
+numLongChains = length (filter isLong (map chain [1..100]))
+	where isLong xs = length xs > 15
+使用 Int 的原因是 length 返回值是 Int 类型的, 具体看原文.
+另外还能使用(map (*) [1..]), 返回元素函数的列表,
+[(0*),(1*),(2*),(3*),(4*),(5*)...
+然而这不属于 Show 于是不能打印. 用以下方式探测:
+let listOfFuns = map (*) [0..]
+(listOfFuns !! 4) 5 --> 20
+Lambdas 基本用来写一次性匿名函数代入高阶函数当中,
+书写时先用'\'再写参数再写"->"再写函数体最后包围以括号,
+在上面的例子中直接用 Lambdas 代替 filter 的判断:
+numLongChains :: Int
+numLongChains = length (filter (\xs -> length xs > 15) (map chain [1..100]))
+像(+3)与(\x -> x+3)等价, 前者的简洁, 后者没有必要.
+Lambdas 就像一般函数, 可以带有任意多个参数:
+zipWith (\a b -> (a * 30 + 3) / b) [5,4,3,2,1] [1,2,3,4,5]
+--> [153.0,61.5,31.0,15.75,6.6]
+Lambdas 中的模式匹配不能匹配两种模式, 比如[]和[x:xs], 慎用.
+map (\(a,b) -> a + b) [(1,2),(3,5),(6,3),(2,6),(2,5)]
+--> [3,8,9,8,7]
+不用括号的情况, 因函数本身被 curried, 有如下后三行等价:
+addThree :: a -> a -> a -> a
+addThree x y z = x+y+z
+addThree = \x -> \y -> \z -> x+y+z
+addThree = \x y z -> x+y+z
+借助 Lambdas 函数 flip 还可以这样写:
+flip' :: (a -> b -> c) -> b -> a -> c
+flip' f = \x y -> f y x
+
+前文中(x:xs)广泛使用, 因而制造 fold 一类函数来做此类事情,
+一个 fold 函数接收一个二元函数一个初值和一个列表为参数,
+逐个抽取列表元素与初值代入函数中运算, 返回值代入初值直到结束,
+比如 foldl 从左边开始取列表的元素,
+foldl' (a -> b -> a) -> a -> [b] -> a
+foldl' _ x [] = x
+foldl' f y (x:xs) = f y (foldl' x xs)
+再来写 sum 函数累加列表各元素:
+sum' :: (Num a) => [a] -> a
+sum' xs = foldl' (\acc x -> acc + x) 0 xs
+考虑到函数是 curried, 并且(+)可以简化, 简写:
+sum' :: (Num a) => [a] -> a
+sum' = foldl (+) 0
+一般出于 curried 特性, (foo a = bar b a)简写(foo = bar b).
+用 foldl 再现 elem 函数, 遍历一次列表:
+elem' :: (Eq a) => a  -> [a] -> Bool
+elem' y ys = foldl (\acc x -> if x==y then True else acc) False ys
+foldr 顾名思义是从列表右侧开始遍历, 同时,
+Lambdas 中参数顺序需要改为(\x acc), 与 foldl 相反.
+因为没有现成的(x:xs)模式匹配, 我用了 init/last 来:
+foldr' :: (a -> b -> b) -> b -> [a] -> b
+foldr' _ x [] = x
+foldr' f x xs = f x (foldr' f (last xs) (init xs))
+然后用来实现 map 函数:
+map' :: (a -> b) -> [a] -> [b]
+map' f xs = foldr (\x acc -> f x : acc) [] xs
+上面的 map 也能用 foldl 实现, 因为(++)非常灵活:
+map' f xs = foldl (\acc x -> acc ++ [f x]) [] xs
+foldl 和 foldr 区别在于无穷列表处理上, 未给例子.
+foldl1 与 foldr1 不用给初值, 因而对 [] 会出错.
+sum' = foldl1 (+)
+maximum' :: (Ord a) => [a] -> a
+maximum' = foldl1 (\x y -> if x>y then x else y)
+reverse' :: [a] -> [a]
+reverse' = foldl (\acc x -> x: acc) []
+product' :: (Num a) => [a] -> a
+product' = foldl1 (*)
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' p = foldr (\x acc -> if p x then x:acc else acc) []
+head' :: [a] -> a
+head' = foldl (\x _ -> x)
+last' :: [a] -> a
+last' = foldl (\_ y -> y)
+按最后意思, fold 将结果作为参数放置后, 这需要注意.
+其中 reverse 还可以写成 reverse' = foldl (flip (:)) []
+然后引入 scanl/ scanr 相近 fold 但打印每一步结果成数列:
+scanl' :: (a -> b -> a) -> a -> [b] -> [a]
+let scanl' f x xs = reverse $ foldl (\acc y -> f x y : acc) [x] xs
+scanl (+) 0 [3,5,2,1] --> [0,3,8,10,11]
+scanr (+) 0 [3,5,2,1] --> [11,8,3,1,0]
+scanl1 (\acc x -> if x > acc then x else acc) [3,4,5,3,7,9,2,1]
+--> [3,4,5,5,7,9,9,9]
+scanl (flip (:)) [] [3,2,1] --> [[],[3],[2,3],[1,2,3]]
+scan 常用在监测那写 fold 方式开展的运算过程,
+题目: 多少个自然数平方根和刚好(<1000)?
+sqrtSums :: Int
+sqrtSums = length (takeWhile (<1000) (scanl1 (+) (map sqrt [1..]))) + 1 --> 131
+这里不能用 filter 因其不能处理无穷列表, 而用 takeWhile.
+运算过程转化为列表在 Haskell 更容易处理.
+
+'$'称为"function application", 也直接是个函数:
+($) :: (a -> b) -> a -> b
+f $ x = f x
+其优先级最低, 其他操作符左联, ($)是右联的, 下面两两等效:
+sum (map sqrt [1..100])
+sum $ map sqrt [1..100]
+sqrt (3+4+9)
+sqrt $ 3+4+9
+sum (filter (> 10) (map (*2) [2..10]))
+sum $ filter (> 10) $ map (*2) [2..10]
+注意下面用法, 比如"($ 3) (4 +) --> 7":
+map ($ 3) [(4+), (10*), (^2), sqrt]
+--> [7.0,30.0,9.0,1.7320508075688772]
+复合函数: f (g x) , 其定义为;
+(.) :: (b -> c) -> (a -> b) -> a -> c
+f . g =\x -> f (g x)
+注意前一个函数接受的与后一个返回的类型应当一致,
+Lambdas 功能强大, 但很多时候用符合函数更为明了:
+map (\x -> negate (abs x)) [5,-3,-6,7,-3,2,-19,24]
+map (negate . abs) [5,-3,-6,7,-3,2,-19,24]
+--> [-5,-3,-6,-7,-3,-2,-19,-24]
+map (\xs -> negate (sum (tail xs))) [[1..5],[3..6],[1..7]]
+map (negate . sum . tail) [[1..5],[3..6],[1..7]]
+--> [-14,-15,-27]
+连续嵌套的带多个参数的表达式将末尾一个用($)隔开:
+sum (replicate 5 (max 6.7 8.9))
+(sum . replicate 5 . max 6.7) 8.9
+sum . replicate 5 . max 6.7 $ 8.9
+replicate 100 (product (map (*3) (zipWith max [1,2,3,4,5] [4,5,6,7,8])))
+replicate 100 . product . map (*3) . zipWith max [1,2,3,4,5] $ [4,5,6,7,8]
+replicate 100 $ product $ map (*3) $ zipWith max [1,2,3,4,5] [4,5,6,7,8]
+但其实($)隔开也是挺相似的, 上三句等价.
+sum' :: (Num a) => [a] -> a
+sum' xs = foldl (+) 0 xs
+不明白为甚这叫无点样式, 直接看以下成对对比的简写:
+fn x = ceiling (negate (tan (cos (max 50 x))))
+fn = ceiling . negate . tan . cos . max 50
+oddSquareSum :: Integer
+oddSquareSum = sum (takeWhile (<10000) (filter odd (map (^2) [1..])))
+oddSquareSum :: Integer
+oddSquareSum = sum . takeWhile (<10000) . filter odd . map (^2) $ [1..]
+作者为了可读性更好建议最后一条用 let/ in 写, 比较特别:
+oddSqureSum :: Int
+oddSqureSum =
+	let
+		oddSquares = filter odd $ map (^2) [1..]
+		belowLimit = takeWhile (<1000) oddSquares
+	in sum belowLimit
+
+module 模块是相关函数/ 类型/ 类型类的组合,
+程序一般就是主程序加载模块, 从中获取函数来处理事务,
+模块可以重用, 自足的模块可以被别的意图的程序使用,
+Haskell 若干个不同功能的模块组成,
+前面涉及属于默认自动装载的 Prelude (前奏?)模块.
+载入模块的语法为: import #{模块名} , 在使用函数之前,
+下面载入 Data.List 模块处理列表, 找出不重复的元素个数,
+nub 是 Data.List 模块中除去重复元素返回列表的函数:
+import Data.List
+numUniqeus :: (Eq a) => [a] -> Int
+numUniqeus = length . nub
+执行 import 之后, 所有 Data.List 模块的函数可以在全局命名空间使用,
+(length . nub)符合函数等价于(\xs -> length $ nub xs).
+GHCI 当中可用 :m + Data.List 来载入模块, 同时载入多个比如:
+:m + Data.List Data.Map Data.Set
+对应大致有个 :m - 来释放模块, 在脚本中载入模块亦可.
+只想载入某些函数, 比如 nub 和 sort, 如下(Haskell 语法怎么会有逗号?):
+import Data.List (nub, sort)
+若自定义了 nub, 不想从模块加载, 用:
+import Data.List hiding (nub)
+像 Data.Map 里 filter, null 函数与 Prelude 冲突的话,
+冲突时使用, 当尝试指定载入 import Data.list (filter)
+会报错询问选 Predule.filter 还 Data.List.filter,
+下面语句照常用 filter, 而载入另一个到 Data.List.filter:
+import qualified Data.Map
+因为 Data.List.filter 太长, 想简化 M.filter:
+import qualified Data.List as M
+下面链接查阅标准库中有哪些模块, 看去真复杂:
+http://www.haskell.org/ghc/docs/latest/html/libraries/
+也可以去 Hoogle 搜索函数名, 模块名, 类型声明:
+http://haskell.org/hoogle/
+
+来看 Data.List , 因 Prelude 是从这里取的, filter 等一般不冲突,
+intersperse 接收一个字符一个列表, 用字符散开列表:
+intersperse '.' "MONKEY" --> "M.O.N.K.E.Y"
+intersperse 0 [1,2,3,4,5,6] --> [1,0,2,0,3,0,4,0,5,0,6]
+intercalate 接受一字符串和一字符串列表, 以前者间隔后者返回字符串:
+intercalate " " ["hey","there","guys"] --> "hey there guys"
+intercalate [0,0,0] [[1,2,3],[4,5,6],[7,8,9]]
+--> [1,2,3,0,0,0,4,5,6,0,0,0,7,8,9]
+transpose 将二维列表看作矩阵, 行列互换后返回:
+transpose [[1,2,3],[4,5,6],[7,8,9]] --> [[1,4,7],[2,5,8],[3,6,9]]
+transpose ["hey","there","guys"] --> ["htg","ehu","yey","rs","e"]
+当下列多项式相加, 将各多项式系数相加在一起:
+(3x^2 + 5^x + 9)+(10x^3 + 9)+(8x^3 + 5x^2 + x - 1)
+map sum $ transpose [[0,3,5,9],[10,0,0,9],[8,5,1,-1]]
+模块带了 foldl' 和 foldl1' 两个更严格的函数,
+两者用于处理大型列表时容易犯错, 详见原文.
+concat 将列表的列表扁平化为列表:
+concat ["foo","bar","car"] --> "foobarcar"
+concat [[3,4,5],[2,3,4],[2,1,1]] --> [3,4,5,2,3,4,2,1,1]
+只能处理一层列表, 多层需要使用多次.
+concatMap 相当于(concat . map), 先执行 map:
+concatMap (replicate 4) [1..3] --> [1,1,1,1,2,2,2,2,3,3,3,3]
+and 接收布尔值的列表作为参数, 全为 True 时返回 True:
+and $ map (>4) [5,6,7,8] --> True
+and $ map (==4) [4,4,4,3,4] --> False
+or 接收布尔值列表作为参数, 存在 True 时返回 True:
+or $ map (==4) [2,3,4,5,6,1] --> True
+or $ map (>4) [1,2,3] --> False
+any 接收一判断加一列表, 当列表存在判断真则返回 True:
+any (==4) [2,3,5,6,1,4] --> True
+all (>4) [6,9,10] --> True
+all (`elem` ['A'..'Z']) "HEYGUYSwhatsup" --> False
+any (`elem` ['A'..'Z']) "HEYGUYSwhatsup" --> True
+iterate 接收一函数加一初值, 重复将初值代入计算, 返回结果列表:
+take 10 $ iterate (*2) 1 --> [1,2,4,8,16,32,64,128,256,512]
+take 3 $ iterate (++ "haha") "haha" --> ["haha","hahahaha","hahahahahaha"]
+splitAt 接收一数值加一列表, 按数值进行一次截断, 返回元组:
+splitAt 3 "heyman" --> ("hey","man")
+splitAt 100 "heyman" --> ("heyman","")
+splitAt (-3) "heyman" --> ("","heyman")
+let (a,b) = splitAt 3 "foobar" in b ++ a --> "barfoo"
+takeWhile 接收一判断加一列表, 返回判断出错前部分的列表:
+takeWhile (>3) [6,5,4,3,2,1,2,3,4,5,4,3,2,1] --> [6,5,4]
+takeWhile (/=' ') "This is a sentence" --> "This"
+比如计算 10000 以内三次方之和:
+sum $ takeWhile (<10000) $ map (^3) [1..] --> 53361
+dropWhile 接收一判断加一列表, 从判断错误开始返回列表, 与上互补:
+dropWhile (/=' ') "This is a sentence" --> " is a sentence"
+dropWhile (<3) [1,2,2,2,3,4,5,4,3,2,1] --> [3,4,5,4,3,2,1]
+下面例子按列表中元组首个元素大于 1000 筛选元组, 给出首个结果:
+let stock = [(994.4,2008,9,1),(995.2,2008,9,2),(999.2,2008,9,3),(1001.4,2008,9,4),(998.3,2008,9,5)]
+head (dropWhile (\(val,y,m,d) -> val < 1000) stock) --> (1001.4,2008,9,4)
+span 接收一判断加一列表, 开始连续否和其余部分, 用元组中列表返回,
+break 接收一判断一列表, 开始连续真和其余部分, 用元组中列表返回:
+(break p)与(span $ not . p)等价:
+break (==4) [1,2,3,4,5,6,7]  --> ([1,2,3],[4,5,6,7])
+span (/=4) [1,2,3,4,5,6,7] --> ([1,2,3],[4,5,6,7])
+sort 接受一列表排序后返回一列表, 元素需是 Ord 类型的:
+sort [8,5,3,2,1,6,4,2] --> [1,2,2,3,4,5,6,8]
+sort "This will be sorted soon" --> "    Tbdeehiillnooorssstw"
+group 接收一列表, 将相邻相同元素合并为列表, 返回列表嵌列表:
+group [1,1,1,1,2,2,2,2,3,3,2,2,2,5,6,7]  
+--> [[1,1,1,1],[2,2,2,2],[3,3],[2,2,2],[5],[6],[7]]
+先 sort, 然后 groups, 用来统计列表相同元素数量:
+map (\l@(x:xs) -> (x,length l)) . group . sort $ [1,1,1,1,2,2,2,2,3,3,2,2,2,5,6,7]
+--> [(1,4),(2,7),(3,2),(5,1),(6,1),(7,1)]
+inits "w00t" --> ["","w","w0","w00","w00t"]
+tails "w00t" --> ["w00t","00t","0t","t",""]
+let w = "w00t" in zip (inits w) (tails w)  
+--> [("","w00t"),("w","00t"),("w0","0t"),("w00","t"),("w00t","")]
+tails 可以用在搜索片断中, 编写下函数:
+search :: (Eq a) => [a] -> [a] -> Bool
+search needle haystack =
+	let nlen = length needle
+	in foldl (\acc x -> if take nlen x == needle then True else acc) False (tails haystack)
+isInfixOf 接收两字符串判断后者是否包含前者, 返回布尔值:
+"cat" `isInfixOf` "im a cat burglar" --> True
+"Cat" `isInfixOf` "im a cat burglar" --> False
+"cats" `isInfixOf` "im a cat burglar" --> False
+isPrefixOf 和 isSuffixOf 判断是否在头部或尾部:
+"hey" `isPrefixOf` "hey there!" --> True
+"hey" `isPrefixOf` "oh hey there!" --> False
+"there!" `isSuffixOf` "oh hey there!" --> True
+"there!" `isSuffixOf` "oh hey there" --> False
+elem 和 notElem 检测元素是否在列表当中:
+notElem '3' "3.1415" --> False
+partition 接收一判断一列表, 按条件分成两列表, 以元组返回:
+partition (`elem` ['A'..'Z']) "BOBsidneyMORGANeddy"  
+--> ("BOBMORGAN","sidneyeddy")
+partition (>3) [1,3,5,6,3,2,1,0,3,7]  
+--> ([5,6,7],[1,3,3,2,1,0,3])
+find 接收一判断一数组, 返回第一个判断为真的元素, 只是:
+find (>4) [1,2,3,4,5,6] --> Just 5
+find (>9) [1,2,3,4,5,6] --> Nothing
+:t find --> find :: (a -> Bool) -> [a] -> Maybe a
+Maybe 类型将在后面章节解释, 可对有值无值做返回, 较安全.
+elemIndex 似 elem, 但返回索引值, 也用 Maybe 类型:
+:t elemIndex --> elemIndex :: (Eq a) => a -> [a] -> Maybe Int
+4 `elemIndex` [1,2,3,4,5,6] --> Just 3
+10 `elemIndex` [1,2,3,4,5,6] --> Nothing
+elemIndices 类似上条, 但返回多个索引的列表:
+' ' `elemIndices` "Where are the spaces?" --> [5,9,13]
+findIndex 似 find, 但返回多个索引的列表或 Nothing:
+findIndex (==4) [5,3,2,1,6,4] --> Just 5
+findIndex (==7) [5,3,2,1,6,4] --> Nothing
+findIndices (`elem` ['A'..'Z']) "Where Are The Caps?" --> [0,6,10,14]
+
+多个列表的有[3..8]的 zip 和 zipWith, 比如 zip3:
+zipWith3 (\x y z -> x + y + z) [1,2,3] [4,5,2,2] [2,2,3] --> [7,8,9]
+zip4 [2,3,3] [2,2,2] [5,5,3] [2,2,2] --> [(2,2,5,2),(3,2,5,2),(3,2,3,2)]
+lines 在处理文件或文本时将带'\n'的字符串分开返回列表:
+lines "first line\nsecond line\nthird line"
+--> ["first line","second line","third line"]
+unlines 与 lines 相反, 但注意结尾多出'\n'
+unlines ["first line", "second line", "third line"]
+"first line\nsecond line\nthird line\n"
+words 和 unwords 转换句子到单词, 以及相反, 通过空格和'\n'识别:
+words "hey these are the words in this sentence"
+--> ["hey","these","are","the","words","in","this","sentence"]
+words "hey these           are    the words in this\nsentence"
+--> ["hey","these","are","the","words","in","this","sentence"]
+unwords ["hey","there","mate"] --> "hey there mate"
+delete 接收一字符一字符串, 删去第一个匹配字符后返回:
+delete 'h' "hey there ghang!" --> "ey there ghang!"
+'h' . delete 'h' $ "hey there ghang!" --> "ey tere ghang!"
+delete 'h' . delete 'h' . delete 'h' $ "hey there ghang!"
+--> "ey tere gang!"
+(\\)接受两列表, 从及一个列表减去第二个, 似 delete 只删除一次:
+[1..10] \\ [2,5,9] --> [1,3,4,6,7,8,10]
+"Im a big baby" \\ "big" --> "Im a  baby"
+union 接收两列表检查逐个后者在前者不含时追加:
+"hey man" `union` "man what's up" --> "hey manwt'sup"
+[1..7] `union` [5..10] --> [1,2,3,4,5,6,7,8,9,10]
+intersect 接收两列表返回交集:
+[1..7] `intersect` [5..10] --> [5,6,7]
+insert 接收一字符一列表, 插入到首个不小于自身的元素前:
+insert 4 [3,5,1,2,8,2] --> [3,4,5,1,2,8,2]
+insert 4 [1,3,4,4,1] --> [1,3,4,4,4,1]
+insert 4 [1,2,3,5,6,7] --> [1,2,3,4,5,6,7]
+insert 'g' $ ['a'..'f'] ++ ['h'..'z'] --> "abcdefghijklmnopqrstuvwxyz"
+insert 3 [1,2,4,3,2,1] --> [1,2,3,4,3,2,1]
+历史原因上面有些函数返回 Int, 不能用于出除法, 于是另有 Num 类型以下函数:
+length, take, drop, splitAt, !!, replicate
+genericLength, genericTake, genericDrop, genericSplitAt, genericIndex, genericReplicate
+nub, delete, union, intersect, group 存在对应更通用版本,
+nubBy, deleteBy, unionBy, intersectBy, groupBy
+前者限定条件(==), 后者接收一个函数作为分组的条件:
+比如 group 等价(groupBy (==)):
+let values = [-4.3, -2.4, -1.2, 0.4, 2.3, 5.9, 10.5, 29.1, 5.3, -2.4, -14.5, 2.9, 2.3]
+groupBy (\x y -> (x > 0) == (y > 0)) values
+--> [[-4.3,-2.4,-1.2],[0.4,2.3,5.9,10.5,29.1,5.3],[-2.4,-14.5],[2.9,2.3]]
+使用 Data.Function 模块的 on 函数更简洁:
+on :: (b -> b -> c) -> (a -> b) -> a -> a -> c
+f `on` g = \x y -> f (g x) (g y)
+groupBy ((==) `on` (> 0)) values
+--> [[-4.3,-2.4,-1.2],[0.4,2.3,5.9,10.5,29.1,5.3],[-2.4,-14.5],[2.9,2.3]]
+另几函数类似, 比如 sort 和 sortBy:
+sortBy :: (a -> a -> Ordering) -> [a] -> [a]
+Ordering 可以是 LT, EQ, GT. sort 等价 (sortBy compare)
+let xs = [[5,4,5,4,4],[1,2,3],[3,5,4,3],[],[2],[2,2]]
+sortBy (compare `on` length) xs
+--> [[],[2],[2,2],[1,2,3],[3,5,4,3],[5,4,5,4,4]]
+(compare `on` length)等价(\x y -> length x `compare` length y).
+
+Data.Char 处理函数字符, 甚至过滤以及映射.
+isControl 判断是否是控制字符, 具体看链接:
+http://book.realworldhaskell.org/read/characters-strings-and-escaping-rules.html
+isSpace 判断是否 Unicode 空白或换行之类 \t, \n, \r, \f, \v.
+isLower 是否 Unicode 小写,
+isUpper 是否 Unicode 大写,
+isAlpha 是否 Unicode 字母, 英文解释一大串不懂,
+isAlphaNum 是否 Unicode 字母或数字,
+isPrint 是否 Unicode 可打印, 控制字符不可打印,
+isDigit 是否 ASCII 数字, ['0'..'9']中的数字,
+isOctDigit 是否 ASCII 八进制数字['0'..'7']中,
+isHexDigit 是否 ASCII 十六进制数字['0'..'9'], ['a'..'f'], ['A'..'F'],
+isLetter 是否 ASCII 字母, 和 isAlpha 等价,
+isMark 是否 Unicode 注音字符, 关于法语, 跳过,
+isNumber 是否 Unicode 数字, 关系到罗马数字, 等,
+isPunctuation 是否 Unicode 标点, 如连接号括号引号,
+isSymbol 是否 Unicode 符号, 如数学或货币符号,
+isSeparator 是否 Unicode 空格或分隔符,
+isAscii 是否 Unicode 前 128 字符, 也对应 ASCII,
+isLatin1 是否 Unicode 前 256 字符, 对应 ISO 8859-1 (Latin-1),
+isAsciiUpper 是否 ASCII 大写,
+isAsciiLower 是否 ASCII 小写.
+类型都是 Char -> Bool , 对于字符串结合 Data.List.all 处理:
+all isAlphaNum "bobby283" --> True
+all isAlphaNum "eddy the fish!" --> False
+用 isSpace 模拟 Data.List.words, 注意空格:
+words "hey guys its me" --> ["hey","guys","its","me"]
+groupBy ((==) `on` isSpace) "hey guys its me"
+--> ["hey"," ","guys"," ","its"," ","me"]
+filter (not . any isSpace) . groupBy ((==) `on` isSpace) $ "hey guys its me"
+--> ["hey","guys","its","me"]
+Data.Char 输出数据类型属于 Ordering, 可以给 LT, EQ, GT,
+GeneralCategory 用来查看类别, 总共 31 种类别:
+generalCategory :: Char -> GeneralCategory
+generalCategory ' ' --> Space
+generalCategory 'A' --> UppercaseLetter
+generalCategory 'a' --> LowercaseLetter
+generalCategory '.' --> OtherPunctuation
+generalCategory '9' --> DecimalNumber
+map generalCategory " \t\nA9?|"
+--> [Space,Control,Control,UppercaseLetter,DecimalNumber,OtherPunctuation,MathSymbol]
+GeneralCategory 类型属于 Eq 类型, 因此可判断:
+generalCategory c == Space
+toUpper 将小写字母转换为大写, 其他符号不发生改变,
+converts 转换为小写, 其他不变,
+toTitle 基本上等价 toUpper,
+digitToInt 将['0'..9], ['a'..'f'], ['A'..'F']转换数字, 其余报错,
+map digitToInt "34538" --> [3,4,5,3,8]
+map digitToInt "FF85AB" --> [15,15,8,5,10,11]
+intToDigit 与上相反, 接收数字转化字符, [0..15]:
+intToDigit 15 --> 'f'
+intToDigit 5 --> '5'
+ord 将字符转化为 ASCII 编码值, 取决于 Unicode, chr 相反:
+ord 'a' --> 97
+chr 97 --> 'a'
+map ord "abcdefgh" --> [97,98,99,100,101,102,103,104]
+通过改变编码转换字符来模式凯撒编码:
+encode :: Int -> String -> String
+encode shift msg =
+	let
+		ords = map ord msg
+		shifted = map (+ shift) msg
+	in map chr shifted
+如果喜欢符合函数, 可以写(map (chr . (+ shift) . ord) msg)
+encode 3 "Heeeeey" --> "Khhhhh|"
+encode 4 "Heeeeey" --> "Liiiii}"
+encode 1 "abcd" --> "bcde"
+encode 5 "Marry Christmas! Ho ho ho!" --> "Rfww~%Hmwnxyrfx&%Mt%mt%mt&"
+解码时取相反的 shift 参数即可:
+decode :: Int -> String -> String
+decode shift msg = encode (negate shift) msg
+encode 3 "Im a little teapot" --> "Lp#d#olwwoh#whdsrw"
+decode 3 "Lp#d#olwwoh#whdsrw" --> "Im a little teapot"
+decode 5 . encode 5 $ "This is a sentence" --> "This is a sentence"
+
+关联列表也叫字典, 近似散列哈希表, 存放顺序无关的键值对,
+phoneBook =
+	[("betty","555-2938")
+	,("bonnie","452-2928")
+	,("patsy","493-2928")
+	,("lucille","205-2928")
+	,("wendy","939-8282")
+	,("penny","853-2492")]
+上面是字典的例子, 常用任务是获取给定键对应的值:
+findKey :: (Eq k) => k -> [(k,v)] -> v
+findKey key xs = snd . head . filter (\(k,v) -> key == k) $ xs
+上面函数当不含对应键, 给出空列表时, 会出现运行时错误, 换 Maybe 类型:
+findKey :: (Eq k) => k -> [(k,v)] -> Maybe v
+findKey key [] = Nothing
+findKey key ((k,v):xs) = if key == k then Just v else findKey key xs
+该函数明显递归, 有边界条件, 有递归的调用, 换 fold 实现:
+findKey :: (Eq k) => k -> [(k,v)] -> Maybe v
+findKey key = foldr (\(k,v) acc -> if key == k then Just v else acc) Nothing
+findKey "penny" phoneBook --> Just "853-2492"
+findKey "betty" phoneBook --> Just "555-2938"
+findKey "wilma" phoneBook --> Nothing
+lookup 函数即对应上述 findKey, 上述函数将遍历一遍列表,
+Data.Map 内部用树部署数据, 处理更快, 另有操作工具.
+因此从此不再用字典称呼, 而称呼其为 map.
+lookup 等某些函数从 Data.Map 导入到 Prelude, 这里载入模块:
+import qualified Data.Map as Map
+fromList 接收一个字典覆盖相同键的重复值返回一个 map,
+猜测前面用 fromList 标明是内部储存用的 map (?), 不能(!!)取出:
+Map.fromList [("betty","555-2938"),("bonnie","452-2928"),("lucille","205-2928")]
+--> fromList [("betty","555-2938"),("bonnie","452-2928"),("lucille","205-2928")]
+Map.fromList [(1,2),(3,4),(3,2),(5,5)] --> fromList [(1,2),(3,2),(5,5)]
+其类型声明, k 在存储时需要是 Ord 来排序, Map.Map 存疑(?):
+Map.fromList :: (Ord k) => [(k, v)] -> Map.Map k v
+empty 返回一个空的 map:
+Map.empty --> fromList []
+insert 接收一键一值一 map, 返回加入键值后的 map:
+Map.insert 3 100 Map.empty --> fromList [(3,100)]
+Map.insert 5 600 (Map.insert 4 200 ( Map.insert 3 100  Map.empty))
+--> fromList [(3,100),(4,200),(5,600)]
+Map.insert 5 600 . Map.insert 4 200 . Map.insert 3 100 $ Map.empty
+--> fromList [(3,100),(4,200),(5,600)]
+用 insert 可以实现 fromList 的功能, 去掉重复返回 map:
+fromList' :: (Ord k) => [(k,v)] -> Map.Map k v
+fromList' = foldr (\(k,v) acc -> Map.insert k v acc) Map.empty
+null 用来判断 map 是否为空:
+Map.null Map.empty --> True
+Map.null $ Map.fromList [(2,3),(5,5)] --> False
+size 用来探测长度, 和 length 类似:
+Map.size Map.empty --> 0
+Map.size $ Map.fromList [(2,4),(3,3),(4,2),(5,4),(6,4)] --> 5
+singleton 接受一键一值创建一个 map:
+Map.singleton 3 9 --> fromList [(3,9)]
+Map.insert 5 9 $ Map.singleton 3 9 --> fromList [(3,9),(5,9)]
+lookup 类似 Data.List.lookup , 但可操作 map:
+Map.lookup 2 $ Map.fromList [(2,'4')] --> Just '4'
+member 接收一键一 map, 检查键是否在 map 中:
+Map.member 3 $ Map.fromList [(3,6),(4,3),(6,9)] --> True
+Map.member 3 $ Map.fromList [(2,5),(4,5)] --> False
+map 和 filter 与 Data.List 中类似, 独作用于 map:
+Map.map (*100) $ Map.fromList [(1,1),(2,4),(3,9)]
+--> fromList [(1,100),(2,400),(3,900)]
+Map.filter isUpper $ Map.fromList [(1,'a'),(2,'A'),(3,'b'),(4,'B')]
+--> fromList [(2,'A'),(4,'B')]
+toList 是 fromList 的反演, 特别看类型声明:
+Map.toList :: Map.Map k a -> [(k, a)]
+Map.toList . Map.insert 9 2 $ Map.singleton 4 3 --> [(4,3),(9,2)]
+keys 和 elems 分别打印出键值为列表,
+keys 等价(map fst . Map.toList), elems 等价(map snd . Map.toList).
+fromListWith 接收一函数一列表返回一 map, 相当与戴上函数的 fromList:
+phoneBook =   
+	[("betty","555-2938")
+	,("betty","342-2492")
+	,("bonnie","452-2928")
+	,("patsy","493-2928")
+	,("patsy","943-2929")
+	,("patsy","827-9162")
+	,("lucille","205-2928")
+	,("wendy","939-8282")
+	,("penny","853-2492")
+	,("penny","555-2111")]
+借助 fromListWith 写函数将重复的值用','连接或组成列表, 或最大值/ 总和:
+phoneBookToMap :: (Ord k) => [(k, String)] -> Map.Map k String
+phoneBookToMap xs = Map.fromListWith (\number1 number2 -> number1 ++ ", " ++ number2) xs
+Map.lookup "patsy" $ phoneBookToMap phoneBook
+--> "827-9162, 943-2929, 493-2928"
+Map.lookup "wendy" $ phoneBookToMap phoneBook
+--> "939-8282"
+Map.lookup "betty" $ phoneBookToMap phoneBook
+--> "342-2492, 555-2938"
+phoneBookToMap :: (Ord k) => [(k, a)] -> Map.Map k [a]
+phoneBookToMap xs = Map.fromListWith (++) $ map (\(k,v) -> (k,[v])) xs
+Map.lookup "patsy" $ phoneBookToMap phoneBook
+--> ["827-9162","943-2929","493-2928"]
+Map.fromListWith max [(2,3),(2,5),(2,100),(3,29),(3,22),(3,11),(4,22),(4,15)]
+--> fromList [(2,100),(3,29),(4,22)]
+Map.fromListWith (+) [(2,3),(2,5),(2,100),(3,29),(3,22),(3,11),(4,22),(4,15)]
+--> fromList [(2,108),(3,62),(4,37)]
+insertWith 类似上函数, 出现重复键时调用函数处理:
+Map.insertWith (+) 3 100 $ Map.fromList [(3,4),(5,103),(6,339)]
+--> fromList [(3,104),(5,103),(6,339)]
+全部函数见下, 可用 import Data.Map (Map) 代替加载:
+http://www.haskell.org/ghc/docs/latest/html/libraries/containers/Data-Map.html
+
+Data.Set 模块提供集合的处理, 其中元素唯一,
+内部为了高效排序, 因此要 Ord 类型, 速度很快,
+常用操作是插入元素/ 检查成员关系/ 转换为列表.
+Data.Set 与 Prelude 和 Data.List 命名冲突多, 用:
+import qualified Data.Set as Set
+text1 = "I just had an anime dream. Anime... Reality... Are they so different?"
+text2 = "The old man left his garbage can out and now his trash is all over my lawn!"
+let set1 = Set.fromList text1
+let set2 = Set.fromList text2
+set1 --> fromList " .?AIRadefhijlmnorstuy"
+set2 --> fromList " !Tabcdefghilmnorstuvwy"
+intersection 函数可检查两集合的交集:
+Set.intersection set1 set2 --> fromList " adefhilmnorstuy"
+difference 检测两集合前者有后者没有的部分:
+Set.difference set1 set2 --> fromList ".?AIRj"
+Set.difference set2 set1 --> fromList "!Tbcgvw"
+union 返回两集合并集:
+Set.union set1 set2 --> fromList " !.?AIRTabcdefghijlmnorstuvwy"
+null, size, member, empty, singleton, insert, delete 可从字面理解:
+Set.null Set.empty --> True
+Set.null $ Set.fromList [3,4,5,5,4,3] --> False
+Set.size $ Set.fromList [3,4,5,3,4,5] --> 3
+Set.singleton 9 --> fromList [9]
+Set.insert 4 $ Set.fromList [9,3,8,1] --> fromList [1,3,4,8,9]
+Set.insert 8 $ Set.fromList [5..10] --> fromList [5,6,7,8,9,10]
+Set.delete 4 $ Set.fromList [3,4,5,4,3,4,5] --> fromList [3,5]
+isSubsetOf 和 isProperSubsetOf 判断两集合前者是否后者子集和真子集,
+Set.fromList [2,3,4] `Set.isSubsetOf` Set.fromList [1,2,3,4,5] --> True
+Set.fromList [1,2,3,4,5] `Set.isSubsetOf` Set.fromList [1,2,3,4,5] --> True
+Set.fromList [1,2,3,4,5] `Set.isProperSubsetOf` Set.fromList [1,2,3,4,5] --> False
+Set.fromList [2,3,4,8] `Set.isSubsetOf` Set.fromList [1,2,3,4,5] --> False
+同样 filter 和 map 的功能:
+Set.filter odd $ Set.fromList [3,4,5,6,7,2,3,4] --> fromList [3,5,7]
+Set.map (+1) $ Set.fromList [3,4,5,6,7,2,3,4] --> fromList [3,4,5,6,7,8]
+集合常用 fromList 去重再借 toList 返回到列表,
+Data.List.nub 也可对列表去重, 但相比速度用集合更快, 代价是,
+集合需要 Ord 类型限定, 而 nub 仅需要 Eq 类型限定.
+let setNub xs = Set.toList $ Set.fromList xs
+setNub "HEY WHATS CRACKALACKIN" --> " ACEHIKLNRSTWY"
+nub "HEY WHATS CRACKALACKIN" --> "HEY WATSCRKLIN"
+相较而言 nub 保持了列表原先规则, 而 setNub 不保持(?).
+
+和很多语言一样, Haskell 可以自己写模块重用,
+想这个计算体积面积的模块, 先命名为 Geomerty.hs,
+文件末尾'r'开头的函数使用但不输出, 不影响:
+module Geometry
+( sphereVolume
+, sphereArea
+, cubeVolume
+, cubeArea
+, cuboidArea
+, cuboidVolume
+) where
+sphereVolume :: Float -> Float
+sphereVolume radius = (4.0 / 3.0) * pi * (radius ^ 3)
+sphereArea :: Float -> Float
+sphereArea radius = 4 * pi * (radius ^ 2)
+cubeVolume :: Float -> Float
+cubeVolume side = cuboidVolume side side side
+cubeArea :: Float -> Float
+cubeArea side = cuboidArea side side side
+cuboidVolume :: Float -> Float -> Float -> Float
+cuboidVolume a b c = rectangleArea a b * c
+cuboidArea :: Float -> Float -> Float -> Float
+cuboidArea a b c = rectangleArea a b * 2 + rectangleArea a c * 2 + rectangleArea c b * 2
+rectangleArea :: Float -> Float -> Float
+rectangleArea a b = a * b
+注意需要在同一个目录, 大写开头, 加载模块似乎 ghci 不行, 脚本里正常:
+import Geometry
+或, 建立 Geometry 目录, 分别创建文件 Sphere.hs, Cuboid.hs, Cube.hs,
+import Geometry.Sphere -- 用来导入, 另两类似. 或者:
+import qualified Geometry.Sphere as Sphere 
+import qualified Geometry.Cuboid as Cuboid 
+import qualified Geometry.Cube as Cube
+然后以 Sphere.area, Sphere.volume, Cuboid.area 调用.

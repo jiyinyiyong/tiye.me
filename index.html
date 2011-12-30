@@ -8,8 +8,8 @@ title: '@题叶'
 <span class="tag">
 	中文
 </span>
+{% for post in site.tags.["中文"] %}
 <div class="posts">
-	{% for post in site.tags.["中文"] %}
 		<span class="date">
 			{{ post.date | date: "%y-%m-%d"}}
 		</span>
@@ -18,13 +18,13 @@ title: '@题叶'
 				{{ post.title }}
 			</a>
 		</span>
-	{% endfor %}
 </div>
+{% endfor %}
 <span class="tag">
 	new
 </span>
+{% for post in site.tags.new %}
 <div class="posts">
-	{% for post in site.tags.new %}
 		<span class="date">
 			{{ post.date | date: "%y-%m-%d"}}
 		</span>
@@ -33,5 +33,5 @@ title: '@题叶'
 				{{ post.title }}
 			</a>
 		</span>
-	{% endfor %}
 </div>
+{% endfor %}

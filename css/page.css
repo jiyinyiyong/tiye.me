@@ -45,4 +45,9 @@ div {
 }
 code {
   background: #e6b3e5;
+  padding: 0px 6px;
+}
+p,
+pre {
+  margin: 0px;
 }

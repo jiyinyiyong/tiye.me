@@ -1,3 +1,0 @@
-
-jekyll --pygments
-jekyll --server

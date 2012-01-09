@@ -1,35 +1,39 @@
 var main, main2, one0, one1, unit;
 
 main = function() {
-  var ctx, cvs;
-  var _this = this;
+  var ctx, cvs,
+    _this = this;
   cvs = document.getElementById('canvas');
   ctx = cvs.getContext('2d');
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+  ctx.shadowBlur = 1;
+  ctx.fillStyle = '#f00';
   (document.getElementById('run0')).onclick = function(e) {
     return main2(ctx, 0, 1);
   };
   (document.getElementById('run4')).onclick = function(e) {
-    return main2(ctx, 4, 1);
+    return main2(ctx, 8, 1);
   };
   (document.getElementById('ru0')).onclick = function(e) {
-    return main2(ctx, 0, 0);
+    return main2(ctx, 0, 1);
   };
   return (document.getElementById('ru4')).onclick = function(e) {
-    return main2(ctx, 4, 0);
+    return main2(ctx, 8, 1);
   };
 };
 
 main2 = function(ctx, sp, bg) {
   var i, j, n, size;
-  size = 18;
+  size = 20;
   n = 20;
   ctx.clearRect(0, 0, 800, 800);
-  ctx.fillStyle = '#ddd';
+  ctx.shadowColor = '#400';
   ctx.beginPath();
   if (bg === 1) {
     for (i = 1; 1 <= n ? i <= n : i >= n; 1 <= n ? i++ : i--) {
       for (j = 1; 1 <= n ? j <= n : j >= n; 1 <= n ? j++ : j--) {
-        ctx.fillRect(i * (size + sp), j * (size + sp), size, size);
+        ctx.fillRect(i * (size + sp) - 2, j * (size + sp) - 2, size + 4, size + 4);
       }
     }
   }
@@ -41,6 +45,7 @@ main2 = function(ctx, sp, bg) {
     }
   }
   ctx.closePath();
+  ctx.strokeStyle = '#fff';
   return ctx.stroke();
 };
 
@@ -53,7 +58,7 @@ unit = function(ctx, x, y, xt, yt) {
   }
 };
 
-one0 = function(ctx, s, x, y) {
+one1 = function(ctx, s, x, y) {
   var dx, dy, j, _results;
   dx = s / 2;
   dy = s / 2;
@@ -67,7 +72,7 @@ one0 = function(ctx, s, x, y) {
   return _results;
 };
 
-one1 = function(ctx, s, x, y) {
+one0 = function(ctx, s, x, y) {
   var ddx, ddy, dx, dy, j, _results;
   dx = s / 2;
   ddx = s / 4;

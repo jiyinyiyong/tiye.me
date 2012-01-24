@@ -1,8 +1,8 @@
 var main, main2, one0, one1, unit;
 
 main = function() {
-  var ctx, cvs,
-    _this = this;
+  var ctx, cvs;
+  var _this = this;
   cvs = document.getElementById('canvas');
   ctx = cvs.getContext('2d');
   ctx.shadowOffsetX = 0;
@@ -37,7 +37,6 @@ main2 = function(ctx, sp, bg) {
       }
     }
   }
-  ctx.fillStyle = '#ddd';
   for (i = 1; 1 <= n ? i <= n : i >= n; 1 <= n ? i++ : i--) {
     for (j = 1; 1 <= n ? j <= n : j >= n; 1 <= n ? j++ : j--) {
       one1(ctx, size / 2, (size + sp) * i, (size + sp) * j);

@@ -24,7 +24,7 @@ main2 = (ctx, sp, bg) ->
 		for i in [1..n]
 			for j in [1..n]
 				ctx.fillRect i*(size+sp)-2, j*(size+sp)-2, size+4, size+4
-	ctx.fillStyle = '#ddd'
+	# ctx.fillStyle = '#ddd'
 	for i in [1..n]
 		for j in [1..n]
 			one1 ctx, size/2, (size+sp)*i, (size+sp)*j

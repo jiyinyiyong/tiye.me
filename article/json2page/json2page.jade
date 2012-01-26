@@ -1,0 +1,64 @@
+
+html
+	head
+		meta(charset='utf-8')
+		script(src='coffee-script.js')
+		script(src="jquery.min.js")
+		script(src='json2Page.js')
+		:coffeescript
+			$ ->
+				texta =
+					'div':
+						'style':
+							'min-width': '800px'
+							'max-width': '1300px'
+							'height': '600px'
+							'display': '-moz-box'
+							'-moz-box-orient': 'horizontal'
+							'box-orient': 'horizontal'
+						'nav':
+							'style':
+								'min-width': '400px'
+							'textarea':
+								'attr':
+									'id': 'text'
+								'style':
+									'height': '600px'
+									'width': '100%'
+									'margin': '0px'
+								'text': "{'div':{'text':'pppp'}}"
+						'div':
+							'style':
+								'min-width': '400px'
+							'div':
+								'attr':
+									'id': 'click'
+								'style':
+									'font-size': '13px'
+									'width': '100%'
+									'max-width': '700px'
+									'height': '600px'
+									'margin': '0px'
+									'background': 'hsl(0,94%,94%)'
+								'text': '鼠标点击这里编译 JSON, 没有设计报错, 所以出错是没反应的'
+				# console.log 'text: ', texta
+				default_text = [
+					'我想做一个从 JSON 解析到 HTML/CSS 的函数, 简化书写',
+					'从 JCSS 看到方法, 于是尝试写出来, 调整了, css / style / text / attr 几个标签',
+					'可以看源码的例子, 本来我以为基本可行, 调试也没发现问题, 可是',
+					'遇到一次出错, 好久想起来, JSON 中重复的属性名称会发生覆盖啊!!',
+					'于是就有了重大的不便, 因为不可能写重复的标签了',
+					'数组可以解决问题, 但语法难看, 还不如直接写 HTML 标签了',
+					'受此影响, 目前这个网页只能做很简单的演示, 概念',
+					'大概今天没时间安心写完了, 先把这个代码放出来啦, 咋办呢?']
+				($ 'body').append (json2Page texta)
+				for i in default_text
+					console.log i
+					($ '#click').append "<p>#{i}</p>"
+				# console.log (json2Page texta)
+				($ '#click').click ->
+					texts = ($ '#text').val()
+					eval "aa=#{texts}"
+					($ '#click').text (json2Page aa)
+		title Json2page
+	body

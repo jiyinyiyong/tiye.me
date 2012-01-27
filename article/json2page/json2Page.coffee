@@ -26,12 +26,16 @@ json2Page = (json) ->
 	json2style = (json_data) ->
 		style = ' style="'
 		for key, value of json_data
+			key = (key.match /([a-z]|-)+/)[0]
+			if typeof value is 'number'
+				value = "#{value}px"
 			style += "#{key}: #{value};"
 		style += '"'
 		return style
 	json2attr = (json_data) ->
 		attrs = ''
 		for key, value of json_data
+			key = (key.match /([a-z]|-)+/)[0]
 			if key is 'style'
 				attrs += json2style value
 			else
@@ -42,6 +46,8 @@ json2Page = (json) ->
 		for sub_key1, sub_value1 of json_data
 			css += sub_key1 + '{'
 			for sub_key2, sub_value2 of sub_value1
+				if typeof value is 'number'
+					value = "#{value}px"
 				css += "#{sub_key2}: #{sub_value2};"
 			css += '}'
 		css += '</style>'
@@ -50,9 +56,9 @@ json2Page = (json) ->
 		page = ''
 		# console.log json_data
 		for key, value of json_data
+			key = (key.match /([a-z]|-)+/)[0]
 			if key is 'text'
 				page += value
-				page += ''
 			else if typeof value is 'string'
 				elem = "<#{key}>"
 				elem += value + ''
@@ -70,6 +76,7 @@ json2Page = (json) ->
 					page += json2style value['style']
 				page += '>'
 				for sub_key, sub_value of value
+					sub_key = (sub_key.match /([a-z]|-)+/)[0]
 					unless sub_key in ['attr', 'style']
 						sub_json_data = {}
 						sub_json_data[sub_key] = sub_value

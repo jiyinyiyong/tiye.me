@@ -1,66 +1,93 @@
-<html><head><meta charset="utf-8"/><script src="coffee-script.js"></script><script src="jquery.min.js"></script><script src="json2Page.js"></script><script type="text/javascript">
+<html><head><meta charset="utf-8"/><script src="http://coffeescript.org/extras/coffee-script.js"></script><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script><script src="http://teddevito.com/demos/js/jquery.js"></script><script src="http://teddevito.com/demos/js/jquery.textarea.js"></script><script src="json2Page.js"></script><style type="text/css">p {
+  margin: 0px;
+  line-height: 26px;
+}
+</style><script type="text/javascript">
+(function() {
+  var br;
 
-  $(function() {
-    var default_text, i, texta, _i, _len;
+  br = '<br/>';
+
+  ($(document)).ready(function() {
+    var texta;
     texta = {
-      'div': {
-        'style': {
-          'min-width': '800px',
-          'max-width': '1300px',
-          'height': '600px',
-          'display': '-moz-box',
+      div: {
+        style: {
+          width: 1000,
+          height: 500,
+          display: '-moz-box',
+          display1: '-webkit-box',
           '-moz-box-orient': 'horizontal',
-          'box-orient': 'horizontal'
+          '-webkit-box-orient': 'horizontal',
+          'font-size': 13,
+          'line-height': 26
         },
-        'nav': {
-          'style': {
-            'min-width': '400px'
-          },
-          'textarea': {
-            'attr': {
-              'id': 'text'
+        nav: {
+          textarea: {
+            attr: {
+              id: 'text',
+              "class": 'tabby',
+              '-moz-tab-size': '4',
+              'tab-size': '4'
             },
-            'style': {
-              'height': '600px',
-              'width': '100%',
-              'margin': '0px'
-            },
-            'text': "{'div':{'text':'pppp'}}"
+            style: {
+              height: 500,
+              width: 500
+            }
           }
         },
-        'div': {
-          'style': {
-            'min-width': '400px'
+        div: {
+          style: {
+            background: 'hsl(0,94%,94%)'
           },
-          'div': {
-            'attr': {
-              'id': 'click'
+          div: {
+            attr: {
+              id: 'click'
             },
-            'style': {
-              'font-size': '13px',
-              'width': '100%',
-              'max-width': '700px',
-              'height': '600px',
-              'margin': '0px',
-              'background': 'hsl(0,94%,94%)'
+            style: {
+              width: 500,
+              'font-size': 13,
+              height: 500
             },
-            'text': '鼠标点击这里编译 JSON, 没有设计报错, 所以出错是没反应的'
+            p: 'json2page 希望解析 json 到网页, 左边输入, 点击这里转化',
+            p1: '将 html 写成 json, 这里还用了 CoffeeScript 的简洁语法',
+            p2: '不过具体调整过的用 attr, style, css, text 几个标签用法',
+            p3: '属性全写在 attr 内, style 是被提出的单个标签的样式',
+            p4: 'css 是全局样式写法更长, text 用来渲染纯文本, 但常用 p',
+            p04: '另外样式里面的 px 长度, 直接从数值类型转化的',
+            p5: '因为 json 重复的属性会覆盖, 我在末尾加上了数字以区别',
+            p6: '具体语法得看源码了, 这么简单写文档看度很大, 源码',
+            p7: {
+              a: {
+                attr: {
+                  href: 'https://github.com/jiyinyiyong/jiyinyiyong.github.com/tree/master/article/json2page'
+                },
+                text: '可以点击这里, 看我 Github 上代码, 有用编译的啦'
+              }
+            },
+            p8: '整个项目从 Jcss 出发的, 希望能用更轻松的格式绘制网页',
+            p9: '细节不完善, 等待以后优化.. 但目标主要是模版的片段',
+            p10: '只是用于动态生成网页部分, 而不面向整个页面的渲染',
+            p11: '可以用 script 标签引用这段代码, 或模块里引用代码',
+            p12: '我在用的时候发现还有些错误, 后面再补补'
           }
         }
       }
     };
-    default_text = ['我想做一个从 JSON 解析到 HTML/CSS 的函数, 简化书写', '从 JCSS 看到方法, 于是尝试写出来, 调整了, css / style / text / attr 几个标签', '可以看源码的例子, 本来我以为基本可行, 调试也没发现问题, 可是', '遇到一次出错, 好久想起来, JSON 中重复的属性名称会发生覆盖啊!!', '于是就有了重大的不便, 因为不可能写重复的标签了', '数组可以解决问题, 但语法难看, 还不如直接写 HTML 标签了', '受此影响, 目前这个网页只能做很简单的演示, 概念', '大概今天没时间安心写完了, 先把这个代码放出来啦, 咋办呢?'];
     ($('body')).append(json2Page(texta));
-    for (_i = 0, _len = default_text.length; _i < _len; _i++) {
-      i = default_text[_i];
-      console.log(i);
-      ($('#click')).append("<p>" + i + "</p>");
-    }
-    return ($('#click')).click(function() {
+    ($('#text')).val("div:\n\tstyle:\n\t\t'font-size': 13\n\t\t'line-height': 26\n\tattr:\n\t\tid: 'only'\n\ttext: 'Text'");
+    ($('textarea.tabby')).tabby();
+    //console.log(json2Page(texta));
+    ($('#click')).click(function() {
       var texts;
-      texts = ($('#text')).val();
+      texts = CoffeeScript.compile(($('#text')).val(), {
+        bare: 'on'
+      });
       eval("aa=" + texts);
       return ($('#click')).text(json2Page(aa));
     });
+    return this;
   });
+
+}).call(this);
 </script><title>Json2page</title></head><body></body></html>

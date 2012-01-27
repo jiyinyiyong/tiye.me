@@ -44,6 +44,8 @@ json2Page = function(json) {
     style = ' style="';
     for (key in json_data) {
       value = json_data[key];
+      key = (key.match(/([a-z]|-)+/))[0];
+      if (typeof value === 'number') value = "" + value + "px";
       style += "" + key + ": " + value + ";";
     }
     style += '"';
@@ -54,6 +56,7 @@ json2Page = function(json) {
     attrs = '';
     for (key in json_data) {
       value = json_data[key];
+      key = (key.match(/([a-z]|-)+/))[0];
       if (key === 'style') {
         attrs += json2style(value);
       } else {
@@ -63,13 +66,14 @@ json2Page = function(json) {
     return attrs;
   };
   json2css = function(json_data) {
-    var css, sub_key1, sub_key2, sub_value1, sub_value2;
+    var css, sub_key1, sub_key2, sub_value1, sub_value2, value;
     css = '<style>';
     for (sub_key1 in json_data) {
       sub_value1 = json_data[sub_key1];
       css += sub_key1 + '{';
       for (sub_key2 in sub_value1) {
         sub_value2 = sub_value1[sub_key2];
+        if (typeof value === 'number') value = "" + value + "px";
         css += "" + sub_key2 + ": " + sub_value2 + ";";
       }
       css += '}';
@@ -82,9 +86,9 @@ json2Page = function(json) {
     page = '';
     for (key in json_data) {
       value = json_data[key];
+      key = (key.match(/([a-z]|-)+/))[0];
       if (key === 'text') {
         page += value;
-        page += '';
       } else if (typeof value === 'string') {
         elem = "<" + key + ">";
         elem += value + '';
@@ -102,6 +106,7 @@ json2Page = function(json) {
         page += '>';
         for (sub_key in value) {
           sub_value = value[sub_key];
+          sub_key = (sub_key.match(/([a-z]|-)+/))[0];
           if (sub_key !== 'attr' && sub_key !== 'style') {
             sub_json_data = {};
             sub_json_data[sub_key] = sub_value;
@@ -116,4 +121,4 @@ json2Page = function(json) {
   return json2page(json);
 };
 
-//exports.json2Page = json2Page;
+exports.json2Page = json2Page;

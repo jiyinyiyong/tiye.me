@@ -1,0 +1,61 @@
+<html><head><meta charset="utf-8"/><title>gfm 类似文本标记</title><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script><script src="../../web_editor/editor.js"></script><script src="liuxian_compile.js"></script><script type="text/javascript">
+
+  $(function() {
+    ($('#box')).append(tool(($('#text')).val()));
+    return ($('#text')).keypress(function(e) {
+      ($('#box')).empty();
+      return ($('#box')).append(tool(($('#text')).val()));
+    });
+  });
+</script><style type="text/css">#main {
+  width: 1000px;
+  height: 600px;
+  display: -moz-box;
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+}
+#text {
+  font-family: 'Wenquanyi Micro Hei Mono';
+  width: 500px;
+  height: 600px;
+  line-height: 26px;
+  font-size: 13px;
+}
+#box {
+  width: 500px;
+  font-family: 'Wenquanyi Micro Hei';
+  height: 600px;
+  font-size: 13px;
+  line-height: 26px;
+  padding: 13px 26px;
+  background: #feb9b9;
+}
+pre,
+#box>code,
+p>code {
+  margin: 0px 3px;
+  padding: 0px 3px;
+  -moz-tab-size: 4;
+  background: #ffebeb;
+  border: 1px solid #f76e6e;
+}
+b {
+  margin: 0px;
+}
+p {
+  margin: 0px;
+  line-height: 26px;
+}
+</style></head><body><div id="main"><textarea id="text">做了一个文本标记测试
+前面看`gfm`实在太喜欢了, 本来打算用了, 都去写了
+可是`gfm`处理空行不舒服啊, 也可能是`showdown`问题
+总之别人代码很长, 我是没有办法了, 洁癖的啥
+而我用到的功能无非是代码 / 换行 / 加粗三者
+于是自己写一个吧.. 的确很简单的, 但是.. 做事太不专心
+`JS`的正则表达式我没认真学, 现在挺悲惨的
+缩进的是代码高亮.. 晕, 没有高亮的..
+	for i in [1..100]
+		console.log '`dd`Nothing'
+就是这样, 还写了一个脚本, 还是昨天那个的
+另外. 一个广告: 清谈 http://qingtan.cnodejs.net </textarea><nav id="box"></nav></div></body></html>

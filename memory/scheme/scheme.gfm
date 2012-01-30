@@ -1,0 +1,65 @@
+
+打算学`Scheme`, 搜了不少尝试去理解, 中文资源不如`JS`多
+`IBM`社区`5+`篇文章, 下面两篇介绍语法方面比较清晰
+http://www.ibm.com/developerworks/cn/linux/l-schm/index1.html
+http://www.ibm.com/developerworks/cn/linux/l-schm/index2.html
+关于历史掌故可以看下面这篇了解下, 比较乱, 我没有细看
+http://blog.chinaunix.net/space.php?uid=20106293&do=blog&id=142113
+`scm`的规范简介有力, 真的很短, 入门后去看下
+直接`Google`就能找到 "算法语言`Scheme`修订`5`报告"
+教程英文的不少, 中文有本`SICP`的翻译, 算清晰, 爱问搜索有
+我搜到`3`份英文教程, 打算只看最简短的第一份了
+`Teach Yourself Scheme in Fixnum Days`
+http://www.ccs.neu.edu/home/dorai/t-y-scheme/t-y-scheme-Z-H-1.html
+`How to Design Programs: DrScheme Companion` http://www.htdp.org/
+`The Scheme Programming Language` http://www.scheme.com/tspl3/
+我参照的这份文档只为学会用 scm 解决问题, 大不算深入
+然后我很想用上`Scheme`的缩进语法, 希望入门后去看 
+http://srfi.schemers.org/srfi-49/srfi-49.html
+
+记得例子不少用`guile`来运行`scm`的, 在脚本开头加两行并可以空行
+	#! /usr/bin/env guile
+	!#
+系统没有 guile 可以在 Ubuntu 安装, 我装的是 1.8 版本
+然后脚本我不重复了, 开头缩进是笔记格式, 代码参考原文
+	;The first program
+	(begin
+		(display "Hello")
+		(newline))
+分号开头进行注释, `begin`表示后边多个模式
+`display`是向`console`输出, `newline`是输出新的换行
+教程说的`mzscheme`不清楚, `Ubuntu`里面用的`guile`
+实际上我用的命令是`$ rlwrap guile`
+然后输入`load "hi.scm"`(点钱目录文件名)运行该脚本
+`guile`中的`prompt`是`guile>`, 这里直接输入代码
+在`prompt`中输入`"hi"`会直接输出内容
+两种方式有区别, 向`console`输出对于函数是种副作用
+而`"hi"`则是计算得到结果的
+文章约定`=>`表示模式运算后给出结果
+可以用`(exit)`退出`guile`命令行, `Linux`常快捷键`C^d`
+运行脚本可以用`guile -s hi.scm`
+
+@`scm`有布尔, 数值, 字符, 符号几个数据类型
+真: `#t`, 假: `#f`, 判断是否布尔类型: `boolean? #t`
+否定: `(not #t) => #f`
+`scm`中数值类型有整数, 分数, 实数, 复数
+各自有`number? complex? real? rational? integer?` 判断
+整数未必十进制, 前缀`#b #o #x`分别表示二, 八, 十六进制
+比如`#b100`是二进制的`100`, 十进制的`4`
+判断大小是否相等用`(eqv? 2 #b10) => #t``(eqv? 2 2.0) => #f`
+这个广义的判别函数对于不同类型不会报错`(eqv? 2 #f) => #f`
+另外有个针对数值的判别符`(= 42 42.0) => #t`
+而这个判别符对于数值外内容会报错, 比如`(= 2 #f)`
+对于数字的大小判断还有`> < >= <=`可用
+运算符号有`+ - * /`, 都支持一个或多个参数
+其中除法结果是分数
+`(expt 2 3)`表示乘方, 只有两个参数
+`min max abs exp atan sqrt`等都可以推测
+`scm`的字符以`#\`开头比如`#\c`是字符`c`
+一般是在后面跟一个字符, 但也有用多个字母描述的比如
+`#\newline #\tab #\space`, 也有`#\ `表示空格
+字符的判别: `char? #\c => #t`, 字符还有大小的判别
+`char<? char<=? char=? char>=? char>?`
+为忽略大小写用`(char-ci=? #\A #\a) => #t`, 以此类推
+字母大小写转换用`char-downcase char-upcase`
+

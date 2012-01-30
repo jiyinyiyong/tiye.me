@@ -1,0 +1,26 @@
+			<title>			scheme笔记			</title>			<style>			body{
+	background: hsl(0,96%,96%);
+	font-size: 13px;
+	padding: 26px 130px;
+	line-height: 26px;
+}
+body>code, pre{
+	padding: 0px 3px;
+	margin: 0px 3px;
+	background: hsl(0,94%,95%);
+	border: 1px solid hsl(0,96%,86%);
+}
+p{
+	margin: 0px;
+}
+pre{
+	margin: 0px;
+	width: 600px;
+}
+body>*{
+	margin: 0px;
+}
+a{
+	color: hsl(240,40%,50%);
+	text-decoration: none;
+}			</style>			<br/>打算学<code>Scheme</code>, 搜了不少尝试去理解, 中文资源不如<code>JS</code>多<br/><code>IBM</code>社区<code>5+</code>篇文章, 下面两篇介绍语法方面比较清晰<br/><a href='http://www.ibm.com/developerworks/cn/linux/l-schm/index1.html'>www.ibm.com/developerworks/cn/linux/l-schm/index1.html</a><br/><a href='http://www.ibm.com/developerworks/cn/linux/l-schm/index2.html'>www.ibm.com/developerworks/cn/linux/l-schm/index2.html</a><br/>关于历史掌故可以看下面这篇了解下, 比较乱, 我没有细看<br/><a href='http://blog.chinaunix.net/space.php?uid=20106293&do=blog&id=142113'>blog.chinaunix.net/space.php?uid=20106293&do=blog&id=142113</a><br/><code>scm</code>的规范简介有力, 真的很短, 入门后去看下<br/>直接<code>Google</code>就能找到 "算法语言<code>Scheme</code>修订<code>5</code>报告"<br/>教程英文的不少, 中文有本<code>SICP</code>的翻译, 算清晰, 爱问搜索有<br/>我搜到<code>3</code>份英文教程, 打算只看最简短的第一份了<br/><code>Teach Yourself Scheme in Fixnum Days</code><br/><a href='http://www.ccs.neu.edu/home/dorai/t-y-scheme/t-y-scheme-Z-H-1.html'>www.ccs.neu.edu/home/dorai/t-y-scheme/t-y-scheme-Z-H-1.html</a><br/><code>How to Design Programs: DrScheme Companion</code> <a href='http://www.htdp.org/'>www.htdp.org/</a><br/><code>The Scheme Programming Language</code> <a href='http://www.scheme.com/tspl3/'>www.scheme.com/tspl3/</a><br/>我参照的这份文档只为学会用 scm 解决问题, 大不算深入<br/>然后我很想用上<code>Scheme</code>的缩进语法, 希望入门后去看 <br/><a href='http://srfi.schemers.org/srfi-49/srfi-49.html'>srfi.schemers.org/srfi-49/srfi-49.html</a><br/><br/>记得例子不少用<code>guile</code>来运行<code>scm</code>的, 在脚本开头加两行并可以空行<br/><pre><code>#! /usr/bin/env guile<br/>!#</code></pre>系统没有 guile 可以在 Ubuntu 安装, 我装的是 1.8 版本<br/>然后脚本我不重复了, 开头缩进是笔记格式, 代码参考原文<br/><pre><code>;The first program<br/>(begin<br/>	(display "Hello")<br/>	(newline))</code></pre>分号开头进行注释, <code>begin</code>表示后边多个模式<br/><code>display</code>是向<code>console</code>输出, <code>newline</code>是输出新的换行<br/>教程说的<code>mzscheme</code>不清楚, <code>Ubuntu</code>里面用的<code>guile</code><br/>实际上我用的命令是<code>$ rlwrap guile</code><br/>然后输入<code>load "hi.scm"</code>(点钱目录文件名)运行该脚本<br/><code>guile</code>中的<code>prompt</code>是<code>guile></code>, 这里直接输入代码<br/>在<code>prompt</code>中输入<code>"hi"</code>会直接输出内容<br/>两种方式有区别, 向<code>console</code>输出对于函数是种副作用<br/>而<code>"hi"</code>则是计算得到结果的<br/>文章约定<code>=></code>表示模式运算后给出结果<br/>可以用<code>(exit)</code>退出<code>guile</code>命令行, <code>Linux</code>常快捷键<code>C^d</code><br/>运行脚本可以用<code>guile -s hi.scm</code><br/><br/><p><b><code>scm</code>有布尔, 数值, 字符, 符号几个数据类型</b></p>真: <code>#t</code>, 假: <code>#f</code>, 判断是否布尔类型: <code>boolean? #t</code><br/>否定: <code>(not #t) => #f</code><br/><code>scm</code>中数值类型有整数, 分数, 实数, 复数<br/>各自有<code>number? complex? real? rational? integer?</code> 判断<br/>整数未必十进制, 前缀<code>#b #o #x</code>分别表示二, 八, 十六进制<br/>比如<code>#b100</code>是二进制的<code>100</code>, 十进制的<code>4</code><br/>判断大小是否相等用<code>(eqv? 2 #b10) => #t</code><code>(eqv? 2 2.0) => #f</code><br/>这个广义的判别函数对于不同类型不会报错<code>(eqv? 2 #f) => #f</code><br/>另外有个针对数值的判别符<code>(= 42 42.0) => #t</code><br/>而这个判别符对于数值外内容会报错, 比如<code>(= 2 #f)</code><br/>对于数字的大小判断还有<code>> < >= <=</code>可用<br/>运算符号有<code>+ - * /</code>, 都支持一个或多个参数<br/>其中除法结果是分数<br/><code>(expt 2 3)</code>表示乘方, 只有两个参数<br/><code>min max abs exp atan sqrt</code>等都可以推测<br/><code>scm</code>的字符以<code>#\</code>开头比如<code>#\c</code>是字符<code>c</code><br/>一般是在后面跟一个字符, 但也有用多个字母描述的比如<br/><code>#\newline #\tab #\space</code>, 也有<code>#\ </code>表示空格<br/>字符的判别: <code>char? #\c => #t</code>, 字符还有大小的判别<br/><code>char<? char<=? char=? char>=? char>?</code><br/>为忽略大小写用<code>(char-ci=? #\A #\a) => #t</code>, 以此类推<br/>字母大小写转换用<code>char-downcase char-upcase</code><br/><br/><br/>

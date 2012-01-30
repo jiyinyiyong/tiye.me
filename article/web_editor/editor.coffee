@@ -14,7 +14,7 @@ editor = (box) ->
 							box.value = c[..p-2] + c[p..]
 							box.setSelectionRange p-1, p-1
 					else
-						if c[p-1] is '\n'
+						if c[p-1] is '\n' and p isnt c.length
 							last_line = c[..p-2].lastIndexOf '\n'
 							indent = c[last_line..p-2].match /^\n\t*/
 							indents = indent[0][1..]
@@ -43,7 +43,7 @@ editor = (box) ->
 						box.value = addtion + front + between + behind
 				return false
 		else if event.keyCode is 13
-			unless event.ctrlKey
+			unless event.ctrlKey or start_p is 0
 				if start_p is end_p
 					p = start_p
 					unless event.shiftKey

@@ -16,7 +16,7 @@ editor = function(box) {
               box.setSelectionRange(p - 1, p - 1);
             }
           } else {
-            if (c[p - 1] === '\n') {
+            if (c[p - 1] === '\n' && p !== c.length) {
               last_line = c.slice(0, (p - 2) + 1 || 9e9).lastIndexOf('\n');
               indent = c.slice(last_line, (p - 2) + 1 || 9e9).match(/^\n\t*/);
               indents = indent[0].slice(1);
@@ -48,7 +48,7 @@ editor = function(box) {
         return false;
       }
     } else if (event.keyCode === 13) {
-      if (!event.ctrlKey) {
+      if (!(event.ctrlKey || start_p === 0)) {
         if (start_p === end_p) {
           p = start_p;
           if (!event.shiftKey) {

@@ -2,7 +2,7 @@
 
   $(function() {
     ($('#box')).append(tool(($('#text')).val()));
-    return ($('#text')).keypress(function(e) {
+    return ($('#text')).keydown(function(e) {
       ($('#box')).empty();
       return ($('#box')).append(tool(($('#text')).val()));
     });

@@ -15,12 +15,7 @@ main = function() {
   (document.getElementById('run4')).onclick = function(e) {
     return main2(ctx, 8, 1);
   };
-  (document.getElementById('ru0')).onclick = function(e) {
-    return main2(ctx, 0, 1);
-  };
-  return (document.getElementById('ru4')).onclick = function(e) {
-    return main2(ctx, 8, 1);
-  };
+  return main2(ctx, 8, 1);
 };
 
 main2 = function(ctx, sp, bg) {

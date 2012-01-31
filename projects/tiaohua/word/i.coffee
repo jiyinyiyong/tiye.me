@@ -10,10 +10,7 @@ main = ->
 		main2 ctx, 0, 1
 	(document.getElementById 'run4').onclick = (e) =>
 		main2 ctx, 8, 1
-	(document.getElementById 'ru0').onclick = (e) =>
-		main2 ctx, 0, 1
-	(document.getElementById 'ru4').onclick = (e) =>
-		main2 ctx, 8, 1
+	main2 ctx, 8, 1
 main2 = (ctx, sp, bg) ->
 	size = 20
 	n = 20

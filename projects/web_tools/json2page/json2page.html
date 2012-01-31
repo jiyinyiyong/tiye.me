@@ -1,4 +1,4 @@
-<html><head><meta charset="utf-8"/><script src="http://coffeescript.org/extras/coffee-script.js"></script><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script><script src="http://teddevito.com/demos/js/jquery.js"></script><script src="http://teddevito.com/demos/js/jquery.textarea.js"></script><script src="json2Page.js"></script><style type="text/css">p {
+<html><head><meta charset="utf-8"/><script src="../../../libs/jquery.min.js"></script><script src="../../../libs/coffee-script.js"></script><!-- script(src='http://coffeescript.org/extras/coffee-script.js')--><!-- script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")--><!-- script(src='http://teddevito.com/demos/js/jquery.js')--><!-- script(src='http://teddevito.com/demos/js/jquery.textarea.js')--><script src="../web_editor/editor.js"></script><script src="json2Page.js"></script><style type="text/css">p {
   margin: 0px;
   line-height: 26px;
 }
@@ -75,9 +75,8 @@
       }
     };
     ($('body')).append(json2Page(texta));
-    ($('#text')).val("div:\n\tstyle:\n\t\t'font-size': 13\n\t\t'line-height': 26\n\tattr:\n\t\tid: 'only'\n\ttext: 'Text'");
-    ($('textarea.tabby')).tabby();
-    //console.log(json2Page(texta));
+    ($('#text')).val("div:  	div:		p:'Text'");
+    editor(($('textarea'))[0]);
     ($('#click')).click(function() {
       var texts;
       texts = CoffeeScript.compile(($('#text')).val(), {

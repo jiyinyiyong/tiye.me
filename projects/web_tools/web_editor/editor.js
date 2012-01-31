@@ -16,18 +16,27 @@ editor = function(box) {
               box.setSelectionRange(p - 1, p - 1);
             }
           } else {
-            if (c[p - 1] === '\n' && p !== c.length) {
+            if (p === 0) {
+              box.value = '\t' + box.value;
+              box.setSelectionRange(1, 1);
+              return false;
+            } else if (c[p - 1] === '\n') {
               last_line = c.slice(0, (p - 2) + 1 || 9e9).lastIndexOf('\n');
-              indent = c.slice(last_line, (p - 2) + 1 || 9e9).match(/^\n\t*/);
-              indents = indent[0].slice(1);
-              box.value = c.slice(0, (p - 1) + 1 || 9e9) + indents + c.slice(p);
-              new_p = p + indents.length;
-              box.setSelectionRange(new_p, new_p);
-            } else {
-              box.value = c.slice(0, (p - 1) + 1 || 9e9) + '\t' + c.slice(p);
-              box.setSelectionRange(p + 1, p + 1);
+              indent = c.slice(last_line, (p - 2) + 1 || 9e9).match(/^\n\t+/);
+              if (indent) {
+                indents = indent[0].slice(1);
+                if (indents.length >= 1) {
+                  box.value = c.slice(0, (p - 1) + 1 || 9e9) + indents + c.slice(p);
+                  new_p = p + indents.length;
+                  box.setSelectionRange(new_p, new_p);
+                  return false;
+                }
+              }
             }
+            box.value = c.slice(0, (p - 1) + 1 || 9e9) + '\t' + c.slice(p);
+            box.setSelectionRange(p + 1, p + 1);
           }
+          return false;
         } else {
           last_line = c.slice(0, (start_p - 1) + 1 || 9e9).lastIndexOf('\n');
           if (last_line >= 0) start_p = last_line;
@@ -54,20 +63,20 @@ editor = function(box) {
           if (!event.shiftKey) {
             last_n = c.slice(0, (p - 1) + 1 || 9e9).lastIndexOf('\n');
             if (last_n === -1) {
-              if (p > 0) {
-                line = c.slice(0, (p - 1) + 1 || 9e9);
-              } else {
-                line = '';
-              }
+              line = '\n' + c.slice(0, (p - 1) + 1 || 9e9);
             } else {
               line = c.slice(last_n, (p - 1) + 1 || 9e9);
             }
-            indent = line.match(/\t+/);
-            indents = indent ? indent[0] : '';
-            behind = c.length === p ? '' : c.slice(p);
-            box.value = c.slice(0, (p - 1) + 1 || 9e9) + '\n' + indents + behind;
-            new_p = p + indents.length + 1;
-            box.setSelectionRange(new_p, new_p);
+            indent = line.match(/^\n\t+/);
+            console.log(indent);
+            if (indent) {
+              indents = indent[0].slice(1);
+              behind = c.length === p ? '' : c.slice(p);
+              box.value = c.slice(0, (p - 1) + 1 || 9e9) + '\n' + indents + behind;
+              new_p = p + indents.length + 1;
+              box.setSelectionRange(new_p, new_p);
+              return false;
+            }
           } else {
             indent = c.slice(0, (p - 1) + 1 || 9e9).match(/\n\t+$/);
             if (indent) {
@@ -77,9 +86,9 @@ editor = function(box) {
               box.value = front + behind;
               new_p = p - tab_length;
               box.setSelectionRange(new_p, new_p);
+              return false;
             }
           }
-          return false;
         }
       }
     } else if (event.keyCode === 8) {

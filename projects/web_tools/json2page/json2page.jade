@@ -2,10 +2,13 @@
 html
 	head
 		meta(charset='utf-8')
-		script(src='http://coffeescript.org/extras/coffee-script.js')
-		script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
-		script(src='http://teddevito.com/demos/js/jquery.js')
-		script(src='http://teddevito.com/demos/js/jquery.textarea.js')
+		script(src="../../../libs/jquery.min.js")
+		script(src="../../../libs/coffee-script.js")
+		// script(src='http://coffeescript.org/extras/coffee-script.js')
+		// script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
+		// script(src='http://teddevito.com/demos/js/jquery.js')
+		// script(src='http://teddevito.com/demos/js/jquery.textarea.js')
+		script(src="../web_editor/editor.js")
 		script(src='json2Page.js')
 		:stylus
 			p
@@ -67,8 +70,9 @@ html
 				($ 'body').append (json2Page texta)
 				($ '#text').val "div:
 					\tdiv:\n\t\tp:'Text'"
-				($ 'textarea.tabby').tabby()
-				console.log (json2Page texta)
+				#($ 'textarea.tabby').tabby()
+				editor ($ 'textarea')[0]
+				#console.log (json2Page texta)
 				($ '#click').click ->
 					texts = CoffeeScript.compile ($ '#text').val(), bare: 'on'
 					eval "aa=#{texts}"

@@ -14,16 +14,23 @@ editor = (box) ->
 							box.value = c[..p-2] + c[p..]
 							box.setSelectionRange p-1, p-1
 					else
-						if c[p-1] is '\n' and p isnt c.length
+						if p is 0
+							box.value = '\t' + box.value
+							box.setSelectionRange 1, 1
+							return false
+						else if c[p-1] is '\n'
 							last_line = c[..p-2].lastIndexOf '\n'
-							indent = c[last_line..p-2].match /^\n\t*/
-							indents = indent[0][1..]
-							box.value = c[..p-1] + indents + c[p..]
-							new_p = p + indents.length
-							box.setSelectionRange new_p, new_p
-						else
-							box.value = c[..p-1] + '\t' + c[p..]
-							box.setSelectionRange p+1, p+1
+							indent = c[last_line..p-2].match /^\n\t+/
+							if indent
+								indents = indent[0][1..]
+								if indents.length >= 1
+									box.value = c[..p-1] + indents + c[p..]
+									new_p = p + indents.length
+									box.setSelectionRange new_p, new_p
+									return false
+						box.value = c[..p-1] + '\t' + c[p..]
+						box.setSelectionRange p+1, p+1
+					return false
 				else
 					last_line = c[..start_p-1].lastIndexOf '\n'
 					if last_line >= 0 then start_p = last_line
@@ -49,18 +56,18 @@ editor = (box) ->
 					unless event.shiftKey
 						last_n = c[0..p-1].lastIndexOf '\n'
 						if last_n is -1
-							if p > 0
-								line = c[..p-1]
-							else
-								line = ''
+							line = '\n' + c[0..p-1]
 						else
 							line = c[last_n..p-1]
-						indent = line.match /\t+/
-						indents = if indent then indent[0] else ''
-						behind = if c.length is p then '' else c[p..] 
-						box.value = c[..p-1] + '\n' + indents + behind
-						new_p = p + indents.length + 1
-						box.setSelectionRange new_p, new_p
+						indent = line.match /^\n\t+/
+						console.log indent
+						if indent
+							indents = indent[0][1..]
+							behind = if c.length is p then '' else c[p..] 
+							box.value = c[..p-1] + '\n' + indents + behind
+							new_p = p + indents.length + 1
+							box.setSelectionRange new_p, new_p
+							return false
 					else
 						indent = c[..p-1].match /\n\t+$/
 						if indent
@@ -70,7 +77,7 @@ editor = (box) ->
 							box.value = front + behind
 							new_p = p - tab_length
 							box.setSelectionRange new_p, new_p
-					return false
+							return false
 		else if event.keyCode is 8
 			if start_p is end_p
 				p = start_p

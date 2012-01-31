@@ -16,6 +16,7 @@ style = """
 		margin: 0px;
 	}
 	pre{
+		-moz-tab-size: 4;
 		margin: 0px;
 		width: 600px;
 	}

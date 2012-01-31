@@ -41,7 +41,7 @@ http://srfi.schemers.org/srfi-49/srfi-49.html
 
 @`scm`有布尔, 数值, 字符, 符号几个数据类型
 真: `#t`, 假: `#f`, 判断是否布尔类型: `boolean? #t`
-否定: `(not #t) => #f`
+否定: `(not #t) ;=> #f`
 `scm`中数值类型有整数, 分数, 实数, 复数
 各自有`number? complex? real? rational? integer?` 判断
 整数未必十进制, 前缀`#b #o #x`分别表示二, 八, 十六进制
@@ -58,8 +58,200 @@ http://srfi.schemers.org/srfi-49/srfi-49.html
 `scm`的字符以`#\`开头比如`#\c`是字符`c`
 一般是在后面跟一个字符, 但也有用多个字母描述的比如
 `#\newline #\tab #\space`, 也有`#\ `表示空格
-字符的判别: `char? #\c => #t`, 字符还有大小的判别
+字符的判别: `char? #\c ;=> #t`, 字符还有大小的判别
 `char<? char<=? char=? char>=? char>?`
 为忽略大小写用`(char-ci=? #\A #\a) => #t`, 以此类推
 字母大小写转换用`char-downcase char-upcase`
+前面这些比如`#t 42 #\c`自求值的内容
+符号被输入到解释器里, 给出运算结果一般就是本身
+符号类型不同, 因为同样的内容常被用作变量标识符
+意味着那会被计算, 并返回计算结果的内容
+但符号依然是基本的数据类型, 可以和其他类型交换
+在`scm`里用上`(quote xyz) => xyz`标记符号
+符号非常常用, 于是有了简写`'E`相当于`(quote E)`
+符号的表示以不被混淆为准, `<=>`和'$!#*'都行
+但像这些`#t "aString" -i`就不行了
+可以用`(symbol? 'xyz)`判别
+注意`scm`里对大小写不敏感, 这里不例外
+接着可以定义符号为变量`(define xyz 9)`
+在解释器里输入就会直接返回内容了`xyz ;=> 9`
+或者用`(set! xyz #\c)`这样
+复合数据类型由数据类型俺结构组合而成
+字符串是自求值的`"Hello" => "Hello"`
+该程序由一系列字符组成`(string #\H #\e #\l #\l #\o)`
+用`(string-ref "abcd" 1)`取出序号`1` 的元素
+用`(string-append "a" "b" "c")`来组合新的字符串
+可新建指定长的空字符串`(make-string 3) ;=> "\x00\x00\x00")`
+如果`(define s (make-string 3))`
+那么再给`s`赋值就注意不能越界
+`(string-set! s 0 #\s)`用来修改指定序号的字符
+向量可以容纳各种类型, 包括向量自身
+定义向量: `(vector 1 2 3) ;=> #(1 2 3)`
+也可以直接使用`#(1 2 3)`产生向量
+类似有`(make-vector 5)`来生成限定长度的向量
+类似有`vector-ref vector-set vector?`
+@点对用来组合任意两个值, 前者称`car`, 后者`cdr`
+组合两者的程序是`(cons 1 #\t) ;=> (1 . #\t)`
+简洁的定义的方式`'(1 . #\t)`
+	(define x '(1 . #\t))
+取出内容通过`(car x)`或者`(cdr x)`
+设置: `(set-car! x)`和`(set-cdr! x)`
+	(define y (cons (cons 1 2) 3)) ;=> ((1 . 1.0) . 2))
+	(define y (cons 1 (cons 2 3))) ;=> (1 2 . 3)
+`(cdr (car y))`可以简化成`(cdar y)`最多四层
+	(cons 1 (cons 2 (cons 3 (cons 4 5)))) ;=> (1 2 3 4 . 5)
+有个空的点对`'() ;=> ()`
+	'(1 . (2 . (3 . (4 . ())))) ;=> (1 2 3 4)
+	(cons 1 (cons 2 (cons 3 (cons 4 '())))) ;=> (1 2 3 4)
+还有个程序: `(list 1 2 3 4) ;=> (1 2 3 4)`
+还有: `'(1 2 3 4) ;=> (1 2 3 4)`
+	(define y (list 1 2 3 4))
+	(list-ref y 0) ;=> 1
+	(list-ref y 3) ;=> 3
+	(list-tail y 1) ;=> (2 3 4)
+	(list-tail y 3) ;=> (4)
+	(pair? '(1 . 2)) ;=> #t
+	(pair? '(1 2)) ;=> #t
+	(pair? '()) ;=> #f
+	(list? '()) ;=> #t
+	(null? '()) ;=> #t
+	(list? '(1 2)) ;=> #t
+	(list? '(1 . 2)) ;=> #f
+字符串和数值间通过`ASIIC`码互转, 其他较明显
+	(char->integer #\d) ;=> 100
+	(integer->char 50) ;=> #\2
+	(string->list "hello") ;=> (#\h #\e #\l #\l #\o)
+	(number->string 16) ;=> "16"
+	(string->number "16") ;=> 16
+	(string->number "hi") ;=> #f
+	(symbol->string 'symbol) ;=> "symbol"
+	(string->symbol "string") ;=> string
+基于基数的转化, 比如下面基于八进制
+	`(string->number "16" 8)`
+`scm`还有个过程类型`procedure`, 目前看到都是基本过程
+基本过程在环境被支持, 也有途径创建自己的过程
+另有种数据类型`port`端口, 关联文件和终端的输入输出
+比如`display`还有个隐含的参数, 表示输出的端口
+`(display "Hello, World!" (current-output-port)`
+
+`scm`解释器会探测每一个形式`(form)`首个符号
+如果那是过程, 就会将其余作为参数执行这个形式
+像`begin define set!`是一些特殊形式, 特殊行为
+用户可以通过`lambda`表达式创建过程
+	(lambda (x) (+ x 2))
+	((lambda (x) (+ x 2)) 5) ;=> 7
+	(define add2 (lambda (x) (+ x 2)))
+	(add2 4) ;=> 6
+	(define area
+		(lambda (length breadth)
+			(* length breadth)))
+	(define area *) ;=> 同上
+`apply`可以运行一个过程, 并载入指定参数
+可以载入多个参数, 但必须要列表作为参数结尾
+	(define x '(1 2 3))
+	(apply + x) ;=> 2
+	(apply + 1 2 3 x) ;=> 12
+`begin`用来俺顺序执行参数中的子形式
+而`lambda`内部也是顺序执行的:
+	(define display3
+		(lambda (arg1 arg2)
+			(display arg1)
+			(newline)
+			(display arg2))
+
+条件语句`if`, `else`是隐含的
+	(if #t
+		(display "true"))
+	(if (> 1 0)
+		(display "true")
+		(display "false"))
+`when`用来判断, 当为真, 按顺序执行子形式
+`unelss`把`when`的条件取反, 然后顺序执行
+不过两者在`guile`里用不出来, 不考虑了
+`cond`用于判别, 每个参数都有判别是和结果
+有可选的`else`, 相似有`case`, 看例子的括号
+	(define c #\c)
+	(cond ((char<? c #\c) -1)
+		((char=? c #\c) 0)
+		(else 1)) ;=> 0
+	(case c
+		((#\a) 1)
+		((#\c) 2)
+		(else 3))
+`and or not`对应: 且, 或, 非
+不过在`guile`对于多个值或其他类型参数就要出错
+	(and #\t #\f) ;=> #\f
+	(or #\t #\f) ;=> #\t
+
+@`scm`的变量作用域是词法域, 静态作用域
+全局变量不受局部变量的影响, 看例子
+	(define x 9)
+	(define add 2 (lambda (x) (+ x 2)))
+	x ;=> 9
+	(add2 3) ;=> 5
+	x ;=> 9
+而`(set! x 20)`能对全局变量进行修改
+`scm`会选取词法上(?)最近的变量进行使用
+	(define counter 0)
+	(define bump-counter
+		(lambda ()
+			(set! counter (+ counter 1))
+			counter))
+	(bump-counter) ;=> 1
+	(bump-counter) ;=> 2
+`let`可以新建局部变量, 遮盖全局变量, 注意写法
+	(define x 20)
+	(let (
+		(x 1)
+		(y 2))
+		(list x y)) ;=> (1 2)
+	(let (
+		(x 1)
+		(y x))
+		(list x y)) ;=> (1 20)
+考虑到`let*`还有下面的写法
+	(let* ((x 1)
+		(y x))
+		(+ x y)) ;=> 2
+	(let ((x 1))
+		(let ((x y))
+			(+ x y))) ;=> 2
+	(let ((cons (lambda (x y) (+ x y))))
+		(cons 1 2)) ;=> 3
+`fluid-let`会临时修改全局变量值, 过后复原
+但是这个在`guile`里头也是不对劲的(?)
+而`let`本身面对这样的过程处理不同
+	(define x 0)
+	(define x+
+		(lambda ()
+			(set! x (+ x 1))
+			(display x)))
+	(let ((x 20))
+		(x+)) ;=> 1
+
+@递归, 调用自身, 转化条件, 设定边界, 看例子
+	(define fractorial
+		lambda (n)
+			(if (= n) 1
+				(* n (fractorial (- n 1)))))
+	(define is-even?
+		(lambda (n)
+			(if (= n 0) #t
+				(is-odd? (- n 1)))))
+	(define is-odd?
+		(lambda (n)
+			(if (= n 0) #f
+				(is-even? (- n 1)))))
+其实`scm`已经内置`even? odd?`两个过程
+注意在局部变量实现`is-even? is-odd?`会有问题
+用`let`时`if`内部的`is-even? is-odd?`不能正确指向
+用`let*`时`if`内部的`is-odd`不能正确指向
+于是引入了新的过程`letrec`进行
+	(letrec ((local-even? (lambda (n)
+		(if (= n 0) #t
+			(local-odd? (- n 1)))))
+		(local-odd? (lambda (n)
+			(if (= n 0) #f
+				(local-even? (- n 1))))))
+		(list (local-even? 23) (local-odd? 23)))
 

@@ -254,4 +254,45 @@ http://srfi.schemers.org/srfi-49/srfi-49.html
 			(if (= n 0) #f
 				(local-even? (- n 1))))))
 		(list (local-even? 23) (local-odd? 23)))
-
+`letrec`是专门为定义递归和相互递归的局部过程设计的
+借助`letrec`实现的循环过程
+	(letrec ((countdown (lambda (i)
+		(if (= i 0) 'liftoff
+			(begin
+				(display i)
+				(newline)
+				(countdown (- i 1)))))))
+		(countdown 10))
+这一段可以用宏用`let`写更紧凑的结构
+	(let countdown ((i 10))
+		(if (= i 0) 'liftoff
+			(begin
+				(display i)
+				(newline)
+				(countdown (- i 1)))))
+`scm`中不存在递归以外其他循环和迭代的构造
+递归会被关照以免开销过大(?)
+前面的递归是尾部递归, 尾递归可以被优化, 因而安全
+例子, 尾递归实现, 从列表`l`取元素`o`位置, 否则返回`#f`
+例子, 递归倒转列表内容的顺序
+	(define reverse!
+		(lambda (s)
+			(let loop ((s s) (r '()))
+				(if (null? s) r
+					(let ((d (cdr s)))
+						(set-cdr! s r)
+						(display d)
+						(display ", ")
+						(display s)
+						(newline)
+						(loop d s))))))
+几个小时才看明白, 还好环境里一般会提供这个函数的
+有一类迭代多次重复, 就是遍历列表每个元素
+于是有`map for-each`两种操作, 前者熟悉的
+	(define add2 (lambda (x)
+		(+ x 2)))
+	(map add2 '(1 2 3)) ;=> (3 4 5)
+	(map cons '(1 2 3) '(10 20 30)) ;=> ((1 .10) (2 . 20) (3 30))
+	(map + '(1 2 3) '(10 20 30)) ;=> ( 11 22 33)
+而后者没有返回值, 是副作用
+	(for-each display '(1 2 3 4))

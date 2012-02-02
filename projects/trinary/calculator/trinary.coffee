@@ -4,7 +4,8 @@ class Trinary
 	len: 81
 	center: 0
 	zero: []
-	constructor: ->
+	constructor: (@leng) ->
+		@len = @leng
 		for i in [0..@len-1]
 			@zero.push '5'
 		@center = (@len - 1) / 2
@@ -166,6 +167,7 @@ class Trinary
 		array_1 = @zero.concat()
 		regex = string.match /^([1-9]*)&([1-9]*)$/
 		unless regex
+			o "--"+string+'--', regex
 			o "wrong string"
 			return "error"
 		else
@@ -300,6 +302,97 @@ class Trinary
 		return @luo_method string_1, string_2, "multiply"
 	luo_divide: (string_1, string_2) ->
 		return @luo_method string_1, string_2, "divide"
-cal = new Trinary()
-o cal.luo_multiply "3423444&78678678", "3455&678678"
-o cal.luo_divide "96111225584&78684136882127", "3455&678678"
+	luo_pow: (string, num) ->
+		array_1 = @from_string string
+		array_2 = @from_string "1&"
+		unless (Math.floor num) is num and num > 1
+			o "Dont use luo_pow like this..."
+		else
+			for i in [1..num]
+				array_2 = @multiply array_2, array_1
+		return @to_string array_2
+	to_decimal: (array_1) ->
+		sum = 0
+		base = Math.pow 3, @center
+		for i in array_1
+			if i is "1" then sum += base
+			else if i is "9" then sum -= base
+			base /= 3
+		return sum
+	number:
+		"0": "&"
+		"1": "1&"
+		"2": "19&"
+		"3": "15&"
+		"4": "11&"
+		"5": "199&"
+		"6": "195&"
+		"7": "191&"
+		"8": "159&"
+		"9": "155&"
+		"10": "151&" 
+	from_decimal: (num) ->
+		unless typeof num is "number"
+			return "type error!"
+		deci = @divide (@from_string "1&"), (@from_string "151&")
+		# o "dd"
+		integer = Math.floor num
+		ten = @from_string "151&"
+		decimal = num - integer
+		negative = false
+		if integer < 0
+			integer = -integer
+			negative = true
+		sum = @from_string "&"
+		unless integer is 0
+			length = (''+num).length
+			base = @from_string "1&"
+			while integer >= 1
+				# o integer
+				d = integer % 10
+				char = @from_string @number[''+d]
+				space = @multiply char, base
+				sum = @plus sum, space
+				base = @multiply base, ten
+				integer = (integer - d) / 10
+		if negative then sum = sum.map @reverse
+		base = @from_string "1&"
+		regex = ('' + num).match /\.([1-9]+)$/
+		if regex
+			decimal = regex[1]
+			for i in [0..decimal.length-1]
+				base = @multiply base, deci
+				# o @to_string base
+				d = decimal[i]
+				unless d is "0"
+					char = @from_string @number[d]
+					space = @multiply char, base
+					sum = @plus space, sum
+		return sum
+	luo2xoy: (string) ->
+		point =
+			x: 0
+			y: 0
+		array = @luo_array_complex (@from_string string)
+		point.x = @to_decimal array[0]
+		point.y = @to_decimal array[1]
+		return point
+	xoy2luo: (x, y) ->
+		array_1 = @from_decimal x
+		array_2 = @from_decimal y
+		pair = [array_1, array_2]
+		point = @complex_array_luo pair
+		# o point
+		point = @to_string point
+		return point
+# cal = new Trinary 27
+# o cal.luo_multiply "3423444&78678678", "3455&678678"
+# o cal.luo_divide "96111225584&78684136882127", "3455&678678"
+# o cal.to_decimal (cal.from_string "19&")
+# a = cal.from_decimal 1.9999
+# o cal.to_string a
+# b = cal.to_decimal (cal.from_string "15&")
+# o b
+# o cal.luo2xoy "352452446456&"
+# o cal.xoy2luo -27278, 163601
+# o cal.luo_pow "11&11", 2

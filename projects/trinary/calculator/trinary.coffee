@@ -96,6 +96,9 @@ class Trinary
 		# o "not decided"
 		return false
 	divide: (array_1, array_2) ->
+		if @equal array_2, @zero
+			o "Divide 0.."
+			return "0 error"
 		o "start divide"
 		array_3 = @zero.concat()
 		array_4 = @zero.concat()
@@ -114,32 +117,34 @@ class Trinary
 		range_0 -= 1
 		o "made range_0"
 		for i in [range_0..@len-1]
-			o "loop i=", i
+			# o "loop i=", i
+			if @equal array_1, @zero then return array_4
 			for j in [0..@len-1]
 				point = (j - (@center - i))
 				if 0 <= point <= @len-1
 					array_3[point] = array_2[j]
-			o "got array_4=", array_4
+			o "got array_3=", array_3
 			n = "5"
 			chosen = array_1
 			choice = @minus array_1, array_3
-			o "fst choice: ", chosen
+			# o "fst choice: ", chosen
 			if @smaller choice, chosen
 				n = "1"
 				chosen = choice.concat()
 			choice = @minus array_1, (array_3.map @reverse)
-			o "snd choice: ", choice
+			# o "snd choice: ", choice
 			if @smaller choice, chosen
 				n = "9"
 				chosen = choice.concat()
-			o "got chosen: ", chosen
+			# o "got chosen: ", chosen
 			array_1 = chosen.concat()
 			array_3 = @zero.concat()
 			array_4[i] = n
+			# o "got array_4=", array_4
+		o "got array_4=", array_4
 		return array_4
 calculator = new Trinary()
-a = ["5", "5", "5", "1", "1", "5", "5", "1", "1"]
-b = ["5", "5", "5", "5", "1", "5", "9", "5", "5"]
+a = ["5", "5", "5", "1", "9", "5", "5", "5", "5"]
+b = ["5", "5", "5", "5", "5", "5", "5", "5", "5"]
 c = calculator.divide a, b
-d = calculator.divide c, a
-o d
+o "c: ", c

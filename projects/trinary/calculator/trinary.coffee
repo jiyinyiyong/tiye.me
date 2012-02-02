@@ -1,7 +1,7 @@
 
 o = console.log
 class Trinary
-	len: 743
+	len: 27
 	center: 0
 	zero: []
 	constructor: ->
@@ -146,12 +146,7 @@ class Trinary
 	to_string: (array_1) ->
 		string = ""
 		for i in [0..@len-1]
-			if array_1[i] is "1"
-				string += "1"
-			else if array_1[i] is "9"
-				string += "9"
-			else if array_1[i] is "5"
-				string += "5"
+			string += array_1[i]
 			if i is @center
 				string += "&"
 		while string[0] is "5"
@@ -186,26 +181,90 @@ class Trinary
 					# o point
 					array_1[point] = after[i]
 			return array_1
-	fplus: (string_1, string_2) ->
+	trinary_plus: (string_1, string_2) ->
 		array_1 = @from_string string_1
 		array_2 = @from_string string_2
 		array_3 = @plus array_1, array_2
 		string_3 = @to_string array_3
 		return string_3
-	fmultiply: (string_1, string_2) ->
+	trinary_multiply: (string_1, string_2) ->
 		array_1 = @from_string string_1
 		array_2 = @from_string string_2
 		array_3 = @multiply array_1, array_2
 		string_3 = @to_string array_3
-	fdivide: (string_1, string_2) ->
+	trinary_divide: (string_1, string_2) ->
 		array_1 = @from_string string_1
 		array_2 = @from_string string_2
 		array_3 = @divide array_1, array_2
 		string_3 = @to_string array_3
-	fminus: (string_1, string_2) ->
+	trinary_minus: (string_1, string_2) ->
 		array_1 = @from_string string_1
 		array_2 = @from_string string_2
 		array_3 = @minus array_1, array_2
 		string_3 = @to_string array_3
+	map_luo:
+		"1": ["1", "5"]
+		"2": ["9", "9"]
+		"3": ["5", "1"]
+		"4": ["9", "1"]
+		"5": ["5", "5"]
+		"6": ["1", "9"]
+		"7": ["5", "9"]
+		"8": ["1", "1"]
+		"9": ["9", "5"]
+		"15": "1"
+		"99": "2"
+		"51": "3"
+		"91": "4"
+		"55": "5"
+		"19": "6"
+		"59": "7"
+		"11": "8"
+		"95": "9"
+	luo_array_complex: (array_1) ->
+		array_2 = @zero.concat()
+		array_3 = @zero.concat()
+		for i in [0..@len-1]
+			cplx = @map_luo[array_1[i]]
+			array_2[i] = cplx[0]
+			array_3[i] = cplx[1]
+		pair = [array_2, array_3]
+		return pair
+	complex_array_luo: (pair) ->
+		array_1 = pair[0]
+		array_2 = pair[1]
+		array_3 = @zero.concat()
+		for i in [0..@len-1]
+			array_3[i] = map_luo[array_1+''+array_2]
+		return array_3
+	complex_array_plus: (pair_1, pair_2) ->
+		pair_3 = []
+		pair_3.push @plus pair_1[0], pair_2[0]
+		pair_3.push @plus pair_1[1], pair_2[1]
+		return pair_3
+	complex_array_minus: (pair_1, pair_2) ->
+		pair_3 = []
+		pair_3.push @minus pair_1[0], pair_2[0]
+		pair_3.push @minus pair_1[1], pair_2[1]
+		return pair_3
+	complex_array_multiply: (pair_1, pair_2) ->
+		pair_3 = []
+		part_1 = @multiply pair_1[0], pair_2[0]
+		part_2 = @multiply pair_1[1], pair_2[1]
+		pair_3.push @complex_array_minus part_1, part_2
+		part_3 = @multiply pair_1[0], pair_2[1]
+		part_4 = @multiply pair_1[1], pair_2[0]
+		pair_3.push @complex_array_plus part_3, part_4
+		return pair_3
+	complex_array_divide: (pair_1, pair_2) ->
+		pair_3 = @complex_array_multiply pair_2, pair_2
+		part_1 = pair_3[0]
+		pair_2[1] = @reverse pair_2[1]
+		pair_4 = @complex_array_multiply pair_1, pair_2
+		pair_4[0] = @divide pair_4[0], part_1
+		pair_4[1] = @divide pair_4[1], part_1
+		return pair_4
 cal = new Trinary()
-o cal.fdivide "1111111&", "1111&"
+o cal.trinary_divide "1111111&", "1111&"
+o cal.trinary_multiply "11&", "111&"
+o cal.luo_array_complex cal.zero

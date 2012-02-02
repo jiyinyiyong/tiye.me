@@ -1,7 +1,7 @@
 
 o = console.log
 class Trinary
-	len: 9
+	len: 743
 	center: 0
 	zero: []
 	constructor: ->
@@ -99,7 +99,7 @@ class Trinary
 		if @equal array_2, @zero
 			o "Divide 0.."
 			return "0 error"
-		o "start divide"
+		# o "start divide"
 		array_3 = @zero.concat()
 		array_4 = @zero.concat()
 		count_5_head = (array_1) ->
@@ -115,7 +115,7 @@ class Trinary
 			o "too far away!"
 			return "error to divide"
 		range_0 -= 1
-		o "made range_0"
+		# o "made range_0"
 		for i in [range_0..@len-1]
 			# o "loop i=", i
 			if @equal array_1, @zero then return array_4
@@ -123,7 +123,7 @@ class Trinary
 				point = (j - (@center - i))
 				if 0 <= point <= @len-1
 					array_3[point] = array_2[j]
-			o "got array_3=", array_3
+			# o "got array_3=", array_3
 			n = "5"
 			chosen = array_1
 			choice = @minus array_1, array_3
@@ -141,10 +141,71 @@ class Trinary
 			array_3 = @zero.concat()
 			array_4[i] = n
 			# o "got array_4=", array_4
-		o "got array_4=", array_4
+		# o "got array_4=", array_4
 		return array_4
-calculator = new Trinary()
-a = ["5", "5", "5", "1", "9", "5", "5", "5", "5"]
-b = ["5", "5", "5", "5", "5", "5", "5", "5", "5"]
-c = calculator.divide a, b
-o "c: ", c
+	to_string: (array_1) ->
+		string = ""
+		for i in [0..@len-1]
+			if array_1[i] is "1"
+				string += "1"
+			else if array_1[i] is "9"
+				string += "9"
+			else if array_1[i] is "5"
+				string += "5"
+			if i is @center
+				string += "&"
+		while string[0] is "5"
+			string = string[1..]
+		while string[string.length-1] is "5"
+			string = string[..(-2)]
+		return string
+	from_string: (string) ->
+		array_1 = @zero.concat()
+		regex = string.match /^([1-9]*)&([1-9]*)$/
+		unless regex
+			o "wrong string"
+			return "error"
+		else
+			# o regex
+			before = regex[1]
+			after = regex[2]
+			if before.length > @center + 1
+				o "too long"
+				return "error"
+			if after.length ? @center
+				o "too long"
+				return	"error"
+			if before.length > 0
+				for i in [0..before.length-1]
+					point = @center - (before.length - i) + 1
+					array_1[point] = before[i]
+			if after.length > 0
+				for i in [0..after.length-1]
+					# o 'fater: ', i
+					point = @center + (i + 1)
+					# o point
+					array_1[point] = after[i]
+			return array_1
+	fplus: (string_1, string_2) ->
+		array_1 = @from_string string_1
+		array_2 = @from_string string_2
+		array_3 = @plus array_1, array_2
+		string_3 = @to_string array_3
+		return string_3
+	fmultiply: (string_1, string_2) ->
+		array_1 = @from_string string_1
+		array_2 = @from_string string_2
+		array_3 = @multiply array_1, array_2
+		string_3 = @to_string array_3
+	fdivide: (string_1, string_2) ->
+		array_1 = @from_string string_1
+		array_2 = @from_string string_2
+		array_3 = @divide array_1, array_2
+		string_3 = @to_string array_3
+	fminus: (string_1, string_2) ->
+		array_1 = @from_string string_1
+		array_2 = @from_string string_2
+		array_3 = @minus array_1, array_2
+		string_3 = @to_string array_3
+cal = new Trinary()
+o cal.fdivide "1111111&", "1111&"

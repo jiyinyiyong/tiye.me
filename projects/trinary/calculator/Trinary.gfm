@@ -1,0 +1,36 @@
+
+@双平衡三进制计算, 程序说明.. @题叶
+
+`Github`上源码的链接: http://dwz.cn/trinary
+`双平衡三进制`是我模仿`平衡三进制`取的名字, 然后简称`双三`
+每个平面上的点对应一个形如`/[1-9]*&[1-9]*/`的数值
+简单说, 想象整个平面是九宫格, 其中每个格子继续又是九宫格
+如果不能想象, 我有个粗糙的图片 http://huaban.com/pins/907018/
+其实质, 与描述平面的复数无异, 不过强行使之紧凑了
+
+我码了一段`coffee`, 虽然自己能力差, 但除我怕没别人喜欢去写了
+代码实现平衡三进制的运算, 然后初步实现了双三的计算
+定义每个数值以字符串出现, 而模块内部是数组的计算
+数值约定以`&`作为分隔, 后边对应小数部分, 前边整数部分
+不能以`5`作为开头和结尾, 但是`&`是必须出现的
+代码中处理`5& &`两个值不够细致, 以后再说
+
+调用时可以`&lt;script&gt;`引用, 因为代码在`GitPage`上
+类`Trinary`有默认精度, 也可重新指定
+大概调试了下, 用得着的方法列举如下`in CoffeeScript`:
+	t = new Trinary ()
+	t.len
+		# 记录内部的数组的长度, 类似精度
+	t.zero
+		# 内部数组归零的模版
+	t.equal array_1, array_2 # -> true / false
+		# 判断两数组内容是否相同
+	t.to_string array_1 # -> string_1
+		# 将平衡三进制数组美化为数值字符串
+	t.from_string string_1 # -> array_1
+		# 将平衡三进制字符串格式化到数组
+	t.trinary_plus string_1, string_2 # -> string_3
+	t.trinary_minus string_1, string_2 # -> string_3
+	t.trinary_multiply string_1, string_2 # -> string_3
+	t.tr
+

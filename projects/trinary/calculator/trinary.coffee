@@ -1,7 +1,7 @@
 
 o = console.log
 class Trinary
-	len: 27
+	len: 81
 	center: 0
 	zero: []
 	constructor: ->
@@ -41,7 +41,7 @@ class Trinary
 					array_3[i] = pair[1]
 				unless pair[0] is "5"
 					if i>0 then array_4[i-1] = pair[0]
-					else o "加法溢出"
+					# else o "加法溢出"
 			array_1 = array_3.concat()
 			array_2 = array_4.concat()
 			array_3 = @zero.concat()
@@ -82,7 +82,7 @@ class Trinary
 			if char_2 is "1" then return true
 			else if char_2 is "9" then return false
 		else if char_1 is "9"
-			unless char_2 is "9" then return false
+			if char_2 is "9" then return false
 			else return true
 		else return "error chars"
 	smaller: (array_1, array_2) ->
@@ -91,11 +91,14 @@ class Trinary
 		array_2 = @abs array_2
 		for i in [0..@len-1]
 			# o "loop at: ", i
-			if @char_smaller array_1[i], array_2[i] then return true
-			else if @char_smaller array_2[i], array_1[i] then return false
+			if @char_smaller array_1[i], array_2[i]
+				# o "compare true", array_1[i], array_2[i]
+				return true
+			if @char_smaller array_2[i], array_1[i] then return false
 		# o "not decided"
 		return false
 	divide: (array_1, array_2) ->
+		if @equal array_1, @zero then return @zero
 		if @equal array_2, @zero
 			o "Divide 0.."
 			return "0 error"
@@ -110,6 +113,8 @@ class Trinary
 			return n
 		head_5s_1 = count_5_head array_1
 		head_5s_2 = count_5_head array_2
+		# o "5s of array_1: ", head_5s_1, " -> ", array_1
+		# o "5s of array_2: ", head_5s_2, " -> ", array_2
 		range_0 = @center + (head_5s_1 - @center) - (head_5s_2 - @center)
 		unless 0 < range_0 <= @len-1
 			o "too far away!"
@@ -123,24 +128,27 @@ class Trinary
 				point = (j - (@center - i))
 				if 0 <= point <= @len-1
 					array_3[point] = array_2[j]
-			# o "got array_3=", array_3
+			# o "array_3: ", array_3.join ' '
 			n = "5"
+			# o "array_1: ", array_1.join ' '
 			chosen = array_1
 			choice = @minus array_1, array_3
-			# o "fst choice: ", chosen
+			# o "choice1: ", choice.join ' '
 			if @smaller choice, chosen
 				n = "1"
 				chosen = choice.concat()
-			choice = @minus array_1, (array_3.map @reverse)
-			# o "snd choice: ", choice
+				# o 'choice1 smaller'
+			choice = @plus array_1, array_3
+			# o "choice2: ", choice.join ' '
 			if @smaller choice, chosen
 				n = "9"
 				chosen = choice.concat()
-			# o "got chosen: ", chosen
+				# o "choice2 smaller"
+			# o "chosen:  ", chosen.join ' '
 			array_1 = chosen.concat()
 			array_3 = @zero.concat()
 			array_4[i] = n
-			# o "got array_4=", array_4
+			# o "array_4: ", array_4.join ' '
 		# o "got array_4=", array_4
 		return array_4
 	to_string: (array_1) ->
@@ -165,9 +173,10 @@ class Trinary
 			before = regex[1]
 			after = regex[2]
 			if before.length > @center + 1
+				o 'before: ', before, before.length, @center
 				o "too long"
 				return "error"
-			if after.length ? @center
+			if after.length > @center
 				o "too long"
 				return	"error"
 			if before.length > 0
@@ -235,7 +244,7 @@ class Trinary
 		array_2 = pair[1]
 		array_3 = @zero.concat()
 		for i in [0..@len-1]
-			array_3[i] = map_luo[array_1+''+array_2]
+			array_3[i] = @map_luo[array_1[i]+''+array_2[i]]
 		return array_3
 	complex_array_plus: (pair_1, pair_2) ->
 		pair_3 = []
@@ -251,20 +260,46 @@ class Trinary
 		pair_3 = []
 		part_1 = @multiply pair_1[0], pair_2[0]
 		part_2 = @multiply pair_1[1], pair_2[1]
-		pair_3.push @complex_array_minus part_1, part_2
+		pair_3.push @minus part_1, part_2
 		part_3 = @multiply pair_1[0], pair_2[1]
 		part_4 = @multiply pair_1[1], pair_2[0]
-		pair_3.push @complex_array_plus part_3, part_4
+		pair_3.push @plus part_3, part_4
 		return pair_3
 	complex_array_divide: (pair_1, pair_2) ->
-		pair_3 = @complex_array_multiply pair_2, pair_2
-		part_1 = pair_3[0]
-		pair_2[1] = @reverse pair_2[1]
-		pair_4 = @complex_array_multiply pair_1, pair_2
-		pair_4[0] = @divide pair_4[0], part_1
-		pair_4[1] = @divide pair_4[1], part_1
-		return pair_4
+		pair_3 = pair_2.concat()
+		pair_3[1] = pair_3[1].map @reverse
+		pair_4 = @complex_array_multiply pair_2, pair_3
+		part_1 = pair_4[0]
+		pair_5 = @complex_array_multiply pair_1, pair_3
+		# o pair_5[0].join ' '
+		# o pair_5[1].join ' '
+		pair_5[0] = @divide pair_5[0], part_1
+		pair_5[1] = @divide pair_5[1], part_1
+		return pair_5
+	luo_method: (string_1, string_2, string_3) ->
+		array_1 = @from_string string_1
+		pair_1 = @luo_array_complex array_1
+		array_2 = @from_string string_2
+		pair_2 = @luo_array_complex array_2
+		if string_3 is "plus"
+			pair_3 = @complex_array_plus pair_1, pair_2
+		else if string_3 is "minus"
+			pair_3 = @complex_array_minus pair_1, pair_2
+		else if string_3 is "multiply"
+			pair_3 = @complex_array_multiply pair_1, pair_2
+		else
+			pair_3 = @complex_array_divide pair_1, pair_2
+		array_3 = @complex_array_luo pair_3
+		string_3 = @to_string array_3
+		return string_3
+	luo_plus: (string_1, string_2) ->
+		return @luo_method string_1, string_2, "plus"
+	luo_minus: (string_1, string_2) ->
+		return @luo_method string_1, string_2, "minus"
+	luo_multiply: (string_1, string_2) ->
+		return @luo_method string_1, string_2, "multiply"
+	luo_divide: (string_1, string_2) ->
+		return @luo_method string_1, string_2, "divide"
 cal = new Trinary()
-o cal.trinary_divide "1111111&", "1111&"
-o cal.trinary_multiply "11&", "111&"
-o cal.luo_array_complex cal.zero
+o cal.luo_multiply "3423444&78678678", "3455&678678"
+o cal.luo_divide "96111225584&78684136882127", "3455&678678"

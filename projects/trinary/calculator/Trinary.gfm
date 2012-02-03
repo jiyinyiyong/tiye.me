@@ -1,5 +1,6 @@
 
-@双平衡三进制计算, 程序说明.. @题叶
+@双平衡三进制计算, 代码说明.. @题叶
+代码没详细测试, 纯演示吧
 
 `Github`上源码的链接: http://dwz.cn/trinary
 `双平衡三进制`是我模仿`平衡三进制`取的名字, 然后简称`双三`
@@ -18,7 +19,8 @@
 调用时可以`&lt;script&gt;`引用, 因为代码在`GitPage`上
 类`Trinary`有默认精度, 也可重新指定
 大概调试了下, 用得着的方法列举如下`in CoffeeScript`:
-	t = new Trinary ()
+	t = new Trinary (27)
+		# 默认的长度是正奇数 81, 边界容易出错
 	t.len
 		# 记录内部的数组的长度, 类似精度
 	t.zero
@@ -30,7 +32,30 @@
 	t.from_string string_1 # -> array_1
 		# 将平衡三进制字符串格式化到数组
 	t.trinary_plus string_1, string_2 # -> string_3
+		# /[159]*&[159]/ 的平衡三进制字符串加法
 	t.trinary_minus string_1, string_2 # -> string_3
+		# 平衡三进制字符串减法
 	t.trinary_multiply string_1, string_2 # -> string_3
-	t.tr
-
+		# 平衡三进制字符串乘法
+	t.trinary_divide string_1, string_2 # -> string_3
+		# 平衡三进制字符串除法
+	t.luo_array_complex array_1 # -> array_2
+		# 内部双三数组转化平衡三进制二维数组
+	t.complex_array_luo array_1 # -> array_2
+		# 内部平衡三进制二维数组转化双三数组
+	t.luo_plus string_1, string_2 # -> string_3
+		# 双三字符串加法
+	t.luo_minus string_1, string_2 # -> string_3
+		# 双三字符串减法
+	t.luo_multiply string_1, string_2 # -> string_3
+		# 双三字符串乘法
+	t.luo_divide string_1, string_2 # -> string_3
+		# 双三字符串除法
+	t.to_decimal array # -> number
+		# 内部平衡三进制数组转化十进制数
+	t.from_decimal number # -> array
+		# 十进制数转化为内部平衡三进制数组
+	t.luo2xoy string # -> (x, y)
+		# 双三字符串转化为坐标, 注意 x / y 轴互换了
+	t.xoy2luo x, y # -> string
+		# 坐标转化为双三字符串

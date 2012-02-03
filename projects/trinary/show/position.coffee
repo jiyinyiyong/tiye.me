@@ -57,6 +57,7 @@ clicked = []
 		ctx.fillText "#{z}", ox, oy-10
 ($ "#cvs").click (e) ->
 	do ->
+		unless full then fullscreen()
 		ox = e.clientX - p.ox
 		oy = e.clientY - p.oy
 		y = e.clientX - p.x
@@ -65,3 +66,11 @@ clicked = []
 		($ "#value").text "#{x}, #{y}, #{z}"
 		ctx.fillText "#{z}", ox, oy-10
 		clicked.push [z, ox, oy]
+body = ($ "body")[0]
+full = false
+fullscreen = ->
+	if body.mozRequestFullScreen
+		body.mozRequestFullScreen()
+	else if body.requestFullScreen then body.requestFullScreen()
+	else if body.webkitRequestFullScreen then body.webkitRequestFullScreen()
+setTimeout fullscreen, 1000

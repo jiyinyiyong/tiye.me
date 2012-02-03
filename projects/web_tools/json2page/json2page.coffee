@@ -1,5 +1,5 @@
 
-json2Page = (json) ->
+json2page = (json) ->
 	o = console.log
 	data = 'html':
 			'head':
@@ -85,4 +85,4 @@ json2Page = (json) ->
 		return page
 	# console.log json2page data
 	return (json2page json)
-exports.json2Page = json2Page
+exports.json2page = json2page unless window

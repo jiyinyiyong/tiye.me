@@ -10,6 +10,8 @@ tool = function(demo) {
   lines.push('');
   lines.unshift('');
   for (i = 1, _ref = lines.length - 2; 1 <= _ref ? i <= _ref : i >= _ref; 1 <= _ref ? i++ : i--) {
+    lines[i] = lines[i].replace(/</g, "&lt;");
+    lines[i] = lines[i].replace(/>/g, "&gt;");
     if (lines[i].slice(0, 1) === '@') {
       lines[i] = '<p><b>' + lines[i].slice(1) + '</b></p>';
     } else if (lines[i].slice(0, 1) === '\t') {

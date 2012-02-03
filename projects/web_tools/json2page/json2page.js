@@ -1,7 +1,7 @@
-var json2Page;
+var json2page;
 
-json2Page = function(json) {
-  var data, json2attr, json2css, json2page, json2style, o;
+json2page = function(json) {
+  var data, json2attr, json2css, json2style, o;
   o = console.log;
   data = {
     'html': {
@@ -121,4 +121,4 @@ json2Page = function(json) {
   return json2page(json);
 };
 
-exports.json2Page = json2Page;
+if (!window) exports.json2page = json2page;

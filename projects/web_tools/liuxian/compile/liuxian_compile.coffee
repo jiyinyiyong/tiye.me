@@ -17,6 +17,8 @@ tool = (demo) ->
 	lines.unshift ''
 	# o lines
 	for i in [1..(lines.length-2)]
+		lines[i] = lines[i].replace /</g, "&lt;"
+		lines[i] = lines[i].replace />/g, "&gt;"
 		if lines[i][0..0] is '@'
 			lines[i] = '<p><b>' + lines[i][1..] + '</b></p>'
 		else if lines[i][0..0] is '\t'

@@ -1,12 +1,13 @@
 
+# 绘制完成的图片见这里
+# canvas 长宽为 2187^2
 cvs = document.getElementById 'cvs'
 ctx = cvs.getContext '2d'
 ctx.textBaseline = 'middle'
-ctx.globalAlpha = 1
+ctx.globalAlpha = 0.1
 ctx.font = "bold 800px Ubuntu"
 ctx.fillStyle = "rgb(255,255,255)"
 ctx.fillRect 0, 0, 2187, 2187
-ctx.globalAlpha = 0.5
 ctx.fillStyle = "rgb(0,0,0)"
 
 cell = (ctx, x, y, w) ->
@@ -25,10 +26,11 @@ cell = (ctx, x, y, w) ->
 	ctx.fillText '4', x + s + 2*u - k, y + s + 2*u
 
 limit = 2187
-width = 27
+width = 9
 x = 0
 y = 0
-while width <= limit
+while width <= limit*3
+	width *= 3
 	x = 0
 	while x+width <= limit
 		y = 0
@@ -36,4 +38,3 @@ while width <= limit
 			cell ctx, x, y, width
 			y += width
 		x += width
-	width *= 3

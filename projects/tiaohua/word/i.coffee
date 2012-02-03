@@ -29,7 +29,8 @@ main2 = (ctx, sp, bg) ->
 	ctx.closePath()
 	ctx.strokeStyle = '#fff'
 	ctx.stroke()
-window.onload = main
+# window.onload = main
+do main
 unit = (ctx, x, y, xt, yt) ->
 	if (Math.round Math.random()) == 0
 		ctx.moveTo x, y

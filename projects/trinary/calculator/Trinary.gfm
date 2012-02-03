@@ -16,7 +16,8 @@
 不能以`5`作为开头和结尾, 但是`&`是必须出现的
 代码中处理`5& &`两个值不够细致, 以后再说
 
-调用时可以`&lt;script&gt;`引用, 因为代码在`GitPage`上
+调用时可以`<script>`引用, 因为代码在`GitPage`上
+http://jiyinyiyong.github.com/projects/trinary/calculator/trinary.js
 类`Trinary`有默认精度, 也可重新指定
 大概调试了下, 用得着的方法列举如下`in CoffeeScript`:
 	t = new Trinary (27)

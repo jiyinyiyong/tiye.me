@@ -9,7 +9,7 @@ html
 		// script(src='http://teddevito.com/demos/js/jquery.js')
 		// script(src='http://teddevito.com/demos/js/jquery.textarea.js')
 		script(src="../web_editor/editor.js")
-		script(src='json2Page.js')
+		script(src='json2page.js')
 		:stylus
 			p
 				margin 0px
@@ -67,16 +67,16 @@ html
 								p11: '可以用 script 标签引用这段代码, 或模块里引用代码'
 								p12: '我在用的时候发现还有些错误, 后面再补补'
 				# console.log 'text: ', texta
-				($ 'body').append (json2Page texta)
+				($ 'body').append (json2page texta)
 				($ '#text').val "div:
 					\tdiv:\n\t\tp:'Text'"
 				#($ 'textarea.tabby').tabby()
 				editor ($ 'textarea')[0]
-				#console.log (json2Page texta)
+				#console.log (json2page texta)
 				($ '#click').click ->
 					texts = CoffeeScript.compile ($ '#text').val(), bare: 'on'
 					eval "aa=#{texts}"
-					($ '#click').text (json2Page aa)
+					($ '#click').text (json2page aa)
 				@
 		title Json2page
 	body

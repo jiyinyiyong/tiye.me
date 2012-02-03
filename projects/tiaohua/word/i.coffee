@@ -11,6 +11,14 @@ main = ->
 	(document.getElementById 'run4').onclick = (e) =>
 		main2 ctx, 8, 1
 	main2 ctx, 8, 1
+one1 = (ctx, s, x, y) ->
+	dx = s / 2
+	dy = s / 2
+	for j in [0..3]
+		unit ctx, x, y+j*dy, x+dx, y+j*dy+dy
+		unit ctx, x+2*dx, y+j*dy, x+dx, y+j*dy+dy
+		unit ctx, x+dx, y+j*dy, x, y+j*dy+dy
+		unit ctx, x+dx, y+j*dy, x+2*dx, y+j*dy+dy
 main2 = (ctx, sp, bg) ->
 	size = 20
 	n = 20
@@ -30,19 +38,10 @@ main2 = (ctx, sp, bg) ->
 	ctx.strokeStyle = '#fff'
 	ctx.stroke()
 # window.onload = main
-do main
 unit = (ctx, x, y, xt, yt) ->
 	if (Math.round Math.random()) == 0
 		ctx.moveTo x, y
 		ctx.lineTo xt, yt
-one1 = (ctx, s, x, y) ->
-	dx = s / 2
-	dy = s / 2
-	for j in [0..3]
-		unit ctx, x, y+j*dy, x+dx, y+j*dy+dy
-		unit ctx, x+2*dx, y+j*dy, x+dx, y+j*dy+dy
-		unit ctx, x+dx, y+j*dy, x, y+j*dy+dy
-		unit ctx, x+dx, y+j*dy, x+2*dx, y+j*dy+dy
 one0 = (ctx, s, x, y) ->
 	dx = s / 2
 	ddx = s / 4
@@ -53,3 +52,4 @@ one0 = (ctx, s, x, y) ->
 		unit ctx, x, y+j*dy+ddy, x+dx, y+j*dy+ddy
 		unit ctx, x+dx+ddx, y+j*dy, x+dx+ddx, y+j*dy+dy
 		unit ctx, x+dx, y+j*dy+ddy, x+2*dx, y+j*dy+ddy
+do main

@@ -72,5 +72,4 @@ fullscreen = ->
 	if body.mozRequestFullScreen
 		body.mozRequestFullScreen()
 	else if body.requestFullScreen then body.requestFullScreen()
-	else if body.webkitRequestFullScreen then body.webkitRequestFullScreen()
 setTimeout fullscreen, 1000

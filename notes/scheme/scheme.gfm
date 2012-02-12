@@ -296,3 +296,105 @@ http://srfi.schemers.org/srfi-49/srfi-49.html
 	(map + '(1 2 3) '(10 20 30)) ;=> ( 11 22 33)
 而后者没有返回值, 是副作用
 	(for-each display '(1 2 3 4))
+
+`scm`的读取端口的参数是可选的, 默认是`console`
+读取内容以字符, 行, `S 表达式`为单位
+以某种`EOF`结束, 才能用`eof-object?`判断结束
+函数有`read-char read-line read`, 后者读取`S 表达式`
+写入的端口也是可选的, 默认`console`
+写入的单位可以是字符, 或者基于`S 表达式`
+`write-char`写出的时候不会有`#\`前置, 保留机器方便的格式
+`display`的功能类似, 但会更方便人们阅读
+`open-input-file`过程接收文件名, 返回输出端口
+	(define i (open-input-file "hello.txt"))
+	(read-char i) ;=> #\h
+	(define j (read i))
+	j ;=> ello
+如果原文件不存在, `close-output-file`会建立新文件
+运行代码发现`output input file port`易混淆, 注意
+	(define o (open-output-file "g.txt"))
+	(display "hello" o)
+	(write-char #\space o)
+	(display 'world o)
+	(newline o)
+	(close0output-port o)
+`call-with-input-file`和`call-with-output-file`自动管理关闭
+	(call-with-input-file "hello.txt"
+		(lambda (i)
+			(let* ((a (read-char i))
+				(b (read-char i))
+				(c (read-char i)))
+			(list a b c)))) ;=> (#\h #\e #\l)
+未来操作字符串方便有`open-input-string open-output-string`
+	(define i (open-input-string "hello world"))
+	(read-char i) ;=> #\h
+	(read i) ;=> ello
+	(read i) ;=> world
+	(define o (open-output-string))
+	(write 'hello o)
+	(write-char #\, o)
+	(display " " o)
+	(display "world" o)
+	(get-output-string o) ;=> "hello, world"
+还有`load load-ralative`两个形式, 解说比较复杂(?)
+
+宏按说明应该像重用的代码块的缩写之类, 像链接用
+	(defint-macro when
+		(lambda (test . branch)
+			(list 'if test
+				(cons 'begin branch)))))
+用`define-macro`定义, 结果是
+	(when (< 1 2)
+		(display "true 1\n")
+		(display "true 2\n"))
+相当于代入其中转化成为
+	(if (< 1 2)
+		(begin
+			(display "true 1\n")
+			(display "true 2\n")))
+同样有`unless`的使用, 甚至在其中使用已经定义的`when`
+	(define-macro unless
+		(lambda (test . branch)
+			(list 'if
+				(list 'not test)
+				(cons 'begin branch))))
+	(define-macro unless
+		(lambda (test . branch)
+			(cons 'when
+				(cons (list 'not test) branch))))
+用反引号还可以简化语法, 大概`guile`对大小写敏感
+其中`,`表示插入相应的值, `,@`表示插入相应`S 表达式`
+	(defin-macro when
+		(lambda (test . branch)
+			`(if ,test
+				(begin ,@branch))))
+当用下面这种方式实现一个`or`形式
+	(define-macro my-or
+		(lambda (x y)
+			`(if ,x ,x ,y)))
+	(my-or 1 2) ;=> 1
+	(my-or #f 2) ;=> 2
+	(my-or
+		(begin
+			(display "twice")
+			(newline)
+			#t)
+		2)
+上面因为求值过程, 会出现两次`display`, 改写
+	(define-macro my-or
+		(lambda (x y)
+			`(let ((temp ,x))
+				(if temp temp ,y))))
+再改写用来形成私有的调用, 甚至用`gensym`产生私有的符号
+	(define-macro my-or
+		(lambda (x y)
+			`(let ((+temp ,x))
+				(if +temp +temp ,y))))
+	(define-macro my-or
+		(lambda (x y)
+			(lat ((temp (gensym)))
+				`(let ((,temp ,x))
+					(if ,temp ,temp ,y)))))
+`? 8.3 的 fluid-let 在 guile 没有, 正好跳过`
+
+后边`Mzscheme`和`guile`差别较大, 加上难度, 放弃了

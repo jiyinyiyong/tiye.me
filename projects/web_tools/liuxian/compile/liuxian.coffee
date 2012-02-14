@@ -38,14 +38,14 @@ unless argvs.length is 3
 	o 'Any file?'
 else
 	o argvs[2]
-	source = (argvs[2].match /(^.+)\.gfm/)
+	source = (argvs[2].match /(^.+)\.lx/)
 	unless source
 		o 'Result from Regex: ', source
 		o 'Probably wrong filename'
 	else
 		# unless source['1'] then o 'Can\'t find .gfm File'
 		# else
-		filename = source['1'] + '.gfm'
+		filename = source['1'] + '.lx'
 		file = fs.readFileSync filename, 'utf-8'
 		html =
 			"

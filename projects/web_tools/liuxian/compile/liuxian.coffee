@@ -52,6 +52,7 @@ else
 			<title>
 			#{source['1']}笔记
 			</title>
+			<meta charset='utf-8'/>
 			<style>
 			#{style}
 			</style>

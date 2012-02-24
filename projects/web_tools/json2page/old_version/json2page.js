@@ -122,3 +122,5 @@ json2page = function(json) {
 };
 
 if (!window) exports.json2page = json2page;
+
+if (window) window.json2page = json2page;

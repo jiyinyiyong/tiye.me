@@ -39,3 +39,6 @@
 		c ~ str2float b
 	f3 f2 42
 	# f3 判断其后 f2 类型不对, 于是等待后边更多执行
+级联方法采用管道符改写, 下面等价
+	($ '#elem').focus().val('').append "<br/>"
+	$ "#elem" | focus | val "" | append "<br/>"

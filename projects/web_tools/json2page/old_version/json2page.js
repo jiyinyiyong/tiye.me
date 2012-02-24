@@ -66,14 +66,14 @@ json2page = function(json) {
     return attrs;
   };
   json2css = function(json_data) {
-    var css, sub_key1, sub_key2, sub_value1, sub_value2, value;
+    var css, sub_key1, sub_key2, sub_value1, sub_value2;
     css = '<style>';
     for (sub_key1 in json_data) {
       sub_value1 = json_data[sub_key1];
       css += sub_key1 + '{';
       for (sub_key2 in sub_value1) {
         sub_value2 = sub_value1[sub_key2];
-        if (typeof value === 'number') value = "" + value + "px";
+        if (typeof sub_value2 === 'number') sub_value2 = "" + sub_value2 + "px";
         css += "" + sub_key2 + ": " + sub_value2 + ";";
       }
       css += '}';

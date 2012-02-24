@@ -46,8 +46,8 @@ json2page = (json) ->
 		for sub_key1, sub_value1 of json_data
 			css += sub_key1 + '{'
 			for sub_key2, sub_value2 of sub_value1
-				if typeof value is 'number'
-					value = "#{value}px"
+				if typeof sub_value2 is 'number'
+					sub_value2 = "#{sub_value2}px"
 				css += "#{sub_key2}: #{sub_value2};"
 			css += '}'
 		css += '</style>'

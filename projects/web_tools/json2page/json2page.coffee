@@ -1,24 +1,17 @@
 
 json2page = (data) ->
   if typeof data is 'string' then return ">#{data}"
-  unless typeof data is 'object'
-    err "data (#{data}) isnt object"
-    return 'break'
   html = ''
   attrs = []
   tags = []
   for key, value of data
     parse = key.match /^(\w*)\$(\w*)$/
     if parse then tags.push id: parse[1], tag: parse[2], value: value
-    else if check = key.match /^[a-zA-Z_]\w+$/ then attrs.push key else
-      err "key (#{key}) cant be parsed"
-      return 'break'
+    else if check = key.match /^[a-zA-Z_]\w+$/ then attrs.push key
   css = []
   for item in attrs
     if item.match /^style\d*$/ then css.push item
-    else if typeof data[item] is 'string' then html += "#{item}='#{data[item]}'" else
-      err "data[item] (#{data[item]}) seems not match"
-      return 'break'
+    else if typeof data[item] is 'string' then html += "#{item}='#{data[item]}'"
   if css.length > 0
     html += "style='"
     for item in css
@@ -47,25 +40,14 @@ json2page = (data) ->
 
 render_style = (data) ->
   style = ''
-  if typeof data isnt 'object'
-    err "style element data (#{data}) isnt object here"
-    return 'break'
-  else
-    for key, value of data
-      style += "#{key}\{"
-      if typeof value isnt 'object'
-        err "things in style element should be object, but got (#{value})"
-        return 'break'
-      else
-        for attr, content of value
-          if match = attr.match /^([a-z-]+)\d*$/
-            style += "#{match[1]}:"
-          else
-            err "match (#{match}) not right"
-            return 'break'
-          if typeof value is 'number' then style += "#{content}px;" else
-            style += content
-      style += '\}'
+  for key, value of data
+    style += "#{key}\{"
+    for attr, content of value
+      if match = attr.match /^([a-z-]+)\d*$/
+        style += "#{match[1]}:"
+      if typeof value is 'number' then style += "#{content}px;" else
+        style += "#{content};"
+    style += '\}'
   return style
       
 err = (e) ->
@@ -102,4 +84,10 @@ data =
     id_here$span1: 'add'
     $pipe:
       $text: 'qq'
-o (json2page data)[1..]
+# o (json2page data)[1..]
+
+out = (data) ->
+  (json2page data)[1..]
+
+if typeof window is 'object' then window.json2page = out
+if typeof exports is 'object' then exports.json2page = out

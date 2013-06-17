@@ -1,0 +1,79 @@
+
+/* fonts */
+
+@font-face {
+  font-family: 'Marcellus';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../font/Marcellus.woff"), local('Marcellus-Regular');
+  /*src: url("http://jiyinyiyong.github.io/blog/src/Marcellus.woff"), local('Marcellus-Regular');*/
+}
+
+/* global settings */
+* {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(0, 33%, 87%);
+}
+body {
+  margin: 0px 0px 300px;
+  font-family: Marcellus, 'Wenquanyi Micro hei';
+  font-size: 20px;
+  line-height: 34px;
+}
+p {
+  margin: 0px;
+}
+a {
+  text-decoration: none;
+}
+a:link {
+  color: hsl(290, 100%, 74%);
+}
+a:visited {
+    color: hsl(0, 23%, 73%);
+}
+
+/* more */
+
+#page {
+    width: 800px;
+    margin: 0px auto;
+}
+.panel {
+    margin: 10px 0px 80px;
+}
+.title {
+    margin: 40px 0px 20px;
+    box-shadow: 0px 1px 0px rgb(218, 201, 201);
+    padding: 0px 0px 0px 10px;
+}
+.panel>p>a {
+  margin-left: 30px;
+}
+#card {
+    display: -webkit-flex;
+    -webkit-flex-flow: row;
+    height: 240px;
+    -webkit-align-items: flex-end;
+    margin-bottom: 110px;
+    -webkit-justify-content: center;
+    display: flex;
+}
+.intro {
+    padding: 8px 40px;
+    display: -webkit-flex;
+    -webkit-flex-flow: column;
+    color: hsl(0, 17%, 68%);
+    width: 617px;
+}
+#avatar {
+    width: 88px;
+    box-shadow: 0px 0px 4px hsl(144, 7%, 58%);
+}

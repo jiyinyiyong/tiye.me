@@ -1,4 +1,7 @@
 
+mixin item(link, title)
+  .line: a(target="_blank", href=link)= title
+
 doctype 5
 html
   head
@@ -7,107 +10,116 @@ html
     link(rel='stylesheet', href='build/page.css')
     link(type="image/x-icon", rel="shortcut icon", href='./pic/jiyinyiyong-128x128.png')
   body
+    #card
+      img#avatar(alt='头像来源感谢 @vicky1994 http://lxtvvv.tuchong.com/2159629/', src='./pic/jiyinyiyong-128x128.png')
+      .name 题叶, JiyinYiyong
+      .about /chenyong/, 1991, dreamer, coder
     #page
-      #card
-        img#avatar(title='头像来源感谢 @vicky1994', src='./pic/jiyinyiyong-128x128.png')
-        .intro
-          p.name 题叶, JiyinYiyong, 1991.summer
-          p.about /chenyong/, CoffeeScript fan, Github user
+      .panel
+        .title My writings
+        mixin item("http://weibo.com/jiyinyiyong", "新浪微博")
+        mixin item("http://jiyinyiyong.github.io/blog/", "静态博客")
+        mixin item("http://www.douban.com/people/jiyinyiyong/notes", "豆瓣日记")
+        mixin item("http://blog.jiyinyiyong.info/about.md", "旧的笔记")
+        mixin item("http://segmentfault.com/u/jiyinyiyong/articles", "Segmentfaul 文章")
+        mixin item("https://medium.com/@jiyinyiyong", "Medium")
+        mixin item("https://twitter.com/jiyinyiyong", "Twitter")
+        mixin item("https://github.com/jiyinyiyong", "Github")
+        mixin item("https://github.com/jiyinyiyong/cirru-parser/wiki/About-Cirru", "Cirru Project")
+
+      .panel
+        .title Things I like
+        mixin item("http://movie.douban.com/doulist/3272325/", "电影豆列 Wandering in the Time")
+        mixin item()
+
       .panel
         .title Where I spend my time?
-        p: a(href='https://github.com/jiyinyiyong') Social coding
-        p: a(href='https://plus.google.com/communities/108571245540392494172/') My dream on Coder News
-        p: a(href='http://cnodejs.org/user/jiyinyiyong') Active member of Chinese Node.js Community
-        p: a(href='http://www.zhihu.com/people/jiyinyiyong/asks') Ask questions 知乎
-        p: a(href='https://twitter.com/jiyinyiyong') My Tweets with my friends
-        p: a(href='http://ruby-china.org/jiyinyiyong') Study new language on Ruby China
-        p: a(href='http://v2ex.com/member/jiyinyiyong') Way to explore the life of others
-        p: a(href='')
+        mixin item("https://github.com/jiyinyiyong", "Social coding")
+        mixin item("https://plus.google.com/communities/108571245540392494172/", "My dream on Coder News")
+        mixin item("http://cnodejs.org/user/jiyinyiyong", "Active member of Chinese Node.js Community")
+        mixin item("http://www.zhihu.com/people/jiyinyiyong/asks", "Ask questions 知乎")
+        mixin item("https://twitter.com/jiyinyiyong", "My Tweets with my friends")
+        mixin item("http://ruby-china.org/jiyinyiyong", "Study new language on Ruby China")
+        mixin item("http://v2ex.com/member/jiyinyiyong", "Way to explore the life of others")
+
       .panel
         .title Old things
-        p: a(href='http://coffee-js.github.com/coffeescript.cn/') CoffeeScript leads me the way to coding
-        p: a(href='https://github.com/jiyinyiyong/learning-notes') Learning Functional Programming
-        p: a(href='http://weibo.com/jiyinyiyong') Once I posted a brunch of bookmarks on 新浪微博
-        p: a(href='https://github.com/coffee-js/languages/issues') Trying to think and talk
-        p: a(href='')
+        mixin item("http://coffee-js.github.com/coffeescript.cn/", "CoffeeScript leads me the way to coding")
+        mixin item("https://github.com/jiyinyiyong/learning-notes", "Learning Functional Programming")
+        mixin item("http://weibo.com/jiyinyiyong", "Once I posted a brunch of bookmarks on 新浪微博")
+        mixin item("https://github.com/coffee-js/languages/issues", "Trying to think and talk")
+        
       .panel
         .title Collections
-        p: a(href='http://jiyinyiyong.github.io/blog/') My blog on Github Pages
-        p: a(href='http://www.tudou.com/home/item_u56179749s0p1.html') Great videos I downloaded
-        p: a(href='https://github.com/jiyinyiyong/article') Write blogs with HTML
-        p: a(href='')
+        mixin item("http://jiyinyiyong.github.io/blog/", "My blog on Github Pages")
+        mixin item("http://www.tudou.com/home/item_u56179749s0p1.html", "Great videos I downloaded")
+        mixin item("https://github.com/jiyinyiyong/article", "Write blogs with HTML")
+        
       .panel
         .title Notes
-        p: a(href='http://jiyinyiyong.blog.163.com/') First tech blog on 网易博客
-        p: a(href='https://github.com/jiyinyiyong/blog2') Archived notes on my first VPS
-        p: a(href='http://thinking.diandian.com/') Strange ideas I wrote down on 点点
-        p: a(href='http://www.douban.com/people/jiyinyiyong/notes')  Diaries about day dreaming on 豆瓣
-        p: a(href='http://learning-notes.diandian.com/') Some of my learning notes
-        p: a(href='')
+        mixin item("http://jiyinyiyong.blog.163.com/", "First tech blog on 网易博客")
+        mixin item("https://github.com/jiyinyiyong/blog2", "Archived notes on my first VPS")
+        mixin item("http://thinking.diandian.com/", "Strange ideas I wrote down on 点点")
+        mixin item("http://www.douban.com/people/jiyinyiyong/notes", " Diaries about day dreaming on 豆瓣")
+        mixin item("http://learning-notes.diandian.com/", "Some of my learning notes")
+        
       .panel
         .title Experiments
-        p: a(href='https://github.com/jiyinyiyong/rain-boots') Grunt is big, Rain-boots is small
-        p: a(href='https://github.com/jiyinyiyong/scirpus') Compile Scirpus to JS code
-        p: a(href='https://github.com/jiyinyiyong/broccoli') Broccoli demo blog
-        p: a(href='https://github.com/jiyinyiyong/goose') Add bracket for Golang code
-        p: a(href='https://github.com/jiyinyiyong/clear_converter') Add brackets for C code
-        p: a(href='https://github.com/jiyinyiyong/thirtySix') Chinese input method idea
-        p: a(href='')
+        mixin item("https://github.com/jiyinyiyong/rain-boots", "Grunt is big, Rain-boots is small")
+        mixin item("https://github.com/jiyinyiyong/scirpus", "Compile Scirpus to JS code")
+        mixin item("https://github.com/jiyinyiyong/broccoli", "Broccoli demo blog")
+        mixin item("https://github.com/jiyinyiyong/goose", "Add bracket for Golang code")
+        mixin item("https://github.com/jiyinyiyong/clear_converter", "Add brackets for C code")
+        mixin item("https://github.com/jiyinyiyong/thirtySix", "Chinese input method idea")
+        
       .panel
         .title Demostrations
-        p: a(href='https://github.com/jiyinyiyong/tiaohua') Futuristic character design
-        p: a(href='http://jiyinyiyong.yupoo.com/') The tiaohua character I designed
-        p: a(href='https://github.com/jiyinyiyong/poet-matrix') Poet Matrix
-        p: a(href='https://github.com/jiyinyiyong/chuangling') 窗棂 and grid workspaces
-        p: a(href='http://jiyinyiyong.github.io/code-ladder/build/') Indentation is better
-        p: a(href='https://github.com/jiyinyiyong/life-game-webgl') Life Game
-        p: a(href='https://github.com/jiyinyiyong/video-player-concept') Video player design
-        p: a(href='')
-      .panel
-        .title Cirru Project
-        p: a(href='https://github.com/jiyinyiyong/code_blocks') Prelude of Cirru
-        p: a(href='https://github.com/jiyinyiyong/cirru-parser') Cirru Parser
-        p: a(href='https://github.com/jiyinyiyong/Cirru.subl') Hilight Cirru in Sublime Text
-        p: a(href='https://github.com/jiyinyiyong/cirru-editor-2') Cirru Editor 2nd
-        p: a(href='')
+        mixin item("https://github.com/jiyinyiyong/tiaohua", "Futuristic character design")
+        mixin item("http://jiyinyiyong.yupoo.com/", "The tiaohua character I designed")
+        mixin item("https://github.com/jiyinyiyong/poet-matrix", "Poet Matrix")
+        mixin item("https://github.com/jiyinyiyong/chuangling", "窗棂 and grid workspaces")
+        mixin item("http://jiyinyiyong.github.io/code-ladder/build/", "Indentation is better")
+        mixin item("https://github.com/jiyinyiyong/life-game-webgl", "Life Game")
+        mixin item("https://github.com/jiyinyiyong/video-player-concept", "Video player design")
+                
       .panel
         .title Converter
-        p: a(href='https://github.com/jiyinyiyong/lilyturf') Lilyturf is an HTML template in CoffeeScript
-        p: a(href='https://github.com/jiyinyiyong/live-tmpl') JSON in LiveScript as HTML template
-        p: a(href='https://github.com/jiyinyiyong/calabash') Run Bash commands from Node
-        p: a(href='https://github.com/jiyinyiyong/she') Add parentheses for Scheme dialects
-        p: a(href='https://github.com/jiyinyiyong/willow') Willow markup language
-        p: a(href='')
+        mixin item("https://github.com/jiyinyiyong/lilyturf", "Lilyturf is an HTML template in CoffeeScript")
+        mixin item("https://github.com/jiyinyiyong/live-tmpl", "JSON in LiveScript as HTML template")
+        mixin item("https://github.com/jiyinyiyong/calabash", "Run Bash commands from Node")
+        mixin item("https://github.com/jiyinyiyong/she", "Add parentheses for Scheme dialects")
+        mixin item("https://github.com/jiyinyiyong/willow", "Willow markup language")
+        
       .panel
         .title Tools
-        p: a(href='https://github.com/jiyinyiyong/talkpage') Chatroom named Talkpage
-        p: a(href='https://github.com/jiyinyiyong/doodle') Reload you HTML when you edit files
-        p: a(href='https://github.com/jiyinyiyong/copyboard') a text-only Copyboard at realtime
-        p: a(href='https://github.com/jiyinyiyong/github-viewer') Github Viewer
-        p: a(href='https://github.com/jiyinyiyong/reload-cli') Reload this command
-        p: a(href='https://github.com/jiyinyiyong/song-box') Song box
-        p: a(href='https://github.com/jiyinyiyong/npm-search') Search NPM
-        p: a(href='https://github.com/jiyinyiyong/coffee-bean') Run CoffeeScript in a page
-        p: a(href='https://github.com/jiyinyiyong/zhongli') My first chatroom
-        p: a(href='https://github.com/jiyinyiyong/noisy-chat') Tiny chatroom here
-        p: a(href='https://github.com/jiyinyiyong/ternary-calculator') Ternary Calculator
-        p: a(href='')
+        mixin item("https://github.com/jiyinyiyong/talkpage", "Chatroom named Talkpage")
+        mixin item("https://github.com/jiyinyiyong/doodle", "Reload you HTML when you edit files")
+        mixin item("https://github.com/jiyinyiyong/copyboard", "a text-only Copyboard at realtime")
+        mixin item("https://github.com/jiyinyiyong/github-viewer", "Github Viewer")
+        mixin item("https://github.com/jiyinyiyong/reload-cli", "Reload this command")
+        mixin item("https://github.com/jiyinyiyong/song-box", "Song box")
+        mixin item("https://github.com/jiyinyiyong/npm-search", "Search NPM")
+        mixin item("https://github.com/jiyinyiyong/coffee-bean", "Run CoffeeScript in a page")
+        mixin item("https://github.com/jiyinyiyong/zhongli", "My first chatroom")
+        mixin item("https://github.com/jiyinyiyong/noisy-chat", "Tiny chatroom here")
+        mixin item("https://github.com/jiyinyiyong/ternary-calculator", "Ternary Calculator")
+        
       .panel
         .title Ideas
-        p: a(href='http://forum.ubuntu.org.cn/viewtopic.php?f=21&t=386367') I really want a better Shell
-        p: a(href='')
+        mixin item("http://forum.ubuntu.org.cn/viewtopic.php?f=21&t=386367", "I really want a better Shell")
+        
       .panel
         .title Translations
-        p: a(href='https://github.com/jiyinyiyong/monads-in-pictures') Monads in pictures, 中文
-        p: a(href='https://github.com/jiyinyiyong/history-of-lisp') History Of Lisp, part
-        p: a(href='http://jiyinyiyong.github.io/haskell-hardway/') Learn Haskell Fast and Hard, 中文
-        p: a(href='')
+        mixin item("https://github.com/jiyinyiyong/monads-in-pictures", "Monads in pictures, 中文")
+        mixin item("https://github.com/jiyinyiyong/history-of-lisp", "History Of Lisp, part")
+        mixin item("http://jiyinyiyong.github.io/haskell-hardway/", "Learn Haskell Fast and Hard, 中文")
+        
       .panel
         .title Me
-        p: a(href='http://www.xiami.com/space/lib-song/u/685374') Songs I love
-        p: a(href='http://tuchong.com/51334/favorites/') Photos I loved
-        p: a(href='http://lxtvvv.tuchong.com/2159629/') The photo I prefer as avatar
-        p: a(href='')
+        mixin item("http://www.xiami.com/space/lib-song/u/685374", "Songs I love")
+        mixin item("http://tuchong.com/51334/favorites/", "Photos I loved")
+        mixin item("http://lxtvvv.tuchong.com/2159629/", "The photo I prefer as avatar")
+        
   script.
     (function(i,s,o,g,r,a,m){
       i['GoogleAnalyticsObject']=r;

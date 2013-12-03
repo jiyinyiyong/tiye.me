@@ -1,29 +1,12 @@
 
-/* fonts */
-
-@font-face {
-  font-family: 'Marcellus';
-  font-style: normal;
-  font-weight: 400;
-  src: url("../font/Marcellus.woff"), local('Marcellus-Regular');
-  /*src: url("http://jiyinyiyong.github.io/blog/src/Marcellus.woff"), local('Marcellus-Regular');*/
-}
-
-/* global settings */
 * {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
 }
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-thumb {
-  background: hsl(0, 33%, 87%);
-}
+
 body {
   margin: 0px 0px 300px;
-  font-family: Marcellus, 'Wenquanyi Micro hei';
+  font-family: Optima, 'Wenquanyi Micro hei';
   font-size: 17px;
   line-height: 34px;
   -webkit-align-items: center;

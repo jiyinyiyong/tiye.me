@@ -7,61 +7,65 @@ html
   head
     title 题叶
     meta(charset='utf-8')
-    link(rel='stylesheet', href='build/page.css')
+    link(rel='stylesheet', href='style/page.css')
     link(type="image/x-icon", rel="shortcut icon", href='./pic/jiyinyiyong-128x128.png')
   body
     #card
       img#avatar(alt='头像来源感谢 @vicky1994 http://lxtvvv.tuchong.com/2159629/', src='./pic/jiyinyiyong-128x128.png')
       .name 题叶, JiyinYiyong
-      .about /chenyong/, 1991, dreamer, coder
+      .about ChenYong, 1991, dreamer, coder
     #page
       .panel
         .title My writings
         mixin item("http://weibo.com/jiyinyiyong", "新浪微博")
-        mixin item("http://jiyinyiyong.github.io/blog/", "静态博客")
+        mixin item("http:repo.jiyinyiyong.me/blog/", "静态博客")
         mixin item("http://www.douban.com/people/jiyinyiyong/notes", "豆瓣日记")
-        mixin item("http://blog.jiyinyiyong.info/about.md", "旧的笔记")
-        mixin item("http://segmentfault.com/u/jiyinyiyong/articles", "Segmentfaul 文章")
+        mixin item("http://blog.jiyinyiyong.info/about.md", "个人技术笔记")
+        mixin item("http://segmentfault.com/u/jiyinyiyong/articles", "Segmentfault 文章")
         mixin item("https://medium.com/@jiyinyiyong", "Medium")
         mixin item("https://twitter.com/jiyinyiyong", "Twitter")
         mixin item("https://github.com/jiyinyiyong", "Github")
-        mixin item("https://github.com/jiyinyiyong/cirru-parser/wiki/About-Cirru", "Cirru Project")
 
       .panel
         .title Things I like
-        mixin item("http://movie.douban.com/doulist/3272325/", "电影豆列 Wandering in the Time")
-        mixin item()
+        mixin item('https://vimeo.com/jiyinyiyong/likes', 'Liked vides on Vimeo')
+        mixin item("http://www.xiami.com/space/lib-song/u/685374", '虾米上喜欢的歌')
+        mixin item("http://tuchong.com/51334/favorites/", "图虫上喜欢的照片")
+        mixin item("http://movie.douban.com/doulist/3272325/", "电影豆列: Wandering in the Time")
+        mixin item("http://lxtvvv.tuchong.com/2159629/", "头像照片")
 
       .panel
-        .title Where I spend my time?
-        mixin item("https://github.com/jiyinyiyong", "Social coding")
-        mixin item("https://plus.google.com/communities/108571245540392494172/", "My dream on Coder News")
-        mixin item("http://cnodejs.org/user/jiyinyiyong", "Active member of Chinese Node.js Community")
-        mixin item("http://www.zhihu.com/people/jiyinyiyong/asks", "Ask questions 知乎")
-        mixin item("https://twitter.com/jiyinyiyong", "My Tweets with my friends")
-        mixin item("http://ruby-china.org/jiyinyiyong", "Study new language on Ruby China")
-        mixin item("http://v2ex.com/member/jiyinyiyong", "Way to explore the life of others")
+        .title Projects
+        mixin item("http://cirru.org", "Cirru Project")
+        mixin item('https://github.com/coffee-js/coffee-script', '翻译 CoffeeScript 首页')
+        mixin item("https://plus.google.com/communities/108571245540392494172/", "Coder News")
+        mixin item('https://github.com/jiyinyiyong/search-tab-crx', 'Chrome Tab Searching Extension')
+        mixin item('http://exportsjs.org/', 'Quick Docs')
 
       .panel
-        .title Old things
-        mixin item("http://coffee-js.github.com/coffeescript.cn/", "CoffeeScript leads me the way to coding")
-        mixin item("https://github.com/jiyinyiyong/learning-notes", "Learning Functional Programming")
-        mixin item("http://weibo.com/jiyinyiyong", "Once I posted a brunch of bookmarks on 新浪微博")
+        .title Old blogs
+        mixin item("https://github.com/jiyinyiyong/article", "Github Articles in HTML")
+        mixin item('http://jiyinyiyong.blog.163.com/', '网易博客')
+        mixin item('http://learning-notes.diandian.com/', '点点, 学习笔记')
+        mixin item('http://thinking.diandian.com/', '点点, 投入的想法')
+        mixin item('http://husxia.blog.sohu.com/', '王月生博客')
+        mixin item('http://beg-silence.tumblr.com/', 'Like Silence 博客')
+
+      .panel
+        .title Forums and friends
+        mixin item("http://www.golangtc.com/", "Golang China")
+        mixin item("http://ruby-china.org/jiyinyiyong", "Ruby China")
+        mixin item("http://v2ex.com/member/jiyinyiyong", "V2EX")
+        mixin item("http://www.zhihu.com/people/jiyinyiyong/asks", "知乎")
+        mixin item("http://cnodejs.org/user/jiyinyiyong", "CNode.js")
         mixin item("https://github.com/coffee-js/languages/issues", "Trying to think and talk")
-        
+
       .panel
         .title Collections
-        mixin item("http://jiyinyiyong.github.io/blog/", "My blog on Github Pages")
-        mixin item("http://www.tudou.com/home/item_u56179749s0p1.html", "Great videos I downloaded")
-        mixin item("https://github.com/jiyinyiyong/article", "Write blogs with HTML")
-        
-      .panel
-        .title Notes
-        mixin item("http://jiyinyiyong.blog.163.com/", "First tech blog on 网易博客")
-        mixin item("https://github.com/jiyinyiyong/blog2", "Archived notes on my first VPS")
-        mixin item("http://thinking.diandian.com/", "Strange ideas I wrote down on 点点")
-        mixin item("http://www.douban.com/people/jiyinyiyong/notes", " Diaries about day dreaming on 豆瓣")
-        mixin item("http://learning-notes.diandian.com/", "Some of my learning notes")
+        mixin item("http://coffee-js.github.com/coffeescript.cn/", "CoffeeScript links")
+        mixin item('http://coffee-js.github.io/clojure-learning/page/', 'Clojure links')
+        mixin item("http://www.tudou.com/home/item/jiyinyiyong", "Tudou")
+        mixin item("https://github.com/jiyinyiyong/learning-notes", "Learning Functional Programming")
         
       .panel
         .title Experiments
@@ -78,7 +82,7 @@ html
         mixin item("http://jiyinyiyong.yupoo.com/", "The tiaohua character I designed")
         mixin item("https://github.com/jiyinyiyong/poet-matrix", "Poet Matrix")
         mixin item("https://github.com/jiyinyiyong/chuangling", "窗棂 and grid workspaces")
-        mixin item("http://jiyinyiyong.github.io/code-ladder/build/", "Indentation is better")
+        mixin item("http:repo.jiyinyiyong.me/code-ladder/build/", "Indentation is better")
         mixin item("https://github.com/jiyinyiyong/life-game-webgl", "Life Game")
         mixin item("https://github.com/jiyinyiyong/video-player-concept", "Video player design")
                 
@@ -92,6 +96,7 @@ html
         
       .panel
         .title Tools
+        mixin item('http://repo.jiyinyiyong.me/seajs-issues/', 'SeaJS Issues Docs')
         mixin item("https://github.com/jiyinyiyong/talkpage", "Chatroom named Talkpage")
         mixin item("https://github.com/jiyinyiyong/doodle", "Reload you HTML when you edit files")
         mixin item("https://github.com/jiyinyiyong/copyboard", "a text-only Copyboard at realtime")
@@ -112,27 +117,13 @@ html
         .title Translations
         mixin item("https://github.com/jiyinyiyong/monads-in-pictures", "Monads in pictures, 中文")
         mixin item("https://github.com/jiyinyiyong/history-of-lisp", "History Of Lisp, part")
-        mixin item("http://jiyinyiyong.github.io/haskell-hardway/", "Learn Haskell Fast and Hard, 中文")
-        
-      .panel
-        .title Me
-        mixin item("http://www.xiami.com/space/lib-song/u/685374", "Songs I love")
-        mixin item("http://tuchong.com/51334/favorites/", "Photos I loved")
-        mixin item("http://lxtvvv.tuchong.com/2159629/", "The photo I prefer as avatar")
+        mixin item("http:repo.jiyinyiyong.me/haskell-hardway/", "Learn Haskell Fast and Hard, 中文")
         
   script.
-    (function(i,s,o,g,r,a,m){
-      i['GoogleAnalyticsObject']=r;
-      i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)
-      },
-      i[r].l=1*new Date();
-      a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];
-      a.async=1;
-      a.src=g;
-      m.parentNode.insertBefore(a,m)
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-41753901-1', 'jiyinyiyong.github.io');
+    ga('create', 'UA-41753901-7', 'jiyinyiyong.me');
     ga('send', 'pageview');

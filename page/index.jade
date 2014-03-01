@@ -1,0 +1,17 @@
+
+doctype 5
+
+head
+  link(rel='stylesheet', href='page/style.css')
+  script(defer, src='build/build.js')
+  //- include ga.html
+body#app
+  #title(v-on='click: toggleView', class='{{appMode}}')
+    #name
+      span#name-nice 题叶
+      span#name-id jiyinyiyong
+    #about
+      span#real-name ChenYong
+      span#birth-year 1991
+      span#introduction Coder of CoffeeScript & Cirru
+  #menu

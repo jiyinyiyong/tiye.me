@@ -1,0 +1,25 @@
+{
+  "name": "tiye.me",
+  "version": "0.0.0",
+  "description": "tiye.me",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tiye/tiye.me.git"
+  },
+  "keywords": [
+    "jiyinyiyong"
+  ],
+  "author": "jiyinyiyong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tiye/tiye.me/issues"
+  },
+  "homepage": "https://github.com/tiye/tiye.me",
+  "dependencies": {
+    "vue": "~0.9.2"
+  }
+}

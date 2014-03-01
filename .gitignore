@@ -2,5 +2,9 @@
 _site/
 *~
 *swp
+build/
+node_modules/
+src/
+index.html
 
 google*html

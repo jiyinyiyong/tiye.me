@@ -1,5 +1,9 @@
 
-body {
+* {
+    box-sizing: border-box;
+}
+
+#app {
     background-image: url('../pic/jiyinyiyong.png');
     background-size: cover;
     background-position: 50% 30%;
@@ -16,7 +20,10 @@ body {
     cursor: pointer;
 }
 
-#title.menu-hide {
+#title {
+}
+
+.menu-hide #title {
     color: white;
     position: absolute;
     height: 100%;
@@ -25,22 +32,86 @@ body {
     flex-direction: column;
     text-align: center;
     justify-content: center;
+    text-shadow: 2px 1px 7px hsl(0, 0%, 0%);
 }
-#title.menu-hide span {
-    margin-left: 0.5em;
+#title span {
+    margin: 0 0.3em;
 }
-#title.menu-hide #name {
+.menu-hide #title #name {
     font-size: 40px;
     padding-right: 500px;
     line-height: 120px;
     height: 120px;
 }
-#title.menu-hide #about {
+.menu-hide #title #about {
     font-size: 18px;
     height: 50px;
     padding-left: 160px;
 }
-#title.menu-hide #about:before {
+.menu-hide #title #about:before {
 }
 
-#title.menu-open {}
+#app.menu-open {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin: 0;
+}
+
+.menu-open #title, .menu-open #menu {
+    background: hsla(0, 77%, 9%, 0.54);
+    padding: 10px;
+    color: white;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.menu-open #title {
+    display: flex;
+    box-shadow: 0 1px 0px hsla(0, 21%, 34%, 0.39);
+    justify-content: flex-start;
+    padding-bottom: 30px;
+}
+.menu-open #title #name {
+}
+.menu-open #title #about {
+    color: gray;
+}
+
+.menu-open #menu {
+    padding: 20px 10px;
+    min-height: 400px;
+}
+
+#category {
+    margin-left: 100px;
+    font-size: 20px;
+    line-height: 35px;
+}
+
+#category .aspect {
+    cursor: pointer;
+    padding-left: 20px;
+    width: 200px;
+    color: hsla(0, 100%, 100%, 0.52);
+    text-transform: capitalize;
+}
+
+#category .aspect.aspect-open {
+    color: white;
+}
+
+#category .aspect:hover {
+    background: hsla(39, 100%, 92%, 0.11);
+}
+
+#resources {
+    padding-left: 100px;
+}
+
+#resources .link {
+    line-height: 40px;
+    color: hsl(235, 100%, 84%);
+    text-decoration: none;
+    font-size: 20px;
+}

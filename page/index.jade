@@ -3,10 +3,11 @@ doctype 5
 
 head
   link(rel='stylesheet', href='page/style.css')
+  link(type="image/x-icon", rel="shortcut icon", href='./pic/jiyinyiyong.png')
   script(defer, src='build/build.js')
   //- include ga.html
-body#app
-  #title(v-on='click: toggleView', class='{{appMode}}')
+body#app(v-class='appMode')
+  #title(v-on='click: toggleView')
     #name
       span#name-nice 题叶
       span#name-id jiyinyiyong
@@ -14,4 +15,13 @@ body#app
       span#real-name ChenYong
       span#birth-year 1991
       span#introduction Coder of CoffeeScript & Cirru
-  #menu
+  #menu(v-show='open')
+    #category
+      .candidates(v-repeat='menu')
+        .aspect(v-on='click: selectAspect(this.category)'
+          v-class='aspectState(this.category)'
+          ) {{category}}
+    #resources
+      .candidates(v-repeat='menu')
+        .candidates(v-repeat='resources', v-show='onAspect(category)')
+          a.link(href='{{link}}', v-text='name')

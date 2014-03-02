@@ -4,6 +4,7 @@ doctype 5
 head
   link(rel='stylesheet', href='page/style.css')
   link(type="image/x-icon", rel="shortcut icon", href='./pic/jiyinyiyong.png')
+  meta(charset='utf-8')
   script(defer, src='build/build.js')
   //- include ga.html
 body#app(v-class='appMode')
@@ -12,9 +13,11 @@ body#app(v-class='appMode')
       span#name-nice 题叶
       span#name-id jiyinyiyong
     #about
-      span#real-name ChenYong
-      span#birth-year 1991
-      span#introduction Coder of CoffeeScript & Cirru
+      span#real-name ChenYong,
+      span#birth-year 1991,
+      span#introduction
+        a(href='https://github.com/tiye/tiye.me', v-click='noevent') Coder
+        span of CoffeeScript &amp; Cirru
   #menu(v-show='open')
     #category
       .candidates(v-repeat='menu')
@@ -22,6 +25,7 @@ body#app(v-class='appMode')
           v-class='aspectState(this.category)'
           ) {{category}}
     #resources
-      .candidates(v-repeat='menu')
-        .candidates(v-repeat='resources', v-show='onAspect(category)')
-          a.link(href='{{link}}', v-text='name')
+      .candidates(v-repeat='menu', v-show='onAspect(category)')
+        .candidates(v-repeat='resources')
+          a.link(href='{{link}}', v-text='name', target='_blank')
+        .description(v-text='description')

@@ -1,12 +1,11 @@
 
 q = (x) -> document.querySelector x
-signNewSite = '➦'
 Vue = require 'vue'
 
 app = new Vue
   el: '#app'
   data:
-    open: yes
+    open: no
     menu: require('./menu').menu
     default: 'likes'
   methods:
@@ -21,6 +20,8 @@ app = new Vue
         'aspect-open'
       else
         'aspect-close'
+    noevent: (event) ->
+      event.stopPropgation()
   computed:
     appMode:
       $get: ->

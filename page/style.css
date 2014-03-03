@@ -1,7 +1,8 @@
 
 @font-face {
   font-family: '悦黑';
-  src: url('MFYueHei_Noncommercial-ExLight.otf');
+  /*src: url('MFYueHei_Noncommercial-ExLight.otf');*/
+  src: url('http://tiye.qiniudn.com/MFYueHei_Noncommercial-ExLight.otf');
 }
 
 * {
@@ -9,9 +10,10 @@
 }
 
 #app {
-    background-image: url('../pic/jiyinyiyong.png');
+    /*background-image: url('../pic/jiyinyiyong.jpg');*/
+    background-image: url('http://tiye.qiniudn.com/jiyinyiyong.jpg');
     background-size: cover;
-    background-position: 50% 30%;
+    /*background-position: 50% 30%;*/
     position: absolute;
     top: 0;
     left: 0;

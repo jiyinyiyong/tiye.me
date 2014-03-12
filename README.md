@@ -6,11 +6,11 @@ http://tiye.me
 
 Framework: [Vue.js][http://vuejs.org]
 
-中文字体: [造字工房, 悦黑, 纤细体][yuthei]
+中文字体: [造字工房, 悦圆][yueyuan] (本地已经安装 `MF YueYuan (Noncommercial)` 的情况下...)
 
 Picture: [Leafs][leaf] by [@Kuazu][Kuazu]
 
-[yuthei]: http://www.makefont.com/font.html?MFYueHei_Noncommercial_ExLight
+[yueyuan]: http://www.makefont.com/font.html?MFYueYuan_Noncommercial_Regular
 [Kuazu]: http://weibo.com/vvvvvhuahua
 [leaf]: http://lxtvvv.tuchong.com/2159629/
 

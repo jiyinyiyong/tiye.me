@@ -1,26 +1,19 @@
 
-@font-face {
-  font-family: '悦黑';
-  /*src: url('MFYueHei_Noncommercial-ExLight.otf');*/
-  src: url('http://tiye.qiniudn.com/MFYueHei_Noncommercial-ExLight.otf');
-}
-
 * {
     box-sizing: border-box;
 }
 
 #app {
-    /*background-image: url('../pic/jiyinyiyong.jpg');*/
+    /* background-image: url('../pic/jiyinyiyong.jpg'); */
     background-image: url('http://tiye.qiniudn.com/leaf.jpg');
     background-size: cover;
-    /*background-position: 50% 30%;*/
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-repeat: no-repeat;
-    font-family: Optima, '悦黑';
+    font-family: 'MF YueYuan (Noncommercial)', Optima, 'Hiragino Sans GB';
     margin: 0;
 }
 

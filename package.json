@@ -14,12 +14,15 @@
     "jiyinyiyong"
   ],
   "author": "jiyinyiyong",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/tiye/tiye.me/issues"
   },
   "homepage": "https://github.com/tiye/tiye.me",
-  "dependencies": {
-    "vue": "~0.9.2"
+  "dependencies": {},
+  "devDependencies": {
+    "vue": "~0.10.3",
+    "cirru-html": "~0.1.5",
+    "devtools-reloader-station": "0.0.3"
   }
 }

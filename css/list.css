@@ -1,0 +1,49 @@
+
+#category {
+    margin-left: 100px;
+    font-size: 16px;
+    line-height: 32px;
+}
+
+#category .aspect {
+    cursor: pointer;
+    padding-left: 20px;
+    width: 160px;
+    color: hsla(0, 100%, 100%, 0.52);
+    text-transform: capitalize;
+}
+
+#category .aspect.aspect-open {
+    color: white;
+}
+
+#category .aspect:hover {
+    background: hsla(39, 100%, 92%, 0.11);
+}
+
+#resources {
+    padding-left: 2em;
+}
+
+#resources .description {
+    color: hsla(0, 0%, 87%, 0.36);
+    margin-top: 2em;
+}
+#resources .description:first-letter {
+    text-transform: capitalize;
+}
+
+#resources .link {
+    line-height: 32px;
+    color: hsla(0, 100%, 100%, 0.56);
+    text-decoration: none;
+    font-size: 16px;
+}
+#resources .link:after {
+    content: '➦';
+    margin-left: 20px;
+    color: hsla(266, 100%, 81%, 0);
+}
+#resources .link:hover:after {
+    color: hsla(235, 100%, 82%, 0.95);
+}

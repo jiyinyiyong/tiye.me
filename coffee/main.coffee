@@ -9,8 +9,9 @@ app = new Vue
     menu: require('./menu').menu
     default: 'likes'
   methods:
-    toggleView: ->
-      @open = not @open
+    showDetail: (event) ->
+      event.stopPropagation()
+      @open = yes
     selectAspect: (category) ->
       @default = category
     onAspect: (category) ->
@@ -21,10 +22,8 @@ app = new Vue
       else
         'aspect-close'
     noevent: (event) ->
-      event.stopPropgation()
-  computed:
-    appMode:
-      $get: ->
-        if @open then 'menu-open' else 'menu-hide'
-
-console.log menu
+      event.stopPropagation()
+    showBackground: (event) ->
+      if event.target.id is 'app'
+        @open = no
+  computed: {}

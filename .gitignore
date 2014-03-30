@@ -4,7 +4,7 @@ _site/
 *swp
 build/
 node_modules/
-src/
+js/
 index.html
 
 google*html

@@ -18,9 +18,9 @@ body#app
           :href https://github.com/tiye/tiye.me
           :v-on "click: noevent"
           :target _blank
-          = Coder
+          = Coding
         span
-          = "of CoffeeScript &amp; Cirru"
+          = "in CoffeeScript, Go &amp; Cirru"
   #menu
     :v-show open
     #category

@@ -153,7 +153,7 @@ exports.menu = [
     name: '宋词'
     link: 'http://www.douban.com/note/307092195/'
   ,
-    name: '???'
+    name: '伣论'
     link: 'http://www.douban.com/note/313037995/'
   ,
     name: ''

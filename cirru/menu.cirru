@@ -20,7 +20,7 @@ body#app
           :target _blank
           = Coding
         span
-          = "in CoffeeScript, Go &amp; Cirru"
+          = "in CoffeeScript &amp; Cirru"
   #menu
     :v-show open
     #category

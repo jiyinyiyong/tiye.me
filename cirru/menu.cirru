@@ -1,8 +1,5 @@
 body#app
-  :v-on "click: showBackground"
   #title
-    :v-on "click: showDetail"
-    :v-show "!open"
     #name
       span#name-nice
         = 题叶
@@ -16,20 +13,17 @@ body#app
       span#introduction
         a
           :href https://github.com/tiye/tiye.me
-          :v-on "click: noevent"
           :target _blank
           = Coding
         span
           = "in CoffeeScript &amp; Cirru"
   #menu
-    :v-show open
     #category
-      .candidates
+      .aspect
         :v-repeat menu
-        .aspect
-          :v-on "click: selectAspect(this.category)"
-          :v-class "aspectState(this.category)"
-          :v-model category
+        :v-on "click: selectAspect(this.category)"
+        :v-class "aspectState(this.category)"
+        :v-model category
     #resources
       .candidates
         :v-repeat menu

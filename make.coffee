@@ -1,64 +1,79 @@
-
+#!/usr/bin/env coffee
 project = 'repo/tiye.me'
-interval = interval: 300
-watch = no
 
 require 'shelljs/make'
-fs = require 'fs'
-station = require 'devtools-reloader-station'
-browserify = require 'browserify'
-{renderer} = require 'cirru-html'
+path = require 'path'
+mission = require 'mission'
 
-startTime = (new Date).getTime()
-process.on 'exit', ->
-  now = (new Date).getTime()
-  duration = (now - startTime) / 1000
-  console.log "\nfinished in #{duration}s"
+mission.time()
 
-reload = -> station.reload project if watch
- 
-compileCoffee = (name, callback) ->
-  exec "coffee -o js/ -bc coffee/#{name}", ->
-    console.log "done: coffee, compiled coffee/#{name}"
-    do callback
- 
-packJS = ->
-  b = browserify ['./js/main']
-  build = fs.createWriteStream 'build/build.js', 'utf8'
-  bundle = b.bundle(debug: yes)
-  bundle.pipe build
-  bundle.on 'end', ->
-    console.log 'done: browserify'
-    do reload
- 
 target.folder = ->
-  mkdir '-p', 'cirru', 'coffee', 'js', 'build', 'css'
-  exec 'touch cirru/index.cirru css/style.css'
-  exec 'touch coffee/main.coffee'
-  exec 'touch README.md .gitignore .npmignore'
- 
-target.cirru = ->
-  file = 'cirru/index.cirru'
-  render = renderer (cat file), '@filename': file
-  html = render()
-  fs.writeFile 'index.html', html, 'utf8', (err) ->
-    console.log 'done: cirru'
-    do reload
+  mission.tree
+    '.gitignore': ''
+    'README.md': ''
+    js: {}
+    build: {}
+    cirru: {'index.cirru': ''}
+    coffee: {'main.coffee': ''}
+    css: {'style.css': ''}
 
-target.js = ->
-  exec 'coffee -o js/ -bc coffee/'
- 
+target.coffee = ->
+  mission.coffee
+    find: /\.coffee$/, from: 'coffee/', to: 'js/', extname: '.js'
+    options:
+      bare: yes
+
+cirru = ->
+  mission.cirru
+    file: 'index.cirru', from: 'cirru/', to: './', extname: '.html'
+
+browserify = (callback) ->
+  mission.browserify
+    file: 'main.js', from: 'js/', to: 'build/', done: callback
+
+target.cirru = -> cirru()
+target.browserify = -> browserify()
+
 target.compile = ->
-  target.cirru()
-  exec 'coffee -o js/ -bc coffee/', ->
-    packJS()
- 
+  cirru()
+  target.coffee yes
+  browserify()
+
 target.watch = ->
-  watch = yes
-  fs.watch 'cirru/', interval, target.cirru
-  fs.watch 'coffee/', interval, (type, name) ->
-    if type is 'change'
-      compileCoffee name, ->
-        do packJS
-  
-  station.start()
+  station = mission.reload()
+
+  mission.watch
+    files: ['cirru/', 'coffee/']
+    trigger: (filepath, extname) ->
+      switch extname
+        when '.cirru'
+          cirru()
+          station.reload project
+        when '.coffee'
+          filepath = path.relative 'coffee/', filepath
+          mission.coffee
+            file: filepath, from: 'coffee/', to: 'js/', extname: '.js'
+            options:
+              bare: yes
+          browserify ->
+            station.reload project
+
+target.patch = ->
+  target.compile()
+  mission.bump
+    file: 'package.json'
+    options:
+      at: 'patch'
+
+target.rsync = ->
+  mission.rsync
+    file: './'
+    dest: 'tiye:~/repo/tiye.me/'
+    options:
+      exclude: [
+        'node_modules/'
+        'coffee'
+        'README.md'
+        'js'
+        '.git/'
+      ]

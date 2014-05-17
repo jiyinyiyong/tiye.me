@@ -1,6 +1,4 @@
 
-
-@import url('app.css');
 @import url('title.css');
 @import url('list.css');
 
@@ -34,11 +32,11 @@
     margin: 0;
 }
 
-#title, #menu {
-    background: hsla(0, 77%, 9%, 0.54);
+#menu {
     padding: 10px;
     color: white;
     display: flex;
     justify-content: flex-start;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.43);
+    background: hsla(0, 77%, 9%, 0.54);
+    height: 400px;
 }

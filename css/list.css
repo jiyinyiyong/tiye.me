@@ -13,12 +13,13 @@
     text-transform: capitalize;
 }
 
-#category .aspect.aspect-open {
-    color: white;
+#category .aspect:hover {
+    box-shadow: -1px 0px 0px rgb(165, 165, 165);
 }
 
-#category .aspect:hover {
-    background: hsla(39, 100%, 92%, 0.11);
+#category .aspect.aspect-open {
+    color: white;
+    box-shadow: -1px 0px 0 white;
 }
 
 #resources {
@@ -40,10 +41,7 @@
     font-size: 16px;
 }
 #resources .link:after {
-    content: '➦';
-    margin-left: 20px;
-    color: hsla(266, 100%, 81%, 0);
+    content: '↗';
+    margin-left: 0.5em;
 }
-#resources .link:hover:after {
-    color: hsla(235, 100%, 82%, 0.95);
-}
+

@@ -22,17 +22,11 @@ exports.menu = [
   category: 'writings'
   description: 'Quite many words I wrote'
   resources: [
+    name: '个人博客'
+    link: 'http://blog.tiye.me'
+  ,
     name: '新浪微博'
     link: 'http://weibo.com/jiyinyiyong'
-  ,
-    name: '豆瓣日记'
-    link: 'http://www.douban.com/people/jiyinyiyong/notes'
-  ,
-    name: 'Segmentfault 文章'
-    link: 'http://segmentfault.com/u/jiyinyiyong/articles'
-  ,
-    name: 'Medium'
-    link: 'https://medium.com/@jiyinyiyong'
   ,
     name: 'Twitter'
     link: 'https://twitter.com/jiyinyiyong'
@@ -49,12 +43,6 @@ exports.menu = [
   ,
     name: 'MVVM in Web development'
     link: 'http://vuejs.org/'
-  ,
-    name: ''
-    link: ''
-  ,
-    name: ''
-    link: ''
   ]
 ,
   category: 'domains'
@@ -80,6 +68,15 @@ exports.menu = [
   ,
     name: 'exportsjs.org'
     link: 'http://exportsjs.org/'
+  ,
+    name: 'doctalk.im'
+    link: 'http://doctalk.im/'
+  ,
+    name: 'mirro.in'
+    link: 'http://mirro.in/'
+  ,
+    name: 'langy.in'
+    link: 'http://langy.in/'
   ]
 ,
   category: 'projects'
@@ -105,9 +102,6 @@ exports.menu = [
   ,
     name: 'coffee-js/languages'
     link: 'https://github.com/coffee-js/languages/'
-  ,
-    name: ''
-    link: ''
   ]
 ,
   category: 'translations'
@@ -121,9 +115,6 @@ exports.menu = [
   ,
     name: 'Learn Haskell Fast and Hard, 中文'
     link: 'http://repo.tiye.me/haskell-hardway/'
-  ,
-    name: ''
-    link: ''
   ]
 ,
   category: 'deprecated'
@@ -155,9 +146,6 @@ exports.menu = [
   ,
     name: '伣论'
     link: 'http://www.douban.com/note/313037995/'
-  ,
-    name: ''
-    link: ''
   ]
 ,
   category: 'groups'
@@ -177,9 +165,6 @@ exports.menu = [
   ,
     name: 'CNode.js'
     link: 'http://cnodejs.org/user/jiyinyiyong'
-  ,
-    name: ''
-    link: ''
   ]
 ,
   category: 'collections'
@@ -193,11 +178,5 @@ exports.menu = [
   ,
     name: 'Videos on programming on 土豆'
     link: 'http://www.tudou.com/home/item/jiyinyiyong'
-  ,
-    name: ''
-    link: ''
-  ,
-    name: ''
-    link: ''
   ]
 ]

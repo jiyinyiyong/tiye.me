@@ -13,6 +13,6 @@ html
       :charset utf-8
     script
       :defer
-      :src build/build.js
+      :src build/main.js
     @insert ga.html
   @partial menu.cirru

@@ -1,6 +1,6 @@
 {
   "name": "tiye.me",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "tiye.me",
   "main": "src/main.js",
   "scripts": {

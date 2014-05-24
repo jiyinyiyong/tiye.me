@@ -77,6 +77,9 @@ exports.menu = [
   ,
     name: 'langy.in'
     link: 'http://langy.in/'
+  ,
+    name: 'haokan.im'
+    link: 'http://haokan.im/'
   ]
 ,
   category: 'projects'

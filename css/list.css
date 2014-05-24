@@ -24,6 +24,9 @@
 
 #resources {
     padding-left: 2em;
+    max-height: 300px;
+    overflow: auto;
+    min-width: 400px;
 }
 
 #resources .description {

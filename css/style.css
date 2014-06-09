@@ -6,8 +6,7 @@
     box-sizing: border-box;
 }
 
-#app {
-    background-image: url('http://tiye.qiniudn.com/leaf.jpg');
+body {
     background-size: cover;
     position: absolute;
     top: 0;
@@ -17,26 +16,22 @@
     background-repeat: no-repeat;
     font-family: Optima, 'Hiragino Sans GB', '文泉驿微米黑';
     margin: 0;
+    display: flex;
+    -webkit-user-select: none;
+    background-attachment: fixed;
 }
 
-#app {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-#app {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+#app-view {
     margin: 0;
+    width: 100%;
+    margin-top: 400px;
 }
 
 #menu {
     padding: 10px;
     color: white;
-    display: flex;
     justify-content: flex-start;
     background: hsla(0, 77%, 9%, 0.54);
-    height: 400px;
+    display: flex;
+    height: 700px;
 }

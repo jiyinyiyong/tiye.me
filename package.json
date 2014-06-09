@@ -21,8 +21,7 @@
   "homepage": "https://github.com/tiye/tiye.me",
   "dependencies": {},
   "devDependencies": {
-    "cirru-html": "~0.1.5",
-    "devtools-reloader-station": "0.0.4",
-    "vue": "~0.10.3"
+    "mission": "0.0.7",
+    "shelljs": "^0.3.0"
   }
 }

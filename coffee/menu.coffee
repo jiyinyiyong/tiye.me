@@ -1,5 +1,5 @@
 
-exports.menu = [
+module.exports = [
   category: 'likes'
   description: 'I enjoy them, talk to me about some of them maybe'
   resources: [
@@ -80,6 +80,9 @@ exports.menu = [
   ,
     name: 'haokan.im'
     link: 'http://haokan.im/'
+  ,
+    name: 'mvc.im'
+    link: 'http://mvc.im/'
   ]
 ,
   category: 'projects'

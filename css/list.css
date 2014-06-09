@@ -24,16 +24,14 @@
 
 #resources {
     padding-left: 2em;
-    max-height: 300px;
-    overflow: auto;
     min-width: 400px;
 }
 
-#resources .description {
+#description {
     color: hsla(0, 0%, 87%, 0.36);
     margin-top: 2em;
 }
-#resources .description:first-letter {
+#description:first-letter {
     text-transform: capitalize;
 }
 

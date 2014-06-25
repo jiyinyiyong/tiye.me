@@ -1,5 +1,5 @@
 #!/usr/bin/env coffee
-project = 'repo/tiye.me'
+project = 'repo/tiye/tiye.me'
 
 require 'shelljs/make'
 path = require 'path'

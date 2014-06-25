@@ -83,6 +83,12 @@ module.exports = [
   ,
     name: 'mvc.im'
     link: 'http://mvc.im/'
+  ,
+    name: 'origami-ui.org'
+    link: 'http://origami-ui.org/'
+  ,
+    name: 'memkits.org'
+    link: 'http://memkits.org/'
   ]
 ,
   category: 'projects'

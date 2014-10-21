@@ -19,6 +19,7 @@ body {
     display: flex;
     -webkit-user-select: none;
     background-attachment: fixed;
+    background-image: url('//dn-tiye.qbox.me/leaf.jpg');
 }
 
 #app-view {

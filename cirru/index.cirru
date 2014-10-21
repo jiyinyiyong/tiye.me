@@ -2,16 +2,20 @@
 doctype
 html
   head
-    link (:rel stylesheet) (:href css/style.css)
+    title "题叶 @jiyinyiyong"
     link (:type image/x-icon) (:rel "shortcut icon")
-      :href http://tiye.qiniudn.com/leaf.jpg
+      :href //dn-tiye.qbox.me/leaf.jpg
     meta (:charset utf-8)
-    @if (@ inDev) $ @block
-      link (:rel stylesheet) (:href css/resource-dev.css)
-      script (:src bower_components/react/react.js)
-    @if (@ inBuild) $ @block
-      link (:rel stylesheet) (:href css/resource-build.css)
-      script (:src http://cdn.staticfile.org/react/0.10.0/react.min.js)
-      @insert ga.html
-    script (:defer) (:src build/main.js)
+    meta (:name description)
+     :content "题叶, @jiyinyiyong, 1991, CoffeeScript & Cirru"
+    script(:src dist/vendor.min.js)
+    @if (@ dev)
+      @block
+        link (:rel stylesheet) (:href css/main.css)
+        link (:rel stylesheet) (:href css/dev.css)
+        script (:defer) (:src build/main.js)
+      @block
+        link (:rel stylesheet) (:href dist/main.min.css)
+        script (:defer) (:src dist/main.min.js)
+        @insert cirru/ga.html
   body

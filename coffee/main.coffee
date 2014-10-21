@@ -1,4 +1,5 @@
 
+React = require 'react'
 $ = React.DOM
 $.concat = (args...) ->
   args.filter((x) -> x?).join(' ')

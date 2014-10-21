@@ -1,13 +1,10 @@
 
-_site/
-*~
-*swp
-build/
-node_modules/
 bower_components/
-js/
+node_modules/
+
 build/
-index.html
+dist/
 jpg/
 
-google*html
+google*.html
+index.html

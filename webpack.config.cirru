@@ -22,7 +22,7 @@ var
   :module $ object
     :loaders $ []
       {} (:test /\.cirru$) (:loader :cirru-script) (:ignore /node_modules)
-      {} (:test /\.css$) (:loader :style!css)
+      {} (:test /\.css$) (:loader :style!css?importLoaders=1!autoprefixer)
       {} (:test "/\.(png|jpg)$") (:loader :url)
 
   :plugins $ array

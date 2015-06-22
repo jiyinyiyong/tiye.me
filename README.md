@@ -9,8 +9,11 @@ Picture: [Leafs][leaf] by [@Kuazu][Kuazu]
 [Kuazu]: http://weibo.com/vvvvvhuahua
 [leaf]: http://lxtvvv.tuchong.com/2159629/
 
+### No longer maintaining
 
-Images converted via:
-
-* http://steve.kargs.net/hosting/create-a-website-faviconico-with-ubuntu-linux/
-* http://www.howtogeek.com/109369/how-to-quickly-resize-convert-modify-images-from-the-linux-terminal/
+* 基于 Markdown 静态文件服务的博客 https://github.com/jiyinyiyong/blog2
+* Github Articles in HTML https://github.com/jiyinyiyong/article
+* 网易博客 http://jiyinyiyong.blog.163.com/
+* 点点, 学习笔记 http://learning-notes.diandian.com/
+* 点点, 投入的想法 http://thinking.diandian.com/
+* Like Silence 博客 http://beg-silence.tumblr.com/

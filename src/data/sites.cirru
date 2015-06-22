@@ -39,3 +39,7 @@ var
     :logo avatarUrl
     :text :Blog
     :link :http://blog.tiye.me
+  {}
+    :logo :https://d13yacurqjgara.cloudfront.net/assets/favicon-672359ebc28c7f207beedecfc3af9008.ico
+    :text :Dribbble
+    :link :https://dribbble.com/jiyinyiyong/likes

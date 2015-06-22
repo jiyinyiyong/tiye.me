@@ -6,8 +6,11 @@ var
   TextCard $ React.createFactory $ require :./component/Text-card
   projectsData $ require :./data/projects
   sitesData $ require :./data/sites
+  concernsData $ require :./data/concerns
+  skillsData $ require :./data/skills
   avatarUrl $ require :../images/tiye-400x400.jpg
   onlineIcon $ require :../images/online.png
+  teambitonIcon $ require :../images/teambition.png
 
 var
   div $ React.createFactory :div
@@ -34,12 +37,24 @@ var
 
       div ({} (:className :page-content))
         div ({} (:className :layout-left))
-          RichCard $ {} $ :data $ {} (:major ":题叶 - Chen Yong") (:minor ":FP, GUI, Writing")
+          RichCard $ {} $ :data $ {} (:major ":题叶, Chen Yong") (:minor ":FP, GUI, Writing")
             :logo avatarUrl
-          TextCard $ {} $ :text ":Working at Teambition, located at Shanghai 张江"
+          LineCard $ {} $ :data $ {}
+            :text ":Working at Teambition, 张江, Shanghai"
+            :logo teambitonIcon
         div ({} (:className :layout-right))
           LineCard $ {} $ :data $ {} (:text :@jiyinyiyong) (:logo avatarUrl)
           LineCard $ {} $ :data $ {} (:text ":Always online") (:logo onlineIcon)
+
+      div ({} (:className :page-content))
+        div ({} (:className :layout-left))
+          div ({} (:className :heading)) :Concerns
+          concernsData.map $ \ (data index)
+            return $ RichCard $ {} (:data data) (:key index)
+        div ({} (:className :layout-right))
+          div ({} (:className :heading)) :Skills
+          skillsData.map $ \ (data index)
+            return $ LineCard $ {} (:data data) (:key index)
 
       div ({} (:className :page-content))
         div ({} (:className :layout-left))
@@ -47,7 +62,7 @@ var
           projectsData.map $ \ (project index)
             return $ RichCard $ {} (:data project) (:key index)
         div ({} (:className :layout-right))
-          div ({} (:className :heading)) :Sites
+          div ({} (:className :heading)) :Activities
           sitesData.map $ \ (site index)
             return $ LineCard $ {} (:data site) (:key index)
 

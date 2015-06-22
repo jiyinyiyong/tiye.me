@@ -14,7 +14,8 @@ var T React.PropTypes
     :data T.object.isRequired
 
   :onClick $ \ (event)
-    window.open this.props.data.link
+    if (? this.props.data.link) $ do
+      window.open this.props.data.link
 
   :render $ \ ()
     return $ div ({} (:className ":card rich-card") (:onClick this.onClick))

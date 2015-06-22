@@ -1,7 +1,8 @@
 
 var
   stir $ require :stir-template
-  (object~ html head title meta link script body div) stir
+  fs $ require :fs
+  ({}~ html head title meta link script body div) stir
 
 = module.exports $ \ (data)
   return $ stir.render
@@ -9,9 +10,14 @@ var
     html null
       head null
         title null ":题叶 jiyinyiyong"
-        meta $ object (:charset :utf-8)
-        link $ object (:rel :icon)
+        meta $ {} (:charset :utf-8)
+        meta $ {} (:name :description) (:content ":题叶的个人主页")
+        meta $ {} (:name :keywords) (:content ":题叶 jiyinyiyong")
+        cond (not data.dev)
+          fs.readFileSync :html/ga.html :utf8
+          , undefined
+        link $ {} (:rel :icon)
           :href :http://tp1.sinaimg.cn/1651843872/180/40048616024/1
-        script $ object (:src data.vendor) (:defer true)
-        script $ object (:src data.main) (:defer true)
+        script $ {} (:src data.vendor) (:defer true)
+        script $ {} (:src data.main) (:defer true)
       body null

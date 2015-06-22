@@ -31,7 +31,7 @@
     :logo :https://avatars1.githubusercontent.com/u/8581280?v=3&s=200
     :link :https://github.com/webcityio
   {}
-    :major ":MVC Works"
-    :minor ":MVC Pattern in GUI programming"
-    :logo :https://avatars3.githubusercontent.com/u/7984910?v=3&s=200
-    :link :https://github.com/mvc-works
+    :major :柳线
+    :minor ":设计清晰的行文格式"
+    :logo :http://img4.douban.com/view/site/small/public/fb498c8d3b4d736.jpg
+    :link :http://site.douban.com/231595/

@@ -15,7 +15,9 @@
 
 .card .logo {
   margin-right: 1em;
-  background-size: cover;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .card + .card {

@@ -1,0 +1,19 @@
+
+.name-link {
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: row;
+  padding: 1em;
+  font-family: Futura;
+  width: 200px;
+}
+
+.name-link .avatar {
+  width: 32px;
+  height: 32px;
+  background-image: url(../../images/tiye-400x400.jpg);
+  background-size: cover;
+  margin-right: 1em;
+}
+
+.name-link .name {}

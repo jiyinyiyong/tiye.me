@@ -1,0 +1,39 @@
+
+.page-header {
+    background-image: url(../../images/leaf.jpg);
+    height: 400px;
+    background-size: cover;
+}
+
+.page-header .white-cover {
+  border-top: 400px solid transparent;
+  border-right: 0px solid white;
+  border-bottom: 0px solid white;
+  border-left: 0px solid white;
+}
+
+.page-footer {
+    background-image: url(../../images/leaf.jpg);
+    height: 400px;
+    background-size: cover;
+}
+
+.page-footer .white-cover {
+  border-top: 400px solid white;
+  border-right: 0px solid white;
+  border-bottom: 0px solid white;
+  border-left: 0px solid transparent;
+}
+
+/* now content */
+
+.page-user {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 1200px;
+  margin: auto;
+}
+
+.page-content {}

@@ -7,7 +7,7 @@ html
       :href //dn-tiye.qbox.me/leaf.jpg
     meta (:charset utf-8)
     meta (:name description)
-     :content "题叶, @jiyinyiyong, 1991, CoffeeScript & Cirru"
+     :content "题叶: FP, GUI & Writing"
     script(:src dist/vendor.min.js)
     @if (@ dev)
       @block

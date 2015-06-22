@@ -1,5 +1,5 @@
 
-.page-header {
+.page-header, .page-footer {
     background-image: url(../../images/leaf.jpg);
     height: 400px;
     background-size: cover;
@@ -12,12 +12,6 @@
   border-left: 0px solid white;
 }
 
-.page-footer {
-    background-image: url(../../images/leaf.jpg);
-    height: 400px;
-    background-size: cover;
-}
-
 .page-footer .white-cover {
   border-top: 400px solid white;
   border-right: 0px solid white;
@@ -27,13 +21,15 @@
 
 /* now content */
 
-.page-user {
+.page-user, .page-content {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  align-items: center;
+  align-items: start;
   width: 1200px;
   margin: auto;
 }
 
-.page-content {}
+.page-content {
+  margin-top: 40px;
+}

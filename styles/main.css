@@ -3,6 +3,7 @@
 @import url(base/font.css);
 
 @import url(layout/page.css);
+@import url(layout/heading.css);
 
 @import url(module/name-card.css);
 @import url(module/name-link.css);

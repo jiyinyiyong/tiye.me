@@ -1,0 +1,29 @@
+
+.project-card {
+  border: 1px solid #eee;
+  cursor: pointer;
+  padding: 1em;
+  display: flex;
+  width: 400px;
+}
+
+.project-card + .project-card {
+  margin-top: 1em;
+}
+
+.project-card .logo {
+  width: 64px;
+  height: 64px;
+  background-size: cover;
+  margin-right: 1em;
+}
+
+.project-card .detials {}
+
+.project-card .name {
+  font-weight: bold;
+}
+
+.project-card .desc {
+  color: #888;
+}

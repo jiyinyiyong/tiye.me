@@ -21,6 +21,8 @@
 
 /* now content */
 
+@media screen and (min-width: 900px) {
+
 .page-content {
   display: flex;
   flex-direction: row;
@@ -36,4 +38,6 @@
 }
 .layout-right {
   padding-top: 80px;
+}
+
 }

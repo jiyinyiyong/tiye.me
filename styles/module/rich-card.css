@@ -4,9 +4,14 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  width: 400px;
   padding: 1em;
   transition: box-shadow 400ms;
+}
+
+@media screen and (min-width: 400px) {
+  .card {
+    width: 400px;
+  }
 }
 
 .card:hover {

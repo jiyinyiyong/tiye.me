@@ -11,6 +11,7 @@ var
       head null
         title null ":题叶 jiyinyiyong"
         meta $ {} (:charset :utf-8)
+        meta $ {} (:name :viewport) (:content ":initial-scale=1,minimum-scale=1")
         meta $ {} (:name :description) (:content ":题叶的个人主页")
         meta $ {} (:name :keywords) (:content ":题叶 jiyinyiyong")
         cond (not data.dev)

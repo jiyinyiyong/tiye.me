@@ -21,15 +21,19 @@
 
 /* now content */
 
-.page-user, .page-content {
+.page-content {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  align-items: start;
-  width: 1200px;
+  align-items: center;
+  max-width: 1200px;
   margin: auto;
+  margin-top: 40px;
 }
 
-.page-content {
-  margin-top: 40px;
+.layout-left {
+  padding-bottom: 80px;
+}
+.layout-right {
+  padding-top: 80px;
 }

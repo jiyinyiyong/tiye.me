@@ -1,0 +1,42 @@
+
+.card {
+  border: 1px solid #eee;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  width: 400px;
+  padding: 1em;
+  transition: box-shadow 400ms;
+}
+
+.card:hover {
+  box-shadow: 2px 2px 6px hsla(0,0%,0%,0.1);
+}
+
+.card .logo {
+  margin-right: 1em;
+  background-size: cover;
+}
+
+.card + .card {
+  margin-top: 1em;
+}
+
+.rich-card {
+}
+
+.rich-card .logo {
+  width: 64px;
+  height: 64px;
+  margin-right: 1em;
+}
+
+.rich-card .detials {}
+
+.rich-card .major {
+  font-weight: bold;
+}
+
+.rich-card .minor {
+  color: #888;
+}

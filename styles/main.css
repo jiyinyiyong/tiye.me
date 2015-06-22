@@ -5,7 +5,6 @@
 @import url(layout/page.css);
 @import url(layout/heading.css);
 
-@import url(module/name-card.css);
-@import url(module/name-link.css);
-@import url(module/project-card.css);
-@import url(module/site-link.css);
+@import url(module/rich-card.css);
+@import url(module/line-card.css);
+@import url(module/text-card.css);

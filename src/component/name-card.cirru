@@ -12,5 +12,5 @@ var
     return $ div ({} (:className :name-card))
       div ({} (:className :avatar))
       div ({} (:className :intro))
-        div ({} (:className :major)) ":题叶"
+        div ({} (:className :major)) ":题叶, Chen Yong"
         div ({} (:className :minor)) ":FP, GUI, Writing"

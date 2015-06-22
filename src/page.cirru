@@ -1,12 +1,13 @@
 
 var
   React $ require :react
-  NameCard $ React.createFactory $ require :./component/name-card
-  NameLink $ React.createFactory $ require :./component/name-link
-  ProjectCard $ React.createFactory $ require :./component/project-card
-  SiteLink $ React.createFactory $ require :./component/site-link
+  RichCard $ React.createFactory $ require :./component/rich-card
+  LineCard $ React.createFactory $ require :./component/line-card
+  TextCard $ React.createFactory $ require :./component/Text-card
   projectsData $ require :./data/projects
   sitesData $ require :./data/sites
+  avatarUrl $ require :../images/tiye-400x400.jpg
+  onlineIcon $ require :../images/online.png
 
 var
   div $ React.createFactory :div
@@ -30,16 +31,24 @@ var
 
     return $ div ({} (:className :page))
       this.renderHeaderCover
-      div ({} (:className :page-user))
-        NameCard
-        NameLink
+
       div ({} (:className :page-content))
-        div ({} (:className :layout-projects))
+        div ({} (:className :layout-left))
+          RichCard $ {} $ :data $ {} (:major ":题叶 - Chen Yong") (:minor ":FP, GUI, Writing")
+            :logo avatarUrl
+          TextCard $ {} $ :text ":Working at Teambition, located at Shanghai 张江"
+        div ({} (:className :layout-right))
+          LineCard $ {} $ :data $ {} (:text :@jiyinyiyong) (:logo avatarUrl)
+          LineCard $ {} $ :data $ {} (:text ":Always online") (:logo onlineIcon)
+
+      div ({} (:className :page-content))
+        div ({} (:className :layout-left))
           div ({} (:className :heading)) :Projects
           projectsData.map $ \ (project index)
-            return $ ProjectCard $ {} (:project project) (:key index)
-        div ({} (:className :layout-projects))
+            return $ RichCard $ {} (:data project) (:key index)
+        div ({} (:className :layout-right))
           div ({} (:className :heading)) :Sites
           sitesData.map $ \ (site index)
-            return $ SiteLink $ {} (:site site) (:key index)
+            return $ LineCard $ {} (:data site) (:key index)
+
       this.renderFooterCover

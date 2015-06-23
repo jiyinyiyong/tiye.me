@@ -22,3 +22,4 @@ var
         script $ {} (:src data.vendor) (:defer true)
         script $ {} (:src data.main) (:defer true)
       body null
+        div $ {} (:id :app)

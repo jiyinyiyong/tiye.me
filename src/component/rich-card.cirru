@@ -1,26 +1,27 @@
 
 var
-  React $ require :react
+  deku $ require :deku
 
 var
-  div $ React.createFactory :div
+  div $ deku.element.bind null :div
 
-var T React.PropTypes
-
-= module.exports $ React.createClass $ {}
-  :displayName :rich-card
+= module.exports $ {}
 
   :propTypes $ {}
-    :data T.object.isRequired
+    :data $ {}
+      :type :object
 
-  :onClick $ \ (event)
-    if (? this.props.data.link) $ do
-      window.open this.props.data.link
+  :render $ \ (component setState)
 
-  :render $ \ ()
-    return $ div ({} (:className ":card rich-card") (:onClick this.onClick))
-      div $ {} (:className :logo)
-        :style $ {} (:backgroundImage (+ ":url(" this.props.data.logo ":)"))
-      div ({} (:className :details))
-        div ({} (:className :major)) this.props.data.major
-        div ({} (:className :minor)) this.props.data.minor
+    var data component.props.data
+
+    var onClick $ \ (event)
+      if (? data.link) $ do
+        window.open data.link
+
+    return $ div ({} (:class ":card rich-card") (:onClick onClick))
+      div $ {} (:class :logo)
+        :style $ {} (:background-image (+ ":url(" data.logo ":)"))
+      div ({} (:class :details))
+        div ({} (:class :major)) data.major
+        div ({} (:class :minor)) data.minor

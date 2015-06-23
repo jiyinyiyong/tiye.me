@@ -27,7 +27,7 @@
     "webpack-dev-server": "^1.8.0"
   },
   "dependencies": {
-    "react": "^0.13.3"
+    "deku": "^0.4.5"
   },
   "repository": {
     "type": "git",

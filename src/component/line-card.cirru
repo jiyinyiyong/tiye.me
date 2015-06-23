@@ -1,24 +1,24 @@
 
 var
-  React $ require :react
+  deku $ require :deku
 
 var
-  div $ React.createFactory :div
+  div $ deku.element.bind null :div
 
-var T React.PropTypes
-
-= module.exports $ React.createClass $ {}
-  :displayName :line-card
+= module.exports $ {}
 
   :propTypes $ {}
-    :data T.object.isRequired
+    :data $ {}
+      :type :object
 
-  :onClick $ \ (event)
-    if (? this.props.data.link) $ do
-      window.open this.props.data.link
+  :render $ \ (component setState)
+    var data component.props.data
 
-  :render $ \ ()
-    return $ div ({} (:className ":card line-card") (:onClick this.onClick))
-      div $ {} (:className :logo)
-        :style $ {} (:backgroundImage (+ ":url(" this.props.data.logo ":)"))
-      div ({} (:className :text)) this.props.data.text
+    var onClick $ \ (event)
+      if (? data.link) $ do
+        window.open data.link
+
+    return $ div ({} (:class ":card line-card") (:onClick onClick))
+      div $ {} (:class :logo)
+        :style $ {} (:background-image (+ ":url(" data.logo ":)"))
+      div ({} (:class :text)) data.text

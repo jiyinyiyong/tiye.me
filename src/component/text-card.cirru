@@ -1,18 +1,16 @@
 
 var
-  React $ require :react
+  deku $ require :deku
 
 var
-  div $ React.createFactory :div
+  div $ deku.element.bind null :div
 
-var T React.PropTypes
-
-= module.exports $ React.createClass $ {}
-  :displayName :line-card
+= module.exports $ {}
 
   :propTypes $ {}
-    :text T.string.isRequired
+    :text $ {}
+      :type :string
 
-  :render $ \ ()
-    return $ div ({} (:className ":card text-card"))
-      div ({} (:className :text)) this.props.text
+  :render $ \ (component setState)
+    return $ div ({} (:class ":card text-card"))
+      div ({} (:class :text)) component.props.text

@@ -1,9 +1,9 @@
 
 var
-  React $ require :react
-  RichCard $ React.createFactory $ require :./component/rich-card
-  LineCard $ React.createFactory $ require :./component/line-card
-  TextCard $ React.createFactory $ require :./component/Text-card
+  deku $ require :deku
+  RichCard $ deku.element.bind null $ require :./component/rich-card
+  LineCard $ deku.element.bind null $ require :./component/line-card
+  TextCard $ deku.element.bind null $ require :./component/Text-card
   projectsData $ require :./data/projects
   sitesData $ require :./data/sites
   concernsData $ require :./data/concerns
@@ -13,57 +13,56 @@ var
   teambitonIcon $ require :../images/teambition.png
 
 var
-  div $ React.createFactory :div
+  div $ deku.element.bind null :div
 
-= module.exports $ React.createClass $ {}
-  :displayName :layout-page
-
-  :renderHeaderCover $ \ ()
-    return $ div ({} (:className :page-header))
-      div $ {} (:className :white-cover)
-        :style $ {}
-          :borderLeftWidth innerWidth
-
-  :renderFooterCover $ \ ()
-    return $ div ({} (:className :page-footer))
-      div $ {} (:className :white-cover)
-        :style $ {}
-          :borderLeftWidth innerWidth
+= module.exports $ {}
 
   :render $ \ ()
 
-    return $ div ({} (:className :page))
-      this.renderHeaderCover
+    var renderHeaderCover $ \ ()
+      return $ div ({} (:class :page-header))
+        div $ {} (:class :white-cover)
+          :style $ {}
+            :border-left-width $ + innerWidth :px
 
-      div ({} (:className :page-content))
-        div ({} (:className :layout-left))
+    var renderFooterCover $ \ ()
+      return $ div ({} (:class :page-footer))
+        div $ {} (:class :white-cover)
+          :style $ {}
+            :border-left-width $ + innerWidth :px
+
+    return $ div ({} (:class :page))
+      renderHeaderCover
+
+      div ({} (:class :page-content))
+        div ({} (:class :layout-left))
           RichCard $ {} $ :data $ {} (:major ":题叶, Chen Yong") (:minor ":FP, GUI, Writing")
             :logo avatarUrl
           LineCard $ {} $ :data $ {}
             :text ":Working at Teambition, 张江, Shanghai"
             :logo teambitonIcon
-        div ({} (:className :layout-right))
+        div ({} (:class :layout-right))
           LineCard $ {} $ :data $ {} (:text :@jiyinyiyong) (:logo avatarUrl)
           LineCard $ {} $ :data $ {} (:text ":Always online") (:logo onlineIcon)
 
-      div ({} (:className :page-content))
-        div ({} (:className :layout-left))
-          div ({} (:className :heading)) :Concerns
+      div ({} (:class :page-content))
+        div ({} (:class :layout-left))
+          div ({} (:class :heading)) :Concerns
           concernsData.map $ \ (data index)
             return $ RichCard $ {} (:data data) (:key index)
-        div ({} (:className :layout-right))
-          div ({} (:className :heading)) :Skills
+        div ({} (:class :layout-right))
+          div ({} (:class :heading)) :Skills
           skillsData.map $ \ (data index)
             return $ LineCard $ {} (:data data) (:key index)
 
-      div ({} (:className :page-content))
-        div ({} (:className :layout-left))
-          div ({} (:className :heading)) :Projects
+      div ({} (:class :page-content))
+        div ({} (:class :layout-left))
+          div ({} (:class :heading)) :Projects
           projectsData.map $ \ (project index)
             return $ RichCard $ {} (:data project) (:key index)
-        div ({} (:className :layout-right))
-          div ({} (:className :heading)) :Activities
+        div ({} (:class :layout-right))
+          div ({} (:class :heading)) :Activities
           sitesData.map $ \ (site index)
             return $ LineCard $ {} (:data site) (:key index)
 
-      this.renderFooterCover
+      renderFooterCover

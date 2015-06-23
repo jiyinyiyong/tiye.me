@@ -1,12 +1,13 @@
 
 var
-  React $ require :react
-  Page $ React.createFactory $ require :./page
+  deku $ require :deku
+  Page $ deku.element.bind null $ require :./page
 
 require :../styles/main.css
 
 var render $ \ ()
-  React.render (Page) document.body
+  var app $ deku.tree (Page)
+  deku.render app (document.querySelector :#app)
 
 render
 

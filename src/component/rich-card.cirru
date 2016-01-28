@@ -18,6 +18,7 @@ var
     var onClick $ \ (event)
       if (? data.link) $ do
         window.open data.link
+      return undefined
 
     return $ div ({} (:class ":card rich-card") (:onClick onClick))
       div $ {} (:class :logo)

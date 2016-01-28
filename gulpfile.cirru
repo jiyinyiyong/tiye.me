@@ -14,7 +14,7 @@ gulp.task :rsync $ \ (cb)
   wrapper.rsync
     object
       :ssh true
-      :src $ array :index.html :build :google* :sitemap*
+      :src $ array :index.html :build :sitemap*
       :recursive true
       :args $ array :--verbose
       :dest :tiye:~/repo/tiye.me/

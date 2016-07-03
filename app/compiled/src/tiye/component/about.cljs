@@ -14,36 +14,36 @@
  [{:category "Projects",
    :data
    [["Cirru" "http://cirru.org"]
-    ["Respo" "http://cirru.org"]
-    ["Cumulo" "http://cirru.org"]
-    ["Quamolit" "http://cirru.org"]
-    ["Memkits" ""]
-    ["Quamolit" ""]
-    ["柳线" ""]]}
-  {:category "Wrtings",
+    ["Respo" "https://github.com/mvc-works/respo/wiki/Quick-Start"]
+    ["Cumulo" "http://cumulo.org"]
+    ["Quamolit" "https://github.com/Quamolit/quamolit"]
+    ["Memkits" "https://github.com/Memkits/"]
+    ["柳线" "https://site.douban.com/231595/"]]}
+  {:category "Writings",
    :data
-   [["SegmentFault" "http://cirru.org"]
-    ["豆瓣" "http://cirru.org"]
-    ["HashNode" "http://cirru.org"]]}
+   [["SegmentFault" "https://segmentfault.com/blog/jiyinyiyong"]
+    ["豆瓣" "https://www.douban.com/people/jiyinyiyong/notes"]
+    ["HashNode" "https://hashnode.com/@jiyinyiyong/stories"]]}
   {:category "Activities",
    :data
-   [["微博" "http://cirru.org"]
-    ["Twitter" "http://cirru.org"]
-    ["GitHub" "http://cirru.org"]
-    ["React China" "http://cirru.org"]
-    ["Clojure China" "http://cirru.org"]]}
+   [["微博" "https://weibo.com/jiyinyiyong/"]
+    ["Twitter" "https://twitter.com/jiyinyiyong"]
+    ["GitHub" "https://github.com/jiyinyiyong"]
+    ["React China" "http://react-china.org/users/jiyinyiyong/activity"]
+    ["Clojure China"
+     "http://clojure-china.org/users/jiyinyiyong/activity"]]}
   {:category "Skills",
    :data
-   [["React" ""]
-    ["Clojure" "http://cirru.org"]
-    ["CoffeeScript" "http://cirru.org"]
-    ["Haskell Beginner" "http://cirru.org"]]}
+   [["React" "https://facebook.github.io/react/"]
+    ["Clojure" "http://clojure.org/"]
+    ["CoffeeScript" "http://coffeescript.org/"]
+    ["Haskell Beginner" "https://www.haskell.org/"]]}
   {:category "Records",
    :data
-   [["饿了么 2016" ""]
-    ["teambition 2014" "http://cirru.org"]
-    ["Appest 2013" "http://cirru.org"]
-    ["精弘网络" "http://cirru.org"]]}])
+   [["饿了么 2016" "http://ele.me/"]
+    ["teambition 2014" "https://teambition.com/"]
+    ["Appest 2013" "http://ticktick.com/"]
+    ["精弘网络" "http://www.zjut.com/"]]}])
 
 (defn render []
   (fn [state mutate!]

@@ -1,6 +1,8 @@
 
 (ns tiye-server.schema)
 
-(def database {:states {}, :messages {}, :buffers {}, :users {}})
+(def database {:states {}, :messages {}, :users {}})
 
-(def state {:user-id nil, :id nil})
+(def state {:user-id nil, :buffer-time nil, :id nil, :buffer nil})
+
+(def message {:time nil, :nickname "", :id nil, :text ""})

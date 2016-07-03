@@ -4,6 +4,7 @@
             [respo.alias :refer [create-comp div span]]
             [tiye.style.layout :as layout]
             [tiye.style.widget :as widget]
+            [tiye.style.typeset :as typeset]
             [respo.component.space :refer [comp-space]]
             [tiye.component.text :refer [comp-text]]))
 
@@ -25,6 +26,6 @@
           {}
           (comp-text
             "FP, GUI & Writing"
-            (merge widget/description)))))))
+            (merge typeset/description)))))))
 
 (def comp-visiting-card (create-comp :visiting-card render))

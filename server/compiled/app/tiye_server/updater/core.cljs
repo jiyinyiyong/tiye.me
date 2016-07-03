@@ -1,7 +1,7 @@
 
 (ns tiye-server.updater.core
   (:require [tiye-server.updater.state :as state]
-            [tiye-server.updater.task :as task]))
+            [tiye-server.updater.message :as message]))
 
 (defn updater [db op op-data state-id op-id op-time]
   (case
@@ -10,8 +10,14 @@
     (state/connect db op-data state-id op-id op-time)
     :state/disconnect
     (state/disconnect db op-data state-id op-id op-time)
-    :task/add
-    (task/add db op-data state-id op-id op-time)
-    :task/rm
-    (task/rm db op-data state-id op-id op-time)
+    :state/buffer
+    (state/buffer db op-data state-id op-id op-time)
+    :state/settings
+    (state/settings db op-data state-id op-id op-time)
+    :state/nickname
+    (state/nickname db op-data state-id op-id op-time)
+    :message/confirm
+    (message/confirm db op-data state-id op-id op-time)
+    :message/clear
+    (message/clear db op-data state-id op-id op-time)
     db))

@@ -31,6 +31,8 @@
 
 (def fullscreen {:width "100%", :position "absolute", :height "100%"})
 
-(def flex {:flex 1})
+(def flex {:flex 1, :flex-shrink 0})
 
 (def article {:padding "40px", :overflow-y "auto"})
+
+(def scroll {:overflow "auto"})

@@ -6,14 +6,15 @@
             [tiye.style.widget :as widget]
             [tiye.style.layout :as layout]
             [respo.component.debug :refer [comp-debug]]
-            [tiye.component.about :refer [comp-about]]))
+            [tiye.component.about :refer [comp-about]]
+            [tiye.component.chatroom :refer [comp-chatroom]]))
 
 (defn render [store]
   (fn [state mutate!]
     (div
       {:style (merge layout/fullscreen layout/horizontal)}
       (comp-about)
-      (comp-sidebar)
-      (comp-debug store {:bottom 0, :right 0}))))
+      (if (some? store) (comp-chatroom store) (comp-sidebar))
+      (comp-debug (:state store) {:top 0, :left 0}))))
 
 (def comp-container (create-comp :container render))

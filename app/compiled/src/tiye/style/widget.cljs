@@ -6,8 +6,6 @@
 
 (def title {:line-height 2, :font-size "16px", :font-weight "bold"})
 
-(def description {:line-height 2, :color (hsl 0 0 60), :font-size 16})
-
 (def resource
  {:line-height 2,
   :color "white",
@@ -35,3 +33,30 @@
 
 (def notice-large
  {:color (hsl 0 0 70), :font-size "28px", :font-weight "lighter"})
+
+(def textbox
+ {:line-height 2,
+  :font-size "16px",
+  :padding "0 8px",
+  :outline "none",
+  :border "none"})
+
+(def button
+ {:line-height 2,
+  :color "white",
+  :font-size "14px",
+  :font-weight "normal",
+  :background-color (hsl 200 60 80),
+  :outline "none",
+  :border "none"})
+
+(def username
+ {:line-height 2,
+  :color (hsl 0 0 100),
+  :font-size "12px",
+  :background-color (hsl 30 80 70),
+  :padding "0 4px",
+  :display "inline-block",
+  :border-radius "4px"})
+
+(def message {:padding "4px 0"})

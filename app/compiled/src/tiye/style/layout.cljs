@@ -14,6 +14,12 @@
   :display "flex",
   :flex-direction "column"})
 
+(def column
+ {:align-items "stretch",
+  :justify-content "flex-start",
+  :display "flex",
+  :flex-direction "column"})
+
 (def horizontal-box
  {:align-items "center",
   :justify-content "center",
@@ -23,6 +29,12 @@
 (def horizontal
  {:align-items "stretch",
   :justify-content "space-between",
+  :display "flex",
+  :flex-direction "row"})
+
+(def row
+ {:align-items "stretch",
+  :justify-content "flex-start",
   :display "flex",
   :flex-direction "row"})
 

@@ -38,7 +38,7 @@
           (str
             "Currently there are "
             (get-in store [:statistics :user-count])
-            " users on this site.")
+            " users in the chatroom.")
           nil))
       (div
         {:style

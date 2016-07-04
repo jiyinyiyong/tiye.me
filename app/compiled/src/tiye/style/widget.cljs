@@ -1,21 +1,15 @@
 
 (ns tiye.style.widget
-  (:require [hsl.core :refer [hsl]]))
+  (:require [hsl.core :refer [hsl]] [tiye.style.layout :as layout]))
 
 (def card {:padding "20px"})
 
-(def title {:line-height 2, :font-size "16px", :font-weight "bold"})
-
 (def resource
  {:line-height 2,
-  :color "white",
-  :background-color (hsl 200 80 80),
+  :color (hsl 200 20 50),
+  :font-size "14px",
   :padding "0 8px",
-  :text-decoration "none",
-  :display "inline-block",
-  :margin-right "8px",
-  :border-radius "2px",
-  :margin-bottom "8px"})
+  :text-decoration "none"})
 
 (def avatar
  {:width "80px",
@@ -60,3 +54,33 @@
   :border-radius "4px"})
 
 (def message {:padding "4px 0"})
+
+(def row-divider {:background-color (hsl 0 0 94), :width "2px"})
+
+(def time-tip
+ {:color (hsl 0 0 80),
+  :vertical-align "middle",
+  :font-size "10px",
+  :font-weight "lighter",
+  :align-self "center",
+  :font-family "Menlo,monospace"})
+
+(def showcase
+ (merge
+   layout/row
+   {:align-items "center",
+    :width "180px",
+    :padding "0 8px",
+    :margin-right "8px",
+    :border (str "1px solid " (hsl 0 0 90)),
+    :border-radius "4px",
+    :margin-bottom "8px",
+    :height "40px"}))
+
+(defn logo-small [img]
+  {:width "24px",
+   :background-image (str "url(" img ")"),
+   :background-repeat "no-repeat",
+   :background-position "center",
+   :background-size "contain",
+   :height "24px"})

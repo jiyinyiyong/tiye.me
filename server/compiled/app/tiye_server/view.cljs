@@ -18,7 +18,8 @@
            [(:id state)
             (merge
               schema/message
-              {:time (:buffer-time state),
+              {:writing? true,
+               :time (:buffer-time state),
                :nickname (:nickname state),
                :id (:id state),
                :text (:buffer state)})])))

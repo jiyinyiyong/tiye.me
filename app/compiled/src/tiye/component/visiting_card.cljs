@@ -19,9 +19,9 @@
         (:style (merge layout/vertical))
         (div
           {}
-          (comp-text "题叶" (merge widget/title))
+          (comp-text "题叶" (merge typeset/title))
           (comp-space 8 nil)
-          (comp-text "@jiyinyiyong" widget/title))
+          (comp-text "@jiyinyiyong" typeset/title))
         (div
           {}
           (comp-text

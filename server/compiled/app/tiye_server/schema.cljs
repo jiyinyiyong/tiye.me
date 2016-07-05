@@ -3,6 +3,12 @@
 
 (def database {:states {}, :messages {}, :users {}})
 
-(def state {:user-id nil, :buffer-time nil, :id nil, :buffer nil})
+(def state
+ {:user-id nil,
+  :buffer-time nil,
+  :id nil,
+  :show-settings? false,
+  :buffer nil})
 
-(def message {:time nil, :nickname "", :id nil, :text ""})
+(def message
+ {:writing? false, :time nil, :nickname "", :id nil, :text ""})

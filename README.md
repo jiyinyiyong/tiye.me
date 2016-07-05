@@ -2,7 +2,7 @@
 @jiyinyiyong's Page
 ------
 
-> During refactoring...
+> Not finished yet but may be long time...
 
 http://tiye.me
 

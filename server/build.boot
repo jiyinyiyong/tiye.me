@@ -82,7 +82,7 @@
     :source-paths #{"cirru/app"})
   (comp
     (transform-cirru)
-    (cljs :compiler-options {:target :nodejs})
+    (cljs :optimizations :simple :compiler-options {:target :nodejs})
     (target)))
 
 (deftask build-advanced []
@@ -92,6 +92,11 @@
     (transform-cirru)
     (cljs :optimizations :advanced :compiler-options {:target :nodejs})
     (target)))
+
+(deftask rsync []
+  (with-pre-wrap fileset
+    (sh "rsync" "-r" "target" "tiye:servers/tiye" "--exclude" "main.out" "--delete")
+    fileset))
 
 (deftask watch-test []
   (set-env!

@@ -10,7 +10,7 @@
 
 (defn -main []
   (nodejs/enable-util-print!)
-  (setup-server! db-ref updater render-scene render-view {:port 4010})
+  (setup-server! db-ref updater render-scene render-view {:port 5020})
   (add-watch db-ref :log (fn []))
   (println "server started"))
 

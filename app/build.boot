@@ -40,13 +40,15 @@
   (make-html
     (html {}
       (head {}
-        (title (use-text "题叶"))
+        (title (use-text "题叶 @jiyinyiyong"))
         (link {:attrs {:rel "icon" :type "image/jpg" :href "tiye-400x400.jpg"}})
         (if (:build? data)
           (link (:attrs {:rel "manifest" :href "manifest.json"})))
         (meta'{:attrs {:charset "utf-8"}})
         (meta' {:attrs {:name "viewport" :content "width=device-width, initial-scale=1"}})
         (style (use-text "body {margin: 0;}"))
+        (meta' {:attrs {:name "description" :content "题叶, jiyinyiyong, Profile, About, Contact"}})
+        (meta' {:attrs {:name "language" :content "zh-cn"}})
         (style (use-text "body * {box-sizing: border-box;}"))
         (script {:attrs {:id "config" :type "text/edn" :innerHTML (pr-str data)}}))
       (body {}

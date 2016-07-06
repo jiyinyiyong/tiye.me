@@ -41,15 +41,21 @@
   :font-size "14px",
   :font-weight "normal",
   :background-color (hsl 200 60 80),
+  :padding "0 8px",
   :outline "none",
-  :border "none"})
+  :border "none",
+  :border-radius "8px"})
 
 (def username
  {:line-height 2,
-  :color (hsl 0 0 100),
+  :text-overflow "ellipsis",
+  :color (hsl 0 0 60),
+  :text-align "right",
   :font-size "12px",
-  :background-color (hsl 30 80 70),
-  :padding "0 4px",
+  :overflow "hidden",
+  :background-color (hsl 30 80 100),
+  :width "100px",
+  :padding "0 8px",
   :display "inline-block",
   :border-radius "4px"})
 
@@ -62,6 +68,7 @@
   :vertical-align "middle",
   :font-size "10px",
   :font-weight "lighter",
+  :flex-shrink 0,
   :align-self "center",
   :font-family "Menlo,monospace"})
 
@@ -84,3 +91,12 @@
    :background-position "center",
    :background-size "contain",
    :height "24px"})
+
+(def number-highlight
+ {:line-height 2,
+  :color (hsl 0 0 100),
+  :font-size "12px",
+  :background-color (hsl 40 80 60),
+  :padding "0 8px",
+  :display "inline-block",
+  :border-radius "12px"})

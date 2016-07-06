@@ -1,6 +1,7 @@
 
 (ns tiye.component.chatroom
-  (:require [respo.alias :refer [create-comp div input button]]
+  (:require [hsl.core :refer [hsl]]
+            [respo.alias :refer [create-comp div input button]]
             [tiye.component.text :refer [comp-text]]
             [tiye.component.message :refer [comp-message]]
             [tiye.component.settings :refer [comp-settings]]
@@ -34,15 +35,14 @@
       {:style (merge layout/vertical layout/flex {:padding "40px"})}
       (div
         {:style typeset/description}
+        (comp-text "Currently there are " nil)
         (comp-text
-          (str
-            "Currently there are "
-            (get-in store [:statistics :user-count])
-            " users in the chatroom.")
-          nil))
+          (get-in store [:statistics :user-count])
+          widget/number-highlight)
+        (comp-text " users in the chatroom." nil))
       (div
         {:style
-         (merge layout/flex layout/scroll {:padding-bottom "200px"})}
+         (merge layout/flex layout/scroll {:padding-bottom "320px"})}
         (->>
           (merge (:messages store) (:buffers store))
           (map last)
@@ -54,11 +54,16 @@
       (div
         {:style (merge layout/horizontal)}
         (input
-          {:style (merge widget/textbox layout/flex),
+          {:style
+           (merge
+             widget/textbox
+             layout/flex
+             {:background-color (hsl 0 0 93)}),
            :event {:keydown on-keydown, :input on-input},
            :attrs {:placeholder "Message...", :value state}})
+        (comp-space 8 nil)
         (button
-          {:style widget/button,
+          {:style (merge widget/button),
            :event {:click on-settings},
            :attrs {:inner-text "Settings"}})
         (comp-space 8 nil)

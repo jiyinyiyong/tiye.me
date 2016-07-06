@@ -39,7 +39,7 @@
   :flex-direction "row"})
 
 (def sidebar
- {:min-width "360px", :background-color (hsl 0 0 96), :flex 1})
+ {:min-width "260px", :background-color (hsl 0 0 96), :flex 1})
 
 (def fullscreen {:width "100%", :position "absolute", :height "100%"})
 

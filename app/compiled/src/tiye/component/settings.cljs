@@ -23,6 +23,6 @@
           {:style widget/textbox,
            :event {:input on-input},
            :attrs
-           {:placeholder "Someone", :value (:nickname session)}})))))
+           {:placeholder (or (:nickname session) "Someone")}})))))
 
 (def comp-settings (create-comp :settings render))

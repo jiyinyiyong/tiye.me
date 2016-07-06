@@ -13,6 +13,7 @@
   (fn [state mutate!]
     (div
       {:style (merge layout/row widget/message)}
+      (comp-text (readable-time (:time message)) widget/time-tip)
       (div
         {:style widget/username}
         (comp-text (or (:nickname message) "Someone") nil))
@@ -21,7 +22,6 @@
         (:text message)
         (merge (if (:writing? message) {:color (hsl 0 0 70)})))
       (comp-space 16 nil)
-      (comp-text (readable-time (:time message)) widget/time-tip)
       (comment comp-debug message {:opacity 0.1, :right 0}))))
 
 (def comp-message (create-comp :message render))

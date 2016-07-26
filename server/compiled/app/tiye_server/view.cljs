@@ -20,7 +20,11 @@
               schema/message
               {:writing? true,
                :time (:buffer-time state),
-               :nickname (:nickname state),
+               :nickname
+               (let [nickname (:nickname state)]
+                 (if (and (some? nickname) (pos? (count nickname)))
+                   nickname
+                   (:id state))),
                :id (:id state),
                :text (:buffer state)})])))
      (into {}))})

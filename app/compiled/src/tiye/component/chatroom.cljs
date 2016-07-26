@@ -4,7 +4,6 @@
             [respo.alias :refer [create-comp div input button]]
             [tiye.component.text :refer [comp-text]]
             [tiye.component.message :refer [comp-message]]
-            [tiye.component.settings :refer [comp-settings]]
             [tiye.style.layout :as layout]
             [tiye.style.widget :as widget]
             [tiye.style.typeset :as typeset]
@@ -28,6 +27,8 @@
 (defn on-clear [e dispatch! mutate!] (dispatch! :message/clear nil))
 
 (defn on-settings [e dispatch! mutate!] (dispatch! :state/settings nil))
+
+(defn on-nickname [e dispatch!] (dispatch! :state/nickname (:value e)))
 
 (defn render [store]
   (fn [state mutate!]
@@ -54,6 +55,16 @@
       (div
         {:style (merge layout/horizontal)}
         (input
+          {:style widget/textbox,
+           :event {:input on-nickname},
+           :attrs
+           {:placeholder
+            (let [nickname (get-in store [:state :nickname])]
+              (if (and (some? nickname) (> (count nickname) 0))
+                nickname
+                (get-in store [:state :id])))}})
+        (comp-space 8 nil)
+        (input
           {:style
            (merge
              widget/textbox
@@ -61,11 +72,6 @@
              {:background-color (hsl 0 0 93)}),
            :event {:keydown on-keydown, :input on-input},
            :attrs {:placeholder "Message...", :value state}})
-        (comp-space 8 nil)
-        (button
-          {:style (merge widget/button),
-           :event {:click on-settings},
-           :attrs {:inner-text "Settings"}})
         (comp-space 8 nil)
         (button
           {:style widget/button,

@@ -2,6 +2,10 @@
 (ns tiye.style.typeset
   (:require [hsl.core :refer [hsl]]))
 
+(def global
+ {:font-family
+  "\"Helvetica Neue\", \"PingFang SC\", \"Microsoft Yahei\", 微软雅黑, STXihei, 华文细黑, sans-serif"})
+
 (def heading
  {:line-height 2,
   :color (hsl 0 0 70),

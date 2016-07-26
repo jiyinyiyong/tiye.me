@@ -5,6 +5,7 @@
             [tiye.component.sidebar :refer [comp-sidebar]]
             [tiye.style.widget :as widget]
             [tiye.style.layout :as layout]
+            [tiye.style.typeset :as typeset]
             [respo.component.debug :refer [comp-debug]]
             [tiye.component.about :refer [comp-about]]
             [tiye.component.chatroom :refer [comp-chatroom]]))
@@ -12,7 +13,8 @@
 (defn render [store]
   (fn [state mutate!]
     (div
-      {:style (merge layout/fullscreen layout/horizontal)}
+      {:style
+       (merge layout/fullscreen layout/horizontal typeset/global)}
       (comp-about)
       (div {:style widget/row-divider})
       (if (empty? store) (comp-sidebar) (comp-chatroom store))

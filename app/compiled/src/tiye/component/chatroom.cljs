@@ -15,18 +15,18 @@
 
 (defn update-state [state text] text)
 
-(defn on-input [e dispatch! mutate!]
-  (let [content (:value e)]
-    (mutate! content)
-    (dispatch! :state/buffer content)))
+(defn on-input [mutate!]
+  (fn [e dispatch!]
+    (let [content (:value e)]
+      (mutate! content)
+      (dispatch! :state/buffer content))))
 
-(defn on-keydown [e dispatch! mutate!]
-  (if (= 13 (:key-code e))
-    (do (mutate! "") (dispatch! :message/confirm nil))))
+(defn on-keydown [mutate!]
+  (fn [e dispatch!]
+    (if (= 13 (:key-code e))
+      (do (mutate! "") (dispatch! :message/confirm nil)))))
 
-(defn on-clear [e dispatch! mutate!] (dispatch! :message/clear nil))
-
-(defn on-settings [e dispatch! mutate!] (dispatch! :state/settings nil))
+(defn on-clear [e dispatch!] (dispatch! :message/clear nil))
 
 (defn on-nickname [e dispatch!] (dispatch! :state/nickname (:value e)))
 
@@ -49,13 +49,13 @@
           (map last)
           (sort-by :time)
           (map (fn [message] [(:id message) (comp-message message)]))))
-      (if (get-in store [:state :show-settings?])
-        (comp-settings (:state store))
-        (div {}))
       (div
         {:style (merge layout/horizontal)}
         (input
-          {:style widget/textbox,
+          {:style
+           (merge
+             widget/textbox
+             {:background-color (hsl 0 0 93), :width "120px"}),
            :event {:input on-nickname},
            :attrs
            {:placeholder
@@ -70,7 +70,8 @@
              widget/textbox
              layout/flex
              {:background-color (hsl 0 0 93)}),
-           :event {:keydown on-keydown, :input on-input},
+           :event
+           {:keydown (on-keydown mutate!), :input (on-input mutate!)},
            :attrs {:placeholder "Message...", :value state}})
         (comp-space 8 nil)
         (button

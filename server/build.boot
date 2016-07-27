@@ -1,13 +1,13 @@
 
 (set-env!
- :dependencies '[[org.clojure/clojurescript "1.9.36"      :scope "test"]
+ :dependencies '[[org.clojure/clojurescript "1.9.89"      :scope "test"]
                  [org.clojure/clojure       "1.8.0"       :scope "test"]
                  [adzerk/boot-cljs          "1.7.228-1"   :scope "test"]
                  [figwheel-sidecar          "0.5.4-5"     :scope "test"]
                  [com.cemerick/piggieback   "0.2.1"       :scope "test"]
                  [org.clojure/tools.nrepl   "0.2.12"      :scope "test"]
                  [ajchemist/boot-figwheel   "0.5.4-5"     :scope "test"]
-                 [cirru/boot-cirru-sepal    "0.1.8"       :scope "test"]
+                 [cirru/boot-cirru-sepal    "0.1.9"       :scope "test"]
                  [binaryage/devtools        "0.5.2"       :scope "test"]
                  [adzerk/boot-test          "1.1.1"       :scope "test"]
                  [mvc-works/hsl             "0.1.2"       :scope "test"]

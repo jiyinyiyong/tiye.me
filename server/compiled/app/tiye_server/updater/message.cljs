@@ -6,7 +6,7 @@
   (let [state (get-in db [:states state-id])
         buffer (:buffer state)
         buffer-time (:buffer-time state)
-        nickname (:nickname state)]
+        nickname (or (:nickname state) (:id state))]
     (-> db
      (update-in
        [:states state-id]

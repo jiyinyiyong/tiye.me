@@ -95,7 +95,7 @@
 
 (deftask rsync []
   (with-pre-wrap fileset
-    (sh "rsync" "-r" "target" "tiye:servers/tiye" "--exclude" "main.out" "--delete")
+    (sh "rsync" "-r" "target" "tiye.me:servers/tiye" "--exclude" "main.out" "--delete")
     fileset))
 
 (deftask watch-test []

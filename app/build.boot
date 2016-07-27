@@ -50,6 +50,7 @@
         (meta' {:attrs {:name "description" :content "题叶, jiyinyiyong, Profile, About, Contact"}})
         (meta' {:attrs {:name "language" :content "zh-cn"}})
         (style (use-text "body * {box-sizing: border-box;}"))
+        (div {:attrs {:innerHTML (slurp "html/ga.html")}})
         (script {:attrs {:id "config" :type "text/edn" :innerHTML (pr-str data)}}))
       (body {}
         (div {:attrs {:id "app"}})
@@ -102,7 +103,7 @@
 
 (deftask rsync []
   (with-pre-wrap fileset
-    (sh "rsync" "-r" "target/" "tiye:repo/tiye/tiye.me" "--exclude" "main.out" "--delete")
+    (sh "rsync" "-r" "target/" "tiye.me:repo/tiye/tiye.me" "--exclude" "main.out" "--delete")
     fileset))
 
 (deftask send-tiye []

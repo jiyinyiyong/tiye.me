@@ -20,7 +20,8 @@
   (render-app!)
   (setup-socket!
     store-ref
-    {:url (str "ws://" (.-hostname js/location) ":5020")})
+    {:on-close! (fn [event] (reset! store-ref {})),
+     :url (str "ws://" (.-hostname js/location) ":5020")})
   (add-watch store-ref :changes render-app!)
   (add-watch states-ref :changes render-app!)
   (println "app started!")

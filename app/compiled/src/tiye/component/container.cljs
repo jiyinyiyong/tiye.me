@@ -8,7 +8,8 @@
             [tiye.style.typeset :as typeset]
             [respo.component.debug :refer [comp-debug]]
             [tiye.component.about :refer [comp-about]]
-            [tiye.component.chatroom :refer [comp-chatroom]]))
+            [tiye.component.chatroom :refer [comp-chatroom]]
+            [tiye.component.title :refer [comp-title]]))
 
 (defn render [store]
   (fn [state mutate!]
@@ -18,6 +19,8 @@
       (comp-about)
       (div {:style widget/row-divider})
       (if (empty? store) (comp-sidebar) (comp-chatroom store))
-      (comp-debug (:state store) {:bottom 0, :left 0}))))
+      (comp-debug (:state store) {:bottom 0, :left 0})
+      (comp-title
+        (str "(" (get-in store [:statistics :user-count]) ") 题叶")))))
 
 (def comp-container (create-comp :container render))

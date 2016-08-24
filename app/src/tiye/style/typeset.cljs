@@ -17,6 +17,6 @@
 
 (def global
  {:font-family
-  "\"Helvetica Neue\", \"PingFang SC\", \"Microsoft Yahei\", 微软雅黑, STXihei, 华文细黑, sans-serif"})
+  "\"Helvetica Neue\", \"PingFang SC\", \"Microsoft Yahei\", 思源黑体, STXihei, 微软雅黑, sans-serif"})
 
 (def description {:line-height 2, :color (hsl 0 0 60), :font-size 16})

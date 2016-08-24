@@ -21,6 +21,6 @@
       (if (empty? store) (comp-sidebar) (comp-chatroom store))
       (comp-debug (:state store) {:bottom 0, :left 0})
       (comp-title
-        (str "(" (get-in store [:statistics :user-count]) ") 题叶")))))
+        (str "(" (get-in store [:statistics :user-count]) ") 在线")))))
 
 (def comp-container (create-comp :container render))

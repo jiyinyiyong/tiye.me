@@ -8,7 +8,7 @@
      "http://cirru.org"
      "https://avatars0.githubusercontent.com/u/6281941?v=3&s=200"]
     ["Respo"
-     "https://github.com/mvc-works/respo/wiki/Quick-Start"
+     "https://github.com/Respo/respo/wiki/Quick-Start"
      "https://avatars3.githubusercontent.com/u/20469468?v=3&s=200"]
     ["Cumulo"
      "http://cumulo.org"

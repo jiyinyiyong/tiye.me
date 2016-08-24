@@ -1,21 +1,20 @@
 
 (set-env!
- :dependencies '[[org.clojure/clojurescript "1.9.89"      :scope "test"]
+ :dependencies '[[org.clojure/clojurescript "1.9.216"     :scope "test"]
                  [org.clojure/clojure       "1.8.0"       :scope "test"]
                  [adzerk/boot-cljs          "1.7.228-1"   :scope "test"]
                  [figwheel-sidecar          "0.5.4-5"     :scope "test"]
                  [com.cemerick/piggieback   "0.2.1"       :scope "test"]
                  [org.clojure/tools.nrepl   "0.2.12"      :scope "test"]
                  [ajchemist/boot-figwheel   "0.5.4-5"     :scope "test"]
-                 [cirru/boot-cirru-sepal    "0.1.9"       :scope "test"]
-                 [binaryage/devtools        "0.5.2"       :scope "test"]
+                 [cirru/stack-server        "0.1.8"       :scope "test"]
                  [adzerk/boot-test          "1.1.1"       :scope "test"]
                  [mvc-works/hsl             "0.1.2"       :scope "test"]
                  [cumulo/server             "0.1.0"]
                  [cumulo/shallow-diff       "0.1.1"]])
 
 (require '[adzerk.boot-cljs   :refer [cljs]]
-         '[cirru-sepal.core   :refer [transform-cirru]]
+         '[stack-server.core  :refer [start-stack-editor! transform-stack]]
          '[adzerk.boot-test   :refer :all]
          '[boot-figwheel])
 
@@ -33,7 +32,7 @@
 
 (def all-builds
   [{:id "dev"
-    :source-paths ["compiled/app"]
+    :source-paths ["src"]
     :compiler {:output-to "app.js"
                :output-dir "server_out/"
                :main 'tiye-server.main
@@ -50,25 +49,15 @@
    :http-server-root "target"
    :reload-clj-files false})
 
-(deftask compile-cirru []
-  (set-env!
-    :source-paths #{"cirru/"})
+(deftask generate-code []
   (comp
-    (transform-cirru)
-    (target :dir #{"compiled/"})))
+    (transform-stack :filename "stack-sepal.ir")
+    (target :dir #{"src/"})))
 
-(deftask watch-compile []
-  (set-env!
-    :source-paths #{"cirru/"})
+(deftask dev! []
   (comp
-    (watch)
-    (transform-cirru)
-    (target :dir #{"compiled/"})))
-
-(deftask dev []
-  (set-env!
-    :source-paths #{"compiled/app"})
-  (comp
+    (start-stack-editor! :port 7011)
+    (target :dir #{"src/"})
     (repl)
     (figwheel
       :build-ids ["dev"]
@@ -78,18 +67,15 @@
     (target)))
 
 (deftask build-simple []
-  (set-env!
-    :source-paths #{"cirru/app"})
   (comp
-    (transform-cirru)
+    (transform-stack :filename "stack-sepal.ir")
     (cljs :optimizations :simple :compiler-options {:target :nodejs})
     (target)))
 
+; use build-simple instead due to WebSocket reasons
 (deftask build-advanced []
-  (set-env!
-    :source-paths #{"cirru/app"})
   (comp
-    (transform-cirru)
+    (transform-stack :filename "stack-sepal.ir" :port 7011)
     (cljs :optimizations :advanced :compiler-options {:target :nodejs})
     (target)))
 
@@ -100,8 +86,7 @@
 
 (deftask watch-test []
   (set-env!
-    :source-paths #{"cirru/src" "cirru/test"})
+    :source-paths #{"src" "test"})
   (comp
     (watch)
-    (transform-cirru)
     (test :namespaces '#{tiye-server.test})))

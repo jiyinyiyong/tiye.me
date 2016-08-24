@@ -1,6 +1,9 @@
 
 (ns tiye-server.schema)
 
+(def message
+ {:writing? false, :time nil, :nickname "", :id nil, :text ""})
+
 (def database {:states {}, :messages {}, :users {}})
 
 (def state
@@ -9,6 +12,3 @@
   :id nil,
   :show-settings? false,
   :buffer nil})
-
-(def message
- {:writing? false, :time nil, :nickname "", :id nil, :text ""})

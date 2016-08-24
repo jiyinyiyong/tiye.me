@@ -5,7 +5,7 @@
             [tiye.style.layout :as layout]
             [tiye.style.widget :as widget]
             [tiye.style.typeset :as typeset]
-            [respo.component.space :refer [comp-space]]
+            [respo.comp.space :refer [comp-space]]
             [tiye.component.text :refer [comp-text]]))
 
 (defn render []

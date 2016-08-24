@@ -6,7 +6,7 @@
             [tiye.style.widget :as widget]
             [tiye.style.layout :as layout]
             [tiye.style.typeset :as typeset]
-            [respo.component.debug :refer [comp-debug]]
+            [respo.comp.debug :refer [comp-debug]]
             [tiye.component.about :refer [comp-about]]
             [tiye.component.chatroom :refer [comp-chatroom]]
             [tiye.component.title :refer [comp-title]]))

@@ -3,8 +3,8 @@
   (:require [hsl.core :refer [hsl]]
             [respo.alias :refer [create-comp div span]]
             [tiye.component.text :refer [comp-text]]
-            [respo.component.debug :refer [comp-debug]]
-            [respo.component.space :refer [comp-space]]
+            [respo.comp.debug :refer [comp-debug]]
+            [respo.comp.space :refer [comp-space]]
             [tiye.style.layout :as layout]
             [tiye.style.widget :as widget]
             [tiye.util.format :refer [readable-time]]))

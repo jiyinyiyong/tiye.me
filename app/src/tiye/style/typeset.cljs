@@ -2,9 +2,7 @@
 (ns tiye.style.typeset
   (:require [hsl.core :refer [hsl]]))
 
-(def global
- {:font-family
-  "\"Helvetica Neue\", \"PingFang SC\", \"Microsoft Yahei\", 微软雅黑, STXihei, 华文细黑, sans-serif"})
+(def entry {})
 
 (def heading
  {:line-height 2,
@@ -13,10 +11,12 @@
   :font-weight "lighter",
   :margin-top "16px"})
 
+(def paragraph {:line-height 2})
+
 (def title {:line-height 2, :font-size "16px", :font-weight "bold"})
 
-(def entry {})
-
-(def paragraph {:line-height 2})
+(def global
+ {:font-family
+  "\"Helvetica Neue\", \"PingFang SC\", \"Microsoft Yahei\", 微软雅黑, STXihei, 华文细黑, sans-serif"})
 
 (def description {:line-height 2, :color (hsl 0 0 60), :font-size 16})

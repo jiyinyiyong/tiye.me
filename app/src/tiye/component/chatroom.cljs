@@ -8,12 +8,10 @@
             [tiye.style.widget :as widget]
             [tiye.style.typeset :as typeset]
             [tiye.style.devtool :as devtool]
-            [respo.component.debug :refer [comp-debug]]
-            [respo.component.space :refer [comp-space]]))
+            [respo.comp.debug :refer [comp-debug]]
+            [respo.comp.space :refer [comp-space]]))
 
-(defn init-state [] "")
-
-(defn update-state [state text] text)
+(defn on-nickname [e dispatch!] (dispatch! :state/nickname (:value e)))
 
 (defn on-input [mutate!]
   (fn [e dispatch!]
@@ -21,14 +19,16 @@
       (mutate! content)
       (dispatch! :state/buffer content))))
 
+(defn update-state [state text] text)
+
+(defn on-clear [e dispatch!] (dispatch! :message/clear nil))
+
+(defn init-state [] "")
+
 (defn on-keydown [mutate!]
   (fn [e dispatch!]
     (if (= 13 (:key-code e))
       (do (mutate! "") (dispatch! :message/confirm nil)))))
-
-(defn on-clear [e dispatch!] (dispatch! :message/clear nil))
-
-(defn on-nickname [e dispatch!] (dispatch! :state/nickname (:value e)))
 
 (defn render [store]
   (fn [state mutate!]

@@ -1,2 +1,0 @@
-
-(ns tiye.component.works)

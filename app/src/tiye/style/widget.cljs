@@ -2,7 +2,7 @@
 (ns tiye.style.widget
   (:require [hsl.core :refer [hsl]] [tiye.style.layout :as layout]))
 
-(def message {:padding "4px 0"})
+(def message {:align-items "flex-start", :padding "4px 0"})
 
 (def dim8 {:background-color (hsl 0 0 80)})
 
@@ -29,6 +29,7 @@
   :overflow "hidden",
   :background-color (hsl 30 80 100),
   :width "100px",
+  :flex-shrink 0,
   :padding "0 8px",
   :display "inline-block",
   :border-radius "4px"})
@@ -71,15 +72,6 @@
 (def card {:padding "20px"})
 
 (def dim9 {:background-color (hsl 0 0 90)})
-
-(def time-tip
- {:color (hsl 0 0 80),
-  :vertical-align "middle",
-  :font-size "10px",
-  :font-weight "lighter",
-  :flex-shrink 0,
-  :align-self "center",
-  :font-family "Menlo,monospace"})
 
 (def number-highlight
  {:line-height 2,

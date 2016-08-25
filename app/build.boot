@@ -4,7 +4,7 @@
                  [org.clojure/clojure       "1.8.0"       :scope "test"]
                  [adzerk/boot-cljs          "1.7.228-1"   :scope "test"]
                  [adzerk/boot-reload        "0.4.12"      :scope "test"]
-                 [cirru/stack-server        "0.1.8"       :scope "test"]
+                 [cirru/stack-server        "0.1.9"       :scope "test"]
                  [adzerk/boot-test          "1.1.1"       :scope "test"]
                  [mvc-works/hsl             "0.1.2"]
                  [respo                     "0.3.9"]
@@ -44,7 +44,8 @@
         (meta' {:attrs {:name "description" :content "题叶, jiyinyiyong, Profile, About, Contact"}})
         (meta' {:attrs {:name "language" :content "zh-cn"}})
         (style (use-text "body * {box-sizing: border-box;}"))
-        (div {:attrs {:innerHTML (slurp "html/ga.html")}})
+        (if (:build? data)
+          (div {:attrs {:innerHTML (slurp "html/ga.html")}}))
         (script {:attrs {:id "config" :type "text/edn" :innerHTML (pr-str data)}}))
       (body {}
         (div {:attrs {:id "app"}})

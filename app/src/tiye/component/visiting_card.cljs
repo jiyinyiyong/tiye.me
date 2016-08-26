@@ -13,7 +13,7 @@
     (div
       {:style (merge widget/card layout/horizontal-box)}
       (div {:style (merge widget/avatar)})
-      (comp-space 20 nil)
+      (comp-space 16 nil)
       (div
         {}
         (:style (merge layout/vertical))

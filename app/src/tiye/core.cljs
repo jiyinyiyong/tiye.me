@@ -11,14 +11,21 @@
 
 (defonce states-ref (atom {}))
 
-(defn render-app! []
-  (let [target (.querySelector js/document "#app")]
-    (render! (comp-container @store-ref) target dispatch! states-ref)))
-
 (defn on-jsload []
   (clear-cache!)
   (render-app!)
   (println "code updated."))
+
+(defn listen-visibility [dispatch!]
+  (.addEventListener
+    js/window
+    "visiblitychange"
+    (fn [event]
+      (dispatch! :state/visibility (.-visibilityState js/document)))))
+
+(defn render-app! []
+  (let [target (.querySelector js/document "#app")]
+    (render! (comp-container @store-ref) target dispatch! states-ref)))
 
 (defn -main []
   (enable-console-print!)
@@ -29,6 +36,7 @@
      :url (str "ws://" (.-hostname js/location) ":5020")})
   (add-watch store-ref :changes render-app!)
   (add-watch states-ref :changes render-app!)
+  (listen-visibility dispatch!)
   (println "app started!")
   (let [configEl (.querySelector js/document "#config")
         config (read-string (.-innerHTML configEl))]

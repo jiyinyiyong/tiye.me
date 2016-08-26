@@ -60,10 +60,7 @@
      "http://clojure-china.org/uploads/default/3/02eee0f0cf48c269.gif"]
     ["CoffeeScript"
      "http://coffeescript.org/"
-     "https://assets.toptal.io/uploads/blog/category/logo/20/coffeescript.png"]
-    ["Haskell Beginner"
-     "https://www.haskell.org/"
-     "https://www.haskell.org/static/img/logo.png"]]}
+     "https://assets.toptal.io/uploads/blog/category/logo/20/coffeescript.png"]]}
   {:category "Records",
    :data
    [["饿了么 2016"

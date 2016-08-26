@@ -43,18 +43,18 @@
    :height "24px"})
 
 (def avatar
- {:width "80px",
+ {:width "64px",
   :flex-shrink 0,
   :background-image (str "url(tiye-400x400.jpg)"),
   :border-radius "50%",
   :background-size "cover",
-  :height "80px"})
+  :height "64px"})
 
 (def showcase
  (merge
    layout/row
    {:align-items "center",
-    :width "180px",
+    :width "160px",
     :padding "0 8px",
     :margin-right "8px",
     :border (str "1px solid " (hsl 0 0 90)),

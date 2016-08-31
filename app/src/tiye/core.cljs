@@ -11,6 +11,10 @@
 
 (defonce states-ref (atom {}))
 
+(defn render-app! []
+  (let [target (.querySelector js/document "#app")]
+    (render! (comp-container @store-ref) target dispatch! states-ref)))
+
 (defn on-jsload []
   (clear-cache!)
   (render-app!)
@@ -22,10 +26,6 @@
     "visiblitychange"
     (fn [event]
       (dispatch! :state/visibility (.-visibilityState js/document)))))
-
-(defn render-app! []
-  (let [target (.querySelector js/document "#app")]
-    (render! (comp-container @store-ref) target dispatch! states-ref)))
 
 (defn -main []
   (enable-console-print!)

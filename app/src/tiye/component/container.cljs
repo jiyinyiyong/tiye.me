@@ -2,6 +2,7 @@
 (ns tiye.component.container
   (:require [hsl.core :refer [hsl]]
             [respo.alias :refer [create-comp div span]]
+            [respo-ui.style :as ui]
             [tiye.component.sidebar :refer [comp-sidebar]]
             [tiye.style.widget :as widget]
             [tiye.style.layout :as layout]
@@ -14,12 +15,10 @@
 (defn render [store]
   (fn [state mutate!]
     (div
-      {:style
-       (merge layout/fullscreen layout/horizontal typeset/global)}
-      (comp-about)
-      (div {:style widget/row-divider})
+      {:style (merge typeset/global)}
       (if (empty? store) (comp-sidebar) (comp-chatroom store))
-      (comp-debug (:state store) {:bottom 0, :left 0})
+      (comp-about)
+      (comment comp-debug (:state store) {:bottom 0, :left 0})
       (comp-title
         (str "(" (get-in store [:statistics :user-count]) ") 在线")))))
 

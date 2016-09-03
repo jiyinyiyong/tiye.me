@@ -13,8 +13,7 @@
  {:line-height 2,
   :color (hsl 200 20 50),
   :font-size "14px",
-  :padding "0 8px",
-  :text-decoration "none"})
+  :padding "0 8px"})
 
 (def row-divider {:background-color (hsl 0 0 94), :width "2px"})
 
@@ -53,9 +52,10 @@
 (def showcase
  (merge
    layout/row
-   {:align-items "center",
-    :width "160px",
+   {:min-width "120px",
+    :align-items "center",
     :padding "0 8px",
+    :text-decoration "none",
     :margin-right "8px",
     :border (str "1px solid " (hsl 0 0 90)),
     :border-radius "4px",

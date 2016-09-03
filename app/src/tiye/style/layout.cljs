@@ -2,9 +2,7 @@
 (ns tiye.style.layout
   (:require [hsl.core :refer [hsl]]))
 
-(def scroll {:overflow "auto"})
-
-(def article {:padding "40px", :overflow-y "auto"})
+(def article {:padding "16px", :overflow-y "auto"})
 
 (def sidebar
  {:min-width "260px", :background-color (hsl 0 0 96), :flex 1})

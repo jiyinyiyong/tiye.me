@@ -14,7 +14,7 @@
 (defn render []
   (fn [state mutate!]
     (div
-      {:style (merge layout/article {:width "40%"})}
+      {:style (merge layout/article)}
       (comp-visiting-card)
       (div
         {}
@@ -40,24 +40,21 @@
                                           (fn 
                                             [index address]
                                             [index
-                                             (div
+                                             (a
                                                {:style
                                                 (merge
                                                   layout/row
-                                                  widget/showcase)}
+                                                  widget/showcase),
+                                                :attrs
+                                                {:target "_blank",
+                                                 :href
+                                                 (get address 1)}}
                                                (div
                                                  {:style
                                                   (widget/logo-small
                                                     (get address 2))})
-                                               (a
-                                                 {:style
-                                                  widget/resource,
-                                                  :attrs
-                                                  {:target "_blanck",
-                                                   :href
-                                                   (get address 1)}}
-                                                 (comp-text
-                                                   (first address)
-                                                   nil)))])))))])))))))
+                                               (comp-text
+                                                 (first address)
+                                                 widget/resource))])))))])))))))
 
 (def comp-about (create-comp :about render))

@@ -2,6 +2,7 @@
 (ns tiye.component.chatroom
   (:require [hsl.core :refer [hsl]]
             [respo.alias :refer [create-comp div input button]]
+            [respo-ui.style :as ui]
             [tiye.component.text :refer [comp-text]]
             [tiye.component.message :refer [comp-message]]
             [tiye.style.layout :as layout]
@@ -33,7 +34,7 @@
 (defn render [store]
   (fn [state mutate!]
     (div
-      {:style (merge layout/vertical layout/flex {:padding "40px"})}
+      {:style (merge ui/column {:padding "16px"})}
       (div
         {:style typeset/description}
         (comp-text "Currently there are " nil)
@@ -42,8 +43,7 @@
           widget/number-highlight)
         (comp-text " users in the chatroom." nil))
       (div
-        {:style
-         (merge layout/flex layout/scroll {:padding-bottom "320px"})}
+        {:style (merge {:padding-bottom "120px"})}
         (->>
           (merge (:messages store) (:buffers store))
           (map last)

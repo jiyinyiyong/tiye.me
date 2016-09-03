@@ -60,7 +60,7 @@
     (start-stack-editor! :port 7011)
     (target :dir #{"src/"})))
 
-(deftask dev! []
+(deftask dev []
   (comp
     (repl)
     (figwheel

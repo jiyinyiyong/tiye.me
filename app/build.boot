@@ -7,7 +7,7 @@
                  [cirru/stack-server        "0.1.11"      :scope "test"]
                  [adzerk/boot-test          "1.1.1"       :scope "test"]
                  [mvc-works/hsl             "0.1.2"]
-                 [respo                     "0.3.9"]
+                 [respo                     "0.3.13"]
                  [respo/ui                  "0.1.1"]
                  [cumulo/client             "0.1.1"]])
 
@@ -67,7 +67,7 @@
   (set-env!
     :asset-paths #{"assets"})
   (comp
-    (watch)
+    (repl)
     (start-stack-editor!)
     (target :dir #{"src/"})
     (html-file :data {:build? false})
@@ -89,11 +89,6 @@
     (cljs :optimizations :advanced)
     (html-file :data {:build? true})
     (target)))
-
-(deftask rsync []
-  (with-pre-wrap fileset
-    (sh "rsync" "-r" "target/" "tiye.me:repo/tiye/tiye.me" "--exclude" "main.out" "--delete")
-    fileset))
 
 (deftask build []
   (comp

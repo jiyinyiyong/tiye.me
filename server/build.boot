@@ -56,8 +56,12 @@
 
 (deftask dev! []
   (comp
+    (repl)
     (start-stack-editor! :port 7011)
-    (target :dir #{"src/"})
+    (target :dir #{"src/"})))
+
+(deftask dev! []
+  (comp
     (repl)
     (figwheel
       :build-ids ["dev"]
@@ -75,14 +79,9 @@
 ; use build-simple instead due to WebSocket reasons
 (deftask build-advanced []
   (comp
-    (transform-stack :filename "stack-sepal.ir" :port 7011)
+    (transform-stack :filename "stack-sepal.ir")
     (cljs :optimizations :advanced :compiler-options {:target :nodejs})
     (target)))
-
-(deftask rsync []
-  (with-pre-wrap fileset
-    (sh "rsync" "-r" "target" "tiye.me:servers/tiye" "--exclude" "main.out" "--delete")
-    fileset))
 
 (deftask watch-test []
   (set-env!

@@ -8,7 +8,13 @@
    :statistics
    {:user-count (count (:states db)),
     :nicknames
-    (map (fn [entry] (:nickname (last entry))) (:states db))},
+    (map
+      (fn [entry]
+        (let [state (last entry) nickname (:nickname state)]
+          (if (and (some? nickname) (not (string/blank? nickname)))
+            nickname
+            (:id state))))
+      (:states db))},
    :messages (:messages db),
    :buffers
    (->>

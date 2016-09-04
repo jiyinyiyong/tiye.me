@@ -11,6 +11,12 @@
 (defn disconnect [db op-data state-id op-id op-time]
   (update db :states (fn [state] (dissoc state state-id))))
 
+(defn clear-name [db op-data state-id op-id op-time]
+  (update-in
+    db
+    [:states state-id]
+    (fn [state] (println state) (dissoc state :nickname))))
+
 (defn buffer [db op-data state-id op-id op-time]
   (-> db
    (update-in

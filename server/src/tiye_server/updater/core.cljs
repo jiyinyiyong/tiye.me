@@ -14,8 +14,12 @@
     (state/buffer db op-data state-id op-id op-time)
     :state/nickname
     (state/nickname db op-data state-id op-id op-time)
+    :state/clear-name
+    (state/nickname db op-data state-id op-id op-time)
     :message/confirm
     (message/confirm db op-data state-id op-id op-time)
     :message/clear
     (message/clear db op-data state-id op-id op-time)
+    :message/remove
+    (message/remove-one db op-data state-id op-id op-time)
     db))

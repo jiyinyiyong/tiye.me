@@ -5,6 +5,8 @@
             [tiye.style.widget :as widget]
             [tiye.style.layout :as layout]))
 
+(defn on-click [] (.reload js/location))
+
 (defn render []
   (fn [state mutate!]
     (div
@@ -12,7 +14,8 @@
        (merge
          layout/vertical-box
          widget/notice-large
-         {:height "320px"})}
-      (comp-text "Chat server is down" nil))))
+         {:cursor "pointer", :height "320px"}),
+       :event {:click on-click}}
+      (comp-text "Chat server is down, click to reload." nil))))
 
 (def comp-offline-tip (create-comp :offline-tip render))

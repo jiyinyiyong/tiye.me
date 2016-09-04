@@ -2,6 +2,13 @@
 (ns tiye-server.updater.message
   (:require [tiye-server.schema :as schema]))
 
+(defn remove-one [db op-data state-id op-id op-time]
+  (update
+    db
+    :messages
+    (fn [messages]
+      (filter (fn [message] (not= op-data (:id message))) messages))))
+
 (defn confirm [db op-data state-id op-id op-time]
   (let [state (get-in db [:states state-id])
         buffer (:buffer state)
@@ -18,8 +25,8 @@
        (fn [messages]
          (if (some? buffer)
            (let [fresh-messages (if
-                                  (> (count messages) 40)
-                                  (subvec messages 40)
+                                  (> (count messages) 20)
+                                  (subvec messages 10)
                                   messages)]
              (conj
                fresh-messages

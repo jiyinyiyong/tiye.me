@@ -2,7 +2,11 @@
 (ns tiye.style.widget
   (:require [hsl.core :refer [hsl]] [tiye.style.layout :as layout]))
 
-(def message {:align-items "flex-start", :padding "4px 0"})
+(def message
+ {:align-items "flex-start",
+  :margin-top 8,
+  :padding "4px 0",
+  :position "relative"})
 
 (def dim8 {:background-color (hsl 0 0 80)})
 

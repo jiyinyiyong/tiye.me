@@ -10,7 +10,7 @@
                  [cirru/stack-server        "0.1.11"      :scope "test"]
                  [adzerk/boot-test          "1.1.1"       :scope "test"]
                  [mvc-works/hsl             "0.1.2"       :scope "test"]
-                 [cumulo/server             "0.1.0"]
+                 [cumulo/server             "0.1.1"]
                  [cumulo/shallow-diff       "0.1.1"]])
 
 (require '[adzerk.boot-cljs   :refer [cljs]]

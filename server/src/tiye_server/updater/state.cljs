@@ -8,12 +8,6 @@
      [:states state-id]
      (fn [state] (assoc state :nickname op-data)))))
 
-(defn settings [db op-data state-id op-id op-time]
-  (-> db
-   (update-in
-     [:states state-id]
-     (fn [state] (update state :show-settings? not)))))
-
 (defn disconnect [db op-data state-id op-id op-time]
   (update db :states (fn [state] (dissoc state state-id))))
 

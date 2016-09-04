@@ -21,7 +21,7 @@
     (do
       (reset! reader-db-ref @writer-db-ref)
       (render-clients! @reader-db-ref render-scene render-view)))
-  (js/setTimeout render-loop! 300))
+  (js/setTimeout render-loop! 200))
 
 (defn -main []
   (nodejs/enable-util-print!)

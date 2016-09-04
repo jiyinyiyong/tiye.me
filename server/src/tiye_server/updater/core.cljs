@@ -12,8 +12,6 @@
     (state/disconnect db op-data state-id op-id op-time)
     :state/buffer
     (state/buffer db op-data state-id op-id op-time)
-    :state/settings
-    (state/settings db op-data state-id op-id op-time)
     :state/nickname
     (state/nickname db op-data state-id op-id op-time)
     :message/confirm

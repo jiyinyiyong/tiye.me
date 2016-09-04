@@ -1,15 +1,22 @@
 
 (ns tiye-server.view
-  (:require [tiye-server.schema :as schema]))
+  (:require [tiye-server.schema :as schema]
+            [clojure.string :as string]))
 
 (defn render-view [state-id db]
   {:state (get-in db [:states state-id]),
-   :statistics {:user-count (count (:states db))},
+   :statistics
+   {:user-count (count (:states db)),
+    :nicknames
+    (map (fn [entry] (:nickname (last entry))) (:states db))},
    :messages (:messages db),
    :buffers
    (->>
      (:states db)
-     (filter (fn [entry] (some? (:buffer (last entry)))))
+     (filter
+       (fn [entry]
+         (let [buffer (:buffer (last entry))]
+           (and (some? buffer) (not (string/blank? buffer))))))
      (map
        (fn [entry]
          (let [state (last entry)]

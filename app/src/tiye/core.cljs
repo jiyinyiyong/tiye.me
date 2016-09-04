@@ -3,9 +3,12 @@
   (:require [respo.core :refer [render! clear-cache!]]
             [tiye.component.container :refer [comp-container]]
             [cljs.reader :refer [read-string]]
-            [cumulo-client.core :refer [send! setup-socket!]]))
+            [cumulo-client.core :refer [send! setup-socket!]]
+            [notifier.comp.notifications :refer [notify!]]))
 
 (defn dispatch! [op op-data] (send! op op-data))
+
+(defn on-close! [id])
 
 (defonce store-ref (atom {}))
 
@@ -13,7 +16,19 @@
 
 (defn render-app! []
   (let [target (.querySelector js/document "#app")]
-    (render! (comp-container @store-ref) target dispatch! states-ref)))
+    (render! (comp-container @store-ref) target dispatch! states-ref)
+    (if (some? @store-ref)
+      (notify!
+        (->>
+          (:messages @store-ref)
+          (map
+            (fn [message] [(:id message)
+                           {:icon "http://tiye.me/tiye-400x400.jpg",
+                            :title (:nickname message),
+                            :id message,
+                            :body (:text message)}]))
+          (into {}))
+        on-close!))))
 
 (defn on-jsload []
   (clear-cache!)

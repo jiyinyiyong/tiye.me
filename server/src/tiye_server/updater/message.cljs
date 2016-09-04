@@ -17,19 +17,18 @@
        :messages
        (fn [messages]
          (if (some? buffer)
-           (assoc
-             messages
-             op-id
-             (assoc
-               schema/message
-               :id
-               op-id
-               :time
-               buffer-time
-               :text
-               buffer
-               :nickname
-               nickname))
+           (let [fresh-messages (if
+                                  (> (count messages) 40)
+                                  (subvec messages 40)
+                                  messages)]
+             (conj
+               fresh-messages
+               (merge
+                 schema/message
+                 {:time buffer-time,
+                  :nickname nickname,
+                  :id op-id,
+                  :text buffer})))
            messages))))))
 
-(defn clear [db op-data state-id op-id op-time] (assoc db :messages {}))
+(defn clear [db op-data state-id op-id op-time] (assoc db :messages []))

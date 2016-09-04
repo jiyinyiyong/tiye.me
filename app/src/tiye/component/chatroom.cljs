@@ -1,6 +1,7 @@
 
 (ns tiye.component.chatroom
   (:require [hsl.core :refer [hsl]]
+            [clojure.string :as string]
             [respo.alias :refer [create-comp div input button]]
             [respo-ui.style :as ui]
             [tiye.component.text :refer [comp-text]]
@@ -40,15 +41,19 @@
       {:style (merge ui/column {:padding "16px"})}
       (div
         {:style typeset/description}
-        (comp-text "Currently there are " nil)
+        (comp-text (get-in store [:statistics :user-count]) nil)
+        (comp-text " 人在线: " nil)
         (comp-text
-          (get-in store [:statistics :user-count])
-          widget/number-highlight)
-        (comp-text " users in the chatroom." nil))
+          (string/join ", " (get-in store [:statistics :nicknames]))
+          nil))
+      (comp-space nil "24px")
       (div
         {:style (merge {:padding-bottom "120px"})}
         (->>
-          (merge (:messages store) (:buffers store))
+          (:messages store)
+          (map (fn [message] [(:id message) message]))
+          (into {})
+          (merge (:buffers store))
           (map last)
           (sort-by :time)
           (map (fn [message] [(:id message) (comp-message message)]))))

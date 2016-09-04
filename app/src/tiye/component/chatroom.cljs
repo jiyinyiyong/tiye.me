@@ -12,7 +12,12 @@
             [respo.comp.debug :refer [comp-debug]]
             [respo.comp.space :refer [comp-space]]))
 
-(defn on-nickname [e dispatch!] (dispatch! :state/nickname (:value e)))
+(defn on-nickname [e dispatch!]
+  (let [event (:original-event e)]
+    (if (= 13 (:key-code e))
+      (do
+        (.preventDefault event)
+        (dispatch! :state/nickname (.-value (.-target event)))))))
 
 (defn on-input [mutate!]
   (fn [e dispatch!]
@@ -21,8 +26,6 @@
       (dispatch! :state/buffer content))))
 
 (defn update-state [state text] text)
-
-(defn on-clear [e dispatch!] (dispatch! :message/clear nil))
 
 (defn init-state [] "")
 
@@ -51,33 +54,28 @@
           (map (fn [message] [(:id message) (comp-message message)]))))
       (div
         {:style (merge layout/horizontal)}
-        (input
-          {:style
-           (merge
-             widget/textbox
-             {:background-color (hsl 0 0 93), :width "120px"}),
-           :event {:input on-nickname},
-           :attrs
-           {:placeholder
-            (let [nickname (get-in store [:state :nickname])]
-              (if (and (some? nickname) (> (count nickname) 0))
-                nickname
-                (get-in store [:state :id])))}})
-        (comp-space 8 nil)
-        (input
-          {:style
-           (merge
-             widget/textbox
-             layout/flex
-             {:background-color (hsl 0 0 93)}),
-           :event
-           {:keydown (on-keydown mutate!), :input (on-input mutate!)},
-           :attrs {:placeholder "Message...", :value state}})
-        (comp-space 8 nil)
-        (button
-          {:style widget/button,
-           :event {:click on-clear},
-           :attrs {:inner-text "Clear"}})))))
+        (let [nickname (get-in store [:state :nickname])]
+          (if (and (some? nickname) (> (count nickname) 0))
+            (input
+              {:style
+               (merge
+                 widget/textbox
+                 layout/flex
+                 {:background-color (hsl 0 0 93)}),
+               :event
+               {:keydown (on-keydown mutate!),
+                :input (on-input mutate!)},
+               :attrs
+               {:placeholder (str "Reply as " nickname),
+                :value state}})
+            (input
+              {:style
+               (merge
+                 widget/textbox
+                 {:background-color (hsl 0 0 93), :width "100%"}),
+               :event {:keydown on-nickname},
+               :attrs {:placeholder "Pick a name, and hit Enter"}})))
+        (comp-space 8 nil)))))
 
 (def comp-chatroom
  (create-comp :chatroom init-state update-state render))

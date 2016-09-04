@@ -9,6 +9,7 @@
                  [mvc-works/hsl             "0.1.2"]
                  [respo                     "0.3.13"]
                  [respo/ui                  "0.1.1"]
+                 [respo/notifier            "0.1.0"]
                  [cumulo/client             "0.1.1"]])
 
 (require '[adzerk.boot-cljs   :refer [cljs]]

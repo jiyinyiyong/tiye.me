@@ -12,7 +12,7 @@
        (merge
          layout/vertical-box
          widget/notice-large
-         {:height "200px"})}
-      (comp-text "Offline" nil))))
+         {:height "320px"})}
+      (comp-text "Chat server is down" nil))))
 
 (def comp-offline-tip (create-comp :offline-tip render))

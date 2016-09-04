@@ -9,33 +9,31 @@
             [tiye.style.widget :as widget]
             [tiye.util.format :refer [readable-time]]))
 
+(def style-info
+ {:line-height "24px", :color (hsl 0 0 80), :font-size "12px"})
+
 (def style-content {:font-size "14px"})
 
-(def style-time
- {:line-height "24px",
-  :color (hsl 0 0 80),
-  :font-size "10px",
-  :font-weight "lighter",
-  :flex-shrink 0,
-  :font-family "Menlo,monospace"})
+(def style-time {:display "inline-block"})
 
 (defn render [message]
   (fn [state mutate!]
     (div
-      {:style (merge layout/row widget/message)}
-      (div
-        {:style style-time}
-        (comp-text (readable-time (:time message)) nil))
-      (div
-        {:style widget/username}
-        (comp-text (or (:nickname message) "Someone") nil))
-      (comp-space 8 nil)
+      {:style (merge widget/message)}
       (div
         {:style style-content}
         (comp-text
           (:text message)
           (merge (if (:writing? message) {:color (hsl 0 0 70)}))))
-      (comp-space 16 nil)
+      (div
+        {:style style-info}
+        (div
+          {:style widget/username}
+          (comp-text (or (:nickname message) "Someone") nil))
+        (comp-space 8 nil)
+        (div
+          {:style style-time}
+          (comp-text (readable-time (:time message)) nil)))
       (comment comp-debug message {:opacity 0.1, :right 0}))))
 
 (def comp-message (create-comp :message render))

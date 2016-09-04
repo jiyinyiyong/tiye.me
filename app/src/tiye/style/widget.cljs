@@ -7,7 +7,10 @@
 (def dim8 {:background-color (hsl 0 0 80)})
 
 (def notice-large
- {:color (hsl 0 0 70), :font-size "28px", :font-weight "lighter"})
+ {:color (hsl 0 0 70),
+  :font-size "24px",
+  :font-weight "lighter",
+  :background-color (hsl 0 0 93)})
 
 (def resource
  {:line-height 2,
@@ -19,19 +22,7 @@
 
 (def dim7 {:background-color (hsl 0 0 70)})
 
-(def username
- {:line-height 2,
-  :text-overflow "ellipsis",
-  :color (hsl 0 0 60),
-  :text-align "right",
-  :font-size "12px",
-  :overflow "hidden",
-  :background-color (hsl 30 80 100),
-  :width "100px",
-  :flex-shrink 0,
-  :padding "0 8px",
-  :display "inline-block",
-  :border-radius "4px"})
+(def username {:min-width "40px", :display "inline-block"})
 
 (defn logo-small [img]
   {:width "24px",

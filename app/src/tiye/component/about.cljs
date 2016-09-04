@@ -6,7 +6,6 @@
             [tiye.style.typeset :as typeset]
             [tiye.component.text :refer [comp-text]]
             [tiye.style.widget :as widget]
-            [tiye.component.visiting-card :refer [comp-visiting-card]]
             [tiye.information :as info]))
 
 (def about-tiye (str "题叶"))
@@ -15,7 +14,6 @@
   (fn [state mutate!]
     (div
       {:style (merge layout/article)}
-      (comp-visiting-card)
       (div
         {}
         (->>

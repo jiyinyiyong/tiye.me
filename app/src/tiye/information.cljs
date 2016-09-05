@@ -73,5 +73,5 @@
      "http://ticktick.com/"
      "https://d3qg9zffrnl4ph.cloudfront.net/static/img/touch-icon-ipad.png"]
     ["精弘网络"
-     "http://www.zjut.com/"
-     "http://www.zjut.com/Public/img/favicon.ico"]]}])
+     "https://github.com/zjut"
+     "https://avatars0.githubusercontent.com/u/972876?v=3&s=200"]]}])

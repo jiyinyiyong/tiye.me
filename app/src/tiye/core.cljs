@@ -1,6 +1,10 @@
 
 (ns tiye.core
-  (:require [respo.core :refer [render! clear-cache!]]
+  (:require [respo.core :refer [render!
+                                clear-cache!
+                                falsify-stage!
+                                render-element]]
+            [respo.util.format :refer [mute-element]]
             [tiye.component.container :refer [comp-container]]
             [cljs.reader :refer [read-string]]
             [cumulo-client.core :refer [send! setup-socket!]]
@@ -42,8 +46,18 @@
     (fn [event]
       (dispatch! :state/visibility (.-visibilityState js/document)))))
 
+(def ssr-stages
+ (let [ssr-element (.querySelector js/document "#ssr-stages")
+       ssr-markup (.getAttribute ssr-element "content")]
+   (read-string ssr-markup)))
+
 (defn -main []
   (enable-console-print!)
+  (if (not (empty? ssr-stages))
+    (falsify-stage!
+      (.querySelector js/document "#app")
+      (mute-element (render-element (comp-container {}) (atom {})))
+      dispatch!))
   (render-app!)
   (setup-socket!
     store-ref

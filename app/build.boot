@@ -7,8 +7,8 @@
                  [cirru/stack-server        "0.1.11"      :scope "test"]
                  [adzerk/boot-test          "1.1.1"       :scope "test"]
                  [mvc-works/hsl             "0.1.2"]
-                 [respo                     "0.3.13"]
-                 [respo/ui                  "0.1.1"]
+                 [respo                     "0.3.17"]
+                 [respo/ui                  "0.1.2"]
                  [respo/notifier            "0.1.1"]
                  [cumulo/client             "0.1.1"]])
 
@@ -41,9 +41,10 @@
           (link (:attrs {:rel "manifest" :href "manifest.json"})))
         (meta'{:attrs {:charset "utf-8"}})
         (meta' {:attrs {:name "viewport" :content "width=device-width, initial-scale=1"}})
-        (style (use-text "body {margin: 0;}"))
         (meta' {:attrs {:name "description" :content "题叶, jiyinyiyong, Profile, About, Contact"}})
         (meta' {:attrs {:name "language" :content "zh-cn"}})
+        (meta' {:attrs {:id "ssr-stages" :content "#{}"}})
+        (style (use-text "body {margin: 0;}"))
         (style (use-text "body * {box-sizing: border-box;}"))
         (if (:build? data)
           (div {:attrs {:innerHTML (slurp "html/ga.html")}}))
@@ -57,7 +58,7 @@
   [d data VAL edn "data piece for rendering"]
   (with-pre-wrap fileset
     (let [tmp (tmp-dir!)
-          out (io/file tmp "index.html")]
+          out (io/file tmp "dev.html")]
       (empty-dir! tmp)
       (spit out (html-dsl data fileset))
       (-> fileset

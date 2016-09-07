@@ -11,6 +11,13 @@ Picture: [Leafs][leaf] by [@Kuazu][Kuazu]
 [Kuazu]: http://weibo.com/vvvvvhuahua
 [leaf]: http://lxtvvv.tuchong.com/2159629/
 
+### Client develop
+
+```bash
+export boot_deps=`boot show -c`
+planck -c $boot_deps:src/ -i prerender.cljs
+```
+
 ### No longer maintaining
 
 * 基于 Markdown 静态文件服务的博客 https://github.com/jiyinyiyong/blog2

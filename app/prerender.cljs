@@ -31,7 +31,7 @@
 (defn generate-html [ssr-stages]
   (let [ tree (comp-container {} ssr-stages)
          html-content (make-string tree)]
-    (html-dsl {:build? false} html-content ssr-stages)))
+    (html-dsl {:build? true} html-content ssr-stages)))
 
 (defn -main []
   (spit "target/index.html" (generate-html #{})))

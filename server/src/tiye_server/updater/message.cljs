@@ -7,7 +7,7 @@
     db
     :messages
     (fn [messages]
-      (filter (fn [message] (not= op-data (:id message))) messages))))
+      (filterv (fn [message] (not= op-data (:id message))) messages))))
 
 (defn confirm [db op-data state-id op-id op-time]
   (let [state (get-in db [:states state-id])

@@ -7,7 +7,7 @@
                  [cirru/stack-server        "0.1.11"      :scope "test"]
                  [adzerk/boot-test          "1.1.1"       :scope "test"]
                  [mvc-works/hsl             "0.1.2"]
-                 [respo                     "0.3.19"]
+                 [respo                     "0.3.20"]
                  [respo/ui                  "0.1.2"]
                  [respo/notifier            "0.1.1"]
                  [cumulo/client             "0.1.1"]])
@@ -75,7 +75,7 @@
     (html-file :data {:build? false})
     (reload :on-jsload 'tiye.core/on-jsload
             :cljs-asset-path ".")
-    (cljs)
+    (cljs :compiler-options {:language-in :ecmascriopt5})
     (target)))
 
 (deftask generate-code []
@@ -88,7 +88,8 @@
     :asset-paths #{"assets"})
   (comp
     (transform-stack :filename "stack-sepal.ir")
-    (cljs :optimizations :advanced)
+    (cljs :optimizations :advanced
+          :compiler-options {:language-in :ecmascript5})
     (html-file :data {:build? true})
     (target)))
 

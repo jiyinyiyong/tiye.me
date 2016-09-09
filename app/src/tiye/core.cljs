@@ -56,7 +56,7 @@
   (if (not (empty? ssr-stages))
     (falsify-stage!
       (.querySelector js/document "#app")
-      (mute-element (render-element (comp-container {}) (atom {})))
+      (mute-element (render-element (comp-container {}) states-ref))
       dispatch!))
   (render-app!)
   (setup-socket!

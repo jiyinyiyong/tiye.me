@@ -39,8 +39,12 @@
 
 (defn on-keydown [mutate!]
   (fn [e dispatch!]
-    (if (= 13 (:key-code e))
-      (do (mutate! "") (dispatch! :message/confirm nil)))))
+    (let [event (:original-event e)]
+      (if (= 13 (:key-code e))
+        (do
+          (.preventDefault event)
+          (mutate! "")
+          (dispatch! :message/confirm nil))))))
 
 (defn render [store]
   (fn [state mutate!]

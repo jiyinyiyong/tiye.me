@@ -34,6 +34,6 @@
     (html-dsl {:build? true} html-content ssr-stages)))
 
 (defn -main []
-  (spit "target/index.html" (generate-html #{})))
+  (spit "target/index.html" (generate-html #{:shell})))
 
 (-main)

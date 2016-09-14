@@ -7,4 +7,10 @@
 (def database {:states {}, :messages [], :users {}})
 
 (def state
- {:nickname nil, :user-id nil, :buffer-time nil, :id nil, :buffer nil})
+ {:nickname nil,
+  :user-id nil,
+  :buffer-time nil,
+  :referrer nil,
+  :id nil,
+  :visibility true,
+  :buffer nil})

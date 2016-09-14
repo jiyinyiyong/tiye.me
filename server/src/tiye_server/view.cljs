@@ -8,13 +8,18 @@
    :statistics
    {:user-count (count (:states db)),
     :nicknames
-    (map
-      (fn [entry]
-        (let [state (last entry) nickname (:nickname state)]
-          (if (and (some? nickname) (not (string/blank? nickname)))
-            nickname
-            (:id state))))
-      (:states db))},
+    (->>
+      (:states db)
+      (filter (fn [entry] (not= state-id (:id (last entry)))))
+      (map
+        (fn [entry]
+          (let [state (last entry) nickname (:nickname state)]
+            [(if (and (some? nickname) (not (string/blank? nickname)))
+               nickname
+               (:id state))
+             (:referrer state)
+             (= (:visibility state) "visible")])))
+      (vec))},
    :messages (:messages db),
    :buffers
    (->>

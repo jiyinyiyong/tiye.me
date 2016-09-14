@@ -22,4 +22,8 @@
     (message/clear db op-data state-id op-id op-time)
     :message/remove
     (message/remove-one db op-data state-id op-id op-time)
+    :state/referrer
+    (state/add-referrer db op-data state-id op-id op-time)
+    :state/visibility
+    (state/set-visibility db op-data state-id op-id op-time)
     db))

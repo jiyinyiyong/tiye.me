@@ -11,7 +11,8 @@
             [tiye.style.typeset :as typeset]
             [tiye.style.devtool :as devtool]
             [respo.comp.debug :refer [comp-debug]]
-            [respo.comp.space :refer [comp-space]]))
+            [respo.comp.space :refer [comp-space]]
+            [tiye.comp.member :refer [comp-member]]))
 
 (def style-warning
  {:color (hsl 0 90 40),
@@ -39,14 +40,26 @@
           {:style typeset/description}
           (comp-text (get-in store [:statistics :user-count]) nil)
           (comp-text " 人在线: " nil)
-          (comp-text
-            (string/join ", " (get-in store [:statistics :nicknames]))
-            nil)
-          (comp-space "8px" nil)
+          (comp-member
+            [(or nickname (:id session))
+             (aget js/document "referrer")
+             true])
           (if (some? nickname)
             (div
-              {:style ui/button, :event {:click on-rename}}
-              (comp-text "重新写昵称" nil))))
+              {:style
+               (merge
+                 ui/button
+                 {:line-height "18px", :font-size "12px"}),
+               :event {:click on-rename}}
+              (comp-text "修改昵称" nil)))
+          (div
+            {}
+            (->>
+              (get-in store [:statistics :nicknames])
+              (map-indexed
+                (fn [idx member-data] [idx
+                                       (comp-member member-data)]))))
+          (comp-space "8px" nil))
         (comp-space nil "16px")
         (div
           {:style style-warning}

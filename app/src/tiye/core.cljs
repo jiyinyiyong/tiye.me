@@ -42,7 +42,7 @@
 (defn listen-visibility [dispatch!]
   (.addEventListener
     js/window
-    "visiblitychange"
+    "visibilitychange"
     (fn [event]
       (dispatch! :state/visibility (.-visibilityState js/document)))))
 
@@ -61,7 +61,10 @@
   (render-app!)
   (setup-socket!
     store-ref
-    {:on-close! (fn [event] (reset! store-ref {})),
+    {:on-open!
+     (fn [event]
+       (dispatch! :state/referrer (aget js/document "referrer"))),
+     :on-close! (fn [event] (reset! store-ref {})),
      :url (str "ws://" (.-hostname js/location) ":5020")})
   (add-watch store-ref :changes render-app!)
   (add-watch states-ref :changes render-app!)

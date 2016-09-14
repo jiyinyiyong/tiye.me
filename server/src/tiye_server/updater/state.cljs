@@ -11,6 +11,10 @@
 (defn disconnect [db op-data state-id op-id op-time]
   (update db :states (fn [state] (dissoc state state-id))))
 
+(defn add-referrer [db op-data state-id op-id op-time]
+  (let [referrer op-data]
+    (assoc-in db [:states state-id :referrer] referrer)))
+
 (defn clear-name [db op-data state-id op-id op-time]
   (update-in
     db
@@ -28,3 +32,7 @@
 
 (defn connect [db op-data state-id op-id op-time]
   (assoc-in db [:states state-id] (merge schema/state {:id state-id})))
+
+(defn set-visibility [store op-data state-id op-id op-time]
+  (let [visibility op-data]
+    (assoc-in store [:states state-id :visibility] visibility)))

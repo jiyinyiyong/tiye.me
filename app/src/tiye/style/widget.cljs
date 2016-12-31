@@ -1,26 +1,18 @@
 
-(ns tiye.style.widget
-  (:require [hsl.core :refer [hsl]] [tiye.style.layout :as layout]))
+(ns tiye.style.widget (:require [hsl.core :refer [hsl]] [tiye.style.layout :as layout]))
 
 (def message
- {:align-items "flex-start",
-  :margin-top 8,
-  :padding "4px 0",
-  :position "relative"})
+  {:align-items "flex-start", :margin-top 8, :padding "4px 0", :position "relative"})
 
 (def dim8 {:background-color (hsl 0 0 80)})
 
 (def notice-large
- {:color (hsl 0 0 70),
-  :font-size "24px",
-  :font-weight "lighter",
-  :background-color (hsl 0 0 93)})
+  {:color (hsl 0 0 70),
+   :font-size "24px",
+   :font-weight "lighter",
+   :background-color (hsl 0 0 93)})
 
-(def resource
- {:line-height 2,
-  :color (hsl 200 20 50),
-  :font-size "14px",
-  :padding "0 8px"})
+(def resource {:line-height 2, :color (hsl 200 20 50), :font-size "14px", :padding "0 8px"})
 
 (def row-divider {:background-color (hsl 0 0 94), :width "2px"})
 
@@ -37,15 +29,15 @@
    :height "24px"})
 
 (def avatar
- {:width "64px",
-  :flex-shrink 0,
-  :background-image (str "url(tiye-400x400.jpg)"),
-  :border-radius "50%",
-  :background-size "cover",
-  :height "64px"})
+  {:width "64px",
+   :flex-shrink 0,
+   :background-image (str "url(tiye-400x400.jpg)"),
+   :border-radius "50%",
+   :background-size "cover",
+   :height "64px"})
 
 (def showcase
- (merge
+  (merge
    layout/row
    {:min-width "120px",
     :align-items "center",
@@ -58,32 +50,28 @@
     :height "40px"}))
 
 (def textbox
- {:line-height 2,
-  :font-size "16px",
-  :padding "0 8px",
-  :outline "none",
-  :border "none"})
+  {:line-height 2, :font-size "16px", :padding "0 8px", :outline "none", :border "none"})
 
 (def card {:padding "20px"})
 
 (def dim9 {:background-color (hsl 0 0 90)})
 
 (def number-highlight
- {:line-height 2,
-  :color (hsl 0 0 100),
-  :font-size "12px",
-  :background-color (hsl 40 80 60),
-  :padding "0 8px",
-  :display "inline-block",
-  :border-radius "12px"})
+  {:line-height 2,
+   :color (hsl 0 0 100),
+   :font-size "12px",
+   :background-color (hsl 40 80 60),
+   :padding "0 8px",
+   :display "inline-block",
+   :border-radius "12px"})
 
 (def button
- {:line-height 2,
-  :color "white",
-  :font-size "14px",
-  :font-weight "normal",
-  :background-color (hsl 200 60 80),
-  :padding "0 8px",
-  :outline "none",
-  :border "none",
-  :border-radius "8px"})
+  {:line-height 2,
+   :color "white",
+   :font-size "14px",
+   :font-weight "normal",
+   :background-color (hsl 200 60 80),
+   :padding "0 8px",
+   :outline "none",
+   :border "none",
+   :border-radius "8px"})

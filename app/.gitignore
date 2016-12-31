@@ -3,3 +3,5 @@
 /src/*.jpg
 .nrepl-history
 .nrepl-port
+.lumo_cache
+node_modules

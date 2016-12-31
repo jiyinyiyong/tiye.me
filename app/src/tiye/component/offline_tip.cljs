@@ -10,12 +10,11 @@
 (defn render []
   (fn [state mutate!]
     (div
-      {:style
-       (merge
-         layout/vertical-box
-         widget/notice-large
-         {:cursor "pointer", :height "320px"}),
-       :event {:click on-click}}
-      (comp-text "Chat server is down, click to reload." nil))))
+     {:style (merge
+              layout/vertical-box
+              widget/notice-large
+              {:cursor "pointer", :height "320px"}),
+      :event {:click on-click}}
+     (comp-text "Chat server is down, click to reload." nil))))
 
 (def comp-offline-tip (create-comp :offline-tip render))

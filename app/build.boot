@@ -1,22 +1,23 @@
 
 (set-env!
- :dependencies '[[org.clojure/clojurescript "1.9.216"     :scope "test"]
-                 [org.clojure/clojure       "1.8.0"       :scope "test"]
+ :dependencies '[[org.clojure/clojure       "1.8.0"       :scope "test"]
+                 [org.clojure/clojurescript "1.9.293"     :scope "test"]
                  [adzerk/boot-cljs          "1.7.228-1"   :scope "test"]
-                 [adzerk/boot-reload        "0.4.12"      :scope "test"]
-                 [cirru/stack-server        "0.1.11"      :scope "test"]
+                 [adzerk/boot-reload        "0.4.13"      :scope "test"]
+                 [cirru/boot-stack-server   "0.1.24"      :scope "test"]
                  [adzerk/boot-test          "1.1.1"       :scope "test"]
+                 [andare                    "0.4.0"       :scope "test"]
                  [mvc-works/hsl             "0.1.2"]
-                 [respo                     "0.3.21"]
+                 [respo                     "0.3.33"]
                  [respo/ui                  "0.1.2"]
                  [respo/notifier            "0.1.1"]
-                 [cumulo/client             "0.1.1"]])
+                 [cumulo/recollect          "0.1.2"]])
 
 (require '[adzerk.boot-cljs   :refer [cljs]]
          '[adzerk.boot-reload :refer [reload]]
          '[stack-server.core  :refer [start-stack-editor! transform-stack]]
          '[respo.alias        :refer [html head title script style meta' div link body]]
-         '[respo.render.static-html :refer [make-html]]
+         '[respo.render.html  :refer [make-html]]
          '[adzerk.boot-test   :refer :all]
          '[clojure.java.io    :as    io])
 
@@ -30,22 +31,20 @@
        :scm         {:url "https://github.com/tiye/tiye.me"}
        :license     {"MIT" "http://opensource.org/licenses/mit-license.php"}})
 
-(defn use-text [x] {:attrs {:innerHTML x}})
 (defn html-dsl [data fileset]
   (make-html
     (html {}
       (head {}
-        (title (use-text "题叶 @jiyinyiyong"))
+        (title {:attrs {:innerHTML "题叶 @jiyinyiyong"}})
         (link {:attrs {:rel "icon" :type "image/jpg" :href "tiye-400x400.jpg"}})
-        (if (:build? data)
-          (link (:attrs {:rel "manifest" :href "manifest.json"})))
-        (meta'{:attrs {:charset "utf-8"}})
+        (link (:attrs {:rel "manifest" :href "manifest.json"}))
+        (meta' {:attrs {:charset "utf-8"}})
         (meta' {:attrs {:name "viewport" :content "width=device-width, initial-scale=1"}})
         (meta' {:attrs {:name "description" :content "题叶, jiyinyiyong, Profile, About, Contact"}})
         (meta' {:attrs {:name "language" :content "zh-cn"}})
         (meta' {:attrs {:id "ssr-stages" :content "#{}"}})
-        (style (use-text "body {margin: 0;}"))
-        (style (use-text "body * {box-sizing: border-box;}"))
+        (style {:attrs {:innerHTML "body {margin: 0;}"}})
+        (style {:attrs {:innerHTML "body * {box-sizing: border-box;}"}})
         (if (:build? data)
           (div {:attrs {:innerHTML (slurp "html/ga.html")}}))
         (script {:attrs {:id "config" :type "text/edn" :innerHTML (pr-str data)}}))
@@ -65,18 +64,22 @@
         (add-resource tmp)
         (commit!)))))
 
+(deftask editor! []
+  (comp
+    (wait)
+    (start-stack-editor!)
+    (target :dir #{"src/"})))
+
 (deftask dev! []
   (set-env!
     :asset-paths #{"assets"})
   (comp
-    (repl)
-    (start-stack-editor!)
-    (target :dir #{"src/"})
+    (editor!)
     (html-file :data {:build? false})
-    (reload :on-jsload 'tiye.core/on-jsload
+    (reload :on-jsload 'tiye.core/on-jsload!
             :cljs-asset-path ".")
     (cljs :compiler-options {:language-in :ecmascriopt5})
-    (target)))
+    (target :no-clean true)))
 
 (deftask generate-code []
   (comp
@@ -89,7 +92,12 @@
   (comp
     (transform-stack :filename "stack-sepal.ir")
     (cljs :optimizations :advanced
-          :compiler-options {:language-in :ecmascript5})
+          :compiler-options {:language-in :ecmascript5
+                             :pseudo-names true
+                             :static-fns true
+                             :parallel-build true
+                             :optimize-constants true
+                             :source-map true})
     (html-file :data {:build? true})
     (target)))
 

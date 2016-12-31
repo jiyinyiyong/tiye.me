@@ -18,21 +18,21 @@
 (defn render [store]
   (fn [state mutate!]
     (div
-      {:style (merge typeset/global {:padding-bottom 240})}
-      (div {:style ui/row} (comp-visiting-card))
-      (if (empty? store) (comp-offline-tip) (comp-chatroom store))
-      (comment
-        comp-text
-        "developing"
-        {:line-height 2,
-         :color (hsl 0 80 30),
-         :background-color (hsl 60 80 50),
-         :padding "0 8px",
-         :display "inline-block",
-         :border-radius "14px"})
-      (comp-space nil "120px")
-      (comp-about)
-      (comp-reply store)
-      (comment comp-debug (:state store) {:bottom 0, :left 0}))))
+     {:style (merge typeset/global {:padding-bottom 240})}
+     (div {:style ui/row} (comp-visiting-card))
+     (if (empty? store) (comp-offline-tip) (comp-chatroom store))
+     (comment
+      comp-text
+      "developing"
+      {:line-height 2,
+       :color (hsl 0 80 30),
+       :background-color (hsl 60 80 50),
+       :padding "0 8px",
+       :display "inline-block",
+       :border-radius "14px"})
+     (comp-space nil "120px")
+     (comp-about)
+     (comp-reply store)
+     (comment comp-debug (:state store) {:bottom 0, :left 0}))))
 
 (def comp-container (create-comp :container render))

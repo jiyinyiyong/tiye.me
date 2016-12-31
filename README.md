@@ -6,8 +6,6 @@
 
 http://tiye.me
 
-Picture: [Leafs][leaf] by [@Kuazu][Kuazu]
-
 [Kuazu]: http://weibo.com/vvvvvhuahua
 [leaf]: http://lxtvvv.tuchong.com/2159629/
 
@@ -15,7 +13,7 @@ Picture: [Leafs][leaf] by [@Kuazu][Kuazu]
 
 ```bash
 export boot_deps=`boot show -c`
-planck -c $boot_deps:src/ -i prerender.cljs
+planck -c $boot_deps:src/ -i render.cljs
 ```
 
 ### No longer maintaining

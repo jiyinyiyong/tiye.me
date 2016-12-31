@@ -37,10 +37,14 @@
 (deftask build-simple []
   (comp
     (transform-stack :filename "stack-sepal.ir")
-    (cljs :optimizations :simple
+    (cljs :optimizations :none
           :compiler-options {:target :nodejs
                              :language-in :ecmascript5
-                             :parallel-build true})
+                             :pseudo-names true
+                             :static-fns true
+                             :parallel-build true
+                             :optimize-constants true
+                             :source-map true})
     (target)))
 
 ; use build-simple instead due to WebSocket reasons
@@ -50,7 +54,11 @@
     (cljs :optimizations :advanced
           :compiler-options {:target :nodejs
                              :language-in :ecmascript5
-                             :parallel-build true})
+                             :pseudo-names true
+                             :static-fns true
+                             :parallel-build true
+                             :optimize-constants true
+                             :source-map true})
     (target)))
 
 (deftask watch-test []

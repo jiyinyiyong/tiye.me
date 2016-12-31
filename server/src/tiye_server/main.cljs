@@ -34,3 +34,5 @@
 (defn rm-caches! [] (.execSync (js/require "child_process") "rm .lumo_cache/tiye*"))
 
 (defn on-jsload! [] (println "Code updated.") (render-clients! @reader-db-ref))
+
+(set! *main-cli-fn* -main)

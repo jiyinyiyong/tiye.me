@@ -2,4 +2,13 @@
 (ns tiye-server.twig.container (:require [recollect.bunch :refer [create-twig]]))
 
 (def twig-container
-  (create-twig :container (fn [db state] {:state nil, :logged-in? false, :user nil})))
+  (create-twig
+   :container
+   (fn [db state]
+     {:state state,
+      :logged-in? false,
+      :statistics {:user-count (count (:states db)),
+                   :nicknames (->> (:states db) (map (fn [] ["name" false])))},
+      :messages (:messages db),
+      :buffter [],
+      :user nil})))

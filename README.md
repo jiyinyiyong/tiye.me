@@ -1,22 +1,15 @@
 
-@jiyinyiyong's Page
+@jiyinyiyong's Home page
 ------
 
-> Not finished yet but may be long time...
-
 http://tiye.me
+
+> Waiting to be refactored.
 
 [Kuazu]: http://weibo.com/vvvvvhuahua
 [leaf]: http://lxtvvv.tuchong.com/2159629/
 
-### Client develop
-
-```bash
-export boot_deps=`boot show -c`
-planck -c $boot_deps:src/ -i render.cljs
-```
-
-### No longer maintaining
+### Deprecated blogs
 
 * 基于 Markdown 静态文件服务的博客 https://github.com/jiyinyiyong/blog2
 * Github Articles in HTML https://github.com/jiyinyiyong/article

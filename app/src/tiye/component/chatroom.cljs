@@ -15,11 +15,11 @@
             [tiye.comp.member :refer [comp-member]]))
 
 (def style-warning
-  {:color (hsl 0 90 40),
-   :font-size "14px",
-   :background-color (hsl 60 70 70),
+  {:background-color (hsl 60 70 70),
+   :color (hsl 0 90 40),
    :padding 8,
-   :border-radius "8px"})
+   :border-radius "8px",
+   :font-size "14px"})
 
 (defn on-rename [e dispatch!]
   (println "clear-name")
@@ -43,7 +43,7 @@
         (comp-member [(or nickname (:id session)) (aget js/document "referrer") true])
         (if (some? nickname)
           (div
-           {:style (merge ui/button {:line-height "18px", :font-size "12px"}),
+           {:style (merge ui/button {:font-size "12px", :line-height "18px"}),
             :event {:click on-rename}}
            (comp-text "修改昵称" nil)))
         (div

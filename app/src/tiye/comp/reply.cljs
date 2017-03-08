@@ -13,6 +13,21 @@
             [respo.comp.debug :refer [comp-debug]]
             [respo.comp.space :refer [comp-space]]))
 
+(defn on-keydown [mutate!]
+  (fn [e dispatch!]
+    (let [event (:original-event e)]
+      (if (= 13 (:key-code e))
+        (do (.preventDefault event) (mutate! "") (dispatch! :message/confirm nil))))))
+
+(defn init-state [& args] "")
+
+(defn on-input [mutate!]
+  (fn [e dispatch!]
+    (let [content (:value e)
+          short-content (if (> (count content) 400) (subs content 0 400) content)]
+      (mutate! short-content)
+      (dispatch! :state/buffer short-content))))
+
 (defn on-nickname [e dispatch!]
   (let [event (:original-event e)]
     (if (= 13 (:key-code e))
@@ -22,35 +37,18 @@
              short-name (if (> (count nickname) 20) (subs nickname 0 20) nickname)]
          (dispatch! :state/nickname short-name))))))
 
-(defn on-input [mutate!]
-  (fn [e dispatch!]
-    (let [content (:value e)
-          short-content (if (> (count content) 400) (subs content 0 400) content)]
-      (mutate! short-content)
-      (dispatch! :state/buffer short-content))))
-
-(defn update-state [state text] text)
-
-(defn init-state [& args] "")
-
-(defn on-keydown [mutate!]
-  (fn [e dispatch!]
-    (let [event (:original-event e)]
-      (if (= 13 (:key-code e))
-        (do (.preventDefault event) (mutate! "") (dispatch! :message/confirm nil))))))
-
 (defn render [store]
   (fn [state mutate!]
     (div
      {:style (merge
               layout/horizontal
-              {:box-shadow (str "0 0 10px " (hsl 0 0 0 0.4)),
+              {:position "fixed",
                :bottom 16,
-               :background-color (hsl 0 0 100),
+               :left 8,
                :padding "8px 8px",
-               :right 8,
-               :position "fixed",
-               :left 8})}
+               :background-color (hsl 0 0 100),
+               :box-shadow (str "0 0 10px " (hsl 0 0 0 0.4)),
+               :right 8})}
      (let [nickname (get-in store [:state :nickname])]
        (if (and (some? nickname) (> (count nickname) 0))
          (input
@@ -58,14 +56,16 @@
                    widget/textbox
                    layout/flex
                    {:background-color (hsl 0 0 100), :padding "0"}),
-           :event {:keydown (on-keydown mutate!), :input (on-input mutate!)},
-           :attrs {:placeholder (str "Reply as " nickname), :value state}})
+           :attrs {:value state, :placeholder (str "Reply as " nickname)},
+           :event {:input (on-input mutate!), :keydown (on-keydown mutate!)}})
          (input
           {:style (merge
                    widget/textbox
                    {:background-color (hsl 0 0 100), :width "100%", :padding "0"}),
-           :event {:keydown on-nickname},
-           :attrs {:placeholder "Pick a name, and hit Enter"}})))
+           :attrs {:placeholder "Pick a name, and hit Enter"},
+           :event {:keydown on-nickname}})))
      (comment comp-debug store nil))))
+
+(defn update-state [state text] text)
 
 (def comp-reply (create-comp :reply init-state update-state render))

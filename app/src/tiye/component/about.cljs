@@ -8,8 +8,6 @@
             [tiye.style.widget :as widget]
             [tiye.information :as info]))
 
-(def about-tiye (str "题叶"))
-
 (defn render []
   (fn [state mutate!]
     (div
@@ -31,8 +29,10 @@
                          [index
                           (a
                            {:style (merge layout/row widget/showcase),
-                            :attrs {:target "_blank", :href (get address 1)}}
+                            :attrs {:href (get address 1), :target "_blank"}}
                            (div {:style (widget/logo-small (get address 2))})
                            (comp-text (first address) widget/resource))])))))])))))))
 
 (def comp-about (create-comp :about render))
+
+(def about-tiye (str "题叶"))

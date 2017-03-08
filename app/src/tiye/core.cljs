@@ -30,10 +30,10 @@
             (map
              (fn [message]
                [(:id message)
-                {:icon "http://tiye.me/tiye-400x400.jpg",
+                {:id message,
                  :title (:nickname message),
-                 :id message,
-                 :body (:text message)}]))
+                 :body (:text message),
+                 :icon "http://tiye.me/tiye-400x400.jpg"}]))
             (into {}))
        on-close!))))
 
@@ -52,9 +52,9 @@
   (render-app!)
   (setup-socket!
    store-ref
-   {:on-open! (fn [event] (dispatch! :state/referrer (aget js/document "referrer"))),
+   {:url (str "ws://" (.-hostname js/location) ":5020"),
     :on-close! (fn [event] (reset! store-ref {})),
-    :url (str "ws://" (.-hostname js/location) ":5020")})
+    :on-open! (fn [event] (dispatch! :state/referrer (aget js/document "referrer")))})
   (add-watch store-ref :changes render-app!)
   (add-watch states-ref :changes render-app!)
   (listen-visibility dispatch!)

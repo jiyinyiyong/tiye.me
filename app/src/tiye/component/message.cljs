@@ -9,23 +9,23 @@
             [tiye.style.widget :as widget]
             [tiye.util.format :refer [readable-time]]))
 
-(def style-remove
-  {:color (hsl 0 90 80),
-   :font-size "13px",
-   :cursor "pointer",
-   :padding "0 8px",
-   :right "8px",
-   :display "inline-block",
-   :position "absolute",
-   :border-radius "8px"})
-
-(def style-info {:line-height "20px", :color (hsl 0 0 80), :font-size "12px"})
-
-(defn on-remove [id] (fn [e dispatch!] (dispatch! :message/remove id)))
+(def style-time {:display "inline-block"})
 
 (def style-content {:font-size "14px", :word-break "break-word"})
 
-(def style-time {:display "inline-block"})
+(def style-remove
+  {:display "inline-block",
+   :color (hsl 0 90 80),
+   :padding "0 8px",
+   :border-radius "8px",
+   :position "absolute",
+   :right "8px",
+   :cursor "pointer",
+   :font-size "13px"})
+
+(defn on-remove [id] (fn [e dispatch!] (dispatch! :message/remove id)))
+
+(def style-info {:font-size "12px", :color (hsl 0 0 80), :line-height "20px"})
 
 (defn render [message]
   (fn [state mutate!]

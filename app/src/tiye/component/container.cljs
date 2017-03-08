@@ -24,10 +24,10 @@
      (comment
       comp-text
       "developing"
-      {:line-height 2,
+      {:background-color (hsl 60 80 50),
        :color (hsl 0 80 30),
-       :background-color (hsl 60 80 50),
        :padding "0 8px",
+       :line-height 2,
        :display "inline-block",
        :border-radius "14px"})
      (comp-space nil "120px")

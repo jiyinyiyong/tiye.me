@@ -12,7 +12,7 @@
             [respo.comp.space :refer [comp-space]]
             [respo.comp.text :refer [comp-text]]))
 
-(def style-member {:color (hsl 0 0 80), :padding "0 8px", :display "inline-block"})
+(def style-member {:display "inline-block", :padding "0 8px", :color (hsl 0 0 80)})
 
 (defn render [member-data]
   (fn [state mutate!]

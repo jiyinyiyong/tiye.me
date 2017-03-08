@@ -13,7 +13,7 @@
      {:style (merge
               layout/vertical-box
               widget/notice-large
-              {:cursor "pointer", :height "320px"}),
+              {:height "320px", :cursor "pointer"}),
       :event {:click on-click}}
      (comp-text "Chat server is down, click to reload." nil))))
 

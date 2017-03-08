@@ -11,6 +11,8 @@
 
 (defonce reader-db-ref (atom @writer-db-ref))
 
+(defn on-jsload! [] (println "Code updated.") (render-clients! @reader-db-ref))
+
 (defn render-loop! []
   (if (not= @reader-db-ref @writer-db-ref)
     (do (reset! reader-db-ref @writer-db-ref) (render-clients! @reader-db-ref)))
@@ -32,7 +34,5 @@
   (println "server started"))
 
 (defn rm-caches! [] (.execSync (js/require "child_process") "rm .lumo_cache/tiye*"))
-
-(defn on-jsload! [] (println "Code updated.") (render-clients! @reader-db-ref))
 
 (set! *main-cli-fn* -main)

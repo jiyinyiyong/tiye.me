@@ -1,12 +1,6 @@
 
 (ns tiye-server.updater.message (:require [tiye-server.schema :as schema]))
 
-(defn remove-one [db op-data state-id op-id op-time]
-  (update
-   db
-   :messages
-   (fn [messages] (filterv (fn [message] (not= op-data (:id message))) messages))))
-
 (defn confirm [db op-data state-id op-id op-time]
   (let [state (get-in db [:states state-id])
         buffer (:buffer state)
@@ -27,7 +21,13 @@
                 fresh-messages
                 (merge
                  schema/message
-                 {:time buffer-time, :nickname nickname, :id op-id, :text buffer})))
+                 {:id op-id, :time buffer-time, :text buffer, :nickname nickname})))
              messages))))))
 
 (defn clear [db op-data state-id op-id op-time] (assoc db :messages []))
+
+(defn remove-one [db op-data state-id op-id op-time]
+  (update
+   db
+   :messages
+   (fn [messages] (filterv (fn [message] (not= op-data (:id message))) messages))))

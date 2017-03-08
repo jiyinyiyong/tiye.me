@@ -6,9 +6,9 @@
    :container
    (fn [db state]
      {:state state,
-      :logged-in? false,
       :statistics {:user-count (count (:states db)),
                    :nicknames (->> (:states db) (map (fn [] ["name" false])))},
       :messages (:messages db),
       :buffter [],
+      :logged-in? false,
       :user nil})))

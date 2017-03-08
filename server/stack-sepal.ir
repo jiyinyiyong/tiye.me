@@ -1,1 +1,316 @@
-{:package "tiye-server", :definitions {"network/client-caches" ["defonce" "client-caches" ["atom" ["{}"]]], "updater.message/confirm" ["defn" "confirm" ["db" "op-data" "state-id" "op-id" "op-time"] ["let" [["state" ["get-in" "db" ["[]" ":states" "state-id"]]] ["buffer" [":buffer" "state"]] ["buffer-time" [":buffer-time" "state"]] ["nickname" ["or" [":nickname" "state"] [":id" "state"]]]] ["->" "db" ["update-in" ["[]" ":states" "state-id"] ["fn" ["state"] ["if" ["some?" [":buffer" "state"]] ["->" "state" ["assoc" ":buffer" "nil"] ["assoc" ":buffer-time" "nil"]]]]] ["update" ":messages" ["fn" ["messages"] ["if" ["some?" "buffer"] ["let" [["fresh-messages" ["if" [">" ["count" "messages"] "20"] ["subvec" "messages" "10"] "messages"]]] ["conj" "fresh-messages" ["merge" "schema/message" ["{}" [":id" "op-id"] [":time" "buffer-time"] [":text" "buffer"] [":nickname" "nickname"]]]]] "messages"]]]]]], "main/on-jsload!" ["defn" "on-jsload!" [] ["println" "|Code updated."] ["render-clients!" "@reader-db-ref"]], "network/handle-message" ["defn" "handle-message" ["op" "op-data" "state-id"] ["let" [["op-id" [".generate" "shortid"]] ["op-time" [".valueOf" ["js/Date."]]]] ["go" [">!" "server-chan" ["[]" "op" "op-data" "state-id" "op-id" "op-time"]]]]], "updater.core/updater" ["defn" "updater" ["db" "op" "op-data" "state-id" "op-id" "op-time"] ["case" "op" [":state/connect" ["state/connect" "db" "op-data" "state-id" "op-id" "op-time"]] [":state/disconnect" ["state/disconnect" "db" "op-data" "state-id" "op-id" "op-time"]] [":state/buffer" ["state/buffer" "db" "op-data" "state-id" "op-id" "op-time"]] [":state/nickname" ["state/nickname" "db" "op-data" "state-id" "op-id" "op-time"]] [":state/clear-name" ["state/nickname" "db" "op-data" "state-id" "op-id" "op-time"]] [":message/confirm" ["message/confirm" "db" "op-data" "state-id" "op-id" "op-time"]] [":message/clear" ["message/clear" "db" "op-data" "state-id" "op-id" "op-time"]] [":message/remove" ["message/remove-one" "db" "op-data" "state-id" "op-id" "op-time"]] [":state/referrer" ["state/add-referrer" "db" "op-data" "state-id" "op-id" "op-time"]] [":state/visibility" ["state/set-visibility" "db" "op-data" "state-id" "op-id" "op-time"]] "db"]], "updater.message/clear" ["defn" "clear" ["db" "op-data" "state-id" "op-id" "op-time"] ["assoc" "db" ":messages" ["[]"]]], "main/-main" ["defn" "-main" [] ["nodejs/enable-util-print!"] ["let" [["server-ch" ["run-server!" ["{}" [":port" "5020"]]]]] ["go-loop" ["[]"] ["let" [[["[]" "op" "op-data" "state-id" "op-id" "op-time"] ["<!" "server-ch"]]] ["try" ["let" [["new-db" ["updater" "@writer-db-ref" "op" "op-data" "state-id" "op-id" "op-time"]]] ["reset!" "writer-db-ref" "new-db"]] ["catch" "js/Error" "e" [".log" "js/console" "e"]]] ["recur"]]] ["render-loop!"]] ["add-watch" "writer-db-ref" ":log" ["fn" []]] ["println" "|server started"]], "schema/database" ["def" "database" ["{}" [":states" ["{}"]] [":users" ["{}"]] [":messages" ["[]"]]]], "network/server-chan" ["defonce" "server-chan" ["chan"]], "network/ws" ["def" "ws" ["js/require" "|uws"]], "schema/state" ["def" "state" ["{}" [":user-id" "nil"] [":id" "nil"] [":buffer" "nil"] [":buffer-time" "nil"] [":nickname" "nil"] [":referrer" "nil"] [":visibility" "true"]]], "updater.state/set-visibility" ["defn" "set-visibility" ["store" "op-data" "state-id" "op-id" "op-time"] ["let" [["visibility" "op-data"]] ["assoc-in" "store" ["[]" ":states" "state-id" ":visibility"] "visibility"]]], "updater.state/disconnect" ["defn" "disconnect" ["db" "op-data" "state-id" "op-id" "op-time"] ["update" "db" ":states" ["fn" ["state"] ["dissoc" "state" "state-id"]]]], "network/render-clients!" ["defn" "render-clients!" ["db"] ["doseq" ["[]" "state-entry" [":states" "db"]] ["let" [[["[]" "state-id" "state"] "state-entry"] ["old-store" ["or" ["get" "@client-caches" "state-id"] "nil"]] ["new-store" ["render-bunch" ["twig-container" "db" "state"] "old-store"]] ["changes" ["diff-bunch" ["[]"] "old-store" "new-store"]] ["socket" ["get" "@socket-registry" "state-id"]]] ["if" ["and" ["not=" "changes" ["[]"]] ["some?" "socket"]] ["do" [".send" "socket" ["pr-str" "changes"]] ["swap!" "client-caches" "assoc" "state-id" "new-store"]]]]]], "main/writer-db-ref" ["defonce" "writer-db-ref" ["atom" "schema/database"]], "network/shortid" ["def" "shortid" ["js/require" "|shortid"]], "updater.state/clear-name" ["defn" "clear-name" ["db" "op-data" "state-id" "op-id" "op-time"] ["update-in" "db" ["[]" ":states" "state-id"] ["fn" ["state"] ["println" "state"] ["dissoc" "state" ":nickname"]]]], "twig.container/twig-container" ["def" "twig-container" ["create-twig" ":container" ["fn" ["db" "state"] ["{}" [":state" "state"] [":statistics" ["{}" [":user-count" ["count" [":states" "db"]]] [":nicknames" ["->>" [":states" "db"] ["map" ["fn" [] ["[]" "|name" "false"]]]]]]] [":messages" [":messages" "db"]] [":buffter" ["[]"]] [":logged-in?" "false"] [":user" "nil"]]]]], "main/render-loop!" ["defn" "render-loop!" [] ["if" ["not=" "@reader-db-ref" "@writer-db-ref"] ["do" ["reset!" "reader-db-ref" "@writer-db-ref"] ["render-clients!" "@reader-db-ref"]]] ["js/setTimeout" "render-loop!" "300"]], "network/socket-registry" ["defonce" "socket-registry" ["atom" ["{}"]]], "main/reader-db-ref" ["defonce" "reader-db-ref" ["atom" "@writer-db-ref"]], "network/run-server!" ["defn" "run-server!" ["configs"] ["let" [["wss" ["new" "WebSocketServer" ["js-obj" "|port" [":port" "configs"]]]]] [".on" "wss" "|connection" ["fn" ["socket"] ["let" [["state-id" [".generate" "shortid"]]] ["handle-message" ":state/connect" "nil" "state-id"] ["swap!" "socket-registry" "assoc" "state-id" "socket"] [".on" "socket" "|message" ["fn" ["rawData"] ["let" [["action" ["reader/read-string" "rawData"]] [["[]" "op" "op-data"] "action"]] ["handle-message" "op" "op-data" "state-id"]]]] [".on" "socket" "|close" ["fn" [] ["swap!" "socket-registry" "dissoc" "state-id"] ["handle-message" ":state/disconnect" "nil" "state-id"]]]]]]] "server-chan"], "network/WebSocketServer" ["def" "WebSocketServer" [".-Server" "ws"]], "updater.state/buffer" ["defn" "buffer" ["db" "op-data" "state-id" "op-id" "op-time"] ["->" "db" ["update-in" ["[]" ":states" "state-id"] ["fn" ["state"] ["if" ["nil?" [":buffer" "state"]] ["assoc" "state" ":buffer" "op-data" ":buffer-time" "op-time"] ["assoc" "state" ":buffer" "op-data"]]]]]], "main/rm-caches!" ["defn" "rm-caches!" [] [".execSync" ["js/require" "|child_process"] "|rm .lumo_cache/tiye*"]], "schema/message" ["def" "message" ["{}" [":id" "nil"] [":text" "|"] [":nickname" "|"] [":time" "nil"] [":writing?" "false"]]], "updater.message/remove-one" ["defn" "remove-one" ["db" "op-data" "state-id" "op-id" "op-time"] ["update" "db" ":messages" ["fn" ["messages"] ["filterv" ["fn" ["message"] ["not=" "op-data" [":id" "message"]]] "messages"]]]], "updater.state/nickname" ["defn" "nickname" ["db" "op-data" "state-id" "op-id" "op-time"] ["->" "db" ["update-in" ["[]" ":states" "state-id"] ["fn" ["state"] ["assoc" "state" ":nickname" "op-data"]]]]], "updater.state/add-referrer" ["defn" "add-referrer" ["db" "op-data" "state-id" "op-id" "op-time"] ["let" [["referrer" "op-data"]] ["assoc-in" "db" ["[]" ":states" "state-id" ":referrer"] "referrer"]]], "updater.state/connect" ["defn" "connect" ["db" "op-data" "state-id" "op-id" "op-time"] ["assoc-in" "db" ["[]" ":states" "state-id"] ["merge" "schema/state" ["{}" [":id" "state-id"]]]]]}, :namespaces {"updater.state" ["ns" "tiye-server.updater.state" [":require" ["[]" "tiye-server.schema" ":as" "schema"]]], "schema" ["ns" "tiye-server.schema"], "main" ["ns" "tiye-server.main" [":require" ["[]" "cljs.nodejs" ":as" "nodejs"] ["[]" "tiye-server.schema" ":as" "schema"] ["[]" "tiye-server.network" ":refer" ["[]" "run-server!" "render-clients!"]] ["[]" "tiye-server.updater.core" ":refer" ["[]" "updater"]] ["[]" "cljs.core.async" ":refer" ["[]" "<!"]]] [":require-macros" ["[]" "cljs.core.async.macros" ":refer" ["[]" "go-loop"]]]], "updater.core" ["ns" "tiye-server.updater.core" [":require" ["[]" "tiye-server.updater.state" ":as" "state"] ["[]" "tiye-server.updater.message" ":as" "message"]]], "updater.message" ["ns" "tiye-server.updater.message" [":require" ["[]" "tiye-server.schema" ":as" "schema"]]], "network" ["ns" "tiye-server.network" [":require" ["[]" "cljs.nodejs" ":as" "nodejs"] ["[]" "cljs.reader" ":as" "reader"] ["[]" "cljs.core.async" ":refer" ["[]" "chan" ">!"]] ["[]" "tiye-server.twig.container" ":refer" ["[]" "twig-container"]] ["[]" "recollect.diff" ":refer" ["[]" "diff-bunch"]] ["[]" "recollect.bunch" ":refer" ["[]" "render-bunch"]]] [":require-macros" ["[]" "cljs.core.async.macros" ":refer" ["[]" "go"]]]], "twig.container" ["ns" "tiye-server.twig.container" [":require" ["[]" "recollect.bunch" ":refer" ["[]" "create-twig"]]]]}, :procedures {"updater.state" [], "schema" [], "main" [["set!" "*main-cli-fn*" "-main"]], "updater.core" [], "updater.message" [], "view" [], "twig.container" []}}
+{:package "tiye-server",
+ :files {"updater.state" {:ns ["ns" "tiye-server.updater.state" [":require" ["[]" "tiye-server.schema" ":as" "schema"]]],
+                          :defs {"set-visibility" ["defn"
+                                                   "set-visibility"
+                                                   ["store" "op-data" "state-id" "op-id" "op-time"]
+                                                   ["let"
+                                                    [["visibility" "op-data"]]
+                                                    ["assoc-in"
+                                                     "store"
+                                                     ["[]" ":states" "state-id" ":visibility"]
+                                                     "visibility"]]],
+                                 "disconnect" ["defn"
+                                               "disconnect"
+                                               ["db" "op-data" "state-id" "op-id" "op-time"]
+                                               ["update" "db" ":states" ["fn" ["state"] ["dissoc" "state" "state-id"]]]],
+                                 "clear-name" ["defn"
+                                               "clear-name"
+                                               ["db" "op-data" "state-id" "op-id" "op-time"]
+                                               ["update-in"
+                                                "db"
+                                                ["[]" ":states" "state-id"]
+                                                ["fn" ["state"] ["println" "state"] ["dissoc" "state" ":nickname"]]]],
+                                 "buffer" ["defn"
+                                           "buffer"
+                                           ["db" "op-data" "state-id" "op-id" "op-time"]
+                                           ["->"
+                                            "db"
+                                            ["update-in"
+                                             ["[]" ":states" "state-id"]
+                                             ["fn"
+                                              ["state"]
+                                              ["if"
+                                               ["nil?" [":buffer" "state"]]
+                                               ["assoc" "state" ":buffer" "op-data" ":buffer-time" "op-time"]
+                                               ["assoc" "state" ":buffer" "op-data"]]]]]],
+                                 "nickname" ["defn"
+                                             "nickname"
+                                             ["db" "op-data" "state-id" "op-id" "op-time"]
+                                             ["->"
+                                              "db"
+                                              ["update-in"
+                                               ["[]" ":states" "state-id"]
+                                               ["fn" ["state"] ["assoc" "state" ":nickname" "op-data"]]]]],
+                                 "add-referrer" ["defn"
+                                                 "add-referrer"
+                                                 ["db" "op-data" "state-id" "op-id" "op-time"]
+                                                 ["let"
+                                                  [["referrer" "op-data"]]
+                                                  ["assoc-in" "db" ["[]" ":states" "state-id" ":referrer"] "referrer"]]],
+                                 "connect" ["defn"
+                                            "connect"
+                                            ["db" "op-data" "state-id" "op-id" "op-time"]
+                                            ["assoc-in"
+                                             "db"
+                                             ["[]" ":states" "state-id"]
+                                             ["merge" "schema/state" ["{}" [":id" "state-id"]]]]]},
+                          :procs []},
+         "schema" {:ns ["ns" "tiye-server.schema"],
+                   :defs {"database" ["def" "database" ["{}" [":states" ["{}"]] [":users" ["{}"]] [":messages" ["[]"]]]],
+                          "state" ["def"
+                                   "state"
+                                   ["{}"
+                                    [":user-id" "nil"]
+                                    [":id" "nil"]
+                                    [":buffer" "nil"]
+                                    [":buffer-time" "nil"]
+                                    [":nickname" "nil"]
+                                    [":referrer" "nil"]
+                                    [":visibility" "true"]]],
+                          "message" ["def"
+                                     "message"
+                                     ["{}"
+                                      [":id" "nil"]
+                                      [":text" "|"]
+                                      [":nickname" "|"]
+                                      [":time" "nil"]
+                                      [":writing?" "false"]]]},
+                   :procs []},
+         "main" {:ns ["ns"
+                      "tiye-server.main"
+                      [":require"
+                       ["[]" "cljs.nodejs" ":as" "nodejs"]
+                       ["[]" "tiye-server.schema" ":as" "schema"]
+                       ["[]" "tiye-server.network" ":refer" ["[]" "run-server!" "render-clients!"]]
+                       ["[]" "tiye-server.updater.core" ":refer" ["[]" "updater"]]
+                       ["[]" "cljs.core.async" ":refer" ["[]" "<!"]]]
+                      [":require-macros" ["[]" "cljs.core.async.macros" ":refer" ["[]" "go-loop"]]]],
+                 :defs {"on-jsload!" ["defn"
+                                      "on-jsload!"
+                                      []
+                                      ["println" "|Code updated."]
+                                      ["render-clients!" "@reader-db-ref"]],
+                        "-main" ["defn"
+                                 "-main"
+                                 []
+                                 ["nodejs/enable-util-print!"]
+                                 ["let"
+                                  [["server-ch" ["run-server!" ["{}" [":port" "5020"]]]]]
+                                  ["go-loop"
+                                   ["[]"]
+                                   ["let"
+                                    [[["[]" "op" "op-data" "state-id" "op-id" "op-time"] ["<!" "server-ch"]]]
+                                    ["try"
+                                     ["let"
+                                      [["new-db"
+                                        ["updater" "@writer-db-ref" "op" "op-data" "state-id" "op-id" "op-time"]]]
+                                      ["reset!" "writer-db-ref" "new-db"]]
+                                     ["catch" "js/Error" "e" [".log" "js/console" "e"]]]
+                                    ["recur"]]]
+                                  ["render-loop!"]]
+                                 ["add-watch" "writer-db-ref" ":log" ["fn" []]]
+                                 ["println" "|server started"]],
+                        "writer-db-ref" ["defonce" "writer-db-ref" ["atom" "schema/database"]],
+                        "render-loop!" ["defn"
+                                        "render-loop!"
+                                        []
+                                        ["if"
+                                         ["not=" "@reader-db-ref" "@writer-db-ref"]
+                                         ["do"
+                                          ["reset!" "reader-db-ref" "@writer-db-ref"]
+                                          ["render-clients!" "@reader-db-ref"]]]
+                                        ["js/setTimeout" "render-loop!" "300"]],
+                        "reader-db-ref" ["defonce" "reader-db-ref" ["atom" "@writer-db-ref"]],
+                        "rm-caches!" ["defn"
+                                      "rm-caches!"
+                                      []
+                                      [".execSync" ["js/require" "|child_process"] "|rm .lumo_cache/tiye*"]]},
+                 :procs [["set!" "*main-cli-fn*" "-main"]]},
+         "updater.core" {:ns ["ns"
+                              "tiye-server.updater.core"
+                              [":require"
+                               ["[]" "tiye-server.updater.state" ":as" "state"]
+                               ["[]" "tiye-server.updater.message" ":as" "message"]]],
+                         :defs {"updater" ["defn"
+                                           "updater"
+                                           ["db" "op" "op-data" "state-id" "op-id" "op-time"]
+                                           ["case"
+                                            "op"
+                                            [":state/connect"
+                                             ["state/connect" "db" "op-data" "state-id" "op-id" "op-time"]]
+                                            [":state/disconnect"
+                                             ["state/disconnect" "db" "op-data" "state-id" "op-id" "op-time"]]
+                                            [":state/buffer"
+                                             ["state/buffer" "db" "op-data" "state-id" "op-id" "op-time"]]
+                                            [":state/nickname"
+                                             ["state/nickname" "db" "op-data" "state-id" "op-id" "op-time"]]
+                                            [":state/clear-name"
+                                             ["state/nickname" "db" "op-data" "state-id" "op-id" "op-time"]]
+                                            [":message/confirm"
+                                             ["message/confirm" "db" "op-data" "state-id" "op-id" "op-time"]]
+                                            [":message/clear"
+                                             ["message/clear" "db" "op-data" "state-id" "op-id" "op-time"]]
+                                            [":message/remove"
+                                             ["message/remove-one" "db" "op-data" "state-id" "op-id" "op-time"]]
+                                            [":state/referrer"
+                                             ["state/add-referrer" "db" "op-data" "state-id" "op-id" "op-time"]]
+                                            [":state/visibility"
+                                             ["state/set-visibility" "db" "op-data" "state-id" "op-id" "op-time"]]
+                                            "db"]]},
+                         :procs []},
+         "updater.message" {:ns ["ns"
+                                 "tiye-server.updater.message"
+                                 [":require" ["[]" "tiye-server.schema" ":as" "schema"]]],
+                            :defs {"confirm" ["defn"
+                                              "confirm"
+                                              ["db" "op-data" "state-id" "op-id" "op-time"]
+                                              ["let"
+                                               [["state" ["get-in" "db" ["[]" ":states" "state-id"]]]
+                                                ["buffer" [":buffer" "state"]]
+                                                ["buffer-time" [":buffer-time" "state"]]
+                                                ["nickname" ["or" [":nickname" "state"] [":id" "state"]]]]
+                                               ["->"
+                                                "db"
+                                                ["update-in"
+                                                 ["[]" ":states" "state-id"]
+                                                 ["fn"
+                                                  ["state"]
+                                                  ["if"
+                                                   ["some?" [":buffer" "state"]]
+                                                   ["->"
+                                                    "state"
+                                                    ["assoc" ":buffer" "nil"]
+                                                    ["assoc" ":buffer-time" "nil"]]]]]
+                                                ["update"
+                                                 ":messages"
+                                                 ["fn"
+                                                  ["messages"]
+                                                  ["if"
+                                                   ["some?" "buffer"]
+                                                   ["let"
+                                                    [["fresh-messages"
+                                                      ["if"
+                                                       [">" ["count" "messages"] "20"]
+                                                       ["subvec" "messages" "10"]
+                                                       "messages"]]]
+                                                    ["conj"
+                                                     "fresh-messages"
+                                                     ["merge"
+                                                      "schema/message"
+                                                      ["{}"
+                                                       [":id" "op-id"]
+                                                       [":time" "buffer-time"]
+                                                       [":text" "buffer"]
+                                                       [":nickname" "nickname"]]]]]
+                                                   "messages"]]]]]],
+                                   "clear" ["defn"
+                                            "clear"
+                                            ["db" "op-data" "state-id" "op-id" "op-time"]
+                                            ["assoc" "db" ":messages" ["[]"]]],
+                                   "remove-one" ["defn"
+                                                 "remove-one"
+                                                 ["db" "op-data" "state-id" "op-id" "op-time"]
+                                                 ["update"
+                                                  "db"
+                                                  ":messages"
+                                                  ["fn"
+                                                   ["messages"]
+                                                   ["filterv"
+                                                    ["fn" ["message"] ["not=" "op-data" [":id" "message"]]]
+                                                    "messages"]]]]},
+                            :procs []},
+         "network" {:ns ["ns"
+                         "tiye-server.network"
+                         [":require"
+                          ["[]" "cljs.nodejs" ":as" "nodejs"]
+                          ["[]" "cljs.reader" ":as" "reader"]
+                          ["[]" "cljs.core.async" ":refer" ["[]" "chan" ">!"]]
+                          ["[]" "tiye-server.twig.container" ":refer" ["[]" "twig-container"]]
+                          ["[]" "recollect.diff" ":refer" ["[]" "diff-bunch"]]
+                          ["[]" "recollect.bunch" ":refer" ["[]" "render-bunch"]]]
+                         [":require-macros" ["[]" "cljs.core.async.macros" ":refer" ["[]" "go"]]]],
+                    :defs {"socket-registry" ["defonce" "socket-registry" ["atom" ["{}"]]],
+                           "run-server!" ["defn"
+                                          "run-server!"
+                                          ["configs"]
+                                          ["let"
+                                           [["wss" ["new" "WebSocketServer" ["js-obj" "|port" [":port" "configs"]]]]]
+                                           [".on"
+                                            "wss"
+                                            "|connection"
+                                            ["fn"
+                                             ["socket"]
+                                             ["let"
+                                              [["state-id" [".generate" "shortid"]]]
+                                              ["handle-message" ":state/connect" "nil" "state-id"]
+                                              ["swap!" "socket-registry" "assoc" "state-id" "socket"]
+                                              [".on"
+                                               "socket"
+                                               "|message"
+                                               ["fn"
+                                                ["rawData"]
+                                                ["let"
+                                                 [["action" ["reader/read-string" "rawData"]]
+                                                  [["[]" "op" "op-data"] "action"]]
+                                                 ["handle-message" "op" "op-data" "state-id"]]]]
+                                              [".on"
+                                               "socket"
+                                               "|close"
+                                               ["fn"
+                                                []
+                                                ["swap!" "socket-registry" "dissoc" "state-id"]
+                                                ["handle-message" ":state/disconnect" "nil" "state-id"]]]]]]]
+                                          "server-chan"],
+                           "render-clients!" ["defn"
+                                              "render-clients!"
+                                              ["db"]
+                                              ["doseq"
+                                               ["[]" "state-entry" [":states" "db"]]
+                                               ["let"
+                                                [[["[]" "state-id" "state"] "state-entry"]
+                                                 ["old-store" ["or" ["get" "@client-caches" "state-id"] "nil"]]
+                                                 ["new-store"
+                                                  ["render-bunch" ["twig-container" "db" "state"] "old-store"]]
+                                                 ["changes" ["diff-bunch" ["[]"] "old-store" "new-store"]]
+                                                 ["socket" ["get" "@socket-registry" "state-id"]]]
+                                                ["if"
+                                                 ["and" ["not=" "changes" ["[]"]] ["some?" "socket"]]
+                                                 ["do"
+                                                  [".send" "socket" ["pr-str" "changes"]]
+                                                  ["swap!" "client-caches" "assoc" "state-id" "new-store"]]]]]],
+                           "client-caches" ["defonce" "client-caches" ["atom" ["{}"]]],
+                           "server-chan" ["defonce" "server-chan" ["chan"]],
+                           "shortid" ["def" "shortid" ["js/require" "|shortid"]],
+                           "WebSocketServer" ["def" "WebSocketServer" [".-Server" "ws"]],
+                           "handle-message" ["defn"
+                                             "handle-message"
+                                             ["op" "op-data" "state-id"]
+                                             ["let"
+                                              [["op-id" [".generate" "shortid"]] ["op-time" [".valueOf" ["js/Date."]]]]
+                                              ["go"
+                                               [">!" "server-chan" ["[]" "op" "op-data" "state-id" "op-id" "op-time"]]]]],
+                           "ws" ["def" "ws" ["js/require" "|uws"]]},
+                    :procs []},
+         "twig.container" {:ns ["ns"
+                                "tiye-server.twig.container"
+                                [":require" ["[]" "recollect.bunch" ":refer" ["[]" "create-twig"]]]],
+                           :defs {"twig-container" ["def"
+                                                    "twig-container"
+                                                    ["create-twig"
+                                                     ":container"
+                                                     ["fn"
+                                                      ["db" "state"]
+                                                      ["{}"
+                                                       [":state" "state"]
+                                                       [":statistics"
+                                                        ["{}"
+                                                         [":user-count" ["count" [":states" "db"]]]
+                                                         [":nicknames"
+                                                          ["->>"
+                                                           [":states" "db"]
+                                                           ["map" ["fn" [] ["[]" "|name" "false"]]]]]]]
+                                                       [":messages" [":messages" "db"]]
+                                                       [":buffter" ["[]"]]
+                                                       [":logged-in?" "false"]
+                                                       [":user" "nil"]]]]]},
+                           :procs []}}}

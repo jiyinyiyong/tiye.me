@@ -1,15 +1,15 @@
 
 (ns tiye-server.schema )
 
-(def message {:writing? false, :time nil, :nickname "", :id nil, :text ""})
-
-(def database {:states {}, :messages [], :users {}})
+(def database {:states {}, :users {}, :messages []})
 
 (def state
-  {:nickname nil,
-   :user-id nil,
-   :buffer-time nil,
-   :referrer nil,
+  {:user-id nil,
    :id nil,
-   :visibility true,
-   :buffer nil})
+   :buffer nil,
+   :buffer-time nil,
+   :nickname nil,
+   :referrer nil,
+   :visibility true})
+
+(def message {:id nil, :text "", :nickname "", :time nil, :writing? false})

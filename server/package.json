@@ -19,5 +19,8 @@
   "dependencies": {
     "shortid": "^2.2.6",
     "uws": "^0.13.0"
+  },
+  "devDependencies": {
+    "gaze": "^1.1.2"
   }
 }

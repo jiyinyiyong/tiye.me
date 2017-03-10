@@ -58,14 +58,7 @@
   (add-watch store-ref :changes render-app!)
   (add-watch states-ref :changes render-app!)
   (listen-visibility dispatch!)
-  (println "app started!")
-  (let [configEl (.querySelector js/document "#config")
-        config (read-string (.-innerHTML configEl))]
-    (if (and (some? navigator.serviceWorker) (:build? config))
-      (-> navigator.serviceWorker
-          (.register "./sw.js")
-          (.then (fn [registration] (println "resigtered:" registration.scope)))
-          (.catch (fn [error] (println "failed:" error)))))))
+  (println "App started!"))
 
 (defn on-jsload! [] (clear-cache!) (render-app!) (println "code updated."))
 

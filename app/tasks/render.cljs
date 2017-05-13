@@ -45,7 +45,7 @@
 
 (defn -main []
   (if (= js/process.env.env "dev")
-    (spit "target/dev.html" (generate-empty-html))
+    (spit "target/index.html" (generate-empty-html))
     (spit "target/index.html" (generate-html))))
 
 (-main)

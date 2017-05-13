@@ -1,5 +1,6 @@
 
 (set-env!
+  :source-paths #{"src/"}
   :dependencies '[[org.clojure/clojure       "1.8.0"       :scope "provided"]
                   [org.clojure/clojurescript "1.9.473"     :scope "provided"]
                   [andare                    "0.5.0"       :scope "provided"]
@@ -23,25 +24,12 @@
 
 (deftask build-simple []
   (comp
-    (cljs :optimizations :none
+    (cljs :optimizations :simple
           :compiler-options {:target :nodejs
                              :language-in :ecmascript5
-                             :pseudo-names true
-                             :static-fns true
-                             :parallel-build true
-                             :optimize-constants true
-                             :source-map true})
-    (target)))
-
-; use build-simple instead due to WebSocket reasons
-(deftask build-advanced []
-  (comp
-    (cljs :optimizations :advanced
-          :compiler-options {:target :nodejs
-                             :language-in :ecmascript5
-                             :pseudo-names true
-                             :static-fns true
-                             :parallel-build true
-                             :optimize-constants true
-                             :source-map true})
+                             ; :pseudo-names true
+                             ; :static-fns true
+                             ; :optimize-constants true
+                             ; :source-map true
+                             :parallel-build true})
     (target)))

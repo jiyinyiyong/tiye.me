@@ -51,6 +51,11 @@
     :links [{:text "Segmentfault", :url "https://segmentfault.com/blog/jiyinyiyong"}
             {:text "Medium", :url "https://medium.com/@jiyinyiyong/"}
             {:text "Hashnode", :url "https://hashnode.com/@jiyinyiyong/stories"}]}
-   {:title "玩过 Linux 吗?", :content "当然了, 当年折腾过 Ubuntu, 现在和经常去 SHLUG 听他们聊天."}])
+   {:title "玩过 Linux 吗?", :content "当然了, 当年折腾过 Ubuntu, 现在和经常去 SHLUG 听他们聊天."}
+   {:title "English users",
+    :content "This is the home page of Jiyinyiyong. Find more about me on Twitter please!"}
+   {:title "Cumulo 项目",
+    :content "Cumulo 是一个通过 Diff 算法来进行多端同步的试验, 可以在 GitHub 上跟进.",
+    :links [{:text "GitHub/Cumulo", :url "https://github.com/Cumulo/"}]}])
 
-(def tags #{"Clojure" "React" "上海" "杭州" "Teambition" "饿了么" "Cirru"})
+(def tags #{"Clojure" "React" "上海" "杭州" "Teambition" "Cirru" "English"})

@@ -11,7 +11,7 @@
             [app.comp.tags :refer [comp-tags]]))
 
 (def style-container
-  {:font-family "Josefin Sans, Serif",
+  {:font-family "Avenir, Roboto, Arial, Serif",
    :font-weight 300,
    :background-color (hsl 0 0 0 0.24),
    :justify-content :flex-start,

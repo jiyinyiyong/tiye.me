@@ -18,7 +18,8 @@
    :height 32,
    :line-height "32px",
    :margin 8,
-   :cursor :pointer})
+   :cursor :pointer,
+   :user-select :none})
 
 (defn on-select [aspect] (fn [e d! m!] (d! :query (name aspect))))
 

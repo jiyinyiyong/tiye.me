@@ -33,7 +33,8 @@
     (if (= 13 (:key-code e))
       (do
        (d! :commit nil)
-       (if (fn? js/ga) (js/ga "send" "event" "interest" "search" "submit" buffer))))))
+       (if (fn? js/window.ga)
+         (js/window.ga "send" "event" "interest" "search" "submit" buffer))))))
 
 (defcomp
  comp-search

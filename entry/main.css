@@ -4,8 +4,10 @@ body {
   background-image: url(http://logo.tiye.me/leaf.jpg);
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
+  background-repeat: repeat;
+  /* background-attachment: fixed; */
   background-color: hsl(17, 37%, 15%);
+  color: white;
 }
 
 body * {

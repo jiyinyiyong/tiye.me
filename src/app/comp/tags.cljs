@@ -6,7 +6,7 @@
             [respo-ui.style :as ui]
             [respo.core :refer [create-comp]]
             [respo.comp.space :refer [=<]]
-            [app.schema :refer [information]]))
+            [app.schema :refer [tags]]))
 
 (def style-tag
   {:color :white,
@@ -14,20 +14,20 @@
    :border (str "1px solid " (hsl 0 0 100)),
    :border-radius "16px",
    :padding "0 8px",
-   :font-size 20,
+   :font-size 16,
    :height 32,
    :line-height "32px",
    :margin "0 8px",
    :cursor :pointer})
 
-(defn on-select [aspect] (fn [e d! m!] (d! :select aspect)))
+(defn on-select [aspect] (fn [e d! m!] (d! :query (name aspect))))
 
 (defcomp
  comp-tags
  ()
  (div
   {}
-  (->> (keys information)
+  (->> tags
        (map
         (fn [aspect]
           [aspect

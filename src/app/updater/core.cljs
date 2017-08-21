@@ -1,4 +1,4 @@
 
 (ns app.updater.core )
 
-(defn updater [store op op-data] (case op :select (assoc store :selected op-data) store))
+(defn updater [store op op-data] (case op :query (assoc store :query op-data) store))

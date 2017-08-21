@@ -17,16 +17,18 @@
    :font-size 16,
    :height 32,
    :line-height "32px",
-   :margin "0 8px",
+   :margin 8,
    :cursor :pointer})
 
 (defn on-select [aspect] (fn [e d! m!] (d! :query (name aspect))))
+
+(def style-tags {:padding "0 24px"})
 
 (defcomp
  comp-tags
  ()
  (div
-  {}
+  {:style style-tags}
   (->> tags
        (map
         (fn [aspect]

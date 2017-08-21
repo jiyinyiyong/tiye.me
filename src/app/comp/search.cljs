@@ -6,46 +6,59 @@
             [respo-ui.style :as ui]
             [respo.core :refer [create-comp]]
             [respo.comp.space :refer [=<]]
-            [app.schema :refer [information]]))
+            [app.schema :refer [information]]
+            [app.comp.item :refer [comp-item]]))
 
-(defn on-search [e d! m!] (d! :query (:value e)))
+(def style-searcher {:flex-shrink 0})
+
+(defn on-google [query]
+  (fn [e d! m!]
+    (.open js/window (str "https://www.google.com/search?q=题叶%7Cjiyinyiyong+" query))))
+
+(defn on-search [e d! m!] (d! :buffer (:value e)))
+
+(def style-search {:color :white, :cursor :pointer, :text-decoration :underline})
 
 (def style-input
   {:background-color :transparent,
    :border (str "1px solid " (hsl 0 0 100)),
    :color :white,
-   :width 400})
+   :max-width "80vw",
+   :width 600})
 
-(def style-button
-  {:background-color :transparent,
-   :border (str "1px solid " (hsl 0 0 100)),
-   :border-radius "0px",
-   :color :white,
-   :height 32,
-   :line-height "30px"})
+(def style-empty {:color :white})
 
-(def style-item {:color :white})
+(defn on-keydown [buffer]
+  (fn [e d! m!]
+    (if (= 13 (:key-code e))
+      (do
+       (d! :commit nil)
+       (if (fn? js/ga) (js/ga "send" "event" "interest" "search" "submit" buffer))))))
 
 (defcomp
  comp-search
- (query)
+ (buffer query)
  (div
-  {}
+  {:style style-searcher}
   (div
    {}
    (input
     {:style (merge ui/input style-input),
-     :value query,
-     :placeholder "Keyword",
-     :on {:input on-search}})
-   (=< 8 nil)
-   (button {:style (merge ui/button style-button), :inner-text "Search"}))
-  (let [results information]
-    (div
-     {}
-     (->> information
-          (filter
-           (fn [item]
-             (string/includes? (string/lower-case (:title item)) (string/lower-case query))))
-          (map-indexed
-           (fn [idx item] [idx (div {:style style-item} (<> span (:title item) nil))])))))))
+     :value buffer,
+     :placeholder "Hit Enter to search...",
+     :on {:input on-search, :keydown (on-keydown buffer)}}))
+  (=< nil 16)
+  (if (> (count query) 1)
+    (let [results (->> information
+                       (filter
+                        (fn [item]
+                          (string/includes?
+                           (string/lower-case (:title item))
+                           (string/lower-case query)))))]
+      (if (empty? results)
+        (div {:style style-empty} (<> span "No results" nil))
+        (div {} (->> results (map-indexed (fn [idx item] [idx (comp-item item)])))))))
+  (=< nil 32)
+  (div
+   {}
+   (span {:inner-text "Search Google", :style style-search, :on {:click (on-google query)}}))))

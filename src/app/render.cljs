@@ -9,7 +9,7 @@
   {:title "题叶@jiyinyiyong",
    :icon "http://logo.tiye.me/tiye-400x400.jpg",
    :ssr nil,
-   :inner-html nil})
+   :inline-html (slurp "./entry/ga.html")})
 
 (defn dev-page []
   (make-page

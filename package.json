@@ -4,7 +4,7 @@
   "description": "Stack Workflow",
   "main": "index.js",
   "scripts": {
-    "tiye": "rsync -r dist/ repo.tiye.me:repo/mvc-works/coworkflow/",
+    "tiye": "rsync -r dist/ tiye.me:repo/tiye/tiye.me",
     "release": "shadow-cljs release browser",
     "watch": "shadow-cljs watch browser",
     "compile-ssr": "shadow-cljs compile ssr",

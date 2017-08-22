@@ -21,12 +21,12 @@
 
 (defcomp
  comp-container
- (store)
+ (store mock-ssr?)
  (div
   {:style (merge ui/global ui/fullscreen ui/column-center style-container),
    :class-name "app-container"}
   (comp-profile)
   (=< nil 40)
-  (comp-search (:buffer store) (:query store))
+  (comp-search (:buffer store) (:query store) mock-ssr?)
   (=< nil 40)
   (comp-tags)))

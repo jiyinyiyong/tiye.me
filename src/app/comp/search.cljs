@@ -15,6 +15,8 @@
   (fn [e d! m!]
     (.open js/window (str "https://www.google.com/search?q=题叶%7Cjiyinyiyong+" query))))
 
+(def style-mock {:height 32, :text-align :center, :color :white})
+
 (defn on-search [e d! m!] (d! :buffer (:value e)))
 
 (def style-search {:color :white, :cursor :pointer, :text-decoration :underline})
@@ -33,21 +35,22 @@
     (if (= 13 (:key-code e))
       (do
        (d! :commit nil)
-       (if (fn? js/window.ga)
-         (js/window.ga "send" "event" "interest" "search" "submit" buffer))))))
+       (if (fn? js/window.ga) (js/window.ga "send" "event" "interest" "search" buffer 1))))))
 
 (defcomp
  comp-search
- (buffer query)
+ (buffer query mock-ssr?)
  (div
   {:style style-searcher}
   (div
    {}
-   (input
-    {:style (merge ui/input style-input),
-     :value buffer,
-     :placeholder "Hit Enter to search...",
-     :on {:input on-search, :keydown (on-keydown buffer)}}))
+   (if mock-ssr?
+     (div {:style style-mock} (<> span "Loading..." nil))
+     (input
+      {:style (merge ui/input style-input),
+       :value buffer,
+       :placeholder "Hit Enter to search...",
+       :on {:input on-search, :keydown (on-keydown buffer)}})))
   (=< nil 16)
   (if (> (count query) 1)
     (let [results (->> information

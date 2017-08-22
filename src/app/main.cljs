@@ -17,16 +17,17 @@
 
 (def mount-target (.querySelector js/document ".app"))
 
-(defn render-app! [renderer] (renderer mount-target (comp-container @*store) dispatch!))
-
-(defn reload! [] (clear-cache!) (render-app! render!) (println "Code updated."))
+(defn render-app! [renderer mock-ssr?]
+  (renderer mount-target (comp-container @*store mock-ssr?) dispatch!))
 
 (def ssr? (some? (js/document.querySelector "meta.respo-ssr")))
 
 (defn main! []
-  (if ssr? (render-app! realize-ssr!))
-  (render-app! render!)
-  (add-watch *store :changes (fn [] (render-app! render!)))
+  (if ssr? (render-app! realize-ssr! true))
+  (render-app! render! false)
+  (add-watch *store :changes (fn [] (render-app! render! false)))
   (println "App started."))
+
+(defn reload! [] (clear-cache!) (render-app! render! false) (println "Code updated."))
 
 (set! (.-onload js/window) main!)

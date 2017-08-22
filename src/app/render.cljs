@@ -19,7 +19,7 @@
     {:styles [], :scripts ["/main.js" "/browser/lib.js" "/browser/main.js"]})))
 
 (defn prod-page []
-  (let [html-content (make-string (comp-container schema/store))
+  (let [html-content (make-string (comp-container schema/store true))
         manifest (.parse js/JSON (slurp "dist/assets-manifest.json"))
         cljs-manifest (.parse js/JSON (slurp "dist/manifest.json"))]
     (make-page

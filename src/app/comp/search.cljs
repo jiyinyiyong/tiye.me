@@ -60,7 +60,7 @@
                            (string/lower-case (:title item))
                            (string/lower-case query)))))]
       (if (empty? results)
-        (div {:style style-empty} (<> span "No results" nil))
+        (div {:style style-empty} (<> span (str "No results for " (pr-str query)) nil))
         (div {} (->> results (map-indexed (fn [idx item] [idx (comp-item item)])))))))
   (=< nil 32)
   (div

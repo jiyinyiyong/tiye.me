@@ -10,16 +10,14 @@
 
 (def style-profile {:flex-shrink 0})
 
-(def style-names {:color :white, :font-size 32})
+(def style-names {:color :white, :font-size 16})
 
-(def style-intro {:color :white, :font-size 16})
+(def style-intro {:color :white, :font-size 14})
 
 (defcomp
  comp-profile
  ()
  (div
   {:style (merge ui/column-center style-profile)}
-  (div
-   {}
-   (<> div "@题叶 @jiyinyiyong" style-names)
-   (<> div "Programmer. ClojureScript 爱好者" style-intro))))
+  (div {} (<> span "@题叶 @jiyinyiyong" style-names))
+  (div {} (<> span "Web developer. ClojureScript 爱好者" style-intro))))

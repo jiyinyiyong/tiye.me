@@ -7,26 +7,23 @@
             [respo.core :refer [create-comp]]
             [respo.comp.space :refer [=<]]
             [app.schema :refer [information]]
-            [app.comp.item :refer [comp-item]]))
+            [app.comp.item :refer [comp-item]]
+            [app.comp.search-engine :refer [comp-search-engine]]))
 
-(def style-searcher {:flex-shrink 0})
+(def style-searcher {:flex-shrink 0, :width "60vw"})
 
-(defn on-google [query]
-  (fn [e d! m!]
-    (.open js/window (str "https://www.google.com/search?q=题叶%7Cjiyinyiyong+" query))))
-
-(def style-mock {:height 32, :text-align :center, :color :white})
+(def style-mock {:height 32, :text-align :center, :color :white, :display :inline-block})
 
 (defn on-search [e d! m!] (d! :buffer (:value e)))
-
-(def style-search {:color :white, :cursor :pointer, :text-decoration :underline})
 
 (def style-input
   {:background-color :transparent,
    :border (str "1px solid " (hsl 0 0 100)),
+   :border-width "0 0 1px 0",
    :color :white,
    :max-width "80vw",
-   :width 600})
+   :width 320,
+   :text-align :center})
 
 (def style-empty {:color :white})
 
@@ -37,11 +34,13 @@
        (d! :commit nil)
        (if (fn? js/window.ga) (js/window.ga "send" "event" "interest" "search" buffer 1))))))
 
+(def style-results {})
+
 (defcomp
  comp-search
  (buffer query mock-ssr?)
  (div
-  {:style style-searcher}
+  {:style (merge ui/column-center style-searcher)}
   (div
    {}
    (if mock-ssr?
@@ -49,10 +48,10 @@
      (input
       {:style (merge ui/input style-input),
        :value buffer,
-       :placeholder "Hit Enter to search...",
+       :placeholder "Press Enter to search...",
        :on {:input on-search, :keydown (on-keydown buffer)}})))
   (=< nil 16)
-  (if (> (count query) 1)
+  (if (>= (count query) 2)
     (let [results (->> information
                        (filter
                         (fn [item]
@@ -60,9 +59,9 @@
                            (string/lower-case (:title item))
                            (string/lower-case query)))))]
       (if (empty? results)
-        (div {:style style-empty} (<> span (str "No results for " (pr-str query)) nil))
-        (div {} (->> results (map-indexed (fn [idx item] [idx (comp-item item)])))))))
-  (=< nil 32)
-  (div
-   {}
-   (span {:inner-text "Search Google", :style style-search, :on {:click (on-google query)}}))))
+        (div {:style style-empty} (<> span (str "找不到" (pr-str query) ".") nil))
+        (div
+         {:style style-results}
+         (->> results (map-indexed (fn [idx item] [idx (comp-item item)])))))))
+  (=< nil 16)
+  (if (>= (count query) 2) (comp-search-engine query))))

@@ -14,19 +14,21 @@
   {:font-family "Avenir, Roboto, Arial, Serif",
    :font-weight 300,
    :background-color (hsl 0 0 0 0.24),
-   :justify-content :flex-start,
+   :justify-content :center,
    :padding "120px 0",
    :overflow :auto,
-   :min-height "100%"})
+   :min-height "100%",
+   :color :white})
 
 (defcomp
  comp-container
  (store mock-ssr?)
- (div
-  {:style (merge ui/global ui/fullscreen ui/column-center style-container),
-   :class-name "app-container"}
-  (comp-profile)
-  (=< nil 40)
-  (comp-search (:buffer store) (:query store) mock-ssr?)
-  (=< nil 40)
-  (comp-tags)))
+ (let [show-profile? (< (count (:query store)) 2)]
+   (div
+    {:style (merge ui/global ui/fullscreen ui/column-center style-container),
+     :class-name "app-container"}
+    (if show-profile? (comp-profile))
+    (if show-profile? (=< nil 20))
+    (comp-tags)
+    (=< nil 20)
+    (comp-search (:buffer store) (:query store) mock-ssr?))))

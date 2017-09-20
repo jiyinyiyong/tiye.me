@@ -11,13 +11,12 @@
 (def style-tag
   {:color :white,
    :display :inline-block,
-   :border (str "1px solid " (hsl 0 0 100)),
-   :border-radius "16px",
-   :padding "0 8px",
-   :font-size 16,
-   :height 32,
-   :line-height "32px",
-   :margin 8,
+   :border (str "1px solid " (hsl 0 0 100 0.5)),
+   :border-width "0 0 1px 0",
+   :font-size 14,
+   :height 24,
+   :line-height "24px",
+   :margin 4,
    :cursor :pointer,
    :user-select :none})
 

@@ -14,11 +14,12 @@
   {:font-family "Avenir, Roboto, Arial, Serif",
    :font-weight 300,
    :background-color (hsl 0 0 0 0.24),
-   :justify-content :center,
    :padding "120px 0",
    :overflow :auto,
    :min-height "100%",
-   :color :white})
+   :color :white,
+   :align-items nil,
+   :justify-content nil})
 
 (defcomp
  comp-container

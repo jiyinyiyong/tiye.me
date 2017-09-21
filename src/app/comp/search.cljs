@@ -10,7 +10,7 @@
             [app.comp.item :refer [comp-item]]
             [app.comp.search-engine :refer [comp-search-engine]]))
 
-(def style-searcher {:flex-shrink 0, :width "60vw"})
+(def style-searcher {:flex-shrink 0, :width "80vw"})
 
 (def style-mock {:height 32, :text-align :center, :color :white, :display :inline-block})
 

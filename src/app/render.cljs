@@ -18,18 +18,23 @@
     base-info
     {:styles [], :scripts ["/main.js" "/browser/lib.js" "/browser/main.js"]})))
 
+(def preview? (= "preview" js/process.env.prod))
+
 (defn prod-page []
   (let [html-content (make-string (comp-container schema/store true))
         manifest (.parse js/JSON (slurp "dist/assets-manifest.json"))
-        cljs-manifest (.parse js/JSON (slurp "dist/manifest.json"))]
+        cljs-manifest (.parse js/JSON (slurp "dist/manifest.json"))
+        cdn (if preview?
+              (do (println "Rendering in preview mode!") "")
+              (str "http://repo-cdn.b0.upaiyun.com/tiye.me/"))]
     (make-page
      html-content
      (merge
       base-info
-      {:styles [(aget manifest "main.css")],
-       :scripts [(aget manifest "main.js")
-                 (-> cljs-manifest (aget 0) (aget "js-name"))
-                 (-> cljs-manifest (aget 1) (aget "js-name"))],
+      {:styles [(str cdn (aget manifest "main.css"))],
+       :scripts [(str cdn (aget manifest "main.js"))
+                 (str cdn (-> cljs-manifest (aget 0) (aget "js-name")))
+                 (str cdn (-> cljs-manifest (aget 1) (aget "js-name")))],
        :ssr "respo-ssr"}))))
 
 (defn main! []

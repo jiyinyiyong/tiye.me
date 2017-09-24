@@ -21,6 +21,8 @@
    :align-items nil,
    :justify-content nil})
 
+(def style-area {:margin :auto})
+
 (defcomp
  comp-container
  (store mock-ssr?)
@@ -28,8 +30,10 @@
    (div
     {:style (merge ui/global ui/fullscreen ui/column-center style-container),
      :class-name "app-container"}
-    (if show-profile? (comp-profile))
-    (if show-profile? (=< nil 20))
-    (comp-tags)
-    (=< nil 20)
-    (comp-search (:buffer store) (:query store) mock-ssr?))))
+    (div
+     {:style (merge ui/column-center style-area)}
+     (if show-profile? (comp-profile))
+     (if show-profile? (=< nil 20))
+     (comp-tags)
+     (=< nil 20)
+     (comp-search (:buffer store) (:query store) mock-ssr?)))))

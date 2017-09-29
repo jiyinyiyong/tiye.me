@@ -7,9 +7,9 @@
 
 (def base-info
   {:title "题叶@jiyinyiyong",
-   :icon "http://logo.tiye.me/tiye-400x400.jpg",
+   :icon "http://repo-cdn.b0.upaiyun.com/logo/tiye.jpg",
    :ssr nil,
-   :inline-html (slurp "./entry/ga.html")})
+   :inline-html nil})
 
 (defn dev-page []
   (make-page
@@ -32,8 +32,7 @@
      (merge
       base-info
       {:styles [(str cdn (aget manifest "main.css"))],
-       :scripts [(str cdn (aget manifest "main.js"))
-                 (str cdn (-> cljs-manifest (aget 0) (aget "js-name")))
+       :scripts [(str cdn (-> cljs-manifest (aget 0) (aget "js-name")))
                  (str cdn (-> cljs-manifest (aget 1) (aget "js-name")))],
        :ssr "respo-ssr"}))))
 

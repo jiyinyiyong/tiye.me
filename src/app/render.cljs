@@ -9,7 +9,7 @@
   {:title "题叶@jiyinyiyong",
    :icon "http://repo-cdn.b0.upaiyun.com/logo/tiye.jpg",
    :ssr nil,
-   :inline-html (slurp "entry/ga.html")})
+   :append-html (slurp "entry/ga.html")})
 
 (defn dev-page []
   (make-page

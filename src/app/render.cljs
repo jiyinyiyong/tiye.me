@@ -7,7 +7,7 @@
 
 (def base-info
   {:title "题叶@jiyinyiyong",
-   :icon "http://repo-cdn.b0.upaiyun.com/logo/tiye.jpg",
+   :icon "http://cdn.tiye.me/logo/tiye.jpg",
    :ssr nil,
    :append-html (slurp "entry/ga.html")})
 
@@ -22,18 +22,18 @@
 
 (defn prod-page []
   (let [html-content (make-string (comp-container schema/store true))
-        manifest (.parse js/JSON (slurp "dist/assets-manifest.json"))
-        cljs-manifest (.parse js/JSON (slurp "dist/manifest.json"))
+        webpack-info (.parse js/JSON (slurp "dist/webpack-manifest.json"))
+        cljs-info (.parse js/JSON (slurp "dist/cljs-manifest.json"))
         cdn (if preview?
               (do (println "Rendering in preview mode!") "")
-              (str "http://repo-cdn.b0.upaiyun.com/tiye.me/"))]
+              (str "http://cdn.tiye.me/tiye.me/"))]
     (make-page
      html-content
      (merge
       base-info
-      {:styles [(str cdn (aget manifest "main.css"))],
-       :scripts [(str cdn (-> cljs-manifest (aget 0) (aget "js-name")))
-                 (str cdn (-> cljs-manifest (aget 1) (aget "js-name")))],
+      {:styles [(str cdn (aget webpack-info "main.css"))],
+       :scripts [(str cdn (-> cljs-info (aget 0) (aget "js-name")))
+                 (str cdn (-> cljs-info (aget 1) (aget "js-name")))],
        :ssr "respo-ssr"}))))
 
 (defn main! []

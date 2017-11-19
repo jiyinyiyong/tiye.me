@@ -1,9 +1,8 @@
 
 (ns app.comp.search-engine
-  (:require-macros [respo.macros :refer [defcomp <> div button span input a]])
   (:require [hsl.core :refer [hsl]]
             [respo-ui.style :as ui]
-            [respo.core :refer [create-comp]]
+            [respo.macros :refer [defcomp <> div button span input a]]
             [respo.comp.space :refer [=<]]))
 
 (defn on-google [query]

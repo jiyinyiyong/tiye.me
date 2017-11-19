@@ -1,9 +1,8 @@
 
 (ns app.comp.profile
-  (:require-macros [respo.macros :refer [defcomp <> div button span input]])
   (:require [hsl.core :refer [hsl]]
             [respo-ui.style :as ui]
-            [respo.core :refer [create-comp]]
+            [respo.macros :refer [defcomp <> div button span input]]
             [respo.comp.space :refer [=<]]
             [app.comp.tags :refer [comp-tags]]
             [app.comp.search :refer [comp-search]]))

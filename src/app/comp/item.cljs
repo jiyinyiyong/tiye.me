@@ -1,9 +1,8 @@
 
 (ns app.comp.item
-  (:require-macros [respo.macros :refer [defcomp <> div button span input a]])
   (:require [hsl.core :refer [hsl]]
             [respo-ui.style :as ui]
-            [respo.core :refer [create-comp]]
+            [respo.macros :refer [defcomp list-> <> div button span input a]]
             [respo.comp.space :refer [=<]]))
 
 (def style-item {:color :white, :width 600, :max-width "80vw"})
@@ -19,7 +18,8 @@
    {:style style-item}
    (div {:style style-title} (<> span (:title item) nil))
    (div {:style style-content} (<> span (:content item) nil))
-   (div
+   (list->
+    :div
     {}
     (->> (:links item)
          (map-indexed

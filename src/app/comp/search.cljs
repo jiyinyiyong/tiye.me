@@ -1,10 +1,9 @@
 
 (ns app.comp.search
-  (:require-macros [respo.macros :refer [defcomp <> div input button span]])
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
             [respo-ui.style :as ui]
-            [respo.core :refer [create-comp]]
+            [respo.macros :refer [defcomp list-> <> div input button span]]
             [respo.comp.space :refer [=<]]
             [app.schema :refer [information]]
             [app.comp.item :refer [comp-item]]
@@ -60,7 +59,8 @@
                            (string/lower-case query)))))]
       (if (empty? results)
         (div {:style style-empty} (<> span (str "找不到" (pr-str query) ".") nil))
-        (div
+        (list->
+         :div
          {:style style-results}
          (->> results (map-indexed (fn [idx item] [idx (comp-item item)])))))))
   (=< nil 16)

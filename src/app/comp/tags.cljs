@@ -1,10 +1,9 @@
 
 (ns app.comp.tags
-  (:require-macros [respo.macros :refer [defcomp <> div button span]])
   (:require [clojure.string :as string]
             [hsl.core :refer [hsl]]
             [respo-ui.style :as ui]
-            [respo.core :refer [create-comp]]
+            [respo.macros :refer [defcomp list-> <> div button span]]
             [respo.comp.space :refer [=<]]
             [app.schema :refer [tags]]))
 
@@ -27,7 +26,8 @@
 (defcomp
  comp-tags
  ()
- (div
+ (list->
+  :div
   {:style style-tags}
   (->> tags
        (map

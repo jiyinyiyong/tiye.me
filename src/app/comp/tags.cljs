@@ -7,6 +7,8 @@
             [respo.comp.space :refer [=<]]
             [app.schema :refer [tags]]))
 
+(defn on-select [aspect] (fn [e d! m!] (d! :query (name aspect))))
+
 (def style-tag
   {:color :white,
    :display :inline-block,
@@ -18,8 +20,6 @@
    :margin 4,
    :cursor :pointer,
    :user-select :none})
-
-(defn on-select [aspect] (fn [e d! m!] (d! :query (name aspect))))
 
 (def style-tags {:padding "0 24px"})
 

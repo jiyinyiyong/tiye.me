@@ -1,7 +1,7 @@
 {
-  "name": "coworkflow",
+  "name": "tiye.me",
   "version": "0.1.0",
-  "description": "Stack Workflow",
+  "description": "Home page for tiye",
   "main": "index.js",
   "scripts": {
     "cdn": "rsync -avr --progress dist/* tiye.me:cdn/tiye.me",
@@ -26,6 +26,6 @@
   "license": "MIT",
   "devDependencies": {
     "http-server": "^0.10.0",
-    "shadow-cljs": "^2.0.92"
+    "shadow-cljs": "^2.0.123"
   }
 }

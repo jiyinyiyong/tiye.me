@@ -10,7 +10,7 @@
 
 (def about-dreamlover
   {:title "喜欢什么样的女生?",
-   :content "聪明啊, 温柔啊, 漂亮啊, 亲近大自然, 了解历史... 加在一起是要求太高了. 智慧的善于交际的人总是会特别吸引人的. 但是对于宅男程序员来说这只能算奢望了."})
+   :content "相貌举止是一个事, 然后眼界和性格是一个事, 具体反而我自己都想不清楚了. 另一方面我希望她会一点代码, 这样能更好地相互理解和帮助."})
 
 (def about-wechat {:title "微信账号", :content "找我商量技术和项目可以直接加我微信账号 jiyinyiyong, 注明来自 tiye.me"})
 
@@ -18,15 +18,16 @@
   {:title "Cirru 是什么意思?",
    :content "Cirru 是我的一个项目, 我认为用语法树进行编程才是正确的, 并且在这个方向是做了大量的探索, 最终发明了 Cumulo Editor 这个协同语法树开发工具.",
    :links [{:text "Cirru 首页", :url "http://cirru.org"}
-           {:text "GitHub/Cirru", :url "https://github.com/Cirru"}]})
+           {:text "GitHub/Cirru", :url "https://github.com/Cirru"}
+           {:text "Cumulo Editor", :url "https://github.com/Cirru/cumulo-editor/"}]})
 
-(def about-girlfriend {:title "有对象了吗?", :content "点击下方搜索\"微博\""})
+(def about-girlfriend {:title "有对象了吗?", :content "还没呢, 大婶."})
 
 (def tags ["上海" "程序员" "Clojure" "React" "杭州" "English"])
 
 (def about-hobby
   {:title "兴趣爱好",
-   :content "被写代码耽误了, 没啥爱好. 一定要有的话, 有段时间很喜欢用手机拍照刷朋友圈, 然后也经常地铁或者骑行, 把大城市当做迷宫一样瞎逛. 探索未知世界还是可以挺开心的. 对书店图书馆有兴趣, 刷过西西弗钟书阁, 可是没那么多时间看书啊."})
+   :content "喜欢用手机拍照刷朋友圈, 也喜欢偷拍小姑娘. 然后也经常地铁或者骑行, 把大城市当做迷宫一样瞎逛. 探索未知世界还是可以挺开心的. 对书店图书馆有兴趣, 刷过西西弗钟书阁, 可是没那么多时间看书啊."})
 
 (def about-weibo
   {:title "微博",
@@ -50,14 +51,13 @@
 (def about-test {:title "测试一下", :content "1 test passed."})
 
 (def about-lovelorn
-  {:title "失恋过吧?",
-   :content "嗯, 颓了很长时间, 不断认清了很多自己作为宅男实际上有多么落魄, 多么不上进. 也不知道是好是坏, 有这种经历对人打击一次比一次头疼."})
+  {:title "失恋过吧?", :content "大概是人生无法逃避的一段旅程. 这种感觉折磨了我好几个月, 也改变了我不少, 我最后还是过来了. 过去之后, 有点麻木了."})
 
 (def about-constellation {:title "你什么星座", :content "巨蟹座..吧.."})
 
 (def about-vue
   {:title "Vue 这个框架如何?",
-   :content "我觉得 Vue 对于创业者来说是不错的选择, 或者需要快速完成页面的时候. 但是某种程度上 Vue 回避了前端社区对于函数式编程的大量研究, 而我是笃信函数式编程的, 我觉得大家不应该把学会 Vue 当做是学完了前端."})
+   :content "我觉得 Vue 对于创业者来说是不错的选择, 或者需要快速完成页面的时候. 但是某种程度上 Vue 回避了前端社区对于函数式编程的大量研究, 而我是笃信函数式编程的, 我相信 FP 能带来更好的方案. 但就实际情况来说, Vue 确实用起来更加方便, 特别是简单的页面."})
 
 (def about-douban
   {:title "上不上豆瓣?",
@@ -75,7 +75,7 @@
 
 (def about-teambition
   {:title "前 Teambition 员工",
-   :content "我在 2014 年初加入 Teambition, 2016 年初离开, 大部分时间在简聊团队开发 React 应用"})
+   :content "我在 2014 年初加入 Teambition, 2016 年初离开, 大部分时间在简聊团队开发 React 应用. 那两年喜悦的不快的, 都是我成长最快的两年. 技术上讲实时单页面也是未来我很在乎的一个方向."})
 
 (def about-tiye
   {:title "\"题叶\"这个名字是什么意思?", :content "从张三影的词里来的, 原典是在唐传奇里. 自己找比较有意思, 别追问我啦."})
@@ -86,12 +86,13 @@
    :links [{:text "虾米:题叶", :url "http://www.xiami.com/space/lib-song/u/685374"}]})
 
 (def about-jiyinyiyong
-  {:title "\"jiyinyiyong\"是什么, 怎么念啊?", :content "这是我的小名在天台话里的发音, 是两个字, 但不会念的话就念成 John 吧..."})
+  {:title "\"jiyinyiyong\"是什么, 怎么念啊?", :content "这是我的小名在天台话里的发音, 是两个字, 为了方便就念成 Jon 吧..."})
 
 (def about-cumulo
   {:title "Cumulo 项目",
    :content "Cumulo 是一个通过 Diff 算法来进行多端同步的试验, 可以在 GitHub 上跟进.",
-   :links [{:text "GitHub/Cumulo", :url "https://github.com/Cumulo/"}]})
+   :links [{:text "GitHub/Cumulo", :url "https://github.com/Cumulo/"}
+           {:text "Recollect", :url "https://github.com/Cumulo/recollect"}]})
 
 (def about-blog
   {:title "博客(blog)地址",
@@ -119,7 +120,9 @@
    :content "从 2014 年开始关注 React 社区, 熟悉近年的发展. 我还参与了 React 中文社区线上的建设.",
    :links [{:text "React 中文导航", :url "http://nav.react-china.org"}]})
 
-(def about-shanghai {:title "居住在上海", :content "2014 起在上海工作. 我呆过张江跟普陀, 这些年逛过的地方应该也不少."})
+(def about-shanghai
+  {:title "居住在上海",
+   :content "2014 起在上海工作. 我呆过张江跟普陀, 这些年逛过的地方应该也不少. 去过其他两三个城市之后, 对比了一些浅层的东西, 我对上海有了更多的依赖, 某些角落也透露出更多世界都市的魅力."})
 
 (def about-haskell
   {:title "你学过 Haskell 吗?",
@@ -137,7 +140,7 @@
 
 (def about-worldview
   {:title "世界观什么样?",
-   :content "我觉得自己是个生活在线上世界的人, 乐此不疲地看着各种产业和科技的新闻, 生活却是写着代码刷着剧. 我希望有一天在线下也能像在线上来去飞快, 也不用为了陌生地段而担心, 希望科技能快速发展, 我也愿意为此投入时间金钱. 只是我毕竟从农村来的, 前途未卜啰."})
+   :content "我觉得自己是个生活在线上世界的人, 乐此不疲地看着各种产业和科技的新闻, 生活却是写着代码刷着剧. 我希望有一天在线下也能像在线上来去飞快, 也不用为了陌生地段而担心, 希望科技能快速发展, 我也愿意为此投入时间金钱."})
 
 (def information
   [about-clojure

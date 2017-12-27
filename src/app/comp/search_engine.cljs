@@ -9,9 +9,11 @@
   (fn [e d! m!]
     (.open js/window (str "https://www.google.com/search?q=题叶%7Cjiyinyiyong+" query))))
 
-(defn on-weibo [query]
+(defn on-segmentfault [query]
   (fn [e d! m!]
-    (.open js/window (str "http://weibo.com/1651843872/profile?is_search=1&key_word=" query))))
+    (.open
+     js/window
+     (str "https://segmentfault.com/search?q=" query "&relatedObjectId=1200000000365842"))))
 
 (defn on-twitter [query]
   (fn [e d! m!]
@@ -19,11 +21,9 @@
      js/window
      (str "https://twitter.com/search?q=" query "%20from%3Ajiyinyiyong&src=typd"))))
 
-(defn on-segmentfault [query]
+(defn on-weibo [query]
   (fn [e d! m!]
-    (.open
-     js/window
-     (str "https://segmentfault.com/search?q=" query "&relatedObjectId=1200000000365842"))))
+    (.open js/window (str "http://weibo.com/1651843872/profile?is_search=1&key_word=" query))))
 
 (def style-search {:color :white, :cursor :pointer, :text-decoration :underline})
 

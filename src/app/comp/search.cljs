@@ -9,11 +9,16 @@
             [app.comp.item :refer [comp-item]]
             [app.comp.search-engine :refer [comp-search-engine]]))
 
-(def style-searcher {:flex-shrink 0, :width "80vw"})
-
-(def style-mock {:height 32, :text-align :center, :color :white, :display :inline-block})
+(defn on-keydown [buffer]
+  (fn [e d! m!]
+    (if (= 13 (:key-code e))
+      (do
+       (d! :commit nil)
+       (if (fn? js/window.ga) (js/window.ga "send" "event" "interest" "search" buffer 1))))))
 
 (defn on-search [e d! m!] (d! :buffer (:value e)))
+
+(def style-empty {:color :white})
 
 (def style-input
   {:background-color :transparent,
@@ -24,22 +29,17 @@
    :width 320,
    :text-align :center})
 
-(def style-empty {:color :white})
-
-(defn on-keydown [buffer]
-  (fn [e d! m!]
-    (if (= 13 (:key-code e))
-      (do
-       (d! :commit nil)
-       (if (fn? js/window.ga) (js/window.ga "send" "event" "interest" "search" buffer 1))))))
+(def style-mock {:height 32, :text-align :center, :color :white, :display :inline-block})
 
 (def style-results {})
+
+(def style-searcher {:flex-shrink 0, :width "80vw"})
 
 (defcomp
  comp-search
  (buffer query mock-ssr?)
  (div
-  {:style (merge ui/column-center style-searcher)}
+  {:style (merge ui/center style-searcher)}
   (div
    {}
    (if mock-ssr?

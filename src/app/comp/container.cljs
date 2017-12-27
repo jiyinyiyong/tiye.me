@@ -9,6 +9,8 @@
             [app.comp.search :refer [comp-search]]
             [app.comp.tags :refer [comp-tags]]))
 
+(def style-area {:margin :auto})
+
 (def style-container
   {:font-family "Avenir, Roboto, Arial, Serif",
    :font-weight 300,
@@ -20,17 +22,15 @@
    :align-items nil,
    :justify-content nil})
 
-(def style-area {:margin :auto})
-
 (defcomp
  comp-container
  (store mock-ssr?)
  (let [show-profile? (< (count (:query store)) 2)]
    (div
-    {:style (merge ui/global ui/fullscreen ui/column-center style-container),
+    {:style (merge ui/global ui/fullscreen ui/center style-container),
      :class-name "app-container"}
     (div
-     {:style (merge ui/column-center style-area)}
+     {:style (merge ui/center style-area)}
      (if show-profile? (comp-profile))
      (if show-profile? (=< nil 20))
      (comp-tags)

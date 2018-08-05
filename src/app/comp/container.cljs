@@ -21,7 +21,7 @@
     (=< nil 80)
     (comp-md-block
      (inline-resource "markdown/about.md")
-     {:style {:width 800, :margin :auto, :font-size 16}})
+     {:style {:max-width 800, :margin :auto, :font-size 16, :padding 16}})
     (=< nil 200)
     (div
      {:style (merge

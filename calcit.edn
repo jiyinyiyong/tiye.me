@@ -259,7 +259,7 @@
                    "j" {
                     :type :expr, :by "rJG4IHzWf", :at 1533404540263, :id "c20cMXLuae"
                     :data {
-                     "T" {:type :leaf, :by "rJG4IHzWf", :at 1533404541822, :text ":width", :id "jmLvUGkDEs"}
+                     "T" {:type :leaf, :by "rJG4IHzWf", :at 1533429917645, :text ":max-width", :id "jmLvUGkDEs"}
                      "j" {:type :leaf, :by "rJG4IHzWf", :at 1533404542520, :text "800", :id "PZPwgIipaQ"}
                     }
                    }
@@ -275,6 +275,13 @@
                     :data {
                      "T" {:type :leaf, :by "rJG4IHzWf", :at 1533404638607, :text ":font-size", :id "Bv9DjnbQC_leaf"}
                      "j" {:type :leaf, :by "rJG4IHzWf", :at 1533404639730, :text "16", :id "lx7Q-YN3R_"}
+                    }
+                   }
+                   "x" {
+                    :type :expr, :by "rJG4IHzWf", :at 1533429868609, :id "J2paPR4Ia"
+                    :data {
+                     "T" {:type :leaf, :by "rJG4IHzWf", :at 1533429871485, :text ":padding", :id "J2paPR4Ialeaf"}
+                     "j" {:type :leaf, :by "rJG4IHzWf", :at 1533429872340, :text "16", :id "doJIuS_tk"}
                     }
                    }
                   }

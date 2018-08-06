@@ -1,41 +1,35 @@
 
 body {
   margin: 0;
-  background-image: url(http://cdn.tiye.me/logo/leaf.jpg);
-  background-size: cover;
-  background-position: center;
-  background-repeat: repeat;
-  /* background-attachment: fixed; */
-  background-color: hsl(17, 37%, 15%);
-}
-
-.app {
-  height: 100%;
+  font-display: optional;
 }
 
 body * {
   box-sizing: border-box;
-}
-
-::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: hsla(0, 0%, 100%, 0.6);
-}
-::-moz-placeholder { /* Firefox 19+ */
-  color: hsla(0, 0%, 100%, 0.6);
-}
-:-ms-input-placeholder { /* IE 10+ */
-  color: hsla(0, 0%, 100%, 0.6);
-}
-:-moz-placeholder { /* Firefox 18- */
-  color: hsla(0, 0%, 100%, 0.6);
-}
-
-.app-container > * {
-  margin: auto;
   flex-shrink: 0;
 }
 
-input::selection {
-  color: white;
-  background-color: black;
+::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: hsla(0,0%,100%);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsla(200,100%,76%,0.8);
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+::-webkit-resizer{
+  background-color:transparent;
+}
+
+.footer a {
+  color: #c0c0ff;
 }

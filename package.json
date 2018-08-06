@@ -1,31 +1,29 @@
 {
-  "name": "tiye.me",
+  "name": "calcit-workflow",
   "version": "0.1.0",
-  "description": "Home page for tiye",
+  "description": "ClojureScript workflow using Calcit Editor",
   "main": "index.js",
   "scripts": {
-    "cdn": "rsync -avr --progress dist/* tiye.me:cdn/tiye.me",
-    "tiye": "rsync -r dist/{index.html,manifest.json} tiye.me:repo/tiye/tiye.me/",
-    "upload": "yarn cdn && yarn tiye",
-    "release": "shadow-cljs release browser",
-    "watch": "shadow-cljs watch browser",
-    "compile-ssr": "shadow-cljs compile ssr",
-    "html-dev": "env=dev node target/ssr.js && cp entry/manifest.json target/",
-    "html": "node target/ssr.js && cp entry/manifest.json dist/",
-    "index.html": "yarn compile-ssr && yarn html-dev",
-    "del": "rm -rf dist/*",
-    "serve": "http-server dist",
-    "build": "yarn del && yarn release && yarn compile-ssr && yarn html",
-    "upload": "yarn cdn && yarn tiye"
+    "watch": "shadow-cljs watch client",
+    "serve": "http-server dist -s",
+    "repl": "rlwrap shadow-cljs clj-repl",
+    "build": "shadow-cljs clj-run build.main/build",
+    "build-local": "shadow-cljs clj-run build.main/build-local",
+    "page": "shadow-cljs clj-run build.main/page",
+    "upload": "lumo -c cli/:src/ -m build.upload",
+    "ln": "cd target && rm -f entry && ln -s ../entry"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:tiye/tiye.me.git"
+    "url": "git@github.com:mvc-works/calcit-workflow.git"
   },
   "author": "jiyinyiyong",
   "license": "MIT",
   "devDependencies": {
-    "http-server": "^0.10.0",
-    "shadow-cljs": "^2.0.123"
+    "http-server": "^0.11.1",
+    "shadow-cljs": "^2.4.28"
+  },
+  "dependencies": {
+    "shortid": "^2.2.12"
   }
 }

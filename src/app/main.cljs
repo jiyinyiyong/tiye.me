@@ -1,33 +1,45 @@
 
 (ns app.main
   (:require [respo.core :refer [render! clear-cache! realize-ssr!]]
-            [respo.cursor :refer [mutate]]
             [app.comp.container :refer [comp-container]]
+            [app.updater :refer [updater]]
+            [app.schema :as schema]
+            [reel.util :refer [listen-devtools!]]
+            [reel.core :refer [reel-updater refresh-reel]]
+            [reel.schema :as reel-schema]
             [cljs.reader :refer [read-string]]
-            [app.updater.core :refer [updater]]
-            [app.schema :as schema]))
+            [app.config :as config]))
 
-(defonce *store (atom schema/store))
+(defonce *reel
+  (atom (-> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store))))
 
 (defn dispatch! [op op-data]
-  (let [next-store (if (= op :states)
-                     (update @*store :states (mutate op-data))
-                     (updater @*store op op-data))]
-    (reset! *store next-store)))
+  (comment println "Dispatch:" op)
+  (reset! *reel (reel-updater updater @*reel op op-data)))
 
 (def mount-target (.querySelector js/document ".app"))
 
-(defn render-app! [renderer mock-ssr?]
-  (renderer mount-target (comp-container @*store mock-ssr?) dispatch!))
+(defn render-app! [renderer]
+  (renderer mount-target (comp-container @*reel) #(dispatch! %1 %2)))
 
 (def ssr? (some? (js/document.querySelector "meta.respo-ssr")))
 
 (defn main! []
-  (if ssr? (render-app! realize-ssr! true))
-  (render-app! render! false)
-  (add-watch *store :changes (fn [] (render-app! render! false)))
+  (if ssr? (render-app! realize-ssr!))
+  (render-app! render!)
+  (add-watch *reel :changes (fn [] (render-app! render!)))
+  (listen-devtools! "a" dispatch!)
+  (.addEventListener
+   js/window
+   "beforeunload"
+   (fn [] (.setItem js/localStorage (:storage config/site) (pr-str (:store @*reel)))))
+  (let [raw (.getItem js/localStorage (:storage config/site))]
+    (if (some? raw) (do (dispatch! :hydrate-storage (read-string raw)))))
   (println "App started."))
 
-(defn reload! [] (clear-cache!) (render-app! render! false) (println "Code updated."))
+(defn reload! []
+  (clear-cache!)
+  (reset! *reel (refresh-reel @*reel schema/store updater))
+  (println "Code updated."))
 
 (set! (.-onload js/window) main!)

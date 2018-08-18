@@ -39,6 +39,7 @@ I'm very interested in Functional programming my job is a Web developer. You may
 
 I do sharings, mostly in Shanghai and related to React and ClojureScript. Sometimes to my friends, and sometimes for the company I work for.
 
+2018-08 [广州 React Conf, Virtual DOM ideas](http://cdn.tiye.me/slides/cljs-virtual-dom.key)
 2018-07 [台北, ClojureScript](https://gist.github.com/jiyinyiyong/b403a24667a3f2b93afdd6e9f57f6f10)
 2017-07 [SHLUG ClojureScript](https://gist.github.com/jiyinyiyong/0b71f738c725f000b274399c5954e1a1)
 2017-05 [FP聚会, ClojureScript](https://gist.github.com/jiyinyiyong/7e6993079dea15e6a00c9ccd746b7074)

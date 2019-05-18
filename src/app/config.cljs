@@ -1,12 +1,18 @@
 
-(ns app.config (:require [app.util :refer [get-env!]]))
+(ns app.config )
 
-(def bundle-builds #{"release" "local-bundle"})
+(def cdn?
+  (cond
+    (exists? js/window) false
+    (exists? js/process) (= "true" js/process.env.cdn)
+    :else false))
 
 (def dev?
-  (if (exists? js/window)
-    (do ^boolean js/goog.DEBUG)
-    (not (contains? bundle-builds (get-env! "mode")))))
+  (let [debug? (do ^boolean js/goog.DEBUG)]
+    (cond
+      (exists? js/window) debug?
+      (exists? js/process) (not= "true" js/process.env.release)
+      :else true)))
 
 (def site
   {:storage "tiye-site",
@@ -16,4 +22,5 @@
    :cdn-folder "tiye.me:cdn/tiye-site",
    :title "题叶@jiyinyiyong",
    :icon "http://cdn.tiye.me/logo/tiye.jpg",
+   :storage-key "tiye-site",
    :upload-folder "tiye.me:repo/tiye/tiye.me/"})

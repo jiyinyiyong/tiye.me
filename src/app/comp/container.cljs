@@ -2,15 +2,14 @@
 (ns app.comp.container
   (:require [hsl.core :refer [hsl]]
             [respo-ui.core :as ui]
-            [respo.macros
+            [respo.core
              :refer
              [defcomp cursor-> action-> mutation-> <> div button textarea span]]
-            [verbosely.core :refer [verbosely!]]
             [respo.comp.space :refer [=<]]
             [reel.comp.reel :refer [comp-reel]]
             [respo-md.comp.md :refer [comp-md-block comp-md]]
             [app.config :refer [dev?]]
-            [app.macros :refer [inline-resource]]))
+            [shadow.resource :refer [inline]]))
 
 (defcomp
  comp-container
@@ -20,7 +19,7 @@
     {:style (merge ui/global ui/column)}
     (=< nil 80)
     (comp-md-block
-     (inline-resource "markdown/about.md")
+     (inline "about.md")
      {:style {:max-width 800, :margin :auto, :font-size 16, :padding 16}})
     (=< nil 200)
     (div

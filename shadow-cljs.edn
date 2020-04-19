@@ -1,31 +1,42 @@
-
-{:source-paths ["src" "cli" "markdown"]
- :cache-blockers #{cumulo-util.build}
- :dependencies [[mvc-works/hsl          "0.1.2"]
-                [mvc-works/shell-page   "0.1.10"]
-                [respo                  "0.10.12"]
-                [respo/ui               "0.3.13"]
-                [respo/value            "0.2.5"]
-                [respo/markdown         "0.2.4"]
-                [respo/reel             "0.3.5"]
-                [cumulo/util            "0.1.10"]
-                [org.clojure/core.incubator "0.1.4"]]
- :open-file-command ["subl" ["%s:%s:%s" :file :line :column]]
- :dev-http {7000 "target/"}
- :builds {:client {:target :browser
-                   :output-dir "target/"
-                   :asset-path "./"
-                   :modules {:client {:init-fn app.main/main!}}
-                   :devtools {:after-load app.main/reload!}
-                   :compiler-options {:infer-externs :auto}
-                   :release {:output-dir "dist/"
-                             :module-hash-names 8
-                             :build-options {:manifest-name "assets.edn"}}}
-          :page {:target :node-script
-                 :output-to "target/page.js"
-                 :main app.page/main!
-                 :devtools {:after-load app.page/main!}}
-          :upload {:target :node-script
-                   :output-to "target/upload.js"
-                   :main app.upload/main!
-                   :devtools {:after-load app.upload/main!}}}}
+{
+  :source-paths ["src" "cli" "markdown"]
+  :cache-blockers #{cumulo-util.build}
+  :dependencies [
+    [mvc-works/hsl "0.1.2"]
+    [mvc-works/shell-page "0.1.10"]
+    [respo "0.12.1"]
+    [respo/ui "0.3.14"]
+    [respo/value "0.3.0"]
+    [respo/markdown "0.2.5"]
+    [respo/reel "0.4.0"]
+    [cumulo/util "0.1.10"]
+    [org.clojure/core.incubator "0.1.4"]
+  ]
+  :open-file-command [
+    "subl"
+    ["%s:%s:%s" :file :line :column]
+  ]
+  :dev-http {7000 "target/"}
+  :builds {
+    :client {
+      :target :browser, :output-dir "target/", :asset-path "./"
+      :modules {
+        :client {:init-fn app.main/main!}
+      }
+      :devtools {:after-load app.main/reload!}
+      :compiler-options {:infer-externs :auto}
+      :release {
+        :output-dir "dist/", :module-hash-names 8
+        :build-options {:manifest-name "assets.edn"}
+      }
+    }
+    :page {
+      :target :node-script, :output-to "target/page.js", :main app.page/main!
+      :devtools {:after-load app.page/main!}
+    }
+    :upload {
+      :target :node-script, :output-to "target/upload.js", :main app.upload/main!
+      :devtools {:after-load app.upload/main!}
+    }
+  }
+}

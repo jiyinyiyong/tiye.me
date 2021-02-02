@@ -34,7 +34,7 @@ Most of the time I'm joining React and ClojureScript communities, but we don't h
 
 ## Year Reviews
 
-* [WIP 2020](https://medium.com/@jiyinyiyong/wip-2020-working-projects-38dc6155d6b5)
+* [2020 working projects](https://medium.com/@jiyinyiyong/wip-2020-working-projects-38dc6155d6b5)
 * [Year review of 2019, on coding and moods](https://medium.com/@jiyinyiyong/year-review-of-2019-on-coding-and-moods-4f4125102e62)
 * [Year review, my ClojureScript pieces in 2018](https://medium.com/@jiyinyiyong/year-review-my-clojurescript-pieces-in-2018-da7233649eab)
 * [Cirru 后续更新维护: 2016~2019](https://segmentfault.com/a/1190000020389563)

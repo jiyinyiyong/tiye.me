@@ -38,65 +38,52 @@
       :proc $ quote ()
     |app.main $ {}
       :ns $ quote
-        ns app.main $ :require ([] respo.core :refer $ [] render! clear-cache! realize-ssr!) ([] app.comp.container :refer $ [] comp-container) ([] app.updater :refer $ [] updater) ([] app.schema :as schema) ([] reel.util :refer $ [] listen-devtools!) ([] reel.core :refer $ [] reel-updater refresh-reel) ([] reel.schema :as reel-schema) ([] cljs.reader :refer $ [] read-string) ([] app.config :as config)
+        ns app.main $ :require ([] respo.core :refer $ [] render! clear-cache! realize-ssr!) ([] app.comp.container :refer $ [] comp-container) ([] app.updater :refer $ [] updater) ([] app.schema :as schema) ([] reel.util :refer $ [] listen-devtools!) ([] reel.core :refer $ [] reel-updater refresh-reel) ([] reel.schema :as reel-schema) ([] cljs.reader :refer $ [] read-string) ([] app.config :as config) ([] app.page :refer $ [] ssr-processing!)
       :defs $ {}
-        |*reel $ quote
-          defatom *reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
+        |ssr? $ quote
+          def ssr? $ some? (js/document.querySelector "\"[data-ssr]")
+        |device-main-action $ quote
+          defmacro device-main-action ()
+            let
+                ssr? $ = "\"true" (get-env "\"ssr")
+              if ssr?
+                do (echo "\"enabling SSR..") (quote-replace $ ssr-processing!)
+                quote-replace $ page-init!
+        |page-init! $ quote
+          defn page-init! () (println "\"Running mode:" $ if config/dev? "\"dev" "\"release")
+            when ssr? (echo "\"detected SSR content.") (render-app! realize-ssr!)
+            render-app! render!
+            add-watch *reel :changes $ fn () (render-app! render!)
+            listen-devtools! |a dispatch!
+            println "|App started."
         |dispatch! $ quote
           defn dispatch! (op op-data) (when config/dev? $ println "\"Dispatch:" op) (reset! *reel $ reel-updater updater @*reel op op-data)
         |main! $ quote
-          defn main! () (println "\"Running mode:" $ if config/dev? "\"dev" "\"release") (if ssr? $ render-app! realize-ssr!) (render-app! render!)
-            add-watch *reel :changes $ fn () (render-app! render!)
-            listen-devtools! |a dispatch!
-            .addEventListener js/window |beforeunload persist-storage!
-            repeat! 60 persist-storage!
-            let
-                raw $ .getItem js/localStorage (:storage-key config/site)
-              when (some? raw)
-                dispatch! :hydrate-storage $ extract-cirru-edn (js/JSON.parse raw)
-            println "|App started."
-        |mount-target $ quote (def mount-target $ .querySelector js/document |.app)
-        |reload! $ quote
-          defn reload! () (clear-cache!) (reset! *reel $ refresh-reel @*reel schema/store updater) (println "|Code updated.")
+          defn main! () (device-main-action)
+        |*reel $ quote
+          defatom *reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
         |render-app! $ quote
           defn render-app! (renderer)
             renderer mount-target (comp-container @*reel) (\ dispatch! % %2)
-        |ssr? $ quote
-          def ssr? $ some? (js/document.querySelector |meta.respo-ssr)
+        |reload! $ quote
+          defn reload! () (clear-cache!) (reset! *reel $ refresh-reel @*reel schema/store updater) (println "|Code updated.")
+        |mount-target $ quote (def mount-target $ .querySelector js/document |.app)
       :proc $ quote ()
     |app.page $ {}
       :ns $ quote
-        ns app.page
-          :require ([] respo.render.html :refer $ [] make-string) ([] shell-page.core :refer $ [] make-page spit slurp) ([] app.comp.container :refer $ [] comp-container) ([] app.schema :as schema) ([] reel.schema :as reel-schema) ([] cljs.reader :refer $ [] read-string) ([] app.config :as config) ([] cumulo-util.build :refer $ [] get-ip!)
-          :require-macros $ [] clojure.core.strint :refer ([] <<)
+        ns app.page $ :require ([] respo.render.html :refer $ [] make-string) ([] app.comp.container :refer $ [] comp-container) ([] app.schema :as schema) ([] reel.schema :as reel-schema) ([] app.config :as config) ([] "\"fs" :as fs)
       :defs $ {}
         |base-info $ quote
           def base-info $ {} (:title $ :title config/site) (:icon $ :icon config/site) (:ssr nil) (:inline-html nil)
-        |dev-page $ quote
-          defn dev-page ()
-            make-page | $ merge base-info
-              {}
-                :styles $ [] (<< "\"http://~(get-ip!):8100/main.css") "\"/entry/main.css"
-                :scripts $ [] "\"/client.js"
-                :inline-styles $ []
-        |main! $ quote
-          defn main! () (println "\"Running mode:" $ if config/dev? "\"dev" "\"release")
-            if config/dev? (spit "\"target/index.html" $ dev-page) (spit "\"dist/index.html" $ prod-page)
-        |prod-page $ quote
-          defn prod-page ()
+        |ssr-processing! $ quote
+          defn ssr-processing! ()
             let
                 reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
+                file "\"dist/index.html"
                 html-content $ make-string (comp-container reel)
-                assets $ read-string (slurp |dist/assets.edn)
-                cdn $ if config/cdn? (:cdn-url config/site) "\""
-                prefix-cdn $ fn (x) (str cdn x)
-              make-page html-content $ merge base-info
-                {}
-                  :styles $ [] (:release-ui config/site)
-                  :scripts $ map ("#()" -> % :output-name prefix-cdn) assets
-                  :ssr "\"respo-ssr"
-                  :inline-styles $ [] (slurp "\"./entry/main.css")
-                  :append-html $ slurp "\"./entry/ga.html"
+                content $ fs/readFileSync file "\"utf8"
+              fs/writeFileSync file $ replace content "\"<div class=\"app\" ></div>" (str "\"<div class=\"app\" data-ssr=\"true\" >" html-content "\"</div>")
+              echo "\"replaced" file
       :proc $ quote ()
     |app.schema $ {}
       :ns $ quote (ns app.schema)

@@ -1,4 +1,9 @@
 
+html {
+  /* Chrome on Pad, bottom is strange when tabs are hidden */
+  background-color: #211;
+}
+
 body {
   margin: 0;
   font-display: optional;

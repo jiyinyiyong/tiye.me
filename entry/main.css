@@ -2,6 +2,8 @@
 body {
   margin: 0;
   font-display: optional;
+  overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
 }
 
 body * {
@@ -10,8 +12,8 @@ body * {
 }
 
 ::-webkit-scrollbar {
-  width: 2px;
-  height: 2px;
+  width: 0px;
+  height: 0px;
 }
 
 ::-webkit-scrollbar-track {
@@ -30,8 +32,8 @@ body * {
   background-color:transparent;
 }
 
-.footer a {
-  color: #c0c0ff;
+a {
+  text-decoration: none;
 }
 
 .show-on-hover {
@@ -42,3 +44,4 @@ body * {
 .show-on-hover:hover {
   opacity: 1;
 }
+

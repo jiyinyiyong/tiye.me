@@ -9,7 +9,7 @@
         ns app.comp.container $ :require
           respo.util.format :refer $ hsl
           [] respo-ui.core :as ui
-          [] respo.core :refer $ [] defcomp >> <> div button textarea span a list->
+          [] respo.core :refer $ [] defcomp >> <> div button textarea span a list-> defeffect
           [] respo.comp.space :refer $ [] =<
           [] reel.comp.reel :refer $ [] comp-reel
           [] respo-md.comp.md :refer $ [] comp-md-block comp-md
@@ -28,9 +28,7 @@
                 push-tab $ fn (idx x d!) (println x)
                   d! cursor $ update state :router
                     fn (rs)
-                      if (nil? idx)
-                        w-log $ conj rs x
-                        .assoc-after rs idx x
+                      if (nil? idx) (conj rs x) (.assoc-after rs idx x)
                 close-tab $ fn (idx all? d!)
                   if all?
                     d! cursor $ update state :router
@@ -40,23 +38,25 @@
               div
                 {} $ :style
                   merge ui/global ui/fullscreen $ {} (:background-image "\"url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size "\"cover") (:background-position :center) (:display :flex) (:padding "\"0 200px")
-                if
-                  empty? $ w-log router
-                  comp-empty push-tab
-                  comp-cards router push-tab close-tab
+                comp-cards router push-tab close-tab
+                if (empty? router) (comp-empty push-tab)
                 when dev? $ comp-reel (>> states :reel) reel ({})
         |render-content $ quote
           defn render-content (kind args on-open)
             case-default kind
               div ({})
                 <> $ str "\"Unknown kind: " kind
-              :title $ div ({})
+              :title $ div
+                {} $ :style
+                  {} (:font-weight 700) (:font-family ui/font-normal) (:font-size 18) (:margin-top 8)
                 <> $ nth args 0
-              :text $ div ({})
+              :text $ div
+                {} $ :style
+                  {} $ :line-height "\"20px"
                 <> $ nth args 0
               :links $ div
                 {} $ :style
-                  {} $ :margin "\"16px 0px"
+                  {} $ :margin "\"8px 0px"
                 , &
                   -> args $ map
                     fn (xs)
@@ -77,6 +77,51 @@
                   :href $ nth args 0
                   :inner-text $ nth args 1
                   :target "\"_blank"
+        |comp-card $ quote
+          defcomp comp-card (idx key on-open on-close)
+            [] (effect-fading)
+              let
+                  info $ get site-map key
+                div
+                  {} $ :style
+                    merge ui/column $ {}
+                      :background-color $ hsl 0 0 100 0.96
+                      :height 560
+                      :width 320
+                      :padding "\"0 8px"
+                      :box-shadow "\"1px 1px 4px black"
+                      :border-radius "\"2px"
+                      :border "\"2px solid white"
+                      :margin-right 4
+                      :transition-duration "\"200ms"
+                      :position :absolute
+                      :left $ * (+ 320 4) idx
+                      :top -280
+                  div
+                    {} $ :style (merge ui/row-parted)
+                    span
+                      {} (:class-name "\"show-on-hover") (:title "\"Command + Click to close all")
+                      comp-icon :x
+                        {}
+                          :color $ hsl 0 0 0
+                          :font-size 14
+                          :cursor :pointer
+                        fn (e d!)
+                          let
+                              all? $ or (-> e :event .-metaKey) (-> e :event .-ctrlKey)
+                            on-close idx all? d!
+                    <> (:title info)
+                      {} (:font-family ui/font-fancy) (:font-weight 300)
+                        :color $ hsl 0 0 30
+                    span $ {}
+                  if (nil? info)
+                    <> $ str "\"Unknown data: " key
+                    div ({}) & $ -> info (get :content)
+                      map $ fn (directive)
+                        if (list? directive)
+                          render-content (first directive) (rest directive)
+                            fn (key d!) (on-open idx key d!)
+                          <> $ str "\"Unknown " directive
         |slurp $ quote
           defmacro slurp (file) (read-file file)
         |comp-cards $ quote
@@ -84,46 +129,13 @@
             list->
               {} $ :style
                 merge ui/row $ {} (:margin "\"auto 0")
+                  :width $ * (+ 320 4 320) (count router)
+                  :position :relative
+                  :transition-duration 400
+                  :transition-property :width
               -> router $ map-indexed
                 fn (idx key)
-                  let
-                      info $ get site-map key
-                    [] key $ div
-                      {} $ :style
-                        merge ui/column $ {}
-                          :background-color $ hsl 0 0 100 0.96
-                          :height 560
-                          :width 320
-                          :padding "\"0 8px"
-                          :box-shadow "\"1px 1px 4px black"
-                          :border-radius "\"2px"
-                          :border "\"2px solid white"
-                          :margin-right 4
-                      div
-                        {} $ :style (merge ui/row-parted)
-                        span
-                          {} $ :class-name "\"show-on-hover"
-                          comp-icon :x
-                            {}
-                              :color $ hsl 0 0 0
-                              :font-size 14
-                              :cursor :pointer
-                            fn (e d!)
-                              let
-                                  all? $ or (-> e :event .-metaKey) (-> e :event .-ctrlKey)
-                                on-close idx all? d!
-                        <> (:title info)
-                          {} (:font-family ui/font-fancy) (:font-weight 300)
-                            :color $ hsl 0 0 30
-                        span $ {}
-                      if (nil? info)
-                        <> $ str "\"Unknown data: " key
-                        div ({}) & $ -> info (get :content)
-                          map $ fn (directive)
-                            if (list? directive)
-                              render-content (first directive) (rest directive)
-                                fn (key d!) (on-open idx key d!)
-                              <> $ str "\"Unknown " directive
+                  [] key $ comp-card idx key on-open on-close
         |comp-empty $ quote
           defcomp comp-empty (on-home)
             div
@@ -131,17 +143,52 @@
                 {} $ :margin :auto
               div
                 {} $ :style ui/center
-                div $ {}
-                  :style $ {} (:background-image "\"url(https://cdn.tiye.me/logo/tiye.jpg)") (:background-size "\"cover") (:width 80) (:height 80) (:border-radius "\"50%") (:border "\"4px solid white") (:box-shadow "\"1px 1px 4px black") (:cursor :pointer)
-                  :on-click $ fn (e d!) (on-home nil :home d!)
+                comp-avatar on-home
               =< 8 nil
               div
                 {} $ :style
-                  merge ui/center $ {} (:color :white) (:font-size 21) (:line-height "\"28px") (:text-shadow "\"1px 1px 4px black")
+                  merge ui/center $ {} (:color :white) (:font-size 18) (:line-height "\"28px") (:text-shadow "\"1px 1px 4px black")
                 <> "\"题叶"
                 <> "\"@jiyinyiyong" $ {} (:font-size 14)
+        |comp-avatar $ quote
+          defcomp comp-avatar (on-home)
+            [] (effect-bump)
+              div $ {}
+                :style $ {} (:background-image "\"url(https://cdn.tiye.me/logo/tiye.jpg)") (:background-size "\"cover") (:width 80) (:height 80) (:border-radius "\"50%") (:border "\"4px solid white") (:box-shadow "\"1px 1px 4px black") (:transition-duration "\"300ms") (:transition-timing-function "\"cubic-bezier(0.54, 0.17, 0.53, 1.88)") (:cursor :pointer)
+                :on-click $ fn (e d!) (on-home nil :home d!)
         |site-map $ quote
           def site-map $ parse-cirru-edn (slurp "\"data/meta.cirru")
+        |effect-bump $ quote
+          defeffect effect-bump () (action el at?)
+            if (= action :mount)
+              do
+                -> el .-style .-scale $ set! 0.8
+                js/setTimeout $ fn ()
+                  -> el .-style .-scale $ set! 1
+                  , 0
+        |effect-fading $ quote
+          defeffect effect-fading () (action el at?)
+            case-default action nil
+              :mount $ do
+                -> el .-style .-opacity $ set! 0.1
+                -> el .-style .-translate $ set! "\"-40px 0"
+                .!scrollIntoView el
+                js/setTimeout
+                  fn ()
+                    -> el .-style .-opacity $ set! 1
+                    -> el .-style .-translate $ set! "\"0px 0"
+                  , 0
+              :unmount $ let
+                  el' $ .!cloneNode el
+                -> el .-parentElement $ .!appendChild el'
+                js/setTimeout
+                  fn ()
+                    -> el' .-style .-opacity $ set! 0.01
+                    -> el' .-style .-translate $ set! "\"-40px 0"
+                  , 10
+                js/setTimeout
+                  fn () $ .!remove el'
+                  , 200
     |app.schema $ {}
       :ns $ quote (ns app.schema)
       :defs $ {}

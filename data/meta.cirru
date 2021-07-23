@@ -3,9 +3,12 @@
   :home $ {}
     :title "|题叶"
     :content $ []
-      [] :title "|About me"
-      [] :text "|I use @题叶 and [@jiyinyiyong](https://github.com/jiyinyiyong) on the web. I make things with ClojureScript and work using TypeScript."
-      [] :text "|Most of the time I'm joining React and ClojureScript communities, but we don't have a stable offline community yet."
+      [] :text "|I make things with ClojureScript and work using TypeScript."
+      [] :text "|Most of the time I'm joining React and ClojureScript communities"
+      [] :title |Languages
+      [] :text "|Chinese English ClojureScript TypeScript Rust Calcit"
+
+      [] :title |Entries
       [] :links
         [] :route :projects |Projects
         [] :route :toolkits |Toolkits

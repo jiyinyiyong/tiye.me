@@ -37,7 +37,7 @@
                       fn (rs) (dissoc rs idx)
               div
                 {} $ :style
-                  merge ui/global ui/fullscreen $ {} (:background-image "\"url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size "\"cover") (:background-position :center) (:display :flex) (:padding "\"0 200px")
+                  merge ui/global ui/fullscreen $ {} (:background-image "\"url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size "\"cover") (:background-position :center) (:display :flex) (:padding "\"0 12vw") (:font-size 20)
                 comp-cards router push-tab close-tab
                 if (empty? router) (comp-empty push-tab)
                 when dev? $ comp-reel (>> states :reel) reel ({})
@@ -48,11 +48,11 @@
                 <> $ str "\"Unknown kind: " kind
               :title $ div
                 {} $ :style
-                  {} (:font-weight 700) (:font-family ui/font-normal) (:font-size 18) (:margin-top 8)
+                  {} (:font-weight 700) (:font-family ui/font-normal) (:font-size 24) (:margin-top 8)
                 <> $ nth args 0
               :text $ div
                 {} $ :style
-                  {} $ :line-height "\"20px"
+                  {} $ :line-height "\"26px"
                 <> $ nth args 0
               :links $ div
                 {} $ :style
@@ -72,11 +72,15 @@
               :url $ div ({})
                 <> "\"☍" $ {}
                   :color $ hsl 200 80 70
-                =< 8 nil
+                =< 6 nil
                 a $ {}
                   :href $ nth args 0
                   :inner-text $ nth args 1
                   :target "\"_blank"
+              :html $ div
+                {}
+                  :style $ {} (:position :relative) (:height 660)
+                  :innerHTML $ nth (w-log args) 0
         |comp-card $ quote
           defcomp comp-card (idx key on-open on-close)
             [] (effect-fading)
@@ -84,19 +88,11 @@
                   info $ get site-map key
                 div
                   {} $ :style
-                    merge ui/column $ {}
-                      :background-color $ hsl 0 0 100 0.96
+                    merge ui/column style-card $ {}
+                      :left $ * (+ card-width 4) idx
                       :height 560
-                      :width 320
-                      :padding "\"0 8px"
-                      :box-shadow "\"1px 1px 4px black"
-                      :border-radius "\"2px"
-                      :border "\"2px solid white"
-                      :margin-right 4
-                      :transition-duration "\"200ms"
-                      :position :absolute
-                      :left $ * (+ 320 4) idx
                       :top -280
+                      :width card-width
                   div
                     {} $ :style (merge ui/row-parted)
                     span
@@ -104,24 +100,29 @@
                       comp-icon :x
                         {}
                           :color $ hsl 0 0 0
-                          :font-size 14
+                          :font-size 20
                           :cursor :pointer
                         fn (e d!)
                           let
                               all? $ or (-> e :event .-metaKey) (-> e :event .-ctrlKey)
                             on-close idx all? d!
                     <> (:title info)
-                      {} (:font-family ui/font-fancy) (:font-weight 300)
-                        :color $ hsl 0 0 30
+                      {} (:font-family ui/font-fancy) (:font-size 14) (:font-weight 300)
+                        :color $ hsl 0 0 60
                     span $ {}
+                  =< nil 8
                   if (nil? info)
                     <> $ str "\"Unknown data: " key
-                    div ({}) & $ -> info (get :content)
-                      map $ fn (directive)
-                        if (list? directive)
-                          render-content (first directive) (rest directive)
-                            fn (key d!) (on-open idx key d!)
-                          <> $ str "\"Unknown " directive
+                    div
+                      {} $ :style
+                        {} $ :padding "\"0 16px"
+                      , & $ -> info (get :content)
+                        map $ fn (directive)
+                          if (list? directive)
+                            render-content (first directive) (rest directive)
+                              fn (key d!) (on-open idx key d!)
+                            <> $ str "\"Unknown " directive
+                  =< nil 120
         |slurp $ quote
           defmacro slurp (file) (read-file file)
         |comp-cards $ quote
@@ -129,9 +130,9 @@
             list->
               {} $ :style
                 merge ui/row $ {} (:margin "\"auto 0")
-                  :width $ * (+ 320 4 320) (count router)
+                  :width $ * (+ card-width 4) (count router)
                   :position :relative
-                  :transition-duration 400
+                  :transition-duration "\"300ms"
                   :transition-property :width
               -> router $ map-indexed
                 fn (idx key)
@@ -154,7 +155,7 @@
           defcomp comp-avatar (on-home)
             [] (effect-bump)
               div $ {}
-                :style $ {} (:background-image "\"url(https://cdn.tiye.me/logo/tiye.jpg)") (:background-size "\"cover") (:width 80) (:height 80) (:border-radius "\"50%") (:border "\"4px solid white") (:box-shadow "\"1px 1px 4px black") (:transition-duration "\"300ms") (:transition-timing-function "\"cubic-bezier(0.54, 0.17, 0.53, 1.88)") (:cursor :pointer)
+                :style $ {} (:background-image "\"url(https://cdn.tiye.me/logo/tiye.jpg)") (:background-size "\"cover") (:width 120) (:height 120) (:border-radius "\"50%") (:border "\"4px solid white") (:box-shadow "\"1px 1px 4px black") (:transition-duration "\"300ms") (:transition-timing-function "\"cubic-bezier(0.54, 0.17, 0.53, 1.88)") (:cursor :pointer)
                 :on-click $ fn (e d!) (on-home nil :home d!)
         |site-map $ quote
           def site-map $ parse-cirru-edn (slurp "\"data/meta.cirru")
@@ -162,10 +163,12 @@
           defeffect effect-bump () (action el at?)
             if (= action :mount)
               do
-                -> el .-style .-scale $ set! 0.8
+                -> el .-style .-scale $ set! 0.6
                 js/setTimeout $ fn ()
                   -> el .-style .-scale $ set! 1
                   , 0
+        |card-width $ quote
+          def card-width $ js/Math.min 400 (- js/window.innerWidth 40)
         |effect-fading $ quote
           defeffect effect-fading () (action el at?)
             case-default action nil
@@ -189,6 +192,16 @@
                 js/setTimeout
                   fn () $ .!remove el'
                   , 200
+        |style-card $ quote
+          def style-card $ {}
+            :background-color $ hsl 0 0 100 0.96
+            :padding "\"0px 4px"
+            :box-shadow "\"1px 1px 4px black"
+            :border-radius "\"2px"
+            :border "\"2px solid white"
+            :margin-right 4
+            :transition-duration "\"200ms"
+            :position :absolute
     |app.schema $ {}
       :ns $ quote (ns app.schema)
       :defs $ {}

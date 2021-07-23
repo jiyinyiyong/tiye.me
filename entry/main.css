@@ -39,7 +39,7 @@ a {
 .show-on-hover {
   transition-duration: 300ms;
   transition-property: opacity;
-  opacity: 0.1;
+  opacity: 0.3;
 }
 .show-on-hover:hover {
   opacity: 1;

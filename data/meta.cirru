@@ -3,18 +3,24 @@
   :home $ {}
     :title "|题叶"
     :content $ []
-      [] :text "|I make things with ClojureScript and work using TypeScript."
-      [] :text "|Most of the time I'm joining React and ClojureScript communities"
-      [] :title |Languages
-      [] :text "|Chinese English ClojureScript TypeScript Rust Calcit"
+      [] :text "|Calcit 语言作者. 原神玩家"
+      [] :title "Main focuses"
+      [] :links
+        [] :route :calcit |Calcit
+        [] :route :quamolit |Quamolit
+      [] :title "Video Channels"
+      [] :links
+        [] :url |https://space.bilibili.com/14227306 |bilibili
+        [] :url |https://www.youtube.com/c/JiyinYiyong/videos |YouTube
 
-      [] :title |Entries
+      [] :title "|On..."
       [] :links
         [] :route :projects |Projects
         [] :route :toolkits |Toolkits
         [] :route :blogs |Blogs
         [] :route :sharings |Sharings
-        [] :route :years "|Year Reviews"
+        [] :route :years "|Reviews"
+        [] :route :contacts "|Contacts"
 
   :projects $ {}
     :title |Projects
@@ -24,6 +30,8 @@
         [] :route :respo |Respo
         [] :route :cumulo |Cumulo
         [] :route :cirru |Cirru
+        [] :route :calcit |Calcit
+        [] :route :quamolit |Quamolit
 
   :respo $ {}
     :title |Respo
@@ -63,6 +71,7 @@
         [] :route :memkits |Memkits
         [] :route :topixim |TopixIM
         [] :route :mvc-works "|MVC Works"
+        [] :url |https://github.com/worktools/ "|Work tools"
 
   :topixim $ {}
     :title |TopixIM
@@ -97,7 +106,8 @@
   :contacts $ {}
     :title |Contacts
     :content $ []
-      [] :link $ []
+      [] :text "|Find me on"
+      [] :links
         [] :url |https://twitter.com/jiyinyiyong |Twitter
         [] :url |http://weibo.com/jiyinyiyong/ |Weibo
 
@@ -120,11 +130,20 @@
         [] :url |https://segmentfault.com/blog/jiyinyiyong |SegmentFault
         [] :url |https://www.zhihu.com/people/jiyinyiyong/posts |知乎
         [] :url |https://medium.com/@jiyinyiyong |Medium
+      [] :title "|Deprecated"
+      [] :links
+        [] :url |https://github.com/jiyinyiyong/blog2 "|基于 Markdown 静态文件服务的博客"
+        [] :url |https://github.com/jiyinyiyong/article "|Github Articles in HTML"
+        [] :url |http://jiyinyiyong.blog.163.com/ "|网易博客"
+        [] :url |http://learning-notes.diandian.com/ "|点点, 学习笔记"
+        [] :url |http://thinking.diandian.com/ "|点点, 投入的想法"
+        [] :url |http://beg-silence.tumblr.com/ "|Like Silence 博客"
+
 
   :sharings $ {}
     :title |Sharings
     :content $ []
-      [] :text "|I do sharings, mostly in Shanghai and related to React and ClojureScript. Sometimes to my friends, and sometimes for the company I work for."
+      [] :text "|I do sharings, mostly in Shanghai and related to React and ClojureScript."
       [] :links
         [] :url |https://gist.github.com/jiyinyiyong/561cd06ad1a1537dc8bcc15109bcf1cc "|2018-09 上海 FCC, ClojureScript 开发体验演示"
         [] :url |http://cdn.tiye.me/slides/cljs-virtual-dom.key "|2018-08 广州 React Conf, Virtual DOM ideas"
@@ -132,3 +151,16 @@
         [] :url |https://gist.github.com/jiyinyiyong/7e6993079dea15e6a00c9ccd746b7074 "|2017-05 FP聚会, ClojureScript"
         [] :url |https://os.alipayobjects.com/rmsportal/WbKDoPrtkHaxTuOjOZQy.pdf "|2016-12 杭州 D2, React 到 ClojureScript"
         [] :url |https://github.com/jiyinyiyong/100offer-sharing/blob/master/slides.md "|2016-01 简聊 React"
+
+  :skills $ {}
+    :title |Skills
+    :content $ []
+      [] :title "Skills"
+      [] :text "|ClojureScript TypeScript Rust Calcit"
+
+  :calcit $ {}
+    :title |Calcit
+    :content $ []
+      [] :text "|Calcit: a Lisp dialect based on Cirru. Inspired by ClojureScript."
+      [] :links
+        [] :url |https://github.com/calcit-lang/ "|GitHub Calcit"

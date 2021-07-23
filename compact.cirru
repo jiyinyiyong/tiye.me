@@ -1,31 +1,147 @@
 
 {} (:package |app)
   :configs $ {} (:init-fn |app.main/main!) (:reload-fn |app.main/reload!)
-    :modules $ [] |respo.calcit/compact.cirru |lilac/compact.cirru |memof/compact.cirru |respo-ui.calcit/compact.cirru |respo-markdown.calcit/compact.cirru |reel.calcit/compact.cirru
+    :modules $ [] |respo.calcit/compact.cirru |lilac/compact.cirru |memof/compact.cirru |respo-ui.calcit/compact.cirru |respo-markdown.calcit/compact.cirru |reel.calcit/compact.cirru |respo-feather.calcit/
     :version nil
   :files $ {}
     |app.comp.container $ {}
       :ns $ quote
-        ns app.comp.container $ :require ([] respo-ui.core :as ui)
-          [] respo.core :refer $ [] defcomp >> <> div button textarea span
+        ns app.comp.container $ :require
+          respo.util.format :refer $ hsl
+          [] respo-ui.core :as ui
+          [] respo.core :refer $ [] defcomp >> <> div button textarea span a list->
           [] respo.comp.space :refer $ [] =<
           [] reel.comp.reel :refer $ [] comp-reel
           [] respo-md.comp.md :refer $ [] comp-md-block comp-md
           [] app.config :refer $ [] dev?
+          feather.core :refer $ comp-icon
       :defs $ {}
         |comp-container $ quote
           defcomp comp-container (reel)
             let
                 store $ :store reel
                 states $ :states store
-              js/console.log $ parse-cirru-edn (slurp "\"data/meta.cirru")
+                state $ or (:data states)
+                  {} $ :router ([])
+                cursor $ or (:cursor states) ([])
+                router $ :router state
+                push-tab $ fn (idx x d!) (println x)
+                  d! cursor $ update state :router
+                    fn (rs)
+                      if (nil? idx)
+                        w-log $ conj rs x
+                        .assoc-after rs idx x
+                close-tab $ fn (idx all? d!)
+                  if all?
+                    d! cursor $ update state :router
+                      fn (rs) (.slice rs 0 idx)
+                    d! cursor $ update state :router
+                      fn (rs) (dissoc rs idx)
               div
                 {} $ :style
-                  merge ui/global ui/fullscreen ui/column $ {} (:background-image "\"url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size "\"cover") (:background-position :center)
-                =< nil 200
+                  merge ui/global ui/fullscreen $ {} (:background-image "\"url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size "\"cover") (:background-position :center) (:display :flex) (:padding "\"0 200px")
+                if
+                  empty? $ w-log router
+                  comp-empty push-tab
+                  comp-cards router push-tab close-tab
                 when dev? $ comp-reel (>> states :reel) reel ({})
+        |render-content $ quote
+          defn render-content (kind args on-open)
+            case-default kind
+              div ({})
+                <> $ str "\"Unknown kind: " kind
+              :title $ div ({})
+                <> $ nth args 0
+              :text $ div ({})
+                <> $ nth args 0
+              :links $ div
+                {} $ :style
+                  {} $ :margin "\"16px 0px"
+                , &
+                  -> args $ map
+                    fn (xs)
+                      if (list? xs)
+                        render-content (nth xs 0) (rest xs) on-open
+                        <> $ str "\"Unknown " xs
+              :route $ div
+                {}
+                  :style $ {} (:display :inline-block) (:min-width 40) (:border "\"1px solid #ddf") (:padding "\"0 8px") (:margin-right 8) (:margin-bottom 8) (:cursor :pointer)
+                  :on-click $ fn (e d!)
+                    on-open (nth args 0) d!
+                <> $ nth args 1
+              :url $ div ({})
+                <> "\"☍" $ {}
+                  :color $ hsl 200 80 70
+                =< 8 nil
+                a $ {}
+                  :href $ nth args 0
+                  :inner-text $ nth args 1
+                  :target "\"_blank"
         |slurp $ quote
           defmacro slurp (file) (read-file file)
+        |comp-cards $ quote
+          defcomp comp-cards (router on-open on-close)
+            list->
+              {} $ :style
+                merge ui/row $ {} (:margin "\"auto 0")
+              -> router $ map-indexed
+                fn (idx key)
+                  let
+                      info $ get site-map key
+                    [] key $ div
+                      {} $ :style
+                        merge ui/column $ {}
+                          :background-color $ hsl 0 0 100 0.96
+                          :height 560
+                          :width 320
+                          :padding "\"0 8px"
+                          :box-shadow "\"1px 1px 4px black"
+                          :border-radius "\"2px"
+                          :border "\"2px solid white"
+                          :margin-right 4
+                      div
+                        {} $ :style (merge ui/row-parted)
+                        span
+                          {} $ :class-name "\"show-on-hover"
+                          comp-icon :x
+                            {}
+                              :color $ hsl 0 0 0
+                              :font-size 14
+                              :cursor :pointer
+                            fn (e d!)
+                              let
+                                  all? $ or (-> e :event .-metaKey) (-> e :event .-ctrlKey)
+                                on-close idx all? d!
+                        <> (:title info)
+                          {} (:font-family ui/font-fancy) (:font-weight 300)
+                            :color $ hsl 0 0 30
+                        span $ {}
+                      if (nil? info)
+                        <> $ str "\"Unknown data: " key
+                        div ({}) & $ -> info (get :content)
+                          map $ fn (directive)
+                            if (list? directive)
+                              render-content (first directive) (rest directive)
+                                fn (key d!) (on-open idx key d!)
+                              <> $ str "\"Unknown " directive
+        |comp-empty $ quote
+          defcomp comp-empty (on-home)
+            div
+              {} $ :style
+                {} $ :margin :auto
+              div
+                {} $ :style ui/center
+                div $ {}
+                  :style $ {} (:background-image "\"url(https://cdn.tiye.me/logo/tiye.jpg)") (:background-size "\"cover") (:width 80) (:height 80) (:border-radius "\"50%") (:border "\"4px solid white") (:box-shadow "\"1px 1px 4px black") (:cursor :pointer)
+                  :on-click $ fn (e d!) (on-home nil :home d!)
+              =< 8 nil
+              div
+                {} $ :style
+                  merge ui/center $ {} (:color :white) (:font-size 21) (:line-height "\"28px") (:text-shadow "\"1px 1px 4px black")
+                <> "\"题叶"
+                <> "\"@jiyinyiyong" $ {} (:font-size 14)
+        |site-map $ quote
+          def site-map $ parse-cirru-edn (slurp "\"data/meta.cirru")
     |app.schema $ {}
       :ns $ quote (ns app.schema)
       :defs $ {}
@@ -40,11 +156,11 @@
       :defs $ {}
         |updater $ quote
           defn updater (store op op-data op-id op-time)
-            case op
+            case-default op
+              do (println "\"unknown op" op) store
               :states $ update-states store op-data
               :content $ assoc store :content op-data
               :hydrate-storage op-data
-              op store
     |app.main $ {}
       :ns $ quote
         ns app.main $ :require

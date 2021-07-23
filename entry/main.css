@@ -33,3 +33,12 @@ body * {
 .footer a {
   color: #c0c0ff;
 }
+
+.show-on-hover {
+  transition-duration: 300ms;
+  transition-property: opacity;
+  opacity: 0.1;
+}
+.show-on-hover:hover {
+  opacity: 1;
+}

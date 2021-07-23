@@ -4,16 +4,20 @@
     :title "|题叶"
     :content $ []
       [] :title "|About me"
-      [] :text "|I use @题叶 and [@jiyinyiyong](https://github.com/jiyinyiyong) on the web. I make things with ClojureScript and work using TypeScript. I live in Shanghai."
-      [] :text "|I'm very interested in Functional Programming. My job is a Web developer."
-      [] :text "|I'm very interested in Functional Programming. My job is a Web developer."
+      [] :text "|I use @题叶 and [@jiyinyiyong](https://github.com/jiyinyiyong) on the web. I make things with ClojureScript and work using TypeScript."
       [] :text "|Most of the time I'm joining React and ClojureScript communities, but we don't have a stable offline community yet."
+      [] :links
+        [] :route :projects |Projects
+        [] :route :toolkits |Toolkits
+        [] :route :blogs |Blogs
+        [] :route :sharings |Sharings
+        [] :route :years "|Year Reviews"
 
   :projects $ {}
     :title |Projects
     :content $ []
       [] :title "|Projects"
-      [] :links $ []
+      [] :links
         [] :route :respo |Respo
         [] :route :cumulo |Cumulo
         [] :route :cirru |Cirru
@@ -22,7 +26,7 @@
     :title |Respo
     :content $ []
       [] :text "|a Virtual DOM library in calcit-js/ClojureScript"
-      [] :links $ []
+      [] :links
         [] :url |http://github.com/Respo "|GitHub respo.calcit"
         [] :url |http://github.com/Respo/respo.cljs "|GitHub respo.cljs"
 
@@ -30,21 +34,21 @@
     :title |Cumulo
     :content $ []
       [] :text "|a tiny workflow for realtime apps"
-      [] :links $ []
+      [] :links
         [] :url |https://github.com/Cumulo/ "|GitHub Cumulo"
 
   :cirru $ {}
     :title |Cirru
     :content $ []
       [] :text "|structual code editing"
-      [] :links $ []
+      [] :links
         [] :url |https://github.com/Cirru/ "|GitHub Cirru"
 
   :quamolit $ {}
     :title |Quamolit
     :content $ []
       [] :text "|some canvas works"
-      [] :links $ []
+      [] :links
         [] :url |http://quamolit.org/ "|GitHub Quamolit/phlox"
 
   :toolkits $ {}
@@ -52,36 +56,36 @@
     :content $ []
       [] :title "|Toolkits"
       [] :text "|Some of my tiny pieces can be found on"
-      [] :links $ []
-        [] :route :Memkits |Memkits
+      [] :links
+        [] :route :memkits |Memkits
         [] :route :topixim |TopixIM
-        [] :route :mvc-works |MVC Works
+        [] :route :mvc-works "|MVC Works"
 
   :topixim $ {}
     :title |TopixIM
     :content $ []
       [] :text "|topics over the wire"
-      [] :links $ []
+      [] :links
         [] :url |https://github.com/TopixIM/ "|TopixIM"
 
   :memkits $ {}
     :title |Memkits
     :content $ []
       [] :text "|Memory toolkits"
-      [] :links $ []
+      [] :links
         [] :url |https://github.com/memkits "|Memkits"
 
   :mvc-works $ {}
     :title "|MVC Works"
     :content $ []
       [] :text "|MVC Works"
-      [] :links $ []
+      [] :links
         [] :url |https://github.com/mvc-works/ "|MVC Works"
 
   :forums $ {}
     :title "|Forums"
     :content $ []
-      [] :links $ []
+      [] :links
         [] :url |http://clojureverse.org "|ClojureVerse"
         [] :url |http://cnodejs.org "|CNode"
         [] :url |http://react-china.org/ "|React China"
@@ -97,7 +101,7 @@
   :years $ {}
     :title "|Year Reviews"
     :content $ []
-      [] :links $ []
+      [] :links
         [] :url |https://medium.com/@jiyinyiyong/wip-2020-working-projects-38dc6155d6b5 "|2020 working projects"
         [] :url |https://medium.com/@jiyinyiyong/year-review-of-2019-on-coding-and-moods-4f4125102e62 "|Year review of 2019, on coding and moods"
         [] :url |https://medium.com/@jiyinyiyong/year-review-my-clojurescript-pieces-in-2018-da7233649eab "|Year review, my ClojureScript pieces in 2018"
@@ -109,7 +113,7 @@
   :blogs $ {}
     :title "|Blogs"
     :content $ []
-      [] :links $ []
+      [] :links
         [] :url |https://segmentfault.com/blog/jiyinyiyong |SegmentFault
         [] :url |https://www.zhihu.com/people/jiyinyiyong/posts |知乎
         [] :url |https://medium.com/@jiyinyiyong |Medium
@@ -118,7 +122,7 @@
     :title |Sharings
     :content $ []
       [] :text "|I do sharings, mostly in Shanghai and related to React and ClojureScript. Sometimes to my friends, and sometimes for the company I work for."
-      [] :links $ []
+      [] :links
         [] :url |https://gist.github.com/jiyinyiyong/561cd06ad1a1537dc8bcc15109bcf1cc "|2018-09 上海 FCC, ClojureScript 开发体验演示"
         [] :url |http://cdn.tiye.me/slides/cljs-virtual-dom.key "|2018-08 广州 React Conf, Virtual DOM ideas"
         [] :url |https://gist.github.com/jiyinyiyong/b403a24667a3f2b93afdd6e9f57f6f10 "|2018-07 台北, ClojureScript"

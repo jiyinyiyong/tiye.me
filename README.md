@@ -18,6 +18,40 @@ http://tiye.me
 * 点点, 投入的想法 http://thinking.diandian.com/
 * Like Silence 博客 http://beg-silence.tumblr.com/
 
+### Schema
+
+> `?x` 表示需要填入的某个内容.
+
+Title:
+
+```cirru
+[] :title ?text
+```
+
+Text content:
+
+```cirru
+[] :text ?text
+```
+
+Links:
+
+```cirru
+[] :links ?list
+```
+
+Route:
+
+```cirru
+[] :route ?key ?title ?color
+```
+
+Url:
+
+```cirru
+[] :url ?address ?title ?color
+```
+
 ### Workflow
 
 Workflow https://github.com/mvc-works/calcit-workflow

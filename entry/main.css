@@ -1,3 +1,8 @@
+@font-face
+{
+  font-family: Buda;
+  src: url('./Buda/Buda-Light.ttf'); /* IE9 requires eot */
+}
 
 html {
   /* Chrome on Pad, bottom is strange when tabs are hidden */
@@ -9,6 +14,9 @@ body {
   font-display: optional;
   overscroll-behavior-y: none;
   overscroll-behavior-x: none;
+  user-select: none;
+
+  font-family: 'Buda', cursive;
 }
 
 body * {
@@ -50,3 +58,9 @@ a {
   opacity: 1;
 }
 
+.hover-scale {
+  transition-duration: 200ms;
+}
+.hover-scale:hover {
+  box-shadow: 1px 2px 6px hsla(0, 100%, 0%, 0.2);
+}

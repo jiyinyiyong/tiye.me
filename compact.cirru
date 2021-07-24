@@ -25,7 +25,7 @@
                   {} $ :router ([])
                 cursor $ or (:cursor states) ([])
                 router $ :router state
-                push-tab $ fn (idx x d!) (println x)
+                push-tab $ fn (idx x d!)
                   d! cursor $ update state :router
                     fn (rs)
                       if (nil? idx) (conj rs x) (.assoc-after rs idx x)
@@ -38,6 +38,7 @@
               div
                 {} $ :style
                   merge ui/global ui/fullscreen $ {} (:background-image "\"url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size "\"cover") (:background-position :center) (:display :flex) (:padding "\"0 12vw") (:font-size 20)
+                    :font-family $ str "\"Buda," (:font-family ui/global)
                 comp-cards router push-tab close-tab
                 if (empty? router) (comp-empty push-tab)
                 when dev? $ comp-reel (>> states :reel) reel ({})
@@ -48,11 +49,11 @@
                 <> $ str "\"Unknown kind: " kind
               :title $ div
                 {} $ :style
-                  {} (:font-weight 700) (:font-family ui/font-normal) (:font-size 24) (:margin-top 8)
+                  {} (:font-weight 700) (:font-size 32) (:margin-top 8) (:font-weight 300)
                 <> $ nth args 0
               :text $ div
                 {} $ :style
-                  {} $ :line-height "\"26px"
+                  {} (:line-height "\"26px") (:margin-bottom 12)
                 <> $ nth args 0
               :links $ div
                 {} $ :style
@@ -64,7 +65,7 @@
                         render-content (nth xs 0) (rest xs) on-open
                         <> $ str "\"Unknown " xs
               :route $ div
-                {}
+                {} (:class-name "\"hover-scale")
                   :style $ {} (:display :inline-block) (:min-width 40) (:border "\"1px solid #ddf") (:padding "\"0 8px") (:margin-right 8) (:margin-bottom 8) (:cursor :pointer)
                   :on-click $ fn (e d!)
                     on-open (nth args 0) d!
@@ -74,6 +75,7 @@
                   :color $ hsl 200 80 70
                 =< 6 nil
                 a $ {}
+                  :style $ {} (:font-size 16) (:line-height "\"20px")
                   :href $ nth args 0
                   :inner-text $ nth args 1
                   :target "\"_blank"
@@ -115,14 +117,15 @@
                     <> $ str "\"Unknown data: " key
                     div
                       {} $ :style
-                        {} $ :padding "\"0 16px"
-                      , & $ -> info (get :content)
-                        map $ fn (directive)
-                          if (list? directive)
-                            render-content (first directive) (rest directive)
-                              fn (key d!) (on-open idx key d!)
-                            <> $ str "\"Unknown " directive
-                  =< nil 120
+                        merge ui/expand $ {} (:padding "\"0 16px") (:overflow :auto)
+                      , &
+                        -> info (get :content)
+                          map $ fn (directive)
+                            if (list? directive)
+                              render-content (first directive) (rest directive)
+                                fn (key d!) (on-open idx key d!)
+                              <> $ str "\"Unknown " directive
+                        =< nil 120
         |slurp $ quote
           defmacro slurp (file) (read-file file)
         |comp-cards $ quote

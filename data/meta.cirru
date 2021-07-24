@@ -3,23 +3,26 @@
   :home $ {}
     :title "|题叶"
     :content $ []
-      [] :text "|Calcit 语言作者. 原神玩家"
-      [] :title "Main focuses"
+      [] :text "|Calcit 脚本语言作者. 原神玩家"
+      [] :title "Videos"
+      [] :links
+        [] :url |https://space.bilibili.com/14227306 |Bilibili
+        [] :url |https://www.youtube.com/c/JiyinYiyong/videos |YouTube
+      [] :title "|Focuses"
       [] :links
         [] :route :calcit |Calcit
         [] :route :quamolit |Quamolit
-      [] :title "Video Channels"
-      [] :links
-        [] :url |https://space.bilibili.com/14227306 |bilibili
-        [] :url |https://www.youtube.com/c/JiyinYiyong/videos |YouTube
 
       [] :title "|On..."
       [] :links
         [] :route :projects |Projects
+        [] :route :genshin "|原神"
         [] :route :toolkits |Toolkits
+        [] :route :social "|Social"
+        [] :route :idols "|Forwards"
         [] :route :blogs |Blogs
-        [] :route :sharings |Sharings
         [] :route :years "|Reviews"
+        [] :route :sharings |Sharings
         [] :route :contacts "|Contacts"
 
   :projects $ {}
@@ -36,7 +39,8 @@
   :respo $ {}
     :title |Respo
     :content $ []
-      [] :text "|a Virtual DOM library in calcit-js/ClojureScript"
+      [] :text "|Virtual DOM library on immutable data, available in ClojureScript, now in calcit-js"
+
       [] :links
         [] :url |http://github.com/Respo "|GitHub respo.calcit"
         [] :url |http://github.com/Respo/respo.cljs "|GitHub respo.cljs"
@@ -44,23 +48,40 @@
   :cumulo $ {}
     :title |Cumulo
     :content $ []
-      [] :text "|a tiny workflow for realtime apps"
+      [] :text "|What if servers use uni-directional data, with diff/patch? Let's try!"
       [] :links
         [] :url |https://github.com/Cumulo/ "|GitHub Cumulo"
+      [] :text "|also find demos in:"
+      [] :links
+        [] :route :topixim |TopixIM
 
   :cirru $ {}
     :title |Cirru
     :content $ []
-      [] :text "|structual code editing"
+      [] :text "|Modern interface for S-Expressions, structual editing, semi-graphic tree editor"
       [] :links
         [] :url |https://github.com/Cirru/ "|GitHub Cirru"
+      [] :text "|with text form in an indentation syntax:"
+      [] :links
+        [] :url |http://text.cirru.org/ "|Cirru Text"
+      [] :title |演示
+      [] :links
+        [] :url |https://www.bilibili.com/video/BV1gv411W7eu "|Calcit Editor 使用介绍"
+        [] :url |https://www.bilibili.com/video/BV1Ky4y137g4 "|Cirru 语法介绍"
 
   :quamolit $ {}
     :title |Quamolit
     :content $ []
-      [] :text "|some canvas works"
+      [] :text "|What if animations/graphics in declarative code or functions?"
       [] :links
-        [] :url |http://quamolit.org/ "|GitHub Quamolit/phlox"
+        [] :url |https://github.com/Quamolit/quamolit.calcit "|Quamolit for animations"
+        [] :url |https://github.com/Quamolit/phlox.calcit "|Phlox for 2D shapes"
+        [] :url |https://github.com/Quamolit/quatrfoil.calcit "|Quatrfoil for 3D shapes"
+      [] :title "|演示"
+      [] :links
+        [] :url |https://www.bilibili.com/video/BV1L44y1B7Bd "|Quamolit 开发记录，函数式重构初步，0608"
+        [] :url |https://www.bilibili.com/video/BV1Uw411d79p "|Quatrefoil 演示 Lorenz attractor (洛伦茨吸引子)"
+        [] :url |https://www.bilibili.com/video/BV1if4y1b7cg "|Quatrefoil 开发记录：螺线控制 Hopf 纤维丛，等"
 
   :toolkits $ {}
     :title |Toolkits
@@ -71,32 +92,39 @@
         [] :route :memkits |Memkits
         [] :route :topixim |TopixIM
         [] :route :mvc-works "|MVC Works"
-        [] :url |https://github.com/worktools/ "|Work tools"
 
   :topixim $ {}
     :title |TopixIM
     :content $ []
-      [] :text "|topics over the wire"
+      [] :text "|Real-time collaborative toy apps"
       [] :links
-        [] :url |https://github.com/TopixIM/ "|TopixIM"
+        [] :url |https://github.com/TopixIM/ "|GitHub TopixIM"
 
   :memkits $ {}
     :title |Memkits
     :content $ []
-      [] :text "|Memory toolkits"
+      [] :text "|Toolkits to extend brain and memory"
       [] :links
         [] :url |https://github.com/memkits "|Memkits"
 
   :mvc-works $ {}
     :title "|MVC Works"
     :content $ []
-      [] :text "|MVC Works"
+      [] :text "|random tools to support MVC"
       [] :links
         [] :url |https://github.com/mvc-works/ "|MVC Works"
+        [] :url |https://github.com/worktools/ "|Work tools"
 
-  :forums $ {}
-    :title "|Forums"
+  :social $ {}
+    :title "|Social"
     :content $ []
+      [] :title |Friends
+      [] :links
+        [] :url |https://github.com/b-conf "|BConf"
+        [] :url |https://fp-china.org "|FP China"
+        [] :url |http://www.shlug.org/ "|SHLUG"
+
+      [] :title |Forums
       [] :links
         [] :url |http://clojureverse.org "|ClojureVerse"
         [] :url |http://cnodejs.org "|CNode"
@@ -108,8 +136,9 @@
     :content $ []
       [] :text "|Find me on"
       [] :links
+        [] :url |https://www.zhihu.com/people/jiyinyiyong/posts |知乎
         [] :url |https://twitter.com/jiyinyiyong |Twitter
-        [] :url |http://weibo.com/jiyinyiyong/ |Weibo
+        [] :url |http://weibo.com/jiyinyiyong/ |微博
 
   :years $ {}
     :title "|Year Reviews"
@@ -126,24 +155,24 @@
   :blogs $ {}
     :title "|Blogs"
     :content $ []
+      [] :title |Writings
       [] :links
         [] :url |https://segmentfault.com/blog/jiyinyiyong |SegmentFault
         [] :url |https://www.zhihu.com/people/jiyinyiyong/posts |知乎
         [] :url |https://medium.com/@jiyinyiyong |Medium
-      [] :title "|Deprecated"
+      [] :title "|Old"
       [] :links
-        [] :url |https://github.com/jiyinyiyong/blog2 "|基于 Markdown 静态文件服务的博客"
+        [] :url |https://github.com/jiyinyiyong/blog2 "|Markdown 静态文件"
         [] :url |https://github.com/jiyinyiyong/article "|Github Articles in HTML"
         [] :url |http://jiyinyiyong.blog.163.com/ "|网易博客"
         [] :url |http://learning-notes.diandian.com/ "|点点, 学习笔记"
         [] :url |http://thinking.diandian.com/ "|点点, 投入的想法"
         [] :url |http://beg-silence.tumblr.com/ "|Like Silence 博客"
 
-
   :sharings $ {}
     :title |Sharings
     :content $ []
-      [] :text "|I do sharings, mostly in Shanghai and related to React and ClojureScript."
+      [] :text "|I made sharings, mostly in Shanghai and related to React and ClojureScript."
       [] :links
         [] :url |https://gist.github.com/jiyinyiyong/561cd06ad1a1537dc8bcc15109bcf1cc "|2018-09 上海 FCC, ClojureScript 开发体验演示"
         [] :url |http://cdn.tiye.me/slides/cljs-virtual-dom.key "|2018-08 广州 React Conf, Virtual DOM ideas"
@@ -164,3 +193,31 @@
       [] :text "|Calcit: a Lisp dialect based on Cirru. Inspired by ClojureScript."
       [] :links
         [] :url |https://github.com/calcit-lang/ "|GitHub Calcit"
+      [] :title "|演示"
+      [] :links
+        [] :url |https://www.bilibili.com/video/BV1d44y1z71g "|如何运行 calcit-js 项目的一个演示"
+        [] :url |https://www.bilibili.com/video/BV1uq4y1W7E4 "|calcit-js 开发记录: HUD 报错方案"
+        [] :url |https://www.bilibili.com/video/BV1G54y1H7Hh "|缩进语法写 Lisp"
+
+  :idols $ {}
+    :title |偶像
+    :content $ []
+      [] :text "|For computer interface design:"
+      [] :links
+        [] :url |http://worrydream.com/ "|Bret Victor"
+
+      [] :text "|Google Wave"
+      [] :links
+        [] :url https://www.bilibili.com/video/BV1RU4y1g7tf "|Google Wave"
+
+      [] :text "|Several programming language designers."
+
+  :genshin $ {}
+    :title |原神
+    :content $ []
+      [] :text "|爬山, 美景, 探索, 飞行, 法术, 战斗, 故事, 伙伴"
+      [] :title |整活
+      [] :links
+        [] :url |https://www.bilibili.com/video/BV1p64y1t7AN "|宫霄与花烟的放逆"
+        [] :url |https://www.bilibili.com/video/BV1N44y1m7q4 "|来自派蒙的凝视"
+        [] :url |https://www.bilibili.com/video/BV19b4y1k7RG "|关于莫娜也偷渡稻妻这件事"

@@ -1,7 +1,22 @@
+@font-face
+{
+  font-family: Buda;
+  src: url('./Buda/Buda-Light.ttf'); /* IE9 requires eot */
+}
+
+html {
+  /* Chrome on Pad, bottom is strange when tabs are hidden */
+  background-color: #211;
+}
 
 body {
   margin: 0;
   font-display: optional;
+  overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
+  user-select: none;
+
+  font-family: 'Buda', cursive;
 }
 
 body * {
@@ -10,8 +25,8 @@ body * {
 }
 
 ::-webkit-scrollbar {
-  width: 2px;
-  height: 2px;
+  width: 0px;
+  height: 0px;
 }
 
 ::-webkit-scrollbar-track {
@@ -30,6 +45,22 @@ body * {
   background-color:transparent;
 }
 
-.footer a {
-  color: #c0c0ff;
+a {
+  text-decoration: none;
+}
+
+.show-on-hover {
+  transition-duration: 300ms;
+  transition-property: opacity;
+  opacity: 0.3;
+}
+.show-on-hover:hover {
+  opacity: 1;
+}
+
+.hover-scale {
+  transition-duration: 200ms;
+}
+.hover-scale:hover {
+  box-shadow: 1px 2px 6px hsla(0, 100%, 0%, 0.2);
 }

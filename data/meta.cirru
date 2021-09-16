@@ -3,11 +3,10 @@
   :home $ {}
     :title "|题叶"
     :content $ []
-      [] :text "|Calcit 脚本语言作者. 原神玩家"
+      [] :text "|Calcit 脚本语言作者."
       [] :title "Videos"
       [] :links
         [] :url |https://space.bilibili.com/14227306 |Bilibili
-        [] :url |https://www.youtube.com/c/JiyinYiyong/videos |YouTube
       [] :title "|Focuses"
       [] :links
         [] :route :calcit |Calcit
@@ -16,13 +15,14 @@
       [] :title "|On..."
       [] :links
         [] :route :projects |Projects
-        [] :route :genshin "|原神"
         [] :route :toolkits |Toolkits
+        [] :route :skills "|Skills"
+        [] :route :admires "|Admires"
         [] :route :social "|Social"
-        [] :route :idols "|Forwards"
         [] :route :blogs |Blogs
         [] :route :years "|Reviews"
         [] :route :sharings |Sharings
+        [] :route :genshin "|Games"
         [] :route :contacts "|Contacts"
 
   :projects $ {}
@@ -139,6 +139,7 @@
         [] :url |https://www.zhihu.com/people/jiyinyiyong/posts |知乎
         [] :url |https://twitter.com/jiyinyiyong |Twitter
         [] :url |http://weibo.com/jiyinyiyong/ |微博
+        [] :url |https://www.youtube.com/c/JiyinYiyong/videos |YouTube
 
   :years $ {}
     :title "|Year Reviews"
@@ -185,7 +186,9 @@
     :title |Skills
     :content $ []
       [] :title "Skills"
-      [] :text "|ClojureScript TypeScript Rust Calcit"
+      [] :text "|Worked in TypeScript+React for years, as a web frontend dev."
+      [] :text "|Devoted to ClojureScript for years, a FP guy."
+      [] :text "|Using Rust < 1 year in personal projects."
 
   :calcit $ {}
     :title |Calcit
@@ -199,7 +202,7 @@
         [] :url |https://www.bilibili.com/video/BV1uq4y1W7E4 "|calcit-js 开发记录: HUD 报错方案"
         [] :url |https://www.bilibili.com/video/BV1G54y1H7Hh "|缩进语法写 Lisp"
 
-  :idols $ {}
+  :admires $ {}
     :title |偶像
     :content $ []
       [] :text "|For computer interface design:"
@@ -216,7 +219,7 @@
     :title |原神
     :content $ []
       [] :text "|爬山, 美景, 探索, 飞行, 法术, 战斗, 故事, 伙伴"
-      [] :title |整活
+      [] :title |剪辑
       [] :links
         [] :url |https://www.bilibili.com/video/BV1p64y1t7AN "|宫霄与花烟的放逆"
         [] :url |https://www.bilibili.com/video/BV1N44y1m7q4 "|来自派蒙的凝视"

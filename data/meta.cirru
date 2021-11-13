@@ -75,8 +75,8 @@
       [] :text "|What if animations/graphics in declarative code or functions?"
       [] :links
         [] :url |https://github.com/Quamolit/quamolit.calcit "|Quamolit for animations"
-        [] :url |https://github.com/Quamolit/phlox.calcit "|Phlox for 2D shapes"
-        [] :url |https://github.com/Quamolit/quatrfoil.calcit "|Quatrfoil for 3D shapes"
+        [] :url |https://github.com/Phlox-GL/phlox "|Phlox for 2D shapes"
+        [] :url |https://github.com/Quatrefoil-GL/quatrefoil/ "|Quatrfoil for 3D shapes"
       [] :title "|演示"
       [] :links
         [] :url |https://www.bilibili.com/video/BV1L44y1B7Bd "|Quamolit 开发记录，函数式重构初步，0608"
@@ -198,6 +198,7 @@
         [] :url |https://github.com/calcit-lang/ "|GitHub Calcit"
       [] :title "|演示"
       [] :links
+        [] :url |https://www.bilibili.com/video/BV1Yg411K73P "|Calcit-js 开发的阶段介绍 2021-11"
         [] :url |https://www.bilibili.com/video/BV1d44y1z71g "|如何运行 calcit-js 项目的一个演示"
         [] :url |https://www.bilibili.com/video/BV1uq4y1W7E4 "|calcit-js 开发记录: HUD 报错方案"
         [] :url |https://www.bilibili.com/video/BV1G54y1H7Hh "|缩进语法写 Lisp"
@@ -218,9 +219,9 @@
   :genshin $ {}
     :title |原神
     :content $ []
-      [] :text "|爬山, 美景, 探索, 飞行, 法术, 战斗, 故事, 伙伴"
+      [] :text "|探索地图"
       [] :title |剪辑
       [] :links
-        [] :url |https://www.bilibili.com/video/BV1p64y1t7AN "|宫霄与花烟的放逆"
-        [] :url |https://www.bilibili.com/video/BV1N44y1m7q4 "|来自派蒙的凝视"
-        [] :url |https://www.bilibili.com/video/BV19b4y1k7RG "|关于莫娜也偷渡稻妻这件事"
+        [] :url |https://www.bilibili.com/video/BV1bL411b77G "|早柚 在群玉阁顶 打哈欠"
+        [] :url |https://www.bilibili.com/video/BV1e44y1y74i "|早柚 仙女棒"
+        [] :url |https://www.bilibili.com/video/BV1Kh411q7ti "|凝光: 天动万象!"

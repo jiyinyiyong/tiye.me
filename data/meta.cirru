@@ -137,7 +137,7 @@
       [] :text "|Find me on"
       [] :links
         [] :url |https://www.zhihu.com/people/jiyinyiyong/posts |知乎
-        [] :url |https://twitter.com/jiyinyiyong |Twitter
+        [] :url |https://twitter.com/tiyecirru |Twitter
         [] :url |http://weibo.com/jiyinyiyong/ |微博
         [] :url |https://www.youtube.com/c/JiyinYiyong/videos |YouTube
 
@@ -175,12 +175,12 @@
     :content $ []
       [] :text "|I made sharings, mostly in Shanghai and related to React and ClojureScript."
       [] :links
-        [] :url |https://gist.github.com/jiyinyiyong/561cd06ad1a1537dc8bcc15109bcf1cc "|2018-09 上海 FCC, ClojureScript 开发体验演示"
+        [] :url |https://gist.github.com/tiye/561cd06ad1a1537dc8bcc15109bcf1cc "|2018-09 上海 FCC, ClojureScript 开发体验演示"
         [] :url |http://cdn.tiye.me/slides/cljs-virtual-dom.key "|2018-08 广州 React Conf, Virtual DOM ideas"
-        [] :url |https://gist.github.com/jiyinyiyong/b403a24667a3f2b93afdd6e9f57f6f10 "|2018-07 台北, ClojureScript"
-        [] :url |https://gist.github.com/jiyinyiyong/7e6993079dea15e6a00c9ccd746b7074 "|2017-05 FP聚会, ClojureScript"
+        [] :url |https://gist.github.com/tiye/b403a24667a3f2b93afdd6e9f57f6f10 "|2018-07 台北, ClojureScript"
+        [] :url |https://gist.github.com/tiye/7e6993079dea15e6a00c9ccd746b7074 "|2017-05 FP聚会, ClojureScript"
         [] :url |https://os.alipayobjects.com/rmsportal/WbKDoPrtkHaxTuOjOZQy.pdf "|2016-12 杭州 D2, React 到 ClojureScript"
-        [] :url |https://github.com/jiyinyiyong/100offer-sharing/blob/master/slides.md "|2016-01 简聊 React"
+        [] :url |https://github.com/tiye/100offer-sharing/blob/master/slides.md "|2016-01 简聊 React"
 
   :skills $ {}
     :title |Skills

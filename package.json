@@ -1,11 +1,12 @@
 {
   "dependencies": {
-    "@calcit/procs": "^0.5.17",
-    "feather-icons": "^4.28.0"
+    "@calcit/procs": "^0.5.41",
+    "feather-icons": "^4.29.0"
   },
   "devDependencies": {
     "bottom-tip": "^0.1.3",
-    "vite": "^2.8.4"
+    "vite": "^2.9.7"
   },
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "license": "MIT"
 }

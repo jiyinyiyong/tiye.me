@@ -7,29 +7,33 @@
     |app.comp.container $ {}
       :defs $ {}
         |card-width $ quote
-          def card-width $ js/Math.min 400 (- js/window.innerWidth 40)
+          def card-width $ js/Math.min 400 (- js/window.innerWidth 24)
         |comp-avatar $ quote
           defcomp comp-avatar (on-home)
             [] (effect-bump)
-              div $ {}
-                :style $ {} (:background-image "\"url(https://cdn.tiye.me/logo/tiye.jpg)") (:background-size "\"cover") (:width 120) (:height 120) (:border-radius "\"50%") (:border "\"4px solid white") (:box-shadow "\"1px 1px 4px black") (:transition-duration "\"300ms") (:transition-timing-function "\"cubic-bezier(0.54, 0.17, 0.53, 1.88)") (:cursor :pointer)
-                :on-click $ fn (e d!) (on-home nil :home d!)
+              div
+                {} (:class-name css-avatar)
+                  :on-click $ fn (e d!) (on-home nil :home d!)
+                div $ {} (:class-name css-avatar-outline)
         |comp-card $ quote
           defcomp comp-card (idx key on-open on-close)
             [] (effect-fading)
               let
                   info $ get site-map key
                 div
-                  {} $ :style
-                    merge ui/column style-card $ {}
-                      :left $ * (+ card-width 4) idx
+                  {} (:class-name css-card)
+                    :style $ {}
+                      :left $ * (+ card-width 12) idx
                       :height 560
                       :top -280
                       :width card-width
                   div
-                    {} $ :style (merge ui/row-parted)
+                    {} $ :style
+                      merge ui/row-parted $ {} (:position :absolute) (:top 0) (:left 0) (:width "\"100%") (:padding "\"4px") (:backdrop-filter "\"blur(2px)")
                     span
-                      {} (:class-name "\"show-on-hover") (:title "\"Command + Click to close all")
+                      {} (:class-name "\"show-on-hover")
+                        :style $ {} (:line-height "\"20px") (:height "\"20px")
+                        :title "\"Command + Click to close all"
                       comp-icon :x
                         {}
                           :color $ hsl 0 0 0
@@ -42,13 +46,14 @@
                     <> (:title info)
                       {} (:font-family ui/font-fancy) (:font-size 14) (:font-weight 300)
                         :color $ hsl 0 0 60
-                    span $ {}
+                    span $ {} (:class-name "\"right-corner") (:inner-text "\" ")
                   =< nil 8
                   if (nil? info)
                     <> $ str "\"Unknown data: " key
                     div
                       {} $ :style
                         merge ui/expand $ {} (:padding "\"0 16px") (:overflow :auto)
+                      =< nil 48
                       , &
                         -> info (get :content)
                           map $ fn (directive)
@@ -88,27 +93,72 @@
                       fn (rs) (.slice rs 0 idx)
                     d! cursor $ update state :router
                       fn (rs) (dissoc rs idx)
-              div
-                {} $ :style
-                  merge ui/global ui/fullscreen $ {} (:background-image "\"url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size "\"cover") (:background-position :center) (:display :flex) (:padding "\"0 12vw") (:font-size 20)
-                    :font-family $ str "\"Buda," (:font-family ui/global)
-                comp-cards router push-tab close-tab
-                if (empty? router) (comp-empty push-tab)
-                when dev? $ comp-reel (>> states :reel) reel ({})
+              div ({})
+                div $ {} (:class-name css-bg)
+                div
+                  {} $ :class-name css-container
+                  comp-empty (empty? router) push-tab
+                  comp-cards router push-tab close-tab
+                  when dev? $ comp-reel (>> states :reel) reel ({})
         |comp-empty $ quote
-          defcomp comp-empty (on-home)
+          defcomp comp-empty (visible? on-home)
             div
               {} $ :style
-                {} $ :margin :auto
+                merge ui/center
+                  {} (:margin :auto) (:position :fixed) (:top 0) (:left 0) (:width "\"100%") (:height "\"100%") (:opacity 0.01) (:transition-duration "\"300ms") (:transform "\"translate(12vw,0px)") (:-webkit-tap-highlight-color :transparent) (:transition-delay "\"120ms")
+                  if visible? $ {} (:opacity 1) (:transform "\"translate(0,0px)")
               div
                 {} $ :style ui/center
                 comp-avatar on-home
-              =< 8 nil
+              =< nil 32
               div
                 {} $ :style
-                  merge ui/center $ {} (:color :white) (:font-size 18) (:line-height "\"28px") (:text-shadow "\"1px 1px 4px black")
+                  merge ui/center $ {} (:color :white) (:font-size 20) (:line-height "\"28px") (:text-shadow "\"1px 1px 4px black")
                 <> "\"题叶"
-                <> "\"@jiyinyiyong" $ {} (:font-size 14)
+        |css-avatar $ quote
+          defstyle css-avatar $ {}
+            "\"$0" $ {} (:background-image "\"url(https://cdn.tiye.me/logo/tiye.jpg)") (:background-size "\"120px 120px") (:width 120) (:height 120) (:border-radius "\"50%")
+              :box-shadow $ str "\"1px 1px 4px " (hsl 120 80 50) "\",1px 1px 4px black"
+              :transition-duration "\"300ms"
+              :transition-timing-function "\"cubic-bezier(0.54, 0.17, 0.53, 1.88)"
+              :cursor :pointer
+              :position :relative
+              :background-position :center
+            "\"$0:hover" $ {}
+              :box-shadow $ str "\"1px 1px 6px " (hsl 120 90 80)
+              :transform "\"scale(1.04)"
+            "\"$0:active" $ {}
+              :box-shadow $ str "\"1px 1px 20px " (hsl 120 90 90)
+              :transform "\"scale(1.08)"
+              :transition-duration "\"100ms"
+              :animation-name "\"breathing"
+              :animation-duration "\"4s"
+              :animation-iteration-count :infinite
+            (str "\"$0:hover ." css-avatar-outline)
+              {} $ :border-color (hsl 0 0 100 0.8)
+            (str "\"$0:active ." css-avatar-outline)
+              {} $ :border-width "\"5px"
+        |css-avatar-outline $ quote
+          defstyle css-avatar-outline $ {}
+            "\"$0" $ {} (:position :absolute) (:width "\"100%") (:height "\"100%") (:border-radius "\"50%")
+              :border $ str-spaced "\"5px solid" (hsl 0 0 100 0.9)
+        |css-bg $ quote
+          defstyle css-bg $ {}
+            "\"$0" $ merge ui/global ui/fullscreen
+              {} (:background-image "\"url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size "\"cover") (:background-position :center) (:position :fixed) (:top 0) (:left 0) (:width "\"100%") (:height "\"100%") (:z-index -1) (:opacity 0.7)
+        |css-card $ quote
+          defstyle css-card $ {}
+            "\"$0" $ merge ui/column
+              {} (:padding "\"4px") (:box-shadow "\"1px 1px 4px black") (:border-radius "\"2px") (:border "\"2px solid white") (:margin-right 4) (:transition-duration "\"300ms") (:position :absolute) (:border-radius "\"6px") (:transform-origin "\"-10% 33.3%")
+                :box-shadow $ str "\"0 0 10px 4px " (hsl 200 60 90 0.3)
+                :background-color $ hsl 0 0 100 0.96
+        |css-container $ quote
+          defstyle css-container $ {}
+            "\"$0" $ merge ui/global ui/fullscreen
+              {} (:display :flex) (:font-size 20) (:backdrop-filter "\"blur(2px)") (:padding "\"0 12px 0 12vw") (:scroll-behavior :smooth)
+                :box-shadow $ str "\"inset 0 -40px 1200px " (hsl 0 0 0)
+                :background-color $ hsl 180 60 20 0.02
+                :font-family $ str "\"Buda," (:font-family ui/global)
         |effect-bump $ quote
           defeffect effect-bump () (action el at?)
             if (= action :mount)
@@ -122,24 +172,25 @@
             case-default action nil
               :mount $ do
                 -> el .-style .-opacity $ set! 0.1
-                -> el .-style .-translate $ set! "\"-40px 0"
-                .!scrollIntoView el
-                js/setTimeout
-                  fn ()
-                    -> el .-style .-opacity $ set! 1
-                    -> el .-style .-translate $ set! "\"0px 0"
-                  , 0
+                -> el .-style .-transform $ set! "\"scale(0.6) translate(-80px,0px)"
+                flipped js/setTimeout 0 $ fn ()
+                  -> el .-style .-opacity $ set! 1
+                  -> el .-style .-transform $ set! "\"scale(1) translate(0,0)"
+                flipped js/setTimeout 240 $ fn ()
+                  -> el (.!querySelector "\".right-corner") (w-js-log)
+                    .!scrollIntoView $ js-object (:block "\"end") (:behavoir "\"smooth")
               :unmount $ let
                   el' $ .!cloneNode el
                 -> el .-parentElement $ .!appendChild el'
                 js/setTimeout
                   fn ()
                     -> el' .-style .-opacity $ set! 0.01
-                    -> el' .-style .-translate $ set! "\"-40px 0"
+                    -> el' .-style .-transform $ set! "\"scale(0.8) translate(-24px,0)"
+                    -> el' .-style .-width $ set! 0
                   , 10
                 js/setTimeout
                   fn () $ .!remove el'
-                  , 200
+                  , 300
         |render-content $ quote
           defn render-content (kind args on-open)
             case-default kind
@@ -185,16 +236,6 @@
           def site-map $ parse-cirru-edn (slurp "\"data/meta.cirru")
         |slurp $ quote
           defmacro slurp (file) (read-file file)
-        |style-card $ quote
-          def style-card $ {}
-            :background-color $ hsl 0 0 100 0.96
-            :padding "\"0px 4px"
-            :box-shadow "\"1px 1px 4px black"
-            :border-radius "\"2px"
-            :border "\"2px solid white"
-            :margin-right 4
-            :transition-duration "\"200ms"
-            :position :absolute
       :ns $ quote
         ns app.comp.container $ :require
           respo.util.format :refer $ hsl
@@ -205,6 +246,7 @@
           [] respo-md.comp.md :refer $ [] comp-md-block comp-md
           [] app.config :refer $ [] dev?
           feather.core :refer $ comp-icon
+          respo.css :refer $ defstyle
     |app.config $ {}
       :defs $ {}
         |cdn? $ quote

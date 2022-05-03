@@ -103,10 +103,9 @@
         |comp-empty $ quote
           defcomp comp-empty (visible? on-home)
             div
-              {} $ :style
-                merge ui/center
-                  {} (:margin :auto) (:position :fixed) (:top 0) (:left 0) (:width "\"100%") (:height "\"100%") (:opacity 0.01) (:transition-duration "\"300ms") (:transform "\"translate(12vw,0px)") (:-webkit-tap-highlight-color :transparent) (:transition-delay "\"120ms")
-                  if visible? $ {} (:opacity 1) (:transform "\"translate(0,0px)")
+              {} (:class-name css-profile)
+                :style $ if visible?
+                  {} (:opacity 1) (:transform "\"translate(0,0px)")
               div
                 {} $ :style ui/center
                 comp-avatar on-home
@@ -159,6 +158,10 @@
                 :box-shadow $ str "\"inset 0 -40px 1200px " (hsl 0 0 0)
                 :background-color $ hsl 180 60 20 0.02
                 :font-family $ str "\"Buda," (:font-family ui/global)
+        |css-profile $ quote
+          defstyle css-profile $ {}
+            "\"$0" $ merge ui/center
+              {} (:margin :auto) (:position :fixed) (:top 0) (:left 0) (:width "\"100%") (:height "\"100%") (:opacity 0.01) (:transition-duration "\"300ms") (:transform "\"translate(12vw,0px)") (:-webkit-tap-highlight-color :transparent) (:transition-delay "\"120ms") (:animation-name "\"entering") (:animation-duration "\"800ms")
         |effect-bump $ quote
           defeffect effect-bump () (action el at?)
             if (= action :mount)

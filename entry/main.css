@@ -76,3 +76,18 @@ a {
     background-size: 120px 120px;
   }
 }
+
+@keyframes entering {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  30% {
+    opacity: 0.2;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.0);
+  }
+}

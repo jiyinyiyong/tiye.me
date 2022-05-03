@@ -79,20 +79,11 @@
             let
                 store $ :store reel
                 states $ :states store
-                state $ or (:data states)
-                  {} $ :router ([])
-                cursor $ or (:cursor states) ([])
-                router $ :router state
+                router $ :router store
                 push-tab $ fn (idx x d!)
-                  d! cursor $ update state :router
-                    fn (rs)
-                      if (nil? idx) (conj rs x) (.assoc-after rs idx x)
+                  d! :push-page $ [] idx x
                 close-tab $ fn (idx all? d!)
-                  if all?
-                    d! cursor $ update state :router
-                      fn (rs) (.slice rs 0 idx)
-                    d! cursor $ update state :router
-                      fn (rs) (dissoc rs idx)
+                  d! :close-page $ [] all? idx
               div ({})
                 div $ {} (:class-name css-bg)
                 div
@@ -277,6 +268,10 @@
             render-app!
             add-watch *reel :changes $ fn (r p) (render-app!)
             listen-devtools! |k dispatch!
+            js/window.addEventListener "\"keydown" $ fn (event)
+              if
+                = "\"Escape" $ w-js-log (.-key event)
+                dispatch! :reduce-page nil
             println "|App started."
         |mount-target $ quote
           def mount-target $ .querySelector js/document |.app
@@ -332,7 +327,7 @@
         |store $ quote
           def store $ {}
             :states $ {}
-            :content |
+            :router $ []
       :ns $ quote (ns app.schema)
     |app.updater $ {}
       :defs $ {}
@@ -341,7 +336,16 @@
             case-default op
               do (println "\"unknown op" op) store
               :states $ update-states store op-data
-              :content $ assoc store :content op-data
+              :push-page $ let[] (idx x) op-data
+                update store :router $ fn (rs)
+                  if (nil? idx) (conj rs x) (.assoc-after rs idx x)
+              :close-page $ let[] (all? idx) op-data
+                if all?
+                  update store :router $ fn (rs) (.slice rs 0 idx)
+                  update store :router $ fn (rs) (dissoc rs idx)
+              :reduce-page $ update store :router
+                fn (r)
+                  if (empty? r) r $ rest r
               :hydrate-storage op-data
       :ns $ quote
         ns app.updater $ :require

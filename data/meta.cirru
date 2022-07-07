@@ -17,6 +17,7 @@
         [] :route :projects |Projects
         [] :route :toolkits |Toolkits
         [] :route :skills "|Skills"
+        [] :route :artworks "|Artworks"
         [] :route :admires "|Admires"
         [] :route :social "|Social"
         [] :route :blogs |Blogs
@@ -225,3 +226,12 @@
         [] :url |https://www.bilibili.com/video/BV1bL411b77G "|早柚 在群玉阁顶 打哈欠"
         [] :url |https://www.bilibili.com/video/BV1e44y1y74i "|早柚 仙女棒"
         [] :url |https://www.bilibili.com/video/BV1Kh411q7ti "|凝光: 天动万象!"
+
+  :artworks $ {}
+    :title |Artworks
+    :content $ []
+      [] :text "|WebGL generative art"
+      [] :links
+        [] :url |https://www.bilibili.com/video/BV1Rr4y1g7V8 "|Lamps in sky"
+        [] :url |https://www.bilibili.com/video/BV1ov4y1g7LY "|Kaleidoscopes"
+        [] :url |https://www.bilibili.com/video/BV1uU4y1Z7AF "|Floating City"

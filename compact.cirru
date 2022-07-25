@@ -171,7 +171,7 @@
                   -> el .-style .-opacity $ set! 1
                   -> el .-style .-transform $ set! "\"scale(1) translate(0,0)"
                 flipped js/setTimeout 240 $ fn ()
-                  -> el (.!querySelector "\".right-corner") (w-js-log)
+                  -> el (.!querySelector "\".right-corner") (wo-js-log)
                     .!scrollIntoView $ js-object (:block "\"end") (:behavoir "\"smooth")
               :unmount $ let
                   el' $ .!cloneNode el
@@ -270,7 +270,7 @@
             listen-devtools! |k dispatch!
             js/window.addEventListener "\"keydown" $ fn (event)
               if
-                = "\"Escape" $ w-js-log (.-key event)
+                = "\"Escape" $ wo-js-log (.-key event)
                 dispatch! :reduce-page nil
             println "|App started."
         |mount-target $ quote

@@ -14,18 +14,18 @@
 
       [] :title "|On..."
       [] :links
-        [] :route :projects |Projects
-        [] :route :toolkits |Toolkits
         [] :route :skills "|Skills"
         [] :route :artworks "|Artworks"
-        [] :route :admires "|Admires"
-        [] :route :social "|Social"
-        [] :route :blogs |Blogs
-        [] :route :years "|Reviews"
+        [] :route :contacts |Contacts
+        [] :route :projects |Projects
+        [] :route :toolkits |Toolkits
         [] :route :sharings |Sharings
-        [] :route :genshin "|Games"
-        [] :route :contacts "|Contacts"
         [] :route :donation |Donation
+        [] :route :admires |Admires
+        [] :route :social |Social
+        [] :route :blogs |Blogs
+        [] :route :years |Reviews
+        [] :route :genshin |Games
 
   :projects $ {}
     :title |Projects
@@ -189,8 +189,8 @@
     :content $ []
       [] :title "Skills"
       [] :text "|Worked in TypeScript+React for years, as a web frontend dev."
-      [] :text "|Devoted to ClojureScript for years, a FP guy."
-      [] :text "|Using Rust < 1 year in personal projects."
+      [] :text "|Devoted to ClojureScript for years, an FP guy."
+      [] :text "|Using Rust for a year in personal projects."
 
   :calcit $ {}
     :title |Calcit
@@ -232,14 +232,18 @@
     :title |Artworks
     :content $ []
       [] :text "|WebGL generative art"
-      [] :links
-        [] :url |https://www.bilibili.com/video/BV1Rr4y1g7V8 "|Lamps in sky"
-        [] :url |https://www.bilibili.com/video/BV1ov4y1g7LY "|Kaleidoscopes"
-        [] :url |https://www.bilibili.com/video/BV1uU4y1Z7AF "|Floating City"
+      [] :xigua |https://www.ixigua.com/iframe/7091456248008311304?autoplay=0
+      [] :xigua |https://www.ixigua.com/iframe/7111290341735137823?autoplay=0
+      [] :xigua |https://www.ixigua.com/iframe/7114946237962551838?autoplay=0
+      [] :xigua |https://www.ixigua.com/iframe/7141707370979131941?autoplay=0
+      [] :xigua |https://www.ixigua.com/iframe/7128061977837961741?autoplay=0
+      [] :text "|more demos can be found on my video pages."
 
   :donation $ {}
     :title |Donation
     :content $ []
-      [] :text "|I'm learning paint with code. I collect news on new Web tech. Found them in my videos."
+      [] :text "|I'm learning paint with code. I collect news on Web tech. Found them in my videos."
       [] :links
         [] :url |https://afdian.net/a/ti-ye?tab=home "|爱发电"
+      [] :text "|Example:"
+      [] :xigua |https://www.ixigua.com/iframe/7125731312362750495?autoplay=0

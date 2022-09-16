@@ -52,7 +52,7 @@
                     <> $ str "\"Unknown data: " key
                     div
                       {} $ :style
-                        merge ui/expand $ {} (:padding "\"0 16px") (:overflow :auto)
+                        merge ui/expand $ {} (:padding "\"0 12px") (:overflow :auto)
                       =< nil 48
                       , &
                         -> info (get :content)
@@ -224,8 +224,12 @@
                   :target "\"_blank"
               :html $ div
                 {}
-                  :style $ {} (:position :relative) (:height 660)
+                  :style $ {} (:position :relative)
                   :innerHTML $ nth (w-log args) 0
+              :xigua $ div
+                {}
+                  :style $ {} (:position :relative)
+                  :innerHTML $ str "\"<iframe width=\"360\" height=\"200\" frameborder=\"0\" src=\"" (nth args 0) "\"\" referrerpolicy=\"unsafe-url\" allowfullscreen></iframe>"
         |site-map $ quote
           def site-map $ parse-cirru-edn (slurp "\"data/meta.cirru")
         |slurp $ quote

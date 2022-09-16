@@ -25,6 +25,7 @@
         [] :route :sharings |Sharings
         [] :route :genshin "|Games"
         [] :route :contacts "|Contacts"
+        [] :route :donation |Donation
 
   :projects $ {}
     :title |Projects
@@ -235,3 +236,10 @@
         [] :url |https://www.bilibili.com/video/BV1Rr4y1g7V8 "|Lamps in sky"
         [] :url |https://www.bilibili.com/video/BV1ov4y1g7LY "|Kaleidoscopes"
         [] :url |https://www.bilibili.com/video/BV1uU4y1Z7AF "|Floating City"
+
+  :donation $ {}
+    :title |Donation
+    :content $ []
+      [] :text "|I'm learning paint with code. I collect news on new Web tech. Found them in my videos."
+      [] :links
+        [] :url |https://afdian.net/a/ti-ye?tab=home "|爱发电"

@@ -10,7 +10,7 @@
       [] :title "|Focuses"
       [] :links
         [] :route :calcit |Calcit
-        [] :route :quamolit |Quamolit
+        [] :route :triadica |Triadica
 
       [] :title "|On..."
       [] :links
@@ -37,6 +37,7 @@
         [] :route :cirru |Cirru
         [] :route :calcit |Calcit
         [] :route :quamolit |Quamolit
+        [] :route :quamolit |Triadica
 
   :respo $ {}
     :title |Respo
@@ -247,3 +248,12 @@
         [] :url |https://afdian.net/a/ti-ye?tab=home "|爱发电"
       [] :text "|Example:"
       [] :xigua |https://www.ixigua.com/iframe/7125731312362750495?autoplay=0
+
+  :triadica $ {}
+    :title |Triadica
+    :content $ []
+      [] :text "|WebGL toys with triangles and GLSL"
+      [] :links
+        [] :url |https://github.com/Triadica/triadica-space "|Calcit-js library of Triadica"
+        [] :url |https://github.com/Triadica/triadica.ts "|TypeScript library of Triadica"
+      [] :xigua |https://www.ixigua.com/iframe/7119835590593511966?autoplay=0

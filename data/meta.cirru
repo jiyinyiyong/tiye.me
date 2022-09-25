@@ -178,6 +178,7 @@
     :content $ []
       [] :text "|I made sharings, mostly in Shanghai and related to React and ClojureScript."
       [] :links
+        [] :url |https://www.bilibili.com/video/BV1Yg411K73P/ "|Calcit-js 开发的阶段介绍 2021-11"
         [] :url |https://gist.github.com/tiye/561cd06ad1a1537dc8bcc15109bcf1cc "|2018-09 上海 FCC, ClojureScript 开发体验演示"
         [] :url |http://cdn.tiye.me/slides/cljs-virtual-dom.key "|2018-08 广州 React Conf, Virtual DOM ideas"
         [] :url |https://gist.github.com/tiye/b403a24667a3f2b93afdd6e9f57f6f10 "|2018-07 台北, ClojureScript"

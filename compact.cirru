@@ -135,7 +135,7 @@
         |css-bg $ quote
           defstyle css-bg $ {}
             "\"$0" $ merge ui/global ui/fullscreen
-              {} (:background-image "\"url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size "\"cover") (:background-position :center) (:position :fixed) (:top 0) (:left 0) (:width "\"100%") (:height "\"100%") (:z-index -1) (:opacity 0.7)
+              {} (:background-image "\"url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size "\"cover") (:background-position :center) (:position :fixed) (:top 0) (:left 0) (:width "\"100%") (:height "\"100%") (:z-index -1) (:opacity 0.7) (:filter "\"grayscale(0.5)")
         |css-card $ quote
           defstyle css-card $ {}
             "\"$0" $ merge ui/column
@@ -149,6 +149,7 @@
                 :box-shadow $ str "\"inset 0 -40px 1200px " (hsl 0 0 0)
                 :background-color $ hsl 180 60 20 0.02
                 :font-family $ str "\"Buda," (:font-family ui/global)
+                :filter "\"grayscale(0.5)"
         |css-profile $ quote
           defstyle css-profile $ {}
             "\"$0" $ merge ui/center

@@ -239,6 +239,7 @@
       [] :xigua |https://www.ixigua.com/iframe/7114946237962551838?autoplay=0
       [] :xigua |https://www.ixigua.com/iframe/7141707370979131941?autoplay=0
       [] :xigua |https://www.ixigua.com/iframe/7128061977837961741?autoplay=0
+      [] :xigua |https://www.ixigua.com/iframe/7181125285817877048?autoplay=0
       [] :text "|more demos can be found on my video pages."
 
   :donation $ {}

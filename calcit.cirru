@@ -1140,10 +1140,6 @@
                                         :data $ {}
                                           |T $ {} (:at 1651546897396) (:by |rJG4IHzWf) (:text |:font-family) (:type :leaf)
                                           |b $ {} (:at 1651546897396) (:by |rJG4IHzWf) (:text |ui/global) (:type :leaf)
-                              |u $ {} (:at 1669822349610) (:by |rJG4IHzWf) (:type :expr)
-                                :data $ {}
-                                  |T $ {} (:at 1669822350899) (:by |rJG4IHzWf) (:text |:filter) (:type :leaf)
-                                  |b $ {} (:at 1669822399501) (:by |rJG4IHzWf) (:text "|\"grayscale(0.5)") (:type :leaf)
           |css-profile $ {} (:at 1651559718092) (:by |rJG4IHzWf) (:type :expr)
             :data $ {}
               |T $ {} (:at 1651559720890) (:by |rJG4IHzWf) (:text |defstyle) (:type :leaf)

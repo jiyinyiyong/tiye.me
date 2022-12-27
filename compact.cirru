@@ -149,7 +149,6 @@
                 :box-shadow $ str "\"inset 0 -40px 1200px " (hsl 0 0 0)
                 :background-color $ hsl 180 60 20 0.02
                 :font-family $ str "\"Buda," (:font-family ui/global)
-                :filter "\"grayscale(0.5)"
         |css-profile $ quote
           defstyle css-profile $ {}
             "\"$0" $ merge ui/center

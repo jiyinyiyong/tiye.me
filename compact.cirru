@@ -7,7 +7,7 @@
     |app.comp.container $ {}
       :defs $ {}
         |card-width $ quote
-          def card-width $ js/Math.min 400 (- js/window.innerWidth 24)
+          def card-width $ js/Math.min 480 (- js/window.innerWidth 24)
         |comp-avatar $ quote
           defcomp comp-avatar (on-home)
             [] (effect-bump)
@@ -24,8 +24,8 @@
                   {} (:class-name css-card)
                     :style $ {}
                       :left $ * (+ card-width 12) idx
-                      :height 560
-                      :top -280
+                      :height 640
+                      :top -320
                       :width card-width
                   div
                     {} $ :style
@@ -229,7 +229,7 @@
               :xigua $ div
                 {}
                   :style $ {} (:position :relative)
-                  :innerHTML $ str "\"<iframe width=\"360\" height=\"200\" frameborder=\"0\" src=\"" (nth args 0) "\"\" referrerpolicy=\"unsafe-url\" allowfullscreen></iframe>"
+                  :innerHTML $ str "\"<iframe width=\"100%\" height=\"260px\" frameborder=\"0\" src=\"" (nth args 0) "\"\" referrerpolicy=\"unsafe-url\" allowfullscreen></iframe>"
         |site-map $ quote
           def site-map $ parse-cirru-edn (slurp "\"data/meta.cirru")
         |slurp $ quote
@@ -237,22 +237,16 @@
       :ns $ quote
         ns app.comp.container $ :require
           respo.util.format :refer $ hsl
-          [] respo-ui.core :as ui
-          [] respo.core :refer $ [] defcomp >> <> div button textarea span a list-> defeffect
-          [] respo.comp.space :refer $ [] =<
-          [] reel.comp.reel :refer $ [] comp-reel
-          [] respo-md.comp.md :refer $ [] comp-md-block comp-md
-          [] app.config :refer $ [] dev?
+          respo-ui.core :as ui
+          respo.core :refer $ defcomp >> <> div button textarea span a list-> defeffect
+          respo.comp.space :refer $ =<
+          reel.comp.reel :refer $ comp-reel
+          respo-md.comp.md :refer $ comp-md-block comp-md
+          app.config :refer $ dev?
           feather.core :refer $ comp-icon
           respo.css :refer $ defstyle
     |app.config $ {}
       :defs $ {}
-        |cdn? $ quote
-          def cdn? $ cond
-              exists? js/window
-              , false
-            (exists? js/process) (= "\"true" js/process.env.cdn)
-            :else false
         |dev? $ quote (def dev? true)
         |site $ quote
           def site $ {} (:storage "\"tiye-site") (:dev-ui "\"http://localhost:8100/main.css") (:release-ui "\"http://cdn.tiye.me/favored-fonts/main.css") (:cdn-url "\"http://cdn.tiye.me/tiye-site/") (:cdn-folder "\"tiye.me:cdn/tiye-site") (:title "\"题叶@jiyinyiyong") (:icon "\"http://cdn.tiye.me/logo/tiye.jpg") (:storage-key "\"tiye-site") (:upload-folder "\"tiye.me:repo/tiye/tiye.me/")
@@ -290,16 +284,15 @@
           defn render-app! () $ render! mount-target (comp-container @*reel) dispatch!
       :ns $ quote
         ns app.main $ :require
-          [] respo.core :refer $ [] render! clear-cache! realize-ssr!
-          [] app.comp.container :refer $ [] comp-container
-          [] app.updater :refer $ [] updater
-          [] app.schema :as schema
-          [] reel.util :refer $ [] listen-devtools!
-          [] reel.core :refer $ [] reel-updater refresh-reel
-          [] reel.schema :as reel-schema
-          [] cljs.reader :refer $ [] read-string
-          [] app.config :as config
-          [] app.page :refer $ [] ssr-processing!
+          respo.core :refer $ render! clear-cache! realize-ssr!
+          app.comp.container :refer $ comp-container
+          app.updater :refer $ updater
+          app.schema :as schema
+          reel.util :refer $ listen-devtools!
+          reel.core :refer $ reel-updater refresh-reel
+          reel.schema :as reel-schema
+          app.config :as config
+          app.page :refer $ ssr-processing!
           "\"bottom-tip" :default tip!
           "\"./calcit.build-errors" :default build-errors
     |app.page $ {}
@@ -320,12 +313,12 @@
             echo "\"replaced" file
       :ns $ quote
         ns app.page $ :require
-          [] respo.render.html :refer $ [] make-string
-          [] app.comp.container :refer $ [] comp-container
-          [] app.schema :as schema
-          [] reel.schema :as reel-schema
-          [] app.config :as config
-          [] "\"fs" :as fs
+          respo.render.html :refer $ make-string
+          app.comp.container :refer $ comp-container
+          app.schema :as schema
+          reel.schema :as reel-schema
+          app.config :as config
+          "\"fs" :as fs
     |app.schema $ {}
       :defs $ {}
         |store $ quote
@@ -353,4 +346,4 @@
               :hydrate-storage op-data
       :ns $ quote
         ns app.updater $ :require
-          [] respo.cursor :refer $ [] update-states
+          respo.cursor :refer $ update-states

@@ -71,6 +71,7 @@
                   :position :relative
                   :transition-duration "\"300ms"
                   :transition-property :width
+                  :pointer-events :auto
               -> router $ map-indexed
                 fn (idx key)
                   [] key $ comp-card idx key on-open on-close
@@ -85,7 +86,9 @@
                 close-tab $ fn (idx all? d!)
                   d! :close-page $ [] all? idx
               div ({})
-                div $ {} (:class-name css-bg)
+                div
+                  {} $ :class-name css-bg
+                  create-element :iframe $ {} (:src "\"https://r.tiye.me/Triadica/sapium/") (:class-name css-iframe)
                 div
                   {} $ :class-name css-container
                   comp-empty (empty? router) push-tab
@@ -98,7 +101,8 @@
                 :style $ if visible?
                   {} (:opacity 1) (:transform "\"translate(0,0px)")
               div
-                {} $ :style ui/center
+                {} $ :style
+                  merge ui/center $ {} (:pointer-events :auto)
                 comp-avatar on-home
               =< nil 32
               div
@@ -145,10 +149,14 @@
         |css-container $ quote
           defstyle css-container $ {}
             "\"$0" $ merge ui/global ui/fullscreen
-              {} (:display :flex) (:font-size 20) (:backdrop-filter "\"blur(2px)") (:padding "\"0 12px 0 12vw") (:scroll-behavior :smooth)
+              {} (:display :flex) (:font-size 20) (; :backdrop-filter "\"blur(2px)") (:padding "\"0 12px 0 12vw") (:scroll-behavior :smooth)
                 :box-shadow $ str "\"inset 0 -40px 1200px " (hsl 0 0 0)
-                :background-color $ hsl 180 60 20 0.02
+                ; :background-color $ hsl 180 60 20 0.01
                 :font-family $ str "\"Buda," (:font-family ui/global)
+                :pointer-events :none
+        |css-iframe $ quote
+          defstyle css-iframe $ {}
+            "\"$0" $ {} (:width "\"100%") (:height "\"100%")
         |css-profile $ quote
           defstyle css-profile $ {}
             "\"$0" $ merge ui/center
@@ -238,7 +246,7 @@
         ns app.comp.container $ :require
           respo.util.format :refer $ hsl
           respo-ui.core :as ui
-          respo.core :refer $ defcomp >> <> div button textarea span a list-> defeffect
+          respo.core :refer $ defcomp >> <> div button textarea span a list-> defeffect create-element
           respo.comp.space :refer $ =<
           reel.comp.reel :refer $ comp-reel
           respo-md.comp.md :refer $ comp-md-block comp-md

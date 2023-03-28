@@ -606,7 +606,15 @@
                                   |b $ {} (:at 1676027756558) (:by |rJG4IHzWf) (:type :expr)
                                     :data $ {}
                                       |T $ {} (:at 1676027758550) (:by |rJG4IHzWf) (:text |:src) (:type :leaf)
-                                      |b $ {} (:at 1676027762815) (:by |rJG4IHzWf) (:text "|\"https://r.tiye.me/Triadica/sapium/") (:type :leaf)
+                                      |b $ {} (:at 1680026065398) (:by |rJG4IHzWf) (:type :expr)
+                                        :data $ {}
+                                          |D $ {} (:at 1680026067537) (:by |rJG4IHzWf) (:text |if) (:type :leaf)
+                                          |L $ {} (:at 1680026070505) (:by |rJG4IHzWf) (:type :expr)
+                                            :data $ {}
+                                              |T $ {} (:at 1680026071244) (:by |rJG4IHzWf) (:text |some?) (:type :leaf)
+                                              |b $ {} (:at 1680026077258) (:by |rJG4IHzWf) (:text |js/navigator.gpu) (:type :leaf)
+                                          |P $ {} (:at 1680026082795) (:by |rJG4IHzWf) (:text "|\"https://r.tiye.me/Triadica/soluble/") (:type :leaf)
+                                          |T $ {} (:at 1680026066796) (:by |rJG4IHzWf) (:text "|\"https://r.tiye.me/Triadica/sapium/") (:type :leaf)
                                   |h $ {} (:at 1676027768664) (:by |rJG4IHzWf) (:type :expr)
                                     :data $ {}
                                       |T $ {} (:at 1676027773937) (:by |rJG4IHzWf) (:text |:class-name) (:type :leaf)

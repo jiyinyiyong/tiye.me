@@ -88,7 +88,9 @@
               div ({})
                 div
                   {} $ :class-name css-bg
-                  create-element :iframe $ {} (:src "\"https://r.tiye.me/Triadica/sapium/") (:class-name css-iframe)
+                  create-element :iframe $ {}
+                    :src $ if (some? js/navigator.gpu) "\"https://r.tiye.me/Triadica/soluble/" "\"https://r.tiye.me/Triadica/sapium/"
+                    :class-name css-iframe
                 div
                   {} $ :class-name css-container
                   comp-empty (empty? router) push-tab

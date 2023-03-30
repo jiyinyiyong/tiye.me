@@ -259,3 +259,7 @@
         [] :url |https://github.com/Triadica/triadica-space "|Calcit-js library of Triadica"
         [] :url |https://github.com/Triadica/triadica.ts "|TypeScript library of Triadica"
       [] :xigua |https://www.ixigua.com/iframe/7119835590593511966?autoplay=0
+      [] :text "|WebGPU toys"
+      [] :links
+        [] :url |https://r.tiye.me/Triadica/wgsl-shadertoy/ "|WGSL Shadertoy"
+        [] :url |https://r.tiye.me/Triadica/lagopus.calcit/ "|Lagopus: Triadica in WebGPU"

@@ -89,7 +89,7 @@
                 div
                   {} $ :class-name css-bg
                   create-element :iframe $ {}
-                    :src $ if (some? js/navigator.gpu) "\"https://r.tiye.me/Triadica/soluble/" "\"https://r.tiye.me/Triadica/sapium/"
+                    :src $ if (some? js/navigator.gpu) "\"https://r.tiye.me/Triadica/protea/" "\"https://r.tiye.me/Triadica/sapium/"
                     :class-name css-iframe
                 div
                   {} $ :class-name css-container

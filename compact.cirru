@@ -82,9 +82,9 @@
                 states $ :states store
                 router $ :router store
                 push-tab $ fn (idx x d!)
-                  d! :push-page $ [] idx x
+                  d! $ :: :push-page idx x
                 close-tab $ fn (idx all? d!)
-                  d! :close-page $ [] all? idx
+                  d! $ :: :close-page all? idx
               div ({})
                 div
                   {} $ :class-name css-bg
@@ -266,9 +266,9 @@
         |*reel $ quote
           defatom *reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
         |dispatch! $ quote
-          defn dispatch! (op op-data)
+          defn dispatch! (op)
             when config/dev? $ println "\"Dispatch:" op
-            reset! *reel $ reel-updater updater @*reel op op-data
+            reset! *reel $ reel-updater updater @*reel op
         |main! $ quote
           defn main! ()
             println "\"Running mode:" $ if config/dev? "\"dev" "\"release"
@@ -278,8 +278,8 @@
             listen-devtools! |k dispatch!
             js/window.addEventListener "\"keydown" $ fn (event)
               if
-                = "\"Escape" $ wo-js-log (.-key event)
-                dispatch! :reduce-page nil
+                = "\"Escape" $ .-key event
+                dispatch! $ :: :reduce-page
             println "|App started."
         |mount-target $ quote
           def mount-target $ .querySelector js/document |.app
@@ -339,21 +339,22 @@
     |app.updater $ {}
       :defs $ {}
         |updater $ quote
-          defn updater (store op op-data op-id op-time)
-            case-default op
-              do (println "\"unknown op" op) store
-              :states $ update-states store op-data
-              :push-page $ let[] (idx x) op-data
+          defn updater (store op op-id op-time)
+            tag-match op
+                :states cursor s
+                update-states store cursor s
+              (:push-page idx x)
                 update store :router $ fn (rs)
                   if (nil? idx) (conj rs x) (.assoc-after rs idx x)
-              :close-page $ let[] (all? idx) op-data
+              (:close-page all? idx)
                 if all?
                   update store :router $ fn (rs) (.slice rs 0 idx)
                   update store :router $ fn (rs) (dissoc rs idx)
-              :reduce-page $ update store :router
-                fn (r)
+              (:reduce-page)
+                update store :router $ fn (r)
                   if (empty? r) r $ rest r
-              :hydrate-storage op-data
+              (:hydrate-storage d) d
+              _ $ do (eprintln "\"unknown op" op) store
       :ns $ quote
         ns app.updater $ :require
           respo.cursor :refer $ update-states

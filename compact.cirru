@@ -60,9 +60,8 @@
                         , &
                           -> info (get :content)
                             map $ fn (directive)
-                              if (list? directive)
-                                render-content (first directive) (rest directive)
-                                  fn (key d!) (on-open idx key d!)
+                              if (tuple? directive)
+                                render-content directive $ fn (key d!) (on-open idx key d!)
                                 <> $ str "\"Unknown " directive
                           =< nil 120
         |comp-cards $ %{} :CodeEntry (:doc |)
@@ -212,55 +211,54 @@
                     , 300
         |render-content $ %{} :CodeEntry (:doc |)
           :code $ quote
-            defn render-content (kind args on-open)
-              case-default kind
-                div ({})
-                  <> $ str "\"Unknown kind: " kind
-                :title $ div
-                  {} $ :style
-                    {} (:font-weight 700) (:font-size 32) (:margin-top 8) (:font-weight 300)
-                  <> $ nth args 0
-                :text $ div
-                  {} $ :style
-                    {} (:line-height "\"26px") (:margin-bottom 12)
-                  <> $ nth args 0
-                :links $ div
-                  {} $ :style
-                    {} $ :margin "\"8px 0px"
-                  , &
-                    -> args $ map
-                      fn (xs)
-                        if (list? xs)
-                          render-content (nth xs 0) (rest xs) on-open
+            defn render-content (directive on-open)
+              tag-match directive
+                  :title t
+                  div
+                    {} $ :style
+                      {} (:font-weight 700) (:font-size 32) (:margin-top 8) (:font-weight 300)
+                    <> t
+                (:text t)
+                  div
+                    {} $ :style
+                      {} (:line-height "\"26px") (:margin-bottom 12)
+                    <> t
+                (:links links)
+                  div
+                    {} $ :style
+                      {} $ :margin "\"8px 0px"
+                    , & $ -> links
+                      map $ fn (xs)
+                        if (tuple? xs) (render-content xs on-open)
                           <> $ str "\"Unknown " xs
-                :route $ div
-                  {} (:class-name "\"hover-scale")
-                    :style $ {} (:display :inline-block) (:min-width 40) (:border "\"1px solid #ddf") (:padding "\"0 8px") (:margin-right 8) (:margin-bottom 8) (:cursor :pointer)
-                    :on-click $ fn (e d!)
-                      on-open (nth args 0) d!
-                  <> $ nth args 1
-                :url $ div ({})
-                  <> "\"☍" $ {}
-                    :color $ hsl 200 80 70
-                  =< 6 nil
-                  a $ {}
-                    :style $ {} (:font-size 16) (:line-height "\"20px")
-                    :href $ nth args 0
-                    :inner-text $ nth args 1
-                    :target "\"_blank"
-                :html $ div
-                  {}
+                (:route target title)
+                  div
+                    {} (:class-name "\"hover-scale")
+                      :style $ {} (:display :inline-block) (:min-width 40) (:border "\"1px solid #ddf") (:padding "\"0 8px") (:margin-right 8) (:margin-bottom 8) (:cursor :pointer)
+                      :on-click $ fn (e d!) (on-open target d!)
+                    <> title
+                (:url target title)
+                  div ({})
+                    <> "\"☍" $ {}
+                      :color $ hsl 200 80 70
+                    =< 6 nil
+                    a $ {}
+                      :style $ {} (:font-size 16) (:line-height "\"20px")
+                      :href target
+                      :inner-text title
+                      :target "\"_blank"
+                (:html h)
+                  div $ {}
                     :style $ {} (:position :relative)
-                    :innerHTML $ nth (w-log args) 0
-                :xigua $ div
-                  {}
+                    :innerHTML h
+                (:xigua url)
+                  div $ {}
                     :style $ {} (:position :relative)
-                    :innerHTML $ str "\"<iframe width=\"100%\" height=\"260px\" frameborder=\"0\" src=\"" (nth args 0) "\"\" referrerpolicy=\"unsafe-url\" allowfullscreen></iframe>"
-                :image $ img
-                  {}
-                    :src $ nth args 0
-                    :alt $ nth args 1
-                    :class-name style-embed-image
+                    :innerHTML $ str "\"<iframe width=\"100%\" height=\"260px\" frameborder=\"0\" src=\"" url "\"\" referrerpolicy=\"unsafe-url\" allowfullscreen></iframe>"
+                (:image src alt)
+                  img $ {} (:src src) (:alt alt) (:class-name style-embed-image)
+                _ $ div ({})
+                  <> $ str "\"Unknown kind: " (nth 0 directive)
         |site-map $ %{} :CodeEntry (:doc |)
           :code $ quote
             def site-map $ parse-cirru-edn (slurp "\"data/meta.cirru")

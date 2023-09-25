@@ -256,18 +256,27 @@
                   {}
                     :style $ {} (:position :relative)
                     :innerHTML $ str "\"<iframe width=\"100%\" height=\"260px\" frameborder=\"0\" src=\"" (nth args 0) "\"\" referrerpolicy=\"unsafe-url\" allowfullscreen></iframe>"
+                :image $ img
+                  {}
+                    :src $ nth args 0
+                    :alt $ nth args 1
+                    :class-name style-embed-image
         |site-map $ %{} :CodeEntry (:doc |)
           :code $ quote
             def site-map $ parse-cirru-edn (slurp "\"data/meta.cirru")
         |slurp $ %{} :CodeEntry (:doc |)
           :code $ quote
             defmacro slurp (file) (read-file file)
+        |style-embed-image $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defstyle style-embed-image $ {}
+              "\"&" $ {} (:max-width "\"100%")
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.comp.container $ :require
             respo.util.format :refer $ hsl
             respo-ui.core :as ui
-            respo.core :refer $ defcomp >> <> div button textarea span a list-> defeffect create-element
+            respo.core :refer $ defcomp >> <> div button textarea span a list-> defeffect create-element img
             respo.comp.space :refer $ =<
             reel.comp.reel :refer $ comp-reel
             respo-md.comp.md :refer $ comp-md-block comp-md

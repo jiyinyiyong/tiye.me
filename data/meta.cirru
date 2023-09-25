@@ -3,8 +3,8 @@
   :home $ {}
     :title "|题叶"
     :content $ []
-      [] :text "|Calcit 脚本语言作者."
-      [] :title "Videos"
+      [] :text "|I made Calcit scripting language!"
+      [] :title "Vlogs"
       [] :links
         [] :url |https://space.bilibili.com/14227306 |Bilibili
       [] :title "|Focuses"
@@ -12,7 +12,7 @@
         [] :route :calcit |Calcit
         [] :route :triadica |Triadica
 
-      [] :title "|On..."
+      [] :title "|My..."
       [] :links
         [] :route :skills "|Skills"
         [] :route :artworks "|Artworks"
@@ -26,6 +26,7 @@
         [] :route :blogs |Blogs
         [] :route :years |Reviews
         [] :route :genshin |Games
+        [] :route :career |Career
 
   :projects $ {}
     :title |Projects
@@ -63,7 +64,7 @@
     :content $ []
       [] :text "|Modern interface for S-Expressions, structual editing, semi-graphic tree editor"
       [] :links
-        [] :url |https://github.com/Cirru/ "|GitHub Cirru"
+        [] :url |https://cirru.org/ "|cirru.org"
       [] :text "|with text form in an indentation syntax:"
       [] :links
         [] :url |http://text.cirru.org/ "|Cirru Text"
@@ -156,6 +157,10 @@
         [] :url |https://segmentfault.com/a/1190000009737250 "|Cirru 演进历程: 2012 ~ 2016"
         [] :url |https://segmentfault.com/a/1190000004209473 "|Cirru Project in 2015"
 
+      [] :text "|Review 10 years of programming"
+      [] :image |https://cos-sh.tiye.me/cos-up/8b4560e5d6d76a8afee5369b6f11420c-mmexport1695660565734.png "|Reviews of commits"
+        , nil
+
   :blogs $ {}
     :title "|Blogs"
     :content $ []
@@ -164,7 +169,7 @@
         [] :url |https://segmentfault.com/blog/jiyinyiyong |SegmentFault
         [] :url |https://www.zhihu.com/people/jiyinyiyong/posts |知乎
         [] :url |https://medium.com/@jiyinyiyong |Medium
-      [] :title "|Old"
+      [] :title |Deprecated
       [] :links
         [] :url |https://github.com/jiyinyiyong/blog2 "|Markdown 静态文件"
         [] :url |https://github.com/jiyinyiyong/article "|Github Articles in HTML"
@@ -199,7 +204,7 @@
     :content $ []
       [] :text "|Calcit: a Lisp dialect based on Cirru. Inspired by ClojureScript."
       [] :links
-        [] :url |https://github.com/calcit-lang/ "|GitHub Calcit"
+        [] :url |https://calcit-lang.org "|calcit-lang.org"
       [] :title "|演示"
       [] :links
         [] :url |https://www.bilibili.com/video/BV1Yg411K73P "|Calcit-js 开发的阶段介绍 2021-11"
@@ -240,7 +245,7 @@
       [] :xigua |https://www.ixigua.com/iframe/7141707370979131941?autoplay=0
       [] :xigua |https://www.ixigua.com/iframe/7128061977837961741?autoplay=0
       [] :xigua |https://www.ixigua.com/iframe/7181125285817877048?autoplay=0
-      [] :text "|more demos can be found on my video pages."
+      [] :text "|more demos can be found on my bilibili."
 
   :donation $ {}
     :title |Donation
@@ -263,3 +268,13 @@
       [] :links
         [] :url |https://r.tiye.me/Triadica/wgsl-shadertoy/ "|WGSL Shadertoy"
         [] :url |https://r.tiye.me/Triadica/lagopus.calcit/ "|Lagopus: Triadica in WebGPU"
+  :career $ {}
+    :title |Career
+    :content $ []
+      [] :text "|Most the time I serve a CoffeeScript/JavaScript/TypeScript programmer and working on Browser/Node.js apps"
+      [] :text "|Joined TickTick in Mar 2013"
+      [] :text "|Joined Teambition in Feb 2014"
+      [] :text "|Joined Eleme in May 2016"
+      [] :text "|Joined JiMeng in Jul 2017"
+      [] :text "|Joined friends' startup in Nov 2021"
+      [] :text "|Joined NIO in Oct 2022"

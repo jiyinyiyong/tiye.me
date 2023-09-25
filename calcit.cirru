@@ -1886,6 +1886,35 @@
                                           |b $ %{} :Leaf (:at 1663314258692) (:by |rJG4IHzWf) (:text |args)
                                           |h $ %{} :Leaf (:at 1663314258692) (:by |rJG4IHzWf) (:text |0)
                                       |h $ %{} :Leaf (:at 1663314255196) (:by |rJG4IHzWf) (:text "|\"\" referrerpolicy=\"unsafe-url\" allowfullscreen></iframe>")
+                  |zD $ %{} :Expr (:at 1695661544893) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1695661686472) (:by |rJG4IHzWf) (:text |:image)
+                      |b $ %{} :Expr (:at 1695661546659) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1695661547904) (:by |rJG4IHzWf) (:text |img)
+                          |b $ %{} :Expr (:at 1695661548852) (:by |rJG4IHzWf)
+                            :data $ {}
+                              |T $ %{} :Leaf (:at 1695661549306) (:by |rJG4IHzWf) (:text |{})
+                              |b $ %{} :Expr (:at 1695661549898) (:by |rJG4IHzWf)
+                                :data $ {}
+                                  |T $ %{} :Leaf (:at 1695661669723) (:by |rJG4IHzWf) (:text |:src)
+                                  |b $ %{} :Expr (:at 1695661670647) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1695661671063) (:by |rJG4IHzWf) (:text |nth)
+                                      |b $ %{} :Leaf (:at 1695661671750) (:by |rJG4IHzWf) (:text |args)
+                                      |h $ %{} :Leaf (:at 1695661672492) (:by |rJG4IHzWf) (:text |0)
+                              |h $ %{} :Expr (:at 1695661673844) (:by |rJG4IHzWf)
+                                :data $ {}
+                                  |T $ %{} :Leaf (:at 1695661675839) (:by |rJG4IHzWf) (:text |:alt)
+                                  |b $ %{} :Expr (:at 1695661676113) (:by |rJG4IHzWf)
+                                    :data $ {}
+                                      |T $ %{} :Leaf (:at 1695661677095) (:by |rJG4IHzWf) (:text |nth)
+                                      |b $ %{} :Leaf (:at 1695661678194) (:by |rJG4IHzWf) (:text |args)
+                                      |h $ %{} :Leaf (:at 1695661678941) (:by |rJG4IHzWf) (:text |1)
+                              |l $ %{} :Expr (:at 1695661691230) (:by |rJG4IHzWf)
+                                :data $ {}
+                                  |T $ %{} :Leaf (:at 1695661694809) (:by |rJG4IHzWf) (:text |:class-name)
+                                  |b $ %{} :Leaf (:at 1695661701730) (:by |rJG4IHzWf) (:text |style-embed-image)
         |site-map $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1627027478202) (:by |rJG4IHzWf)
             :data $ {}
@@ -1910,6 +1939,24 @@
                 :data $ {}
                   |T $ %{} :Leaf (:at 1612250819878) (:by |rJG4IHzWf) (:text |read-file)
                   |j $ %{} :Leaf (:at 1612250820901) (:by |rJG4IHzWf) (:text |file)
+        |style-embed-image $ %{} :CodeEntry (:doc |)
+          :code $ %{} :Expr (:at 1695661702133) (:by |rJG4IHzWf)
+            :data $ {}
+              |T $ %{} :Leaf (:at 1695661703488) (:by |rJG4IHzWf) (:text |defstyle)
+              |b $ %{} :Leaf (:at 1695661702133) (:by |rJG4IHzWf) (:text |style-embed-image)
+              |h $ %{} :Expr (:at 1695661707198) (:by |rJG4IHzWf)
+                :data $ {}
+                  |T $ %{} :Leaf (:at 1695661706950) (:by |rJG4IHzWf) (:text |{})
+                  |b $ %{} :Expr (:at 1695661714809) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |T $ %{} :Leaf (:at 1695661715730) (:by |rJG4IHzWf) (:text "|\"&")
+                      |b $ %{} :Expr (:at 1695661716108) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1695661716413) (:by |rJG4IHzWf) (:text |{})
+                          |b $ %{} :Expr (:at 1695661717184) (:by |rJG4IHzWf)
+                            :data $ {}
+                              |T $ %{} :Leaf (:at 1695661719432) (:by |rJG4IHzWf) (:text |:max-width)
+                              |b $ %{} :Leaf (:at 1695661723137) (:by |rJG4IHzWf) (:text "|\"100%")
       :ns $ %{} :CodeEntry (:doc |)
         :code $ %{} :Expr (:at nil) (:by nil)
           :data $ {}
@@ -1947,6 +1994,7 @@
                         |yj $ %{} :Leaf (:at 1627035506063) (:by |rJG4IHzWf) (:text |list->)
                         |yr $ %{} :Leaf (:at 1627047706880) (:by |rJG4IHzWf) (:text |defeffect)
                         |z $ %{} :Leaf (:at 1676027736451) (:by |rJG4IHzWf) (:text |create-element)
+                        |zD $ %{} :Leaf (:at 1695661682968) (:by |rJG4IHzWf) (:text |img)
                 |x $ %{} :Expr (:at nil) (:by nil)
                   :data $ {}
                     |j $ %{} :Leaf (:at nil) (:by nil) (:text |respo.comp.space)

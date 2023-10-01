@@ -11,24 +11,24 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - uses: actions/setup-node@v3
       with:
-        node-version: 18
+        node-version: 20
         cache: yarn
 
     - uses: supplypike/setup-bin@v3
       with:
-        uri: 'https://github.com/calcit-lang/calcit/releases/download/0.8.0-a5/cr'
+        uri: 'https://github.com/calcit-lang/calcit/releases/download/0.8.2/cr'
         name: 'cr'
-        version: '0.8.0-a5'
+        version: '0.8.2'
 
     - uses: supplypike/setup-bin@v3
       with:
-        uri: 'https://github.com/calcit-lang/calcit/releases/download/0.8.0-a5/caps'
+        uri: 'https://github.com/calcit-lang/calcit/releases/download/0.8.2/caps'
         name: 'caps'
-        version: '0.8.0-a5'
+        version: '0.8.2'
 
     - name: "compiles to js"
       run: >

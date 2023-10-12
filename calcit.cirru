@@ -1890,30 +1890,6 @@
                                       |T $ %{} :Leaf (:at 1695663760227) (:by |rJG4IHzWf) (:text |nth)
                                       |b $ %{} :Leaf (:at 1695663760681) (:by |rJG4IHzWf) (:text |0)
                                       |h $ %{} :Leaf (:at 1695663762790) (:by |rJG4IHzWf) (:text |directive)
-        |site-map $ %{} :CodeEntry (:doc |)
-          :code $ %{} :Expr (:at 1627027478202) (:by |rJG4IHzWf)
-            :data $ {}
-              |T $ %{} :Leaf (:at 1627027478202) (:by |rJG4IHzWf) (:text |def)
-              |j $ %{} :Leaf (:at 1627027478202) (:by |rJG4IHzWf) (:text |site-map)
-              |r $ %{} :Expr (:at 1627027479571) (:by |rJG4IHzWf)
-                :data $ {}
-                  |T $ %{} :Leaf (:at 1627027479571) (:by |rJG4IHzWf) (:text |parse-cirru-edn)
-                  |j $ %{} :Expr (:at 1627027479571) (:by |rJG4IHzWf)
-                    :data $ {}
-                      |T $ %{} :Leaf (:at 1627027479571) (:by |rJG4IHzWf) (:text |slurp)
-                      |j $ %{} :Leaf (:at 1627027479571) (:by |rJG4IHzWf) (:text "|\"data/meta.cirru")
-        |slurp $ %{} :CodeEntry (:doc |)
-          :code $ %{} :Expr (:at 1612250801032) (:by |rJG4IHzWf)
-            :data $ {}
-              |T $ %{} :Leaf (:at 1612250802814) (:by |rJG4IHzWf) (:text |defmacro)
-              |j $ %{} :Leaf (:at 1612250801032) (:by |rJG4IHzWf) (:text |slurp)
-              |r $ %{} :Expr (:at 1612250801032) (:by |rJG4IHzWf)
-                :data $ {}
-                  |T $ %{} :Leaf (:at 1612250805673) (:by |rJG4IHzWf) (:text |file)
-              |v $ %{} :Expr (:at 1612250806387) (:by |rJG4IHzWf)
-                :data $ {}
-                  |T $ %{} :Leaf (:at 1612250819878) (:by |rJG4IHzWf) (:text |read-file)
-                  |j $ %{} :Leaf (:at 1612250820901) (:by |rJG4IHzWf) (:text |file)
         |style-embed-image $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1695661702133) (:by |rJG4IHzWf)
             :data $ {}
@@ -2013,6 +1989,13 @@
                     |h $ %{} :Expr (:at 1651546911368) (:by |rJG4IHzWf)
                       :data $ {}
                         |T $ %{} :Leaf (:at 1651546912488) (:by |rJG4IHzWf) (:text |defstyle)
+                |zD $ %{} :Expr (:at 1697132163614) (:by |rJG4IHzWf)
+                  :data $ {}
+                    |T $ %{} :Leaf (:at 1697132165320) (:by |rJG4IHzWf) (:text |app.schema)
+                    |b $ %{} :Leaf (:at 1697132167365) (:by |rJG4IHzWf) (:text |:refer)
+                    |h $ %{} :Expr (:at 1697132168421) (:by |rJG4IHzWf)
+                      :data $ {}
+                        |T $ %{} :Leaf (:at 1697132171628) (:by |rJG4IHzWf) (:text |site-map)
     |app.config $ %{} :FileEntry
       :defs $ {}
         |dev? $ %{} :CodeEntry (:doc |)
@@ -2204,8 +2187,7 @@
               |j $ %{} :Leaf (:at nil) (:by nil) (:text |mount-target)
               |r $ %{} :Expr (:at nil) (:by nil)
                 :data $ {}
-                  |T $ %{} :Leaf (:at nil) (:by nil) (:text |.querySelector)
-                  |j $ %{} :Leaf (:at nil) (:by nil) (:text |js/document)
+                  |j $ %{} :Leaf (:at 1697132025832) (:by |rJG4IHzWf) (:text |js/document.querySelector)
                   |r $ %{} :Leaf (:at nil) (:by nil) (:text ||.app)
         |reload! $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1627018118128) (:by |rJG4IHzWf)
@@ -2512,6 +2494,33 @@
                     |v $ %{} :Leaf (:at 1613373998484) (:by |rJG4IHzWf) (:text |fs)
     |app.schema $ %{} :FileEntry
       :defs $ {}
+        |load-as-code $ %{} :CodeEntry (:doc |)
+          :code $ %{} :Expr (:at 1612250801032) (:by |rJG4IHzWf)
+            :data $ {}
+              |T $ %{} :Leaf (:at 1612250802814) (:by |rJG4IHzWf) (:text |defmacro)
+              |j $ %{} :Leaf (:at 1697132152046) (:by |rJG4IHzWf) (:text |load-as-code)
+              |r $ %{} :Expr (:at 1612250801032) (:by |rJG4IHzWf)
+                :data $ {}
+                  |T $ %{} :Leaf (:at 1612250805673) (:by |rJG4IHzWf) (:text |file)
+              |v $ %{} :Expr (:at 1697131818350) (:by |rJG4IHzWf)
+                :data $ {}
+                  |D $ %{} :Leaf (:at 1697131826338) (:by |rJG4IHzWf) (:text |&data-to-code)
+                  |T $ %{} :Expr (:at 1697131815057) (:by |rJG4IHzWf)
+                    :data $ {}
+                      |D $ %{} :Leaf (:at 1697131815688) (:by |rJG4IHzWf) (:text |parse-cirru-edn)
+                      |T $ %{} :Expr (:at 1612250806387) (:by |rJG4IHzWf)
+                        :data $ {}
+                          |T $ %{} :Leaf (:at 1612250819878) (:by |rJG4IHzWf) (:text |read-file)
+                          |j $ %{} :Leaf (:at 1612250820901) (:by |rJG4IHzWf) (:text |file)
+        |site-map $ %{} :CodeEntry (:doc |)
+          :code $ %{} :Expr (:at 1627027478202) (:by |rJG4IHzWf)
+            :data $ {}
+              |T $ %{} :Leaf (:at 1627027478202) (:by |rJG4IHzWf) (:text |def)
+              |j $ %{} :Leaf (:at 1697132141852) (:by |rJG4IHzWf) (:text |site-map)
+              |r $ %{} :Expr (:at 1627027479571) (:by |rJG4IHzWf)
+                :data $ {}
+                  |T $ %{} :Leaf (:at 1697131845023) (:by |rJG4IHzWf) (:text |load-as-code)
+                  |j $ %{} :Leaf (:at 1627027479571) (:by |rJG4IHzWf) (:text "|\"data/meta.cirru")
         |store $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at nil) (:by nil)
             :data $ {}

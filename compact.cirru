@@ -259,12 +259,6 @@
                   img $ {} (:src src) (:alt alt) (:class-name style-embed-image)
                 _ $ div ({})
                   <> $ str "\"Unknown kind: " (nth 0 directive)
-        |site-map $ %{} :CodeEntry (:doc |)
-          :code $ quote
-            def site-map $ parse-cirru-edn (slurp "\"data/meta.cirru")
-        |slurp $ %{} :CodeEntry (:doc |)
-          :code $ quote
-            defmacro slurp (file) (read-file file)
         |style-embed-image $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle style-embed-image $ {}
@@ -281,6 +275,7 @@
             app.config :refer $ dev?
             feather.core :refer $ comp-icon
             respo.css :refer $ defstyle
+            app.schema :refer $ site-map
     |app.config $ %{} :FileEntry
       :defs $ {}
         |dev? $ %{} :CodeEntry (:doc |)
@@ -315,7 +310,7 @@
               println "|App started."
         |mount-target $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def mount-target $ .querySelector js/document |.app
+            def mount-target $ js/document.querySelector |.app
         |reload! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn reload! () $ if (some? build-errors) (tip! "\"error" build-errors)
@@ -370,6 +365,13 @@
             "\"fs" :as fs
     |app.schema $ %{} :FileEntry
       :defs $ {}
+        |load-as-code $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defmacro load-as-code (file)
+              &data-to-code $ parse-cirru-edn (read-file file)
+        |site-map $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            def site-map $ load-as-code "\"data/meta.cirru"
         |store $ %{} :CodeEntry (:doc |)
           :code $ quote
             def store $ {}

@@ -4,7 +4,7 @@
     :title "|题叶"
     :content $ []
       :: :text "|I made Calcit scripting language!"
-      :: :title "Vlogs"
+      :: :title "|Vlogs"
       :: :links $ []
         :: :url |https://space.bilibili.com/14227306 |Bilibili
       :: :title "|Focuses"
@@ -194,7 +194,7 @@
   :skills $ {}
     :title |Skills
     :content $ []
-      :: :title "Skills"
+      :: :title "|Skills"
       :: :text "|Worked in TypeScript+React for years, as a web frontend dev."
       :: :text "|Devoted to ClojureScript for years, an FP guy."
       :: :text "|Using Rust for a year in personal projects."
@@ -221,7 +221,7 @@
 
       :: :text "|Google Wave"
       :: :links $ []
-        :: :url https://www.bilibili.com/video/BV1RU4y1g7tf "|Google Wave"
+        :: :url |https://www.bilibili.com/video/BV1RU4y1g7tf "|Google Wave"
 
       :: :text "|Several programming language designers."
 

@@ -93,10 +93,10 @@
                   div
                     {} $ :class-name css-bg
                     create-element :iframe $ {}
-                      :src $ if (some? js/navigator.gpu) "\"https://r.tiye.me/Triadica/protea/" "\"https://r.tiye.me/Triadica/sapium/"
+                      :src $ if (some? js/navigator.gpu) "\"https://webgpu.art/protea/" "\"https://r.tiye.me/Triadica/sapium/"
                       :class-name css-iframe
                   div
-                    {} $ :class-name css-container
+                    {} $ :class-name style-container
                     comp-empty (empty? router) push-tab
                     comp-cards router push-tab close-tab
                     when dev? $ comp-reel (>> states :reel) reel ({})
@@ -157,15 +157,6 @@
                 {} (:padding "\"4px") (:box-shadow "\"1px 1px 4px black") (:border-radius "\"2px") (:border "\"2px solid white") (:margin-right 4) (:transition-duration "\"300ms") (:position :absolute) (:border-radius "\"6px") (:transform-origin "\"-10% 33.3%")
                   :box-shadow $ str "\"0 0 10px 4px " (hsl 200 60 90 0.3)
                   :background-color $ hsl 0 0 100 0.96
-        |css-container $ %{} :CodeEntry (:doc |)
-          :code $ quote
-            defstyle css-container $ {}
-              "\"$0" $ merge ui/global ui/fullscreen
-                {} (:display :flex) (:font-size 20) (; :backdrop-filter "\"blur(2px)") (:padding "\"0 12px 0 12vw") (:scroll-behavior :smooth)
-                  :box-shadow $ str "\"inset 0 -40px 1200px " (hsl 0 0 0)
-                  ; :background-color $ hsl 180 60 20 0.01
-                  :font-family $ str "\"Buda," (:font-family ui/global)
-                  :pointer-events :none
         |css-iframe $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle css-iframe $ {}
@@ -239,8 +230,9 @@
                     <> title
                 (:url target title)
                   div ({})
-                    <> "\"☍" $ {}
+                    <> "\"🌐" $ {}
                       :color $ hsl 200 80 70
+                      :font-size 14
                     =< 6 nil
                     a $ {}
                       :style $ {} (:font-size 16) (:line-height "\"20px")
@@ -259,6 +251,15 @@
                   img $ {} (:src src) (:alt alt) (:class-name style-embed-image)
                 _ $ div ({})
                   <> $ str "\"Unknown kind: " (nth 0 directive)
+        |style-container $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defstyle style-container $ {}
+              "\"$0" $ merge ui/global ui/fullscreen
+                {} (:display :flex) (:font-size 20) (; :backdrop-filter "\"blur(2px)") (:padding "\"0 12px 0 12vw") (:scroll-behavior :smooth)
+                  :box-shadow $ str "\"inset 0 -40px 1200px " (hsl 0 0 0)
+                  ; :background-color $ hsl 180 60 20 0.01
+                  :font-family $ str "\"Buda," (:font-family ui/global)
+                  :pointer-events :none
         |style-embed-image $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle style-embed-image $ {}

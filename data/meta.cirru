@@ -10,7 +10,7 @@
       :: :title "|Focuses"
       :: :links $ []
         :: :route :calcit |Calcit
-        :: :route :triadica |Triadica
+        :: :route :webgpu-art "|WebGPU Art"
 
       :: :title "|My..."
       :: :links $ []
@@ -195,9 +195,9 @@
     :title |Skills
     :content $ []
       :: :title "|Skills"
-      :: :text "|Worked in TypeScript+React for years, as a web frontend dev."
-      :: :text "|Devoted to ClojureScript for years, an FP guy."
-      :: :text "|Using Rust for a year in personal projects."
+      :: :text "|Worked in TypeScript/React and some Node.js for years."
+      :: :text "|Using ClojureScript/Calcit for years, FP beliver."
+      :: :text "|Trying Rust and WGSL in personal projects."
 
   :calcit $ {}
     :title |Calcit
@@ -256,18 +256,20 @@
       :: :text "|Example:"
       :: :xigua |https://www.ixigua.com/iframe/7125731312362750495?autoplay=0
 
-  :triadica $ {}
-    :title |Triadica
+  :webgpu-art $ {}
+    :title "|WebGPU Art"
     :content $ []
-      :: :text "|WebGL toys with triangles and GLSL"
+      :: :text "|WebGL toys"
       :: :links $ []
         :: :url |https://github.com/Triadica/triadica-space "|Calcit-js library of Triadica"
         :: :url |https://github.com/Triadica/triadica.ts "|TypeScript library of Triadica"
       :: :xigua |https://www.ixigua.com/iframe/7119835590593511966?autoplay=0
       :: :text "|WebGPU toys"
       :: :links $ []
-        :: :url |https://r.tiye.me/Triadica/wgsl-shadertoy/ "|WGSL Shadertoy"
-        :: :url |https://r.tiye.me/Triadica/lagopus.calcit/ "|Lagopus: Triadica in WebGPU"
+        :: :url |https://webgpu.art/wgsl-shadertoy/ "|WGSL Shadertoy"
+        :: :url |https://webgpu.art/lagopus.calcit/ "|Lagopus: states and shapes with WebGPU"
+        :: :url |https://webgpu.art/protea/ "|Protea: compute shader and shapes with WebGPU"
+        :: :url |https://compute.toys/profile/jiyinyiyong "|my compute.toys page"
   :career $ {}
     :title |Career
     :content $ []

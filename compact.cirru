@@ -93,7 +93,7 @@
                   div
                     {} $ :class-name css-bg
                     create-element :iframe $ {}
-                      :src $ if (some? js/navigator.gpu) "\"https://webgpu.art/soluble/?tab=kaleidoscope" "\"https://r.tiye.me/Triadica/sapium/"
+                      :src $ if (some? js/navigator.gpu) "\"https://webgpu.art/soluble/?tab=clocking" "\"https://r.tiye.me/Triadica/sapium/"
                       :class-name css-iframe
                   div
                     {} $ :class-name style-container

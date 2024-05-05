@@ -610,7 +610,7 @@
                                             :data $ {}
                                               |T $ %{} :Leaf (:at 1680026071244) (:by |rJG4IHzWf) (:text |some?)
                                               |b $ %{} :Leaf (:at 1680026077258) (:by |rJG4IHzWf) (:text |js/navigator.gpu)
-                                          |P $ %{} :Leaf (:at 1713710162291) (:by |rJG4IHzWf) (:text "|\"https://webgpu.art/soluble/?tab=kaleidoscope")
+                                          |P $ %{} :Leaf (:at 1714879826599) (:by |rJG4IHzWf) (:text "|\"https://webgpu.art/soluble/?tab=clocking")
                                           |T $ %{} :Leaf (:at 1680026066796) (:by |rJG4IHzWf) (:text "|\"https://r.tiye.me/Triadica/sapium/")
                                   |h $ %{} :Expr (:at 1676027768664) (:by |rJG4IHzWf)
                                     :data $ {}

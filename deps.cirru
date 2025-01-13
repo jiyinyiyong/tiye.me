@@ -1,11 +1,11 @@
 
 {}
-  :calcit-version |0.9.6
+  :calcit-version |0.9.7
   :dependencies $ {}
     |calcit-lang/lilac |main
     |calcit-lang/memof |main
     |Respo/respo.calcit |main
     |Respo/reel.calcit |main
-    |Respo/respo-markdown.calcit |main
+    |Respo/respo-markdown.calcit |0.4.7
     |Respo/respo-feather.calcit |main
     |Respo/respo-ui.calcit |main

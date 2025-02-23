@@ -249,8 +249,10 @@
                     :innerHTML $ str "\"<iframe width=\"100%\" height=\"260px\" frameborder=\"0\" src=\"" url "\"\" referrerpolicy=\"unsafe-url\" allowfullscreen></iframe>"
                 (:image src alt)
                   img $ {} (:src src) (:alt alt) (:class-name style-embed-image)
+                (:image src alt _n)
+                  img $ {} (:src src) (:alt alt) (:class-name style-embed-image)
                 _ $ div ({})
-                  <> $ str "\"Unknown kind: " (nth 0 directive)
+                  <> $ str "\"Unknown kind: " directive
         |style-container $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle style-container $ {}

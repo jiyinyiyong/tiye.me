@@ -1,6 +1,6 @@
 
 {} (:package |app)
-  :configs $ {} (:init-fn |app.main/main!) (:reload-fn |app.main/reload!) (:version nil)
+  :configs $ {} (:init-fn |app.main/main!) (:reload-fn |app.main/reload!) (:version |0.0.1)
     :modules $ [] |respo.calcit/compact.cirru |lilac/compact.cirru |memof/compact.cirru |respo-ui.calcit/compact.cirru |respo-markdown.calcit/compact.cirru |reel.calcit/compact.cirru |respo-feather.calcit/
   :entries $ {}
   :files $ {}
@@ -9,6 +9,7 @@
         |card-width $ %{} :CodeEntry (:doc |)
           :code $ quote
             def card-width $ js/Math.min 480 (- js/window.innerWidth 24)
+          :examples $ []
         |comp-avatar $ %{} :CodeEntry (:doc |)
           :code $ quote
             defcomp comp-avatar (on-home)
@@ -17,6 +18,7 @@
                   {} (:class-name css-avatar)
                     :on-click $ fn (e d!) (on-home nil :home d!)
                   div $ {} (:class-name css-avatar-outline)
+          :examples $ []
         |comp-card $ %{} :CodeEntry (:doc |)
           :code $ quote
             defcomp comp-card (idx key on-open on-close)
@@ -64,6 +66,7 @@
                                 render-content directive $ fn (key d!) (on-open idx key d!)
                                 <> $ str "\"Unknown " directive
                           =< nil 120
+          :examples $ []
         |comp-cards $ %{} :CodeEntry (:doc |)
           :code $ quote
             defcomp comp-cards (router on-open on-close)
@@ -78,6 +81,7 @@
                 -> router $ map-indexed
                   fn (idx key)
                     [] key $ comp-card idx key on-open on-close
+          :examples $ []
         |comp-container $ %{} :CodeEntry (:doc |)
           :code $ quote
             defcomp comp-container (reel)
@@ -100,6 +104,7 @@
                     comp-empty (empty? router) push-tab
                     comp-cards router push-tab close-tab
                     when dev? $ comp-reel (>> states :reel) reel ({})
+          :examples $ []
         |comp-empty $ %{} :CodeEntry (:doc |)
           :code $ quote
             defcomp comp-empty (visible? on-home)
@@ -116,6 +121,7 @@
                   {} $ :style
                     merge ui/center $ {} (:color :white) (:font-size 20) (:line-height "\"28px") (:text-shadow "\"1px 1px 4px black")
                   <> "\"题叶"
+          :examples $ []
         |css-avatar $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle css-avatar $ {}
@@ -140,16 +146,19 @@
                 {} $ :border-color (hsl 0 0 100 0.8)
               (str "\"$0:active ." css-avatar-outline)
                 {} $ :border-width "\"5px"
+          :examples $ []
         |css-avatar-outline $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle css-avatar-outline $ {}
               "\"$0" $ {} (:position :absolute) (:width "\"100%") (:height "\"100%") (:border-radius "\"50%")
                 :border $ str-spaced "\"5px solid" (hsl 0 0 100 0.9)
+          :examples $ []
         |css-bg $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle css-bg $ {}
               "\"$0" $ merge ui/global ui/fullscreen
                 {} (:background-image "\"url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size "\"cover") (:background-position :center) (:position :fixed) (:top 0) (:left 0) (:width "\"100%") (:height "\"100%") (:z-index -1) (:opacity 0.7) (:filter "\"grayscale(0.5)")
+          :examples $ []
         |css-card $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle css-card $ {}
@@ -157,15 +166,18 @@
                 {} (:padding "\"4px") (:box-shadow "\"1px 1px 4px black") (:border-radius "\"2px") (:border "\"2px solid white") (:margin-right 4) (:transition-duration "\"300ms") (:position :absolute) (:border-radius "\"6px") (:transform-origin "\"-10% 33.3%")
                   :box-shadow $ str "\"0 0 10px 4px " (hsl 200 60 90 0.3)
                   :background-color $ hsl 0 0 100 0.96
+          :examples $ []
         |css-iframe $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle css-iframe $ {}
               "\"$0" $ {} (:width "\"100%") (:height "\"100%")
+          :examples $ []
         |css-profile $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle css-profile $ {}
               "\"$0" $ merge ui/center
                 {} (:margin :auto) (:position :fixed) (:top 0) (:left 0) (:width "\"100%") (:height "\"100%") (:opacity 0.01) (:transition-duration "\"300ms") (:transform "\"translate(12vw,0px)") (:-webkit-tap-highlight-color :transparent) (:transition-delay "\"120ms") (:animation-name "\"entering") (:animation-duration "\"800ms")
+          :examples $ []
         |effect-bump $ %{} :CodeEntry (:doc |)
           :code $ quote
             defeffect effect-bump () (action el at?)
@@ -175,6 +187,7 @@
                   js/setTimeout $ fn ()
                     -> el .-style .-scale $ set! 1
                     , 0
+          :examples $ []
         |effect-fading $ %{} :CodeEntry (:doc |)
           :code $ quote
             defeffect effect-fading () (action el at?)
@@ -200,6 +213,7 @@
                   js/setTimeout
                     fn () $ .!remove el'
                     , 300
+          :examples $ []
         |render-content $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn render-content (directive on-open)
@@ -253,6 +267,7 @@
                   img $ {} (:src src) (:alt alt) (:class-name style-embed-image)
                 _ $ div ({})
                   <> $ str "\"Unknown kind: " directive
+          :examples $ []
         |style-container $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle style-container $ {}
@@ -262,10 +277,12 @@
                   ; :background-color $ hsl 180 60 20 0.01
                   :font-family $ str "\"Buda," (:font-family ui/global)
                   :pointer-events :none
+          :examples $ []
         |style-embed-image $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle style-embed-image $ {}
               "\"&" $ {} (:max-width "\"100%")
+          :examples $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.comp.container $ :require
@@ -279,25 +296,31 @@
             feather.core :refer $ comp-icon
             respo.css :refer $ defstyle
             app.schema :refer $ site-map
+        :examples $ []
     |app.config $ %{} :FileEntry
       :defs $ {}
         |dev? $ %{} :CodeEntry (:doc |)
           :code $ quote (def dev? true)
+          :examples $ []
         |site $ %{} :CodeEntry (:doc |)
           :code $ quote
             def site $ {} (:storage "\"tiye-site") (:dev-ui "\"http://localhost:8100/main.css") (:release-ui "\"http://cdn.tiye.me/favored-fonts/main.css") (:cdn-url "\"http://cdn.tiye.me/tiye-site/") (:cdn-folder "\"tiye.me:cdn/tiye-site") (:title "\"题叶@jiyinyiyong") (:icon "\"http://cdn.tiye.me/logo/tiye.jpg") (:storage-key "\"tiye-site") (:upload-folder "\"tiye.me:repo/tiye/tiye.me/")
+          :examples $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote (ns app.config)
+        :examples $ []
     |app.main $ %{} :FileEntry
       :defs $ {}
         |*reel $ %{} :CodeEntry (:doc |)
           :code $ quote
             defatom *reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
+          :examples $ []
         |dispatch! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn dispatch! (op)
               when config/dev? $ println "\"Dispatch:" op
               reset! *reel $ reel-updater updater @*reel op
+          :examples $ []
         |main! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn main! ()
@@ -311,9 +334,11 @@
                   = "\"Escape" $ .-key event
                   dispatch! $ :: :reduce-page
               println "|App started."
+          :examples $ []
         |mount-target $ %{} :CodeEntry (:doc |)
           :code $ quote
             def mount-target $ js/document.querySelector |.app
+          :examples $ []
         |reload! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn reload! () $ if (some? build-errors) (tip! "\"error" build-errors)
@@ -322,9 +347,11 @@
                 reset! *reel $ refresh-reel @*reel schema/store updater
                 println "|Code updated."
                 tip! "\"ok~" "\"Ok"
+          :examples $ []
         |render-app! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn render-app! () $ render! mount-target (comp-container @*reel) dispatch!
+          :examples $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.main $ :require
@@ -339,6 +366,7 @@
             app.page :refer $ ssr-processing!
             "\"bottom-tip" :default tip!
             "\"./calcit.build-errors" :default build-errors
+        :examples $ []
     |app.page $ %{} :FileEntry
       :defs $ {}
         |base-info $ %{} :CodeEntry (:doc |)
@@ -348,6 +376,7 @@
               :icon $ :icon config/site
               :ssr nil
               :inline-html nil
+          :examples $ []
         |ssr-processing! $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn ssr-processing! () $ let
@@ -357,6 +386,7 @@
                 content $ fs/readFileSync file "\"utf8"
               fs/writeFileSync file $ replace content "\"<div class=\"app\" ></div>" (str "\"<div class=\"app\" data-ssr=\"true\" >" html-content "\"</div>")
               echo "\"replaced" file
+          :examples $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.page $ :require
@@ -366,22 +396,27 @@
             reel.schema :as reel-schema
             app.config :as config
             "\"fs" :as fs
+        :examples $ []
     |app.schema $ %{} :FileEntry
       :defs $ {}
         |load-as-code $ %{} :CodeEntry (:doc |)
           :code $ quote
             defmacro load-as-code (file)
               &data-to-code $ parse-cirru-edn (read-file file)
+          :examples $ []
         |site-map $ %{} :CodeEntry (:doc |)
           :code $ quote
             def site-map $ load-as-code "\"data/meta.cirru"
+          :examples $ []
         |store $ %{} :CodeEntry (:doc |)
           :code $ quote
             def store $ {}
               :states $ {}
               :router $ []
+          :examples $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote (ns app.schema)
+        :examples $ []
     |app.updater $ %{} :FileEntry
       :defs $ {}
         |updater $ %{} :CodeEntry (:doc |)
@@ -402,7 +437,9 @@
                     if (empty? r) r $ rest r
                 (:hydrate-storage d) d
                 _ $ do (eprintln "\"unknown op" op) store
+          :examples $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns app.updater $ :require
             respo.cursor :refer $ update-states
+        :examples $ []

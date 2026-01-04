@@ -43,11 +43,13 @@
   :respo $ {}
     :title |Respo
     :content $ []
-      :: :text "|Virtual DOM library on immutable data, available in ClojureScript, now in calcit-js"
+      :: :text "|Tiny virtual DOM library on immutable data, available in serveral Functional Programming languages"
 
       :: :links $ []
-        :: :url |http://github.com/Respo "|GitHub respo.calcit"
-        :: :url |http://github.com/Respo/respo.cljs "|GitHub respo.cljs"
+        :: :url |https://github.com/Respo/respo.mbt "|GitHub respo.mbt"
+        :: :url |https://github.com/Respo/respo.rs "|GitHub respo.rs"
+        :: :url |https://github.com/Respo/respo.calcit "|GitHub respo.calcit"
+        :: :url |https://github.com/Respo/respo.cljs "|GitHub respo.cljs"
 
   :cumulo $ {}
     :title |Cumulo
@@ -207,6 +209,7 @@
         :: :url |https://calcit-lang.org "|calcit-lang.org"
       :: :title "|演示"
       :: :links $ []
+        :: :url |https://www.bilibili.com/video/BV1Rbv6BtE48 "|Calcit 语言依赖命令行接入 AI 代码生成的探索"
         :: :url |https://www.bilibili.com/video/BV1Yg411K73P "|Calcit-js 开发的阶段介绍 2021-11"
         :: :url |https://www.bilibili.com/video/BV1d44y1z71g "|如何运行 calcit-js 项目的一个演示"
         :: :url |https://www.bilibili.com/video/BV1uq4y1W7E4 "|calcit-js 开发记录: HUD 报错方案"

@@ -44,8 +44,8 @@ The Respo project is a virtual DOM library written in Calcit-js, containing:
 - `respo.render.dom` - DOM element creation and manipulation
 - `respo.render.effect` - Component lifecycle effects
 - `respo.render.patch` - Apply DOM patches
-- `respo.controller.client` - Client-side state management (activate-instance!, patch-instance!)
-- `respo.controller.resolve` - Event handling and resolution
+- `respo.controller.client` - Client-side state management (activate-instance!, patch-instance!, send-to-component!)
+- `respo.controller.resolve` - Event handling and resolution (build-deliver-event, wrap-dispatch)
 
 **Utilities**:
 
@@ -469,7 +469,34 @@ let
   extended
 ```
 
+**Testing Style to String Conversion:**
+
+```bash
+# Basic example (thread-first pipeline avoids bash escaping issues)
+cr eval 'thread-first ({} (:display "|flex") (:color "|red") (:padding "|10px")) .to-list respo.render.dom/style->string println' --dep respo.calcit/
+# Output: padding:10px;color:red;display:flex;
+```
+
+**Notes:**
+
+- `--dep respo.calcit/` loads the module from `~/.config/calcit/modules/`
+- `thread-first` (or `->`) chains operations: create map → convert to list → style->string → print
+- Direct `ns/def` format to reference functions from loaded modules
+
+**Inline Style Object Format:**
+
+```cirru
+# Map format (key-value pairs)
+my-styles $ {}
+  :display "|flex"
+  :color "|red"
+  :padding "|10px"
+  :font-size "|14px"
+```
+
 ### 6. Event Handling
+
+**DOM Event Handlers:**
 
 ```cirru
 ; Simple click handler
@@ -493,6 +520,59 @@ div
     :on-keydown $ fn (e dispatch!)
       when (= (e.key) "|Enter")
         dispatch! [:submit-form]
+```
+
+**Component-Level Event Listeners:**
+
+Components can define custom listeners that respond to events sent via `send-to-component!`. This is useful for global shortcuts, external triggers, or testing.
+
+```cirru
+; Define a listener function that returns a RespoListener record
+defn on-keydown (cursor state)
+  %{} respo.schema/RespoListener (:name :on-keydown)
+    :handler $ fn (event dispatch!)
+      tag-match event $
+        :keydown info
+        when
+          and
+            = |m $ :key info
+            :ctrl info
+          ; Handle Ctrl+M shortcut
+          dispatch! $ :: :states cursor
+            assoc state :message "|Shortcut triggered!"
+
+; Use listener in component by including it in the component body
+defcomp comp-with-listener (states data)
+  let
+      cursor $ :cursor states
+      state $ either (:data states) ({})
+    [] (on-keydown cursor state)  ; Add listener to component
+      div $ {}
+        <> $ :message state
+```
+
+**Triggering Component Listeners:**
+
+Use `send-to-component!` (from `respo.controller.client`) to programmatically send events to the component tree:
+
+```cirru
+; Send keyboard event to all listening components
+send-to-component! $ :: :keydown
+  {} $ :key "|m"
+    :ctrl true
+
+; Trigger from timer or external source
+js/window.setTimeout
+  fn ()
+    send-to-component! $ :: :custom-event
+      {} $ :data |some-value
+  , 1000
+
+; Useful for:
+; - Global keyboard shortcuts (Ctrl+S, Escape, etc.)
+; - WebSocket message handlers
+; - Timer-based triggers
+; - Testing component event handlers
 ```
 
 ---
@@ -728,12 +808,10 @@ cr query ns namespace-name  # Check imports
 ### ⚠️ Critical Rules
 
 1. **NEVER directly edit `calcit.cirru` or `compact.cirru`** with text editors
-
    - Use `cr edit` commands instead
    - These are serialized AST structures, not human-readable code
 
 2. **ALWAYS use relative paths for documentation links**
-
    - Use `../` and `../../` for navigation
    - This allows easy file discovery for LLM tools
 
@@ -836,85 +914,3 @@ Example from `docs/apis/defcomp.md`:
 - [API Overview](../api.md)
 - [Another API](./render!.md)
 ```
-
----
-
-This guide evolves as the project grows. Last updated: 2025-12-22
-
-# Calcit & Respo 开发避坑指南
-
-本文档总结了在 Calcit 和 Respo 开发过程中遇到的常见问题和最佳实践。
-
-## 1. 字符串语法 (String Syntax)
-
-Calcit 使用 `|` 前缀来表示字符串字面量。
-
-- **正确**: `|Hello` (编译为 `"Hello"`)
-- **正确**: `"Hello"` (标准 Cirru 字符串，编译为 `"Hello"`)
-- **错误**: `Hello` (会被解析为 Symbol)
-
-**CLI 操作注意**:
-在使用 `cr tree replace` 修改字符串时，推荐使用 `|` 前缀或 `--json-leaf` 确保类型正确。
-
-```bash
-# 推荐：使用 | 前缀
-cr tree replace ... -e "|Get Started"
-
-# 推荐：使用 --json-leaf 明确指定为叶子节点
-cr tree replace ... -e '"Get Started"' --json-leaf
-```
-
-如果直接使用 `-e '"Get Started"'` 且不加 `--json-leaf`，可能会被解析为包含引号的字符串 `"\"Get Started\""`，导致显示多余引号。
-
-## 2. Respo 文本渲染 (Text Rendering)
-
-Respo 的 HTML 标签（如 `div`, `span`, `button`）**不能直接接受原始字符串作为子节点**。
-
-**错误写法** (会导致 `Invalid data in elements tree`):
-
-```cirru
-div ({})
-  |SomeText
-```
-
-**正确写法 1: 使用 `:inner-text` 属性** (推荐用于纯文本标签)
-
-```cirru
-div $ {} (:inner-text |SomeText)
-```
-
-**正确写法 2: 使用 `<>` 组件** (推荐用于混合内容)
-
-```cirru
-div ({})
-  <> |SomeText
-  span $ {} (:inner-text |Other)
-```
-
-## 3. 样式定义 (Styles)
-
-在 `defstyle` 中定义样式时：
-
-- **数值属性**: 像 `font-weight` 这样的属性，如果使用数字（如 `700`），确保它是数字类型而不是字符串。
-  - 错误: `(:font-weight |bold)` (如果库不支持)
-  - 正确: `(:font-weight 700)`
-
-## 4. CLI 调试技巧
-
-- **检查代码**: `cr js --check-only`
-
-  - 这是一个非常快速的检查命令，能发现未定义的变量 (Warnings) 和语法错误，而不会生成 JS 文件。
-  - **务必关注 Warnings**: 很多运行时错误（如 `unknown head`）都是因为使用了未定义的 Symbol（可能是忘记加 `|` 前缀的字符串）。
-
-- **查看节点结构**: `cr tree show <ns/def> -p <path>`
-
-  - 在修改前，先查看目标节点的结构（是 `list` 还是 `leaf`），确认路径是否正确。
-
-- **精确修改**: `cr tree replace`
-  - 配合 `-p` 路径参数进行精确修改，避免破坏周围结构。
-
-## 5. 命名空间 (Namespaces)
-
-- **修改 Imports**: 使用 `cr edit imports <ns> -j '...'`
-  - 这是修改 `:require` 最安全的方式。
-  - 如果遇到 `invalid ns form` 错误，通常是因为 `ns` 定义格式被破坏，可以尝试清空 imports 再重新添加。

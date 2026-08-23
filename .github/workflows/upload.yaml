@@ -25,6 +25,9 @@ jobs:
 
     - uses: calcit-lang/setup-calcit@v1
 
+    - name: Install dependencies
+      run: caps --ci && yarn install --immutable
+
     - name: Validate Calcit snapshot and quality baseline
       run: |
         calcit calcit.cirru edit format
@@ -34,8 +37,7 @@ jobs:
 
     - name: "compiles to js"
       run: >
-        caps --ci && yarn install --immutable
-        && calcit calcit.cirru js
+        calcit calcit.cirru js
         && yarn vite build --base=./
 
     - name: Deploy to server

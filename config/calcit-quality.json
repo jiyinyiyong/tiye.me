@@ -6,17 +6,39 @@
     "includeDependencies": false
   },
   "metrics": {
-    "typeNone": 25,
-    "typeNotFull": 26,
-    "schemaDynamic": 31,
+    "typeNone": 29,
+    "typeNotFull": 30,
+    "schemaDynamic": 35,
     "codeDynamic": 0,
-    "codeNil": 9,
-    "unresolved": 40,
+    "codeNil": 8,
+    "unresolved": 43,
     "declaredOptional": 0,
     "deprecatedCalls": 0,
-    "unsafeCoerce": 0
+    "unsafeCoerce": 7
   },
   "definitions": {
+    "app.comp.container/browser-number": {
+      "typeNone": 1,
+      "typeNotFull": 1,
+      "schemaDynamic": 1,
+      "codeDynamic": 0,
+      "codeNil": 0,
+      "unresolved": 1,
+      "declaredOptional": 0,
+      "deprecatedCalls": 0,
+      "unsafeCoerce": 1
+    },
+    "app.comp.container/browser-object": {
+      "typeNone": 1,
+      "typeNotFull": 1,
+      "schemaDynamic": 1,
+      "codeDynamic": 0,
+      "codeNil": 0,
+      "unresolved": 1,
+      "declaredOptional": 0,
+      "deprecatedCalls": 0,
+      "unsafeCoerce": 1
+    },
     "app.comp.container/card-width": {
       "typeNone": 1,
       "typeNotFull": 1,
@@ -26,7 +48,7 @@
       "unresolved": 1,
       "declaredOptional": 0,
       "deprecatedCalls": 0,
-      "unsafeCoerce": 0
+      "unsafeCoerce": 1
     },
     "app.comp.container/comp-avatar": {
       "typeNone": 1,
@@ -158,15 +180,37 @@
       "unresolved": 1,
       "declaredOptional": 0,
       "deprecatedCalls": 0,
-      "unsafeCoerce": 0
+      "unsafeCoerce": 1
     },
     "app.comp.container/effect-fading": {
       "typeNone": 1,
       "typeNotFull": 1,
       "schemaDynamic": 1,
       "codeDynamic": 0,
-      "codeNil": 1,
-      "unresolved": 2,
+      "codeNil": 0,
+      "unresolved": 1,
+      "declaredOptional": 0,
+      "deprecatedCalls": 0,
+      "unsafeCoerce": 1
+    },
+    "app.comp.container/event-has-close-all?": {
+      "typeNone": 1,
+      "typeNotFull": 1,
+      "schemaDynamic": 1,
+      "codeDynamic": 0,
+      "codeNil": 0,
+      "unresolved": 1,
+      "declaredOptional": 0,
+      "deprecatedCalls": 0,
+      "unsafeCoerce": 2
+    },
+    "app.comp.container/gpu-supported?": {
+      "typeNone": 1,
+      "typeNotFull": 1,
+      "schemaDynamic": 1,
+      "codeDynamic": 0,
+      "codeNil": 0,
+      "unresolved": 1,
       "declaredOptional": 0,
       "deprecatedCalls": 0,
       "unsafeCoerce": 0

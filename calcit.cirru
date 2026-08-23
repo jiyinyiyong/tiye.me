@@ -77,17 +77,8 @@
                             :font-size 20
                             :cursor :pointer
                           fn (e d!)
-                            hint-fn $ {}
-                              :args $ [] 'JsObject 'Dynamic
-                              :return 'Dynamic
-                              :features $ #{} :js-ffi
-                            if (js-present? e)
-                              let
-                                  raw-event $ browser-object e
-                                  all? $ event-has-close-all? raw-event
-                                on-close idx all? d!
-                              on-close idx false d!
-                      <> title-text $ {} (:font-family ui/font-fancy) (:font-size 14) (:font-weight 300)
+                            on-close idx (event-has-close-all? e) d!
+                      <> title-text $ {} (:font-family ui/font-fancy) (:font-size 14) (:font-weight |300)
                         :color $ hsl 0 0 60
                       span $ {} (:class-name |right-corner) (:inner-text "| ")
                     =< nil 8
@@ -204,7 +195,7 @@
           :code $ quote
             defstyle css-bg $ {}
               |$0 $ merge ui/global ui/fullscreen
-                {} (:background-image "|url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size |cover) (:background-position :center) (:position :fixed) (:top 0) (:left 0) (:width |100%) (:height |100%) (:z-index -1) (:opacity 0.7) (:filter "|grayscale(0.5)")
+                {} (:background-image "|url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size |cover) (:background-position :center) (:position :fixed) (:top 0) (:left 0) (:width |100%) (:height |100%) (:z-index |-1) (:opacity 0.7) (:filter "|grayscale(0.5)")
           :examples $ []
           :schema $ :: 'Dynamic
         |css-card $ %{} 'CodeEntry (:doc |)
@@ -285,18 +276,15 @@
           :code $ quote
             defn event-has-close-all? (event)
               hint-fn $ {}
-                :args $ [] 'Dynamic
+                :args $ [] 'JsObject
                 :return 'Bool
                 :features $ #{} :js-ffi
               let
-                  raw-event $ .-event (browser-object event)
-                if (js-present? raw-event)
-                  let
-                      native-event $ browser-object raw-event
-                    unsafe-coerce
-                      or (.-metaKey native-event) (.-ctrlKey native-event)
-                      , 'Bool
-                  , false
+                  raw-event $ .-event event
+                  native-event $ browser-object raw-event
+                  meta-key? $ unsafe-coerce (.-metaKey native-event) 'Bool
+                  ctrl-key? $ unsafe-coerce (.-ctrlKey native-event) 'Bool
+                or meta-key? ctrl-key?
           :examples $ []
           :schema $ :: 'Dynamic
         |gpu-supported? $ %{} 'CodeEntry (:doc |)
@@ -316,7 +304,7 @@
                 (:title t)
                   div
                     {} $ :style
-                      {} (:font-weight 700) (:font-size 32) (:margin-top 8) (:font-weight 300)
+                      {} (:font-size 32) (:margin-top 8) (:font-weight |300)
                     <> t
                 (:text t)
                   div

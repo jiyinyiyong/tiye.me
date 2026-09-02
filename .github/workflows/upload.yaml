@@ -43,12 +43,14 @@ jobs:
     - name: Compile production assets
       run: |
         calcit calcit.cirru js
+        node scripts/check-runtime-smoke.mjs
         yarn vite build --base=./
         find dist -type f -print0 | sort -z | xargs -0 sha256sum | tee "$RUNNER_TEMP/dist.sha256"
 
     - name: Verify reproducible production build
       run: |
         calcit calcit.cirru js
+        node scripts/check-runtime-smoke.mjs
         yarn vite build --base=./
         find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/dist-repeat.sha256"
         diff -u "$RUNNER_TEMP/dist.sha256" "$RUNNER_TEMP/dist-repeat.sha256"

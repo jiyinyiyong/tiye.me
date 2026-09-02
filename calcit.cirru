@@ -418,7 +418,7 @@
               listen-devtools! |k dispatch!
               js/window.addEventListener |keydown $ fn (event)
                 if
-                  = |Escape $ unsafe-coerce (.-key event) String
+                  = |Escape $ unsafe-coerce (.-key event) 'String
                   dispatch! $ :: :reduce-page
               println "|App started."
           :examples $ []
@@ -494,7 +494,7 @@
           :code $ quote
             defmacro load-as-code (file)
               &data-to-code $ parse-cirru-edn
-                read-file $ unsafe-coerce file String
+                read-file $ unsafe-coerce file 'String
           :examples $ []
           :schema $ :: 'Macro
             {}

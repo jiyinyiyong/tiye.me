@@ -5,7 +5,7 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@calcit/procs@npm:0.13.75":
+"@calcit/procs@npm:^0.13.75":
   version: 0.13.75
   resolution: "@calcit/procs@npm:0.13.75"
   dependencies:
@@ -885,7 +885,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@calcit/procs": "npm:0.13.75"
+    "@calcit/procs": "npm:^0.13.75"
     bottom-tip: "npm:^0.1.5"
     feather-icons: "npm:^4.29.2"
     vite: "npm:^7.3.5"

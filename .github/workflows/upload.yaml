@@ -18,12 +18,13 @@ jobs:
 
     - uses: actions/setup-node@v6
       with:
-        node-version: 24
+        node-version-file: .node-version
 
     - name: Enable Corepack
       run: |
         corepack enable
         corepack prepare yarn@4.12.0 --activate
+        node --version
         yarn --version
 
     - uses: calcit-lang/setup-calcit@v1
@@ -39,10 +40,18 @@ jobs:
         calcit calcit.cirru analyze deprecated
         calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru
 
-    - name: "compiles to js"
-      run: >
+    - name: Compile production assets
+      run: |
         calcit calcit.cirru js
-        && yarn vite build --base=./
+        yarn vite build --base=./
+        find dist -type f -print0 | sort -z | xargs -0 sha256sum | tee "$RUNNER_TEMP/dist.sha256"
+
+    - name: Verify reproducible production build
+      run: |
+        calcit calcit.cirru js
+        yarn vite build --base=./
+        find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/dist-repeat.sha256"
+        diff -u "$RUNNER_TEMP/dist.sha256" "$RUNNER_TEMP/dist-repeat.sha256"
 
     - name: Deploy to server
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -60,3 +69,40 @@ jobs:
     - name: Display status from deploy
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       run: echo "${{ steps.deploy.outputs.status }}"
+
+    - name: Verify deployed production assets
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      env:
+        DEPLOY_URL: https://tiye.me
+      run: |
+        deployed_index="$RUNNER_TEMP/tiye-me-index.html"
+        index_matches=false
+
+        for attempt in {1..10}; do
+          curl --fail --silent --show-error --location \
+            --header 'Cache-Control: no-cache' \
+            "$DEPLOY_URL/?revision=$GITHUB_SHA&attempt=$attempt" \
+            --output "$deployed_index"
+
+          if cmp --silent dist/index.html "$deployed_index"; then
+            index_matches=true
+            break
+          fi
+
+          sleep 3
+        done
+
+        if [[ "$index_matches" != true ]]; then
+          echo 'Deployed index.html does not match this workflow build.' >&2
+          exit 1
+        fi
+
+        while IFS= read -r local_file; do
+          relative_path="${local_file#dist/}"
+          deployed_file="$RUNNER_TEMP/deployed-${relative_path//\//-}"
+          curl --fail --silent --show-error --location \
+            --header 'Cache-Control: no-cache' \
+            "$DEPLOY_URL/$relative_path?revision=$GITHUB_SHA" \
+            --output "$deployed_file"
+          cmp "$local_file" "$deployed_file"
+        done < <(find dist -type f -print | sort)

@@ -493,8 +493,9 @@
         'load-as-code $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defmacro load-as-code (file)
-              &data-to-code $ parse-cirru-edn
-                read-file $ unsafe-coerce file 'String
+              &cirru-nth
+                parse-cirru $ read-file (unsafe-coerce file 'String)
+                , 0
           :examples $ []
           :schema $ :: 'Macro
             {}

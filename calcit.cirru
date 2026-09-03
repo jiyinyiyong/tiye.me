@@ -6,9 +6,9 @@
       :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-feather.calcit/ |js-ffi/
       :type-slots $ {}
   :files $ {}
-    |app.comp.container $ %{} 'FileEntry
+    'app.comp.container $ %{} 'FileEntry
       :defs $ {}
-        |browser-number $ %{} 'CodeEntry (:doc |)
+        'browser-number $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn browser-number (value fallback)
               hint-fn $ {}
@@ -18,7 +18,7 @@
               if (js-present? value) (unsafe-coerce value 'Number) fallback
           :examples $ []
           :schema $ :: 'Dynamic
-        |browser-object $ %{} 'CodeEntry (:doc |)
+        'browser-object $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn browser-object (value)
               hint-fn $ {}
@@ -28,14 +28,14 @@
               unsafe-coerce value 'JsObject
           :examples $ []
           :schema $ :: 'Dynamic
-        |card-width $ %{} 'CodeEntry (:doc |)
+        'card-width $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def card-width $ unsafe-coerce
               js/Math.min 480 $ - (browser-number js/window.innerWidth 0) 24
               , 'Number
           :examples $ []
           :schema $ :: 'Dynamic
-        |comp-avatar $ %{} 'CodeEntry (:doc |)
+        'comp-avatar $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-avatar (on-home)
               [] (effect-bump)
@@ -45,7 +45,7 @@
                   div $ {} (:class-name css-avatar-outline)
           :examples $ []
           :schema $ :: 'Dynamic
-        |comp-card $ %{} 'CodeEntry (:doc |)
+        'comp-card $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-card (idx key on-open on-close)
               [] (effect-fading)
@@ -97,7 +97,7 @@
                           =< nil 120
           :examples $ []
           :schema $ :: 'Dynamic
-        |comp-cards $ %{} 'CodeEntry (:doc |)
+        'comp-cards $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-cards (router on-open on-close)
               list->
@@ -113,7 +113,7 @@
                     [] key $ comp-card idx key on-open on-close
           :examples $ []
           :schema $ :: 'Dynamic
-        |comp-container $ %{} 'CodeEntry (:doc |)
+        'comp-container $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-container (reel)
               let
@@ -140,7 +140,7 @@
                     when dev? $ comp-reel (>> states :reel) reel ({})
           :examples $ []
           :schema $ :: 'Dynamic
-        |comp-empty $ %{} 'CodeEntry (:doc |)
+        'comp-empty $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-empty (visible? on-home)
               div
@@ -148,8 +148,7 @@
                   :style $ if visible?
                     {} (:opacity 1) (:transform "|translate(0,0px)")
                 div
-                  {} $ :style
-                    merge ui/center $ {} (:pointer-events :auto)
+                  {} $ :style (assoc ui/center :pointer-events :auto)
                   comp-avatar on-home
                 =< nil 32
                 div
@@ -158,7 +157,7 @@
                   <> "|题叶"
           :examples $ []
           :schema $ :: 'Dynamic
-        |css-avatar $ %{} 'CodeEntry (:doc |)
+        'css-avatar $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-avatar $ {}
               |$0 $ {} (:background-image "|url(https://cdn.tiye.me/logo/tiye.jpg)") (:background-size "|120px 120px") (:width 120) (:height 120) (:border-radius |50%)
@@ -184,21 +183,21 @@
                 {} $ :border-width |5px
           :examples $ []
           :schema $ :: 'Dynamic
-        |css-avatar-outline $ %{} 'CodeEntry (:doc |)
+        'css-avatar-outline $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-avatar-outline $ {}
               |$0 $ {} (:position :absolute) (:width |100%) (:height |100%) (:border-radius |50%)
                 :border $ str-spaced "|5px solid" (hsl 0 0 100 0.9)
           :examples $ []
           :schema $ :: 'Dynamic
-        |css-bg $ %{} 'CodeEntry (:doc |)
+        'css-bg $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-bg $ {}
               |$0 $ merge ui/global ui/fullscreen
                 {} (:background-image "|url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size |cover) (:background-position :center) (:position :fixed) (:top 0) (:left 0) (:width |100%) (:height |100%) (:z-index |-1) (:opacity 0.7) (:filter "|grayscale(0.5)")
           :examples $ []
           :schema $ :: 'Dynamic
-        |css-card $ %{} 'CodeEntry (:doc |)
+        'css-card $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-card $ {}
               |$0 $ merge ui/column
@@ -207,20 +206,20 @@
                   :background-color $ hsl 0 0 100 0.96
           :examples $ []
           :schema $ :: 'Dynamic
-        |css-iframe $ %{} 'CodeEntry (:doc |)
+        'css-iframe $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-iframe $ {}
               |$0 $ {} (:width |100%) (:height |100%)
           :examples $ []
           :schema $ :: 'Dynamic
-        |css-profile $ %{} 'CodeEntry (:doc |)
+        'css-profile $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-profile $ {}
               |$0 $ merge ui/center
                 {} (:margin :auto) (:position :fixed) (:top 0) (:left 0) (:width |100%) (:height |100%) (:opacity 0.01) (:transition-duration |300ms) (:transform "|translate(12vw,0px)") (:-webkit-tap-highlight-color :transparent) (:transition-delay |120ms) (:animation-name |entering) (:animation-duration |800ms)
           :examples $ []
           :schema $ :: 'Dynamic
-        |effect-bump $ %{} 'CodeEntry (:doc |)
+        'effect-bump $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defeffect effect-bump () (action el at?)
               let
@@ -235,7 +234,7 @@
                       , 0
           :examples $ []
           :schema $ :: 'Dynamic
-        |effect-fading $ %{} 'CodeEntry (:doc |)
+        'effect-fading $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defeffect effect-fading () (action el at?)
               let
@@ -272,7 +271,7 @@
                   , false
           :examples $ []
           :schema $ :: 'Dynamic
-        |event-has-close-all? $ %{} 'CodeEntry (:doc |)
+        'event-has-close-all? $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn event-has-close-all? (event)
               hint-fn $ {}
@@ -287,7 +286,7 @@
                 or meta-key? ctrl-key?
           :examples $ []
           :schema $ :: 'Dynamic
-        |gpu-supported? $ %{} 'CodeEntry (:doc |)
+        'gpu-supported? $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn gpu-supported? ()
               hint-fn $ {}
@@ -297,10 +296,10 @@
               js-present? js/navigator.gpu
           :examples $ []
           :schema $ :: 'Dynamic
-        |render-content $ %{} 'CodeEntry (:doc |)
+        'render-content $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn render-content (directive on-open)
-              tag-match directive
+              match directive
                 (:title t)
                   div
                     {} $ :style
@@ -352,7 +351,7 @@
                   <> $ str "|Unknown kind: " directive
           :examples $ []
           :schema $ :: 'Dynamic
-        |style-container $ %{} 'CodeEntry (:doc |)
+        'style-container $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-container $ {}
               |$0 $ merge ui/global ui/fullscreen
@@ -363,7 +362,7 @@
                   :pointer-events :none
           :examples $ []
           :schema $ :: 'Dynamic
-        |style-embed-image $ %{} 'CodeEntry (:doc |)
+        'style-embed-image $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-embed-image $ {}
               |& $ {} (:max-width |100%)
@@ -382,34 +381,34 @@
             feather.core :refer $ comp-icon
             respo.css :refer $ defstyle
             app.schema :refer $ site-map
-    |app.config $ %{} 'FileEntry
+    'app.config $ %{} 'FileEntry
       :defs $ {}
-        |dev? $ %{} 'CodeEntry (:doc |)
+        'dev? $ %{} 'CodeEntry (:doc |)
           :code $ quote (def dev? true)
           :examples $ []
           :schema $ :: 'Dynamic
-        |site $ %{} 'CodeEntry (:doc |)
+        'site $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def site $ {} (:storage |tiye-site) (:dev-ui |http://localhost:8100/main.css) (:release-ui |http://cdn.tiye.me/favored-fonts/main.css) (:cdn-url |http://cdn.tiye.me/tiye-site/) (:cdn-folder |tiye.me:cdn/tiye-site) (:title "|题叶@jiyinyiyong") (:icon |http://cdn.tiye.me/logo/tiye.jpg) (:storage-key |tiye-site) (:upload-folder |tiye.me:repo/tiye/tiye.me/)
           :examples $ []
           :schema $ :: 'Dynamic
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote (ns app.config)
-    |app.main $ %{} 'FileEntry
+    'app.main $ %{} 'FileEntry
       :defs $ {}
-        |*reel $ %{} 'CodeEntry (:doc |)
+        '*reel $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defatom *reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
           :examples $ []
           :schema $ :: 'Dynamic
-        |dispatch! $ %{} 'CodeEntry (:doc |)
+        'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn dispatch! (op)
               when config/dev? $ println |Dispatch: op
               reset! *reel $ reel-updater updater @*reel op
           :examples $ []
           :schema $ :: 'Dynamic
-        |main! $ %{} 'CodeEntry (:doc |)
+        'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn main! ()
               println "|Running mode:" $ if config/dev? |dev |release
@@ -419,17 +418,17 @@
               listen-devtools! |k dispatch!
               js/window.addEventListener |keydown $ fn (event)
                 if
-                  = |Escape $ .-key event
+                  = |Escape $ unsafe-coerce (.-key event) 'String
                   dispatch! $ :: :reduce-page
               println "|App started."
           :examples $ []
           :schema $ :: 'Dynamic
-        |mount-target $ %{} 'CodeEntry (:doc |)
+        'mount-target $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def mount-target $ js/document.querySelector |.app
           :examples $ []
           :schema $ :: 'Dynamic
-        |reload! $ %{} 'CodeEntry (:doc |)
+        'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn reload! () $ if (some? build-errors) (tip! |error build-errors)
               do (clear-cache!) (remove-watch *reel :changes)
@@ -439,7 +438,7 @@
                 tip! |ok~ |Ok
           :examples $ []
           :schema $ :: 'Dynamic
-        |render-app! $ %{} 'CodeEntry (:doc |)
+        'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn render-app! () $ render! mount-target (comp-container @*reel) dispatch!
           :examples $ []
@@ -458,9 +457,9 @@
             app.page :refer $ ssr-processing!
             |bottom-tip :default tip!
             |./calcit.build-errors :default build-errors
-    |app.page $ %{} 'FileEntry
+    'app.page $ %{} 'FileEntry
       :defs $ {}
-        |base-info $ %{} 'CodeEntry (:doc |)
+        'base-info $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def base-info $ {}
               :title $ :title config/site
@@ -469,14 +468,14 @@
               :inline-html nil
           :examples $ []
           :schema $ :: 'Dynamic
-        |ssr-processing! $ %{} 'CodeEntry (:doc |)
+        'ssr-processing! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn ssr-processing! () $ let
                 reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
                 file |dist/index.html
                 html-content $ make-string (comp-container reel)
                 content $ fs/readFileSync file |utf8
-              fs/writeFileSync file $ replace content "|<div class=\"app\" ></div>" (str "|<div class=\"app\" data-ssr=\"true\" >" html-content |</div>)
+              fs/writeFileSync file $ '.replace content "|<div class=\"app\" ></div>" (str "|<div class=\"app\" data-ssr=\"true\" >" html-content |</div>)
               echo |replaced file
           :examples $ []
           :schema $ :: 'Dynamic
@@ -489,20 +488,26 @@
             reel.schema :as reel-schema
             app.config :as config
             |fs :as fs
-    |app.schema $ %{} 'FileEntry
+    'app.schema $ %{} 'FileEntry
       :defs $ {}
-        |load-as-code $ %{} 'CodeEntry (:doc |)
+        'load-as-code $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defmacro load-as-code (file)
-              &data-to-code $ parse-cirru-edn (read-file file)
+              &cirru-nth
+                parse-cirru $ read-file (unsafe-coerce file 'String)
+                , 0
           :examples $ []
-          :schema $ :: 'Dynamic
-        |site-map $ %{} 'CodeEntry (:doc |)
+          :schema $ :: 'Macro
+            {}
+              :capabilities $ #{} :fs-read
+              :expansion $ :: 'Expr 'Dynamic
+              :required $ [] 'Syntax
+        'site-map $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def site-map $ load-as-code |data/meta.cirru
           :examples $ []
           :schema $ :: 'Dynamic
-        |store $ %{} 'CodeEntry (:doc |)
+        'store $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def store $ {}
               :states $ {}
@@ -511,12 +516,12 @@
           :schema $ :: 'Dynamic
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote (ns app.schema)
-    |app.updater $ %{} 'FileEntry
+    'app.updater $ %{} 'FileEntry
       :defs $ {}
-        |updater $ %{} 'CodeEntry (:doc "|Handles state updates based on dispatched operations")
+        'updater $ %{} 'CodeEntry (:doc "|Handles state updates based on dispatched operations")
           :code $ quote
             defn updater (store op op-id op-time)
-              tag-match op
+              match op
                 (:states cursor s) (update-states store cursor s)
                 (:push-page idx x)
                   update store :router $ fn (rs)

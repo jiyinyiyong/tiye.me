@@ -148,7 +148,7 @@
                   :style $ if visible?
                     {} (:opacity 1) (:transform "|translate(0,0px)")
                 div
-                  {} $ :style (assoc ui/center :pointer-events :auto)
+                  {} $ :style (assoc ui/center :pointer-events |auto)
                   comp-avatar on-home
                 =< nil 32
                 div

@@ -107,7 +107,7 @@
                     :position :relative
                     :transition-duration |300ms
                     :transition-property :width
-                    :pointer-events :auto
+                    :pointer-events |auto
                 -> router $ map-indexed
                   fn (idx key)
                     [] key $ comp-card idx key on-open on-close
@@ -148,7 +148,7 @@
                   :style $ if visible?
                     {} (:opacity 1) (:transform "|translate(0,0px)")
                 div
-                  {} $ :style (assoc ui/center :pointer-events :auto)
+                  {} $ :style (assoc ui/center :pointer-events |auto)
                   comp-avatar on-home
                 =< nil 32
                 div
@@ -359,7 +359,7 @@
                   :box-shadow $ str "|inset 0 -40px 1200px " (hsl 0 0 0)
                   ; :background-color $ hsl 180 60 20 0.01
                   :font-family $ str |Buda, (:font-family ui/global)
-                  :pointer-events :none
+                  :pointer-events |none
           :examples $ []
           :schema $ :: 'Dynamic
         'style-embed-image $ %{} 'CodeEntry (:doc |)

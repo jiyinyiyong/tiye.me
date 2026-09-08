@@ -1,7 +1,7 @@
 {
   "packageManager": "yarn@4.12.0",
   "dependencies": {
-    "@calcit/procs": "0.13.77",
+    "@calcit/procs": "0.14.2",
     "feather-icons": "^4.29.2"
   },
   "devDependencies": {
@@ -9,5 +9,12 @@
     "vite": "^7.3.5"
   },
   "version": "0.0.1",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "compile": "calcit calcit.cirru --compat-types js",
+    "check": "calcit calcit.cirru --compat-types --check-only && calcit calcit.cirru analyze deprecated && calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru",
+    "test": "node scripts/check-runtime-smoke.mjs",
+    "build": "yarn compile && yarn test && vite build --base=./"
+  }
 }

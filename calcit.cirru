@@ -275,11 +275,13 @@
           :code $ quote
             defn event-has-close-all? (event)
               hint-fn $ {}
-                :args $ [] 'JsObject
+                :args $ [] (:: 'Map 'Tag 'Dynamic)
                 :return 'Bool
                 :features $ #{} :js-ffi
               let
-                  raw-event $ .-event event
+                  raw-event $
+                    get event :event
+                    , .unwrap
                   native-event $ browser-object raw-event
                   meta-key? $ unsafe-coerce (.-metaKey native-event) 'Bool
                   ctrl-key? $ unsafe-coerce (.-ctrlKey native-event) 'Bool
@@ -358,7 +360,7 @@
                 {} (:display :flex) (:font-size 20) (; :backdrop-filter "|blur(2px)") (:padding "|0 12px 0 12vw") (:scroll-behavior :smooth)
                   :box-shadow $ str "|inset 0 -40px 1200px " (hsl 0 0 0)
                   ; :background-color $ hsl 180 60 20 0.01
-                  :font-family $ str |Buda, (:font-family ui/global)
+                  :font-family $ str |Buda, ui/default-fonts
                   :pointer-events |none
           :examples $ []
           :schema $ :: 'Dynamic
@@ -493,9 +495,9 @@
         'load-as-code $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defmacro load-as-code (file)
-              &cirru-nth
-                parse-cirru $ read-file (unsafe-coerce file 'String)
-                , 0
+              if (string? file)
+                &data-to-code $ parse-cirru-edn (read-file file)
+                raise |Expected-a-literal-file-path
           :examples $ []
           :schema $ :: 'Macro
             {}

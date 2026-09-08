@@ -13,8 +13,9 @@
   "scripts": {
     "dev": "vite",
     "compile": "calcit calcit.cirru --compat-types js",
-    "check": "calcit calcit.cirru --compat-types --check-only && calcit calcit.cirru analyze deprecated && calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru",
+    "check": "yarn check:typed && calcit calcit.cirru --compat-types --check-only && calcit calcit.cirru analyze deprecated && calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru",
     "test": "node scripts/check-runtime-smoke.mjs",
-    "build": "yarn compile && yarn test && vite build --base=./"
+    "build": "yarn compile && yarn test && vite build --base=./",
+    "check:typed": "calcit calcit.cirru --check-only --init-fn app.updater/updater --reload-fn app.schema/normalize-action"
   }
 }

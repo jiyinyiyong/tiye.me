@@ -33,11 +33,12 @@ jobs:
       run: caps --ci && yarn install --immutable
 
     # Temporary 0.14 migration: the released Reel/Respo stack still needs compat-types.
-    # Keep the existing quality baseline and interaction smoke test enabled.
+    # Keep the tightened quality baseline and interaction smoke test enabled.
     - name: Validate Calcit snapshot and quality baseline
       run: |
         calcit calcit.cirru edit format
         git diff --exit-code -- calcit.cirru
+        yarn check:typed
         calcit calcit.cirru --compat-types --check-only
         calcit calcit.cirru analyze deprecated
         calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru

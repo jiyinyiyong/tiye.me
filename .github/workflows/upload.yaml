@@ -32,24 +32,26 @@ jobs:
     - name: Install dependencies
       run: caps --ci && yarn install --immutable
 
+    # Temporary 0.14 migration: the released Reel/Respo stack still needs compat-types.
+    # Keep the existing quality baseline and interaction smoke test enabled.
     - name: Validate Calcit snapshot and quality baseline
       run: |
         calcit calcit.cirru edit format
         git diff --exit-code -- calcit.cirru
-        calcit calcit.cirru --check-only
+        calcit calcit.cirru --compat-types --check-only
         calcit calcit.cirru analyze deprecated
         calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru
 
     - name: Compile production assets
       run: |
-        calcit calcit.cirru js
+        calcit calcit.cirru --compat-types js
         node scripts/check-runtime-smoke.mjs
         yarn vite build --base=./
         find dist -type f -print0 | sort -z | xargs -0 sha256sum | tee "$RUNNER_TEMP/dist.sha256"
 
     - name: Verify reproducible production build
       run: |
-        calcit calcit.cirru js
+        calcit calcit.cirru --compat-types js
         node scripts/check-runtime-smoke.mjs
         yarn vite build --base=./
         find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/dist-repeat.sha256"

@@ -3,8 +3,7 @@
   :about "|Machine-generated snapshot. Do not edit directly — changes will be overwritten. Use `calcit query` to inspect and `calcit edit`/`calcit tree` to modify. Run `calcit docs agents --contract` before mutations; use `--full` for first orientation or changed contract digest. Manual edits must follow format and schema conventions, then run `calcit edit format`."
   :package |app
   :entries $ {} $ :default
-    {} (:description |) (:init-fn 'app.main/main!) (:mode :native)
-      :reload-fn 'app.main/reload!
+    {} (:description |) (:init-fn 'app.main/main!) (:mode :native) (:reload-fn 'app.main/reload!)
       :feature-policy $ {}
       :modules $ [] |respo.calcit/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-feather.calcit/ |js-ffi/
       :type-slots $ {}
@@ -12,8 +11,7 @@
     'app.browser $ %{} 'FileEntry
       :defs $ {}
         'Element $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ deftrait Element
-            :style 'app.browser/Style
+          :code $ quote $ deftrait Element (:style 'app.browser/Style)
             :parent-element $ :: 'JsNullish 'app.browser/Element
             .clone-node $ :: 'Fn $ {}
               :args $ [] 'app.browser/Element 'Bool
@@ -32,8 +30,7 @@
               :return 'Unit
           :examples $ []
           :ffi $ {} (:backend :js) (:kind :external-object)
-            :names $ {} (:append-child! |appendChild) (:clone-node |cloneNode) (:parent-element |parentElement) (:query-selector |querySelector) (:remove! |remove)
-              :scroll-into-view |scrollIntoView
+            :names $ {} (:append-child! |appendChild) (:clone-node |cloneNode) (:parent-element |parentElement) (:query-selector |querySelector) (:remove! |remove) (:scroll-into-view |scrollIntoView)
           :schema $ :: 'Trait
         'Navigator $ %{} 'CodeEntry (:doc |)
           :code $ quote $ deftrait Navigator
@@ -69,9 +66,7 @@
             :features $ #{} :js-ffi
         'card-width $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn card-width ()
-            &min 480 $ -
-              host/viewport-width
-              , 24
+            &min 480 $ - (host/viewport-width) 24
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Number)
             :args $ []
@@ -176,8 +171,7 @@
     'app.comp.container $ %{} 'FileEntry
       :defs $ {}
         'card-width $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ def card-width
-            browser/card-width
+          :code $ quote $ def card-width (browser/card-width)
           :examples $ []
           :schema $ :: 'Number
         'comp-avatar $ %{} 'CodeEntry (:doc |)
@@ -193,8 +187,7 @@
                   div $ {} $ :class-name css-avatar-outline
               , |comp-avatar
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :return 'respo.schema/Component
+          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
             :args $ [] 'Fn
         'comp-card $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-card (idx key on-open on-close)
@@ -232,9 +225,7 @@
                             :font-size 20
                             :cursor :pointer
                           fn (e d!)
-                            on-close idx
-                              event-has-close-all? e
-                              , d!
+                            on-close idx (event-has-close-all? e) d!
                       <> title-text $ {} (:font-family ui/font-fancy) (:font-size |14px) (:font-weight |300)
                         :color $ hsl 0 0 60
                       span $ {} (:class-name |right-corner) (:inner-text "| ")
@@ -255,8 +246,7 @@
                           =< nil 120
               , |comp-card
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :return 'respo.schema/Component
+          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
             :args $ [] 'Number 'Tag 'Fn 'Fn
         'comp-cards $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-cards (router on-open on-close)
@@ -273,8 +263,7 @@
               -> router $ map-indexed $ fn (idx key)
                 [] key $ comp-card idx key on-open on-close
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :return 'respo.schema/Component
+          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
             :args $ [] (:: 'List 'Tag) 'Fn 'Fn
         'comp-container $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-container (reel)
@@ -296,41 +285,30 @@
                   {} $ :class-name style-container
                   comp-empty (empty? router) push-tab
                   comp-cards router push-tab close-tab
-                  when dev? $ comp-reel (>> states :reel)
-                    reel-view/view-data reel
-                    {}
+                  when dev? $ comp-reel (>> states :reel) (reel-view/view-data reel) ({})
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :return 'respo.schema/Component
+          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
             :args $ [] $ :: 'reel.typed/State 'app.schema/Action 'app.schema/Store
         'comp-empty $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-empty (visible? on-home)
             div
               {} (:class-name css-profile)
-                :style $ if visible? $ {} (:opacity |1)
-                  :transform "|translate(0,0px)"
+                :style $ if visible? $ {} (:opacity |1) (:transform "|translate(0,0px)")
               div
                 {} $ :style $ assoc styles/center :pointer-events |auto
                 comp-avatar on-home
               =< nil 32
               div
                 {} $ :style $ merge styles/center
-                  {} (:color |white) (:font-size |20px) (:line-height |28px)
-                    :text-shadow "|1px 1px 4px black"
+                  {} (:color |white) (:font-size |20px) (:line-height |28px) (:text-shadow "|1px 1px 4px black")
                 <> "|题叶"
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :return 'respo.schema/Component
+          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
             :args $ [] 'Bool 'Fn
         'css-avatar $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-avatar
             {}
-              |$0 $ {}
-                :background-image "|url(https://cdn.tiye.me/logo/tiye.jpg)"
-                :background-size "|120px 120px"
-                :width |120px
-                :height |120px
-                :border-radius |50%
+              |$0 $ {} (:background-image "|url(https://cdn.tiye.me/logo/tiye.jpg)") (:background-size "|120px 120px") (:width |120px) (:height |120px) (:border-radius |50%)
                 :box-shadow $ str "|1px 1px 4px " (hsl 120 80 50) "|,1px 1px 4px black"
                 :transition-duration |300ms
                 :transition-timing-function "|cubic-bezier(0.54, 0.17, 0.53, 1.88)"
@@ -362,32 +340,13 @@
         'css-bg $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-bg
             {} $ |$0 $ merge styles/base styles/fullscreen
-              {}
-                :background-image "|url(https://r.tiye.me/tiye/logo/leaf.jpg)"
-                :background-size |cover
-                :background-position |center
-                :position |fixed
-                :top |0px
-                :left |0px
-                :width |100%
-                :height |100%
-                :z-index |-1
-                :opacity |0.7
-                :filter "|grayscale(0.5)"
+              {} (:background-image "|url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size |cover) (:background-position |center) (:position |fixed) (:top |0px) (:left |0px) (:width |100%) (:height |100%) (:z-index |-1) (:opacity |0.7) (:filter "|grayscale(0.5)")
           :examples $ []
           :schema $ :: 'String
         'css-card $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-card
             {} $ |$0 $ merge styles/column
-              {} (:padding |4px)
-                :box-shadow "|1px 1px 4px black"
-                :border-radius |2px
-                :border "|2px solid white"
-                :margin-right |4px
-                :transition-duration |300ms
-                :position |absolute
-                :border-radius |6px
-                :transform-origin "|-10% 33.3%"
+              {} (:padding |4px) (:box-shadow "|1px 1px 4px black") (:border-radius |2px) (:border "|2px solid white") (:margin-right |4px) (:transition-duration |300ms) (:position |absolute) (:border-radius |6px) (:transform-origin "|-10% 33.3%")
                 :box-shadow $ str "|0 0 10px 4px " $ hsl 200 60 90 0.3
                 :background-color $ hsl 0 0 100 0.96
           :examples $ []
@@ -400,38 +359,28 @@
         'css-profile $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-profile
             {} $ |$0 $ merge styles/center
-              {} (:margin |auto) (:position |fixed) (:top |0px) (:left |0px) (:width |100%) (:height |100%) (:opacity |0.01)
-                :transition-duration |300ms
-                :transform "|translate(12vw,0px)"
-                :-webkit-tap-highlight-color |transparent
-                :transition-delay |120ms
-                :animation-name |entering
-                :animation-duration |800ms
+              {} (:margin |auto) (:position |fixed) (:top |0px) (:left |0px) (:width |100%) (:height |100%) (:opacity |0.01) (:transition-duration |300ms) (:transform "|translate(12vw,0px)") (:-webkit-tap-highlight-color |transparent) (:transition-delay |120ms) (:animation-name |entering) (:animation-duration |800ms)
           :examples $ []
           :schema $ :: 'String
         'effect-bump $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn effect-bump () (effect-on-mount browser/bump!)
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :return 'respo.schema/Effect
+          :schema $ :: 'Fn $ {} (:return 'respo.schema/Effect)
             :args $ []
         'effect-fading $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn effect-fading ()
             effect-watch ([]) browser/fade-in! $ %some browser/fade-out!
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :return 'respo.schema/Effect
+          :schema $ :: 'Fn $ {} (:return 'respo.schema/Effect)
             :args $ []
         'event-has-close-all? $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn event-has-close-all? (event)
-            browser/close-all? event
+          :code $ quote $ defn event-has-close-all? (event) (browser/close-all? event)
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Bool)
             :args $ [] $ :: 'Map 'Tag 'Dynamic
             :features $ #{} :js-ffi
         'gpu-supported? $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn gpu-supported? ()
-            browser/gpu-supported?
+          :code $ quote $ defn gpu-supported? () (browser/gpu-supported?)
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Bool)
             :args $ []
@@ -482,13 +431,11 @@
                   :style $ {} $ :position |relative
                   :innerHTML $ str "|<iframe width=\"100%\" height=\"260px\" frameborder=\"0\" src=\"" url "|\" referrerpolicy=\"unsafe-url\" allowfullscreen></iframe>"
               (:image src alt)
-                img $ {} (:src src) (:alt alt)
-                  :class-name style-embed-image
+                img $ {} (:src src) (:alt alt) (:class-name style-embed-image)
               _ $ div ({})
                 <> $ str "|Unknown kind: " directive
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :return 'respo.schema/Element
+          :schema $ :: 'Fn $ {} (:return 'respo.schema/Element)
             :args $ [] 'app.schema/Content 'Fn
         'style-container $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-container
@@ -530,15 +477,7 @@
           :schema $ :: 'Dynamic
         'site $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def site
-            {} (:storage |tiye-site)
-              :dev-ui |http://localhost:8100/main.css
-              :release-ui |http://cdn.tiye.me/favored-fonts/main.css
-              :cdn-url |http://cdn.tiye.me/tiye-site/
-              :cdn-folder |tiye.me:cdn/tiye-site
-              :title "|题叶@jiyinyiyong"
-              :icon |http://cdn.tiye.me/logo/tiye.jpg
-              :storage-key |tiye-site
-              :upload-folder |tiye.me:repo/tiye/tiye.me/
+            {} (:storage |tiye-site) (:dev-ui |http://localhost:8100/main.css) (:release-ui |http://cdn.tiye.me/favored-fonts/main.css) (:cdn-url |http://cdn.tiye.me/tiye-site/) (:cdn-folder |tiye.me:cdn/tiye-site) (:title "|题叶@jiyinyiyong") (:icon |http://cdn.tiye.me/logo/tiye.jpg) (:storage-key |tiye-site) (:upload-folder |tiye.me:repo/tiye/tiye.me/)
           :examples $ []
           :schema $ :: 'Dynamic
       :ns $ %{} 'NsEntry (:doc |)
@@ -546,8 +485,7 @@
     'app.main $ %{} 'FileEntry
       :defs $ {}
         '*reel $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defatom *reel
-            typed-reel/new-reel schema/store
+          :code $ quote $ defatom *reel (typed-reel/new-reel schema/store)
           :examples $ []
           :schema $ :: 'Ref $ :: 'reel.typed/State 'app.schema/Action 'app.schema/Store
         'dispatch! $ %{} 'CodeEntry (:doc |)
@@ -556,12 +494,9 @@
             let
                 control $ typed-reel/decode-control op
               reset! *reel $ match control
-                (:some command)
-                  typed-reel/apply-control updater @*reel command
+                (:some command) (typed-reel/apply-control updater @*reel command)
                 (:none)
-                  typed-reel/record-op updater @*reel
-                    schema/normalize-action op
-                    generate-id!
+                  typed-reel/record-op updater @*reel (schema/normalize-action op) (generate-id!)
                     expect-number |Date.now $ js/Date.now
             , &unit
           :examples $ []
@@ -585,8 +520,7 @@
             :args $ []
             :features $ #{} :js-ffi
         'mount-target $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ def mount-target
-            js/document.querySelector |.app
+          :code $ quote $ def mount-target (js/document.querySelector |.app)
           :examples $ []
           :schema $ :: 'Dynamic
         'reload! $ %{} 'CodeEntry (:doc |)
@@ -728,8 +662,7 @@
                 Action :hydrate-storage $ decode-map-as data 'app.schema/Store
               _ $ raise |Unknown-application-action
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :return 'app.schema/Action
+          :schema $ :: 'Fn $ {} (:return 'app.schema/Action)
             :args $ [] 'Enum
         'site-map $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def site-map (load-as-code |data/meta.cirru)
@@ -807,8 +740,7 @@
                 assoc store :router $ rest $ :router store
               (:hydrate-storage data) data
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :return 'app.schema/Store
+          :schema $ :: 'Fn $ {} (:return 'app.schema/Store)
             :args $ [] 'app.schema/Store 'app.schema/Action 'String 'Number
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater

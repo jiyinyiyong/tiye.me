@@ -1,21 +1,21 @@
 {
-  "packageManager": "yarn@4.12.0",
+  "packageManager": "yarn@4.18.0",
   "dependencies": {
-    "@calcit/procs": "0.18.1",
+    "@calcit/procs": "0.27.0",
     "feather-icons": "^4.29.2"
   },
   "devDependencies": {
     "bottom-tip": "^0.1.5",
-    "vite": "^7.3.5"
+    "vite": "8.3.1"
   },
   "version": "0.0.2",
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "compile": "calcit calcit.cirru --compat-types js",
-    "check": "yarn check:typed && calcit calcit.cirru --compat-types --check-only && calcit calcit.cirru analyze deprecated && calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru",
+    "compile": "calcit calcit.cirru js",
+    "check": "yarn check:typed && calcit calcit.cirru --check-only && calcit calcit.cirru analyze deprecated && calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru",
     "test": "node scripts/check-runtime-smoke.mjs",
-    "build": "yarn compile && yarn test && vite build --base=./",
+    "build": "yarn compile && yarn test && vite build",
     "check:typed": "calcit calcit.cirru --check-only --init-fn app.updater/updater --reload-fn app.schema/normalize-action"
   }
 }

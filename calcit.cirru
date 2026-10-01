@@ -3,9 +3,9 @@
   :about "|Machine-generated snapshot. Do not edit directly — changes will be overwritten. Use `calcit query` to inspect and `calcit edit`/`calcit tree` to modify. Run `calcit docs agents --contract` before mutations; use `--full` for first orientation or changed contract digest. Manual edits must follow format and schema conventions, then run `calcit edit format`."
   :package |app
   :entries $ {} $ :default
-    {} (:description |) (:init-fn 'app.main/main!) (:mode :native) (:reload-fn 'app.main/reload!)
+    {} (:description |) (:init-fn 'app.main/main!) (:mode :js) (:reload-fn 'app.main/reload!) (:target :browser)
       :feature-policy $ {}
-      :modules $ [] |respo.calcit/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-feather.calcit/ |js-ffi/
+      :modules $ [] |respo.calcit/ |respo-ui.calcit/ |reel.calcit/ |respo-feather.calcit/ |js-ffi/
       :type-slots $ {}
   :files $ {}
     'app.browser $ %{} 'FileEntry
@@ -74,10 +74,11 @@
         'close-all? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn close-all? (event)
             let
-                raw $ unsafe-coerce (read-field event :event) 'js-ffi.browser/KeyboardEventHost
-                meta? $ raw :meta-key?
-                ctrl? $ raw :ctrl-key?
-              or meta? ctrl?
+                raw $ unsafe-coerce
+                    get event :event
+                    , .unwrap
+                  , 'js-ffi.browser/KeyboardEventHost
+              or (raw :meta-key?) (raw :ctrl-key?)
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Bool)
             :args $ [] $ :: 'Map 'Tag 'Dynamic
@@ -166,8 +167,7 @@
             :features $ #{} :js-ffi
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.browser
-          :require (js-ffi.browser :as host)
-            reel.schema :refer $ read-field
+          :require $ js-ffi.browser :as host
     'app.comp.container $ %{} 'FileEntry
       :defs $ {}
         'card-width $ %{} 'CodeEntry (:doc |)
@@ -180,10 +180,10 @@
               %{} Component (:name :comp-avatar)
                 :effects $ [] $ effect-bump
                 :listeners $ []
-                :tree $ %some $ div
+                :tree $ Option :some $ div
                   {} (:class-name css-avatar)
                     :on-click $ fn (e d!)
-                      on-home (%none) :home d!
+                      on-home (Option :none) :home d!
                   div $ {} $ :class-name css-avatar-outline
               , |comp-avatar
           :examples $ []
@@ -195,14 +195,16 @@
               %{} Component (:name :comp-card)
                 :effects $ [] $ effect-fading
                 :listeners $ []
-                :tree $ %some $ let
+                :tree $ Option :some $ let
                     info $ find-page key
                     title-text $ match info
                       (:some page) (:title page)
                       (:none) "|Unknown page"
-                    directives $ match info
-                      (:some page) (:content page)
-                      (:none) ([])
+                    directives $ assert-type
+                      match info
+                        (:some page) (:content page)
+                        (:none) ([])
+                      :: 'List 'app.schema/Content
                   div
                     {} (:class-name css-card)
                       :style $ {}
@@ -242,7 +244,7 @@
                               :args $ [] 'app.schema/Content
                               :return 'respo.schema/Element
                             render-content directive $ fn (key d!)
-                              on-open (%some idx) key d!
+                              on-open (Option :some idx) key d!
                           =< nil 120
               , |comp-card
           :examples $ []
@@ -369,7 +371,7 @@
             :args $ []
         'effect-fading $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn effect-fading ()
-            effect-watch ([]) browser/fade-in! $ %some browser/fade-out!
+            effect-watch ([]) browser/fade-in! $ Option :some browser/fade-out!
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Effect)
             :args $ []
@@ -460,7 +462,6 @@
             respo.core :refer $ defcomp >> <> div button textarea span a list-> create-element img effect-on-mount effect-watch decorate-defcomp
             respo.comp.space :refer $ =<
             reel.comp.reel :refer $ comp-reel
-            respo-md.comp.md :refer $ comp-md-block comp-md
             app.config :refer $ dev?
             feather.core :refer $ comp-icon
             respo.css :refer $ defstyle
@@ -474,7 +475,7 @@
         'dev? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def dev? true
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Bool
         'site $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def site
             {} (:storage |tiye-site) (:dev-ui |http://localhost:8100/main.css) (:release-ui |http://cdn.tiye.me/favored-fonts/main.css) (:cdn-url |http://cdn.tiye.me/tiye-site/) (:cdn-folder |tiye.me:cdn/tiye-site) (:title "|题叶@jiyinyiyong") (:icon |http://cdn.tiye.me/logo/tiye.jpg) (:storage-key |tiye-site) (:upload-folder |tiye.me:repo/tiye/tiye.me/)
@@ -520,9 +521,12 @@
             :args $ []
             :features $ #{} :js-ffi
         'mount-target $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ def mount-target (js/document.querySelector |.app)
+          :code $ quote $ defn mount-target ()
+            option:unwrap $ host/query-selector |.app
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Fn $ {} (:return 'js-ffi.browser/DomElementHost)
+            :args $ []
+            :features $ #{} :js-ffi
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             if (some? build-errors) (tip! |error build-errors)
@@ -537,7 +541,7 @@
             :features $ #{} :js-ffi
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
-            render! mount-target (comp-container @*reel) dispatch!
+            render! (mount-target) (comp-container @*reel) dispatch!
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ []
@@ -551,7 +555,6 @@
             app.schema :as schema
             reel.util :refer $ listen-devtools!
             app.config :as config
-            app.page :refer $ ssr-processing!
             |bottom-tip :default tip!
             |./calcit.build-errors :default build-errors
             reel.typed :as typed-reel
@@ -572,7 +575,7 @@
         'ssr-processing! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn ssr-processing! ()
             let
-                reel $ typed-reel/new-reel schema/store
+                reel $ assert-type (typed-reel/new-reel schema/store) (:: 'reel.typed/State 'app.schema/Action 'app.schema/Store)
                 file |dist/index.html
                 html-content $ make-string $ comp-container reel
                 content $ fs/readFileSync file |utf8
@@ -626,8 +629,8 @@
         'find-page $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn find-page (key)
             if (&map:contains? site-map key)
-              %some $ &map:get site-map key
-              %none
+              Option :some $ &map:get site-map key
+              Option :none
           :examples $ []
           :schema $ :: 'Fn $ {}
             :args $ [] 'Tag
@@ -670,9 +673,7 @@
           :schema $ :: 'Map 'Tag 'app.schema/Page
         'store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def store
-            %{} Store
-              :router $ []
-              :states $ {}
+            Store :router ([]) :states $ {}
           :examples $ []
           :schema $ :: 'app.schema/Store
       :ns $ %{} 'NsEntry (:doc |)

@@ -8,6 +8,7 @@ const { store: initialStore, site_map, normalize_action } = await import("../js-
 const { new_reel, record_op, decode_control, apply_control, refresh } = await import("../js-out/reel.typed.mjs");
 const { updater } = await import("../js-out/app.updater.mjs");
 const { make_string } = await import("../js-out/respo.render.html.mjs");
+const { event__GT_edn } = await import("../js-out/respo.util.format.mjs");
 const tag = core.turn_tag;
 const map = core._$n__$M_;
 const op = (name, ...args) => core._$o__$o_(tag(name), ...args);
@@ -54,7 +55,8 @@ assert.match(make_string(comp_card(0, tag("missing-page"), noop, noop)), /Unknow
 for (const [nativeEvent, expected] of [
   [{ metaKey: false, ctrlKey: false }, false], [{ metaKey: true, ctrlKey: false }, true], [{ metaKey: false, ctrlKey: true }, true],
 ]) {
-  assert.equal(event_has_close_all_$q_(map(tag("event"), nativeEvent)), expected);
+  const event = event__GT_edn({ type: "click", ...nativeEvent });
+  assert.equal(event_has_close_all_$q_(event), expected);
 }
 // Reject malformed operations at the untyped Respo dispatch boundary.
 assert.throws(() => normalize_action(op("push-page", null, tag("home"))));

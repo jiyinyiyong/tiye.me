@@ -1,4 +1,24 @@
-# Calcit 0.14 strict-type migration
+# Calcit strict-type migration
+
+## Current status — Calcit 0.27.0
+
+The full application passes ordinary `--check-only` and JavaScript codegen
+without `--compat-types`, as well as the original typed updater/decoder check.
+Strict Caps resolves the published Reel/Respo/UI/Feather/js-ffi stack. All
+56 local public definitions pass the browser-target check and the strict-v1
+source workflow has no remaining source suggestions.
+
+Migration changes include direct Option/Store constructors, typed DOM mount
+lookup, the actual published Respo event Map/native modifier boundary, and an explicit content-list type
+where an empty fallback previously erased the generic relation. The existing
+23-page runtime smoke test remains; no additional test suite is introduced.
+
+The original quality baseline is unchanged. Current metrics: typeNone 0,
+typeNotFull 7, schemaDynamic 2, unresolved 9, unsafeCoerce 6, codeNil 7;
+codeDynamic, deprecatedCalls and declaredOptional are zero. This is not a
+zero-debt claim.
+
+The sections below record the earlier 0.14 migration and its former blockers.
 
 ## Completed
 
@@ -11,7 +31,7 @@
 
 `yarn check:typed` checks updater + operation decoder without compatibility mode, including their reachable dependencies. It is enforced by CI and does not imply the entire UI graph passes strict checks.
 
-## Remaining blockers
+## Former 0.14 blockers (resolved for the current published stack)
 
 Run `calcit calcit.cirru --check-only` to reproduce the first full-graph failure: `E_AMBIGUOUS_TRAIT_METHOD` on `.map` in `reel.typed-compat/view-data` (Reel 0.6.19).
 
@@ -36,4 +56,9 @@ The per-definition baseline was regenerated after reviewing the moved browser bo
 
 ## Validation
 
-`yarn check` validates strict state contracts, compatibility-mode UI compilation, deprecated APIs, and quality budgets. `yarn build` compiles and executes the generated-JS regression suite before bundling. The suite covers all 23 pages, navigation, modifiers, empty routes, malformed operations, history recall/resume/reset, and hot-reload replay. Browser checks additionally cover real DOM effects and native events.
+`yarn check` validates typed state contracts, ordinary full-app compilation,
+deprecated APIs and the original quality budget. `yarn build` compiles and
+executes the existing generated-JS regression suite before bundling. It covers
+all 23 pages, navigation, modifiers, empty routes, malformed operations, history
+recall/resume/reset and hot-reload replay. This script uses host stubs and HTML
+rendering; it does not prove real-browser DOM effects or screenshot fidelity.

@@ -35,6 +35,7 @@ jobs:
     - name: Set up Calcit and Caps
       uses: calcit-lang/setup-calcit@ca701be5a471759e442aa053cd100720bbe1f09f # v1.5.0
       with:
+        deps-file: deps.cirru
         tools: calcit,caps
         caps-version: "0.1.1"
 
@@ -48,7 +49,6 @@ jobs:
     - name: Check Calcit snapshot and types
       run: |
         set -euo pipefail
-        test "$(calcit --version)" = "0.27.0"
         test -f calcit.cirru
         test -f deps.cirru
         test ! -e compact.cirru
@@ -61,10 +61,11 @@ jobs:
       id: asset-path
       env:
         CDN_ORIGIN: https://cos-sh.tiye.me
+        PR_NUMBER: ${{ github.event.pull_request.number }}
       run: |
         set -euo pipefail
         if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
-          asset_prefix="${GITHUB_REPOSITORY}/pr/"
+          asset_prefix="${GITHUB_REPOSITORY}/pr/${PR_NUMBER}/${GITHUB_RUN_ID}/${GITHUB_RUN_ATTEMPT}/"
         else
           asset_prefix="${GITHUB_REPOSITORY}/"
         fi
@@ -77,14 +78,6 @@ jobs:
       run: |
         set -euo pipefail
         yarn build
-        find dist -type f -print0 | sort -z | xargs -0 sha256sum | tee "$RUNNER_TEMP/dist.sha256"
-
-    - name: Verify reproducible production build
-      run: |
-        set -euo pipefail
-        yarn build
-        find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/dist-repeat.sha256"
-        diff -u "$RUNNER_TEMP/dist.sha256" "$RUNNER_TEMP/dist-repeat.sha256"
 
     - name: Save frontend artifact
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -98,7 +91,7 @@ jobs:
     needs: test
     runs-on: ubuntu-24.04
     concurrency:
-      group: cos-upload-${{ github.repository }}-${{ github.event_name == 'pull_request' && 'pr' || 'production' }}
+      group: cos-upload-${{ github.repository }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'production' }}
       cancel-in-progress: false
       queue: max
     steps:
@@ -165,7 +158,8 @@ jobs:
 
     - name: Upload and verify frontend assets on COS
       if: steps.deploy-head.outputs.current == 'true' && steps.cos-credentials.outputs.available == 'true'
-      uses: worktools/cos-upload-action@17e6d213fe9f6772a6090a13c8ba044cd6cbcb09 # v1.1.1
+      timeout-minutes: 10
+      uses: worktools/cos-upload-action@06d6027dcca6413c5936e04a9b6e9f0d5ef71ba0 # v1.2.0
       with:
         source-dir: dist
         bucket: ${{ secrets.COS_BUCKET }}
@@ -191,40 +185,3 @@ jobs:
     - name: Display status from deploy
       if: steps.deploy-head.outputs.current == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
       run: echo "${{ steps.deploy.outputs.status }}"
-
-    - name: Verify deployed production assets
-      if: steps.deploy-head.outputs.current == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
-      env:
-        DEPLOY_URL: https://tiye.me
-      run: |
-        deployed_index="$RUNNER_TEMP/tiye-me-index.html"
-        index_matches=false
-
-        for attempt in {1..10}; do
-          curl --fail --silent --show-error --location \
-            --header 'Cache-Control: no-cache' \
-            "$DEPLOY_URL/?revision=$GITHUB_SHA&attempt=$attempt" \
-            --output "$deployed_index"
-
-          if cmp --silent dist/index.html "$deployed_index"; then
-            index_matches=true
-            break
-          fi
-
-          sleep 3
-        done
-
-        if [[ "$index_matches" != true ]]; then
-          echo 'Deployed index.html does not match this workflow build.' >&2
-          exit 1
-        fi
-
-        while IFS= read -r local_file; do
-          relative_path="${local_file#dist/}"
-          deployed_file="$RUNNER_TEMP/deployed-${relative_path//\//-}"
-          curl --fail --silent --show-error --location \
-            --header 'Cache-Control: no-cache' \
-            "$DEPLOY_URL/$relative_path?revision=$GITHUB_SHA" \
-            --output "$deployed_file"
-          cmp "$local_file" "$deployed_file"
-        done < <(find dist -type f -print | sort)

@@ -60,18 +60,19 @@ locally. Set `VITE_BASE_URL` to build JS, CSS and the bundled Buda font with
 CDN URLs:
 
 ```sh
-VITE_BASE_URL=https://cos-sh.tiye.me/jiyinyiyong/tiye.me/pr/ yarn build
+VITE_BASE_URL=https://cos-sh.tiye.me/jiyinyiyong/tiye.me/pr/68/local/1/ yarn build
 ```
 
 CI uses that preview prefix for PRs and
 `https://cos-sh.tiye.me/jiyinyiyong/tiye.me/` for main pushes. Only frontend
 `dist/` is uploaded to COS; public verification lives in `cos-upload-action`
-v1.1.1. Configure `COS_BUCKET`, `COS_SECRET_ID` and `COS_SECRET_KEY`.
-Existing runtime tests and reproducible builds remain enabled. Uploads use
+v1.2.0. Configure `COS_BUCKET`, `COS_SECRET_ID` and `COS_SECRET_KEY`.
+Existing runtime tests and one production build remain enabled. Uploads use
 the built artifact, queue separately from builds, and skip superseded commits.
 
 The original server payload `dist/*` and destination
 `rsync-user@tiye.me:/web-assets/repo/${{ github.repository }}` are unchanged.
-Main pushes still verify the deployed files at `https://tiye.me`; this server
-check is separate from COS verification. External fonts, logos, page content
+External fonts, logos, page content
 and background iframe URLs are preserved.
+
+本轮仅精简部署配置，Calcit/procs 仍为正式 0.27.0，不把 COS 改造当作 0.28 升级完成。PR CDN 前缀包含编号/run/attempt，队列按 PR 隔离；生产 prefix 不变。安装器读取 `deps.cirru`，已有 toolchain 核验负责版本一致性。移除重复构建哈希比对及逐文件下载的生产校验（可由 Git 恢复），上传只使用 Action 自身的 `public-base-url` verify；不宣称这验证了服务器现场行为。原业务测试、严格入口、质量预算、HEAD 过期门禁及 rsync 同步保留，不新增脚本或进程管理工具。

@@ -8,7 +8,7 @@
       :typeNone 0
       :typeNotFull 1
       :unresolved 0
-      :unsafeCoerce 1
+      :unsafeCoerce 0
     |app.browser/close-all? $ {} (:codeDynamic 0)
       :codeNil 0
       :declaredOptional 0
@@ -17,7 +17,7 @@
       :typeNone 0
       :typeNotFull 1
       :unresolved 0
-      :unsafeCoerce 1
+      :unsafeCoerce 0
     |app.browser/escape? $ {} (:codeDynamic 0)
       :codeNil 0
       :declaredOptional 0
@@ -26,7 +26,7 @@
       :typeNone 0
       :typeNotFull 1
       :unresolved 0
-      :unsafeCoerce 1
+      :unsafeCoerce 0
     |app.browser/fade-in! $ {} (:codeDynamic 0)
       :codeNil 0
       :declaredOptional 0
@@ -35,7 +35,7 @@
       :typeNone 0
       :typeNotFull 1
       :unresolved 0
-      :unsafeCoerce 1
+      :unsafeCoerce 0
     |app.browser/fade-out! $ {} (:codeDynamic 0)
       :codeNil 0
       :declaredOptional 0
@@ -44,7 +44,7 @@
       :typeNone 0
       :typeNotFull 1
       :unresolved 0
-      :unsafeCoerce 1
+      :unsafeCoerce 0
     |app.browser/gpu-supported? $ {} (:codeDynamic 0)
       :codeNil 0
       :declaredOptional 0
@@ -53,7 +53,7 @@
       :typeNone 0
       :typeNotFull 0
       :unresolved 0
-      :unsafeCoerce 1
+      :unsafeCoerce 0
     |app.comp.container/comp-card $ {} (:codeDynamic 0)
       :codeNil 3
       :declaredOptional 0
@@ -143,7 +143,7 @@
     :typeNone 1
     :typeNotFull 8
     :unresolved 11
-    :unsafeCoerce 6
+    :unsafeCoerce 0
   :scope $ {} (:includeDependencies false)
     :namespace nil
     :namespacePrefix nil

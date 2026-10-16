@@ -1,7 +1,7 @@
 {
   "packageManager": "yarn@4.18.0",
   "dependencies": {
-    "@calcit/procs": "0.30.0",
+    "@calcit/procs": "0.30.1-alpha.4",
     "feather-icons": "^4.29.2"
   },
   "devDependencies": {
@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "vite",
     "compile": "calcit calcit.cirru js",
-    "check": "yarn check:typed && calcit calcit.cirru --check-only && calcit calcit.cirru analyze deprecated && calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru",
+    "check": "calcit calcit.cirru --check-only --all-defs && calcit calcit.cirru fix --workflow strict --verify --format edn && calcit calcit.cirru analyze weak-types --only deprecated-call --summary-only --format json | jq -e '.data.summary.calls == 0' && calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru",
     "test": "node scripts/check-runtime-smoke.mjs",
     "build": "yarn compile && yarn test && vite build",
     "check:typed": "calcit calcit.cirru --check-only --init-fn app.updater/updater --reload-fn app.schema/normalize-action"

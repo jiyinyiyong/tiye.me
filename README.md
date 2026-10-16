@@ -13,13 +13,14 @@ http://tiye.me
 
 `data/meta.cirru` contains a map from page tags to nominal `Page` values. Each page has a string title and a list of `Content` variants:
 
-```cirru
-:home $ %{} :Page (:title |Home)
-  :content $ []
-    %:: :Content :text |Welcome
-    %:: :Content :links $ []
-      %:: :Content :route :calcit |Calcit
-      %:: :Content :url |https://calcit-lang.org |Website
+```cirru-edn
+{}
+  :home $ %{} :Page (:title |Home)
+    :content $ []
+      %:: :Content :text |Welcome
+      %:: :Content :links $ []
+        %:: :Content :route :calcit |Calcit
+        %:: :Content :url |https://calcit-lang.org |Website
 ```
 
 Other variants are `:title String`, `:html String`, `:xigua String`, and `:image String String` (URL and alt text). The loader validates the file against `Map<Tag, Page>` and preserves nominal content types.
@@ -30,7 +31,9 @@ Workflow https://github.com/mvc-works/calcit-workflow
 
 ### Local development
 
-Use Node.js 24 (see `.node-version`), Calcit **0.27.0**, and Yarn 4.18.0.
+Use Node.js 24 (see `.node-version`), Calcit **0.30.1-alpha.4**, matching
+`@calcit/procs`, and Yarn 4.18.0. This is the published 0.30.1 prerelease pair,
+not stable Calcit 0.30.1.
 
 ```bash
 caps --strict --ci
@@ -42,12 +45,17 @@ yarn check
 yarn build
 ```
 
-For a compiler watcher, run `calcit calcit.cirru js --watch` alongside `yarn dev`.
+For a compiler watcher, run `calcit -w calcit.cirru` alongside `yarn dev`.
 
-The application now uses nominal `Page`, `Content`, `Store`, and `Action` types, typed Reel state/history, and explicit DOM FFI contracts. `yarn check:typed` checks the updater and operation decoder with default strict diagnostics; `yarn check` also enforces the tightened per-definition quality baseline.
+The application uses nominal `Page`, `Content`, `Store`, and `Action` types,
+typed Reel state/history and explicit DOM FFI contracts. `yarn check:typed`
+remains a focused updater/decoder check. `yarn check` checks all definitions,
+the complete strict workflow, deprecated calls and the existing per-definition
+quality baseline. The legacy quality command still works in this patch line;
+its budget is retained, with unsafe limits tightened to zero, not waived.
 
-The full UI now compiles with ordinary Calcit diagnostics, without
-`--compat-types`. The original quality baseline remains in force; remaining
+The full UI compiles with ordinary Calcit diagnostics, without
+`--compat-types`. Remaining
 type debt is documented in [migration details](docs/strict-types.md).
 
 The runtime smoke test checks all 23 content pages, routing, closing cards, modifier clicks, empty-router handling, malformed actions, and typed history replay/hot reload.
@@ -77,25 +85,21 @@ and background iframe URLs are preserved.
 
 此前 COS 改造仅精简部署配置，当时 Calcit/procs 仍为正式 0.27.0，不把 COS 改造当作 0.28 升级完成。PR CDN 前缀包含编号/run/attempt，队列按 PR 隔离；生产 prefix 不变。安装器读取 `deps.cirru`，已有 toolchain 核验负责版本一致性。移除重复构建哈希比对及逐文件下载的生产校验（可由 Git 恢复），上传只使用 Action 自身的 `public-base-url` verify；不宣称这验证了服务器现场行为。原业务测试、严格入口、质量预算、HEAD 过期门禁及 rsync 同步保留，不新增脚本或进程管理工具。
 
-### Calcit 迁移候选（未验收）
+### 0.30.1 配对迁移
 
-本地候选将 CLI / `@calcit/procs` 配对到正式 0.30.0，协调 Reel 0.6.38、
-Feather 0.4.28、UI 0.7.40、Respo 0.16.120 与 js-ffi 0.2.3，不使用 alpha/hash
-模块依赖。原主页内容、路由行为、COS 前缀及服务器路径不在本次重设计范围内。
+CLI / runtime 精确配对 alpha.4；模块使用正式 Reel 0.6.39、Feather 0.4.29、
+UI 0.7.41、Respo 0.16.122、js-ffi 0.2.3 和传递 Router 0.8.36，不用 hash/main。
+仍使用稳定 Calcit 0.30.0 的消费者不能混装这套图。此前 SSR attrs 问题
+[Respo #274](https://github.com/Respo/respo.calcit/issues/274) 已在本配对下不再阻塞
+完整 strict；这不宣称原 0.30.0 图已修好。
 
-原 0.27.0 入口检查通过；候选目前全量定义 256/256 通过，挂载 DOM 类型、
-动态子节点展开和退役 `some?` 已处理。原 runtime smoke 的全部断言保留，23 页面、
-导航/关闭修饰键/空路由/非法操作/typed history 回放及生产构建通过，
-但完整 strict 仍受正式 Respo 0.16.120 的 SSR attrs 类型问题阻塞。
-上游 SSR 问题记录于 https://github.com/Respo/respo.calcit/issues/274 。
-不得将这一候选视为可合并或可部署；fresh Caps/CI、实际页面及原完整门禁
-仍待验收。既有 check 脚本里的旧分析命令也尚未迁移，旧质量预算没有删除或放宽。
+保留原主页内容、路由、COS 前缀与服务器路径。源码使用公开 get/Option、当前
+Ref/watch、受检状态树与事件 Map、具名 RenderNode，以及 SSR Reel 的实际字段
+解码。原 23 页回归断言不减；测试读取只迁移到公开 get/Option，并修正 JS
+Array.map 会额外传参给 Calcit 回调的问题。
 
-前向只读探测使用精确 Respo 0.16.122 源码：alpha.4 下全部 256 定义通过、strict
-源码诊断为空，但声明/安装/lock 仍为 0.30.0，所以版本 preflight 失败；
-不把它称为正式依赖图或 JS runtime 验收，也未将 alpha 写入项目依赖。
-同一新源码在 0.30.0 下仍有泛型 key 证明错误，不能只升级 Respo tag 解决。
-
-已处理的源码范围：公开 `get` / Option、当前 Ref/watch 入口、受检状态树与
-事件 Map、具名 RenderNode 包装，以及对 SSR Reel 实际字段的解码，
-不以新的强转或宽松预算绕过检查。只维护 `calcit.cirru` / `deps.cirru`。
+6 处应用层 unsafe 被替换：动画使用已有 Element trait 的 `js-cast` 浅层成员检查，
+Escape 使用现有 keyboard-event-host，关闭修饰键使用现有 object-field / Bool 检查，
+GPU 仍仅检查 nullable 属性存在性，不把缺少 GPU 当成错误。合法宿主行为不变，
+无效替身会更早失败；成员形状不证明深层 CSS 值或宿主方法的返回合同。
+旧质量预算逐定义与总 unsafe 上限均收紧到 0，其他预算不变；不新增检查脚本。

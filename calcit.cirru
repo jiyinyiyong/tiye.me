@@ -47,7 +47,7 @@
         'bump! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn bump! (raw)
             let
-                element $ unsafe-coerce raw 'app.browser/Element
+                element $ js-cast raw 'app.browser/Element
                 style $ .-style element
               set! (.-scale style) |0.6
               host/set-timeout!
@@ -74,11 +74,12 @@
         'close-all? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn close-all? (event)
             let
-                raw $ unsafe-coerce
-                    get event :event
-                    , .unwrap
-                  , 'js-ffi.browser/KeyboardEventHost
-              or (raw :meta-key?) (raw :ctrl-key?)
+                raw $
+                  get event :event
+                  , .unwrap
+              or
+                contract/expect-bool "|close-all metaKey" $ contract/object-field "|close-all event" raw |metaKey
+                contract/expect-bool "|close-all ctrlKey" $ contract/object-field "|close-all event" raw |ctrlKey
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Bool)
             :args $ [] $ :: 'Map 'Tag 'Dynamic
@@ -86,7 +87,7 @@
         'escape? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn escape? (raw)
             let
-                event $ unsafe-coerce raw 'js-ffi.browser/KeyboardEventHost
+                event $ host/keyboard-event-host raw
               = |Escape $ event :key
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Bool)
@@ -95,7 +96,7 @@
         'fade-in! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn fade-in! (raw)
             let
-                element $ unsafe-coerce raw 'app.browser/Element
+                element $ js-cast raw 'app.browser/Element
                 style $ .-style element
               set! (.-opacity style) |0.1
               set! (.-transform style) "|scale(0.6) translate(-80px,0px)"
@@ -129,7 +130,7 @@
         'fade-out! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn fade-out! (raw)
             let
-                element $ unsafe-coerce raw 'app.browser/Element
+                element $ js-cast raw 'app.browser/Element
                 clone $ .clone-node element false
                 style $ .-style clone
                 parent $ element :parent-element
@@ -160,14 +161,14 @@
             :features $ #{} :js-ffi
         'gpu-supported? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn gpu-supported? ()
-            js-present? $ .-gpu $ unsafe-coerce js/navigator 'app.browser/Navigator
+            js-present? $ contract/object-field |navigator js/navigator |gpu
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Bool)
             :args $ []
             :features $ #{} :js-ffi
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.browser
-          :require $ js-ffi.browser :as host
+          :require (js-ffi.browser :as host) (js-ffi.contract :as contract)
     'app.comp.container $ %{} 'FileEntry
       :defs $ {}
         'card-width $ %{} 'CodeEntry (:doc |)

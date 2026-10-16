@@ -75,7 +75,8 @@ The original server payload `dist/*` and destination
 External fonts, logos, page content
 and background iframe URLs are preserved.
 
-本轮仅精简部署配置，Calcit/procs 仍为正式 0.27.0，不把 COS 改造当作 0.28 升级完成。PR CDN 前缀包含编号/run/attempt，队列按 PR 隔离；生产 prefix 不变。安装器读取 `deps.cirru`，已有 toolchain 核验负责版本一致性。移除重复构建哈希比对及逐文件下载的生产校验（可由 Git 恢复），上传只使用 Action 自身的 `public-base-url` verify；不宣称这验证了服务器现场行为。原业务测试、严格入口、质量预算、HEAD 过期门禁及 rsync 同步保留，不新增脚本或进程管理工具。
+此前 COS 改造仅精简部署配置，当时 Calcit/procs 仍为正式 0.27.0，不把 COS 改造当作 0.28 升级完成。PR CDN 前缀包含编号/run/attempt，队列按 PR 隔离；生产 prefix 不变。安装器读取 `deps.cirru`，已有 toolchain 核验负责版本一致性。移除重复构建哈希比对及逐文件下载的生产校验（可由 Git 恢复），上传只使用 Action 自身的 `public-base-url` verify；不宣称这验证了服务器现场行为。原业务测试、严格入口、质量预算、HEAD 过期门禁及 rsync 同步保留，不新增脚本或进程管理工具。
+
 ### Calcit 迁移候选（未验收）
 
 本地候选将 CLI / `@calcit/procs` 配对到正式 0.30.0，协调 Reel 0.6.38、
@@ -91,4 +92,3 @@ Feather 0.4.28、UI 0.7.40、Respo 0.16.120 与 js-ffi 0.2.3，不使用 alpha/h
 已处理的源码范围：公开 `get` / Option、当前 Ref/watch 入口、受检状态树与
 事件 Map、具名 RenderNode 包装，以及对 SSR Reel 实际字段的解码，
 不以新的强转或宽松预算绕过检查。只维护 `calcit.cirru` / `deps.cirru`。
-

@@ -47,7 +47,7 @@
         'bump! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn bump! (raw)
             let
-                element $ unsafe-coerce raw 'app.browser/Element
+                element $ js-cast raw 'app.browser/Element
                 style $ .-style element
               set! (.-scale style) |0.6
               host/set-timeout!
@@ -74,11 +74,12 @@
         'close-all? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn close-all? (event)
             let
-                raw $ unsafe-coerce
-                    get event :event
-                    , .unwrap
-                  , 'js-ffi.browser/KeyboardEventHost
-              or (raw :meta-key?) (raw :ctrl-key?)
+                raw $
+                  get event :event
+                  , .unwrap
+              or
+                contract/expect-bool "|close-all metaKey" $ contract/object-field "|close-all event" raw |metaKey
+                contract/expect-bool "|close-all ctrlKey" $ contract/object-field "|close-all event" raw |ctrlKey
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Bool)
             :args $ [] $ :: 'Map 'Tag 'Dynamic
@@ -86,7 +87,7 @@
         'escape? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn escape? (raw)
             let
-                event $ unsafe-coerce raw 'js-ffi.browser/KeyboardEventHost
+                event $ host/keyboard-event-host raw
               = |Escape $ event :key
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Bool)
@@ -95,7 +96,7 @@
         'fade-in! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn fade-in! (raw)
             let
-                element $ unsafe-coerce raw 'app.browser/Element
+                element $ js-cast raw 'app.browser/Element
                 style $ .-style element
               set! (.-opacity style) |0.1
               set! (.-transform style) "|scale(0.6) translate(-80px,0px)"
@@ -129,7 +130,7 @@
         'fade-out! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn fade-out! (raw)
             let
-                element $ unsafe-coerce raw 'app.browser/Element
+                element $ js-cast raw 'app.browser/Element
                 clone $ .clone-node element false
                 style $ .-style clone
                 parent $ element :parent-element
@@ -160,14 +161,14 @@
             :features $ #{} :js-ffi
         'gpu-supported? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn gpu-supported? ()
-            js-present? $ .-gpu $ unsafe-coerce js/navigator 'app.browser/Navigator
+            js-present? $ contract/object-field |navigator js/navigator |gpu
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Bool)
             :args $ []
             :features $ #{} :js-ffi
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.browser
-          :require $ js-ffi.browser :as host
+          :require (js-ffi.browser :as host) (js-ffi.contract :as contract)
     'app.comp.container $ %{} 'FileEntry
       :defs $ {}
         'card-width $ %{} 'CodeEntry (:doc |)
@@ -180,11 +181,12 @@
               %{} Component (:name :comp-avatar)
                 :effects $ [] $ effect-bump
                 :listeners $ []
-                :tree $ Option :some $ div
-                  {} (:class-name css-avatar)
-                    :on-click $ fn (e d!)
-                      on-home (Option :none) :home d!
-                  div $ {} $ :class-name css-avatar-outline
+                :tree $ Option :some $ respo.schema/RenderNode :element
+                  div
+                    {} (:class-name css-avatar)
+                      :on-click $ fn (e d!)
+                        on-home (Option :none) :home d!
+                    div $ {} $ :class-name css-avatar-outline
               , |comp-avatar
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
@@ -195,57 +197,60 @@
               %{} Component (:name :comp-card)
                 :effects $ [] $ effect-fading
                 :listeners $ []
-                :tree $ Option :some $ let
-                    info $ find-page key
-                    title-text $ match info
-                      (:some page) (:title page)
-                      (:none) "|Unknown page"
-                    directives $ assert-type
-                      match info
-                        (:some page) (:content page)
-                        (:none) ([])
-                      :: 'List 'app.schema/Content
-                  div
-                    {} (:class-name css-card)
-                      :style $ {}
-                        :left $ str
-                          * (+ card-width 12) idx
-                          , |px
-                        :height |640px
-                        :top |-320px
-                        :width $ str card-width |px
+                :tree $ Option :some $ respo.schema/RenderNode :element
+                  let
+                      info $ find-page key
+                      title-text $ match info
+                        (:some page) (:title page)
+                        (:none) "|Unknown page"
+                      directives $ assert-type
+                        match info
+                          (:some page) (:content page)
+                          (:none) ([])
+                        :: 'List 'app.schema/Content
                     div
-                      {} $ :style $ merge styles/row-parted
-                        {} (:position |absolute) (:top |0px) (:left |0px) (:width |100%) (:padding |4px) (:backdrop-filter "|blur(2px)")
-                      span
-                        {} (:class-name |show-on-hover)
-                          :style $ {} (:line-height |20px) (:height |20px)
-                          :title "|Command + Click to close all"
-                        comp-icon :x
-                          {}
-                            :color $ hsl 0 0 0
-                            :font-size 20
-                            :cursor :pointer
-                          fn (e d!)
-                            on-close idx (event-has-close-all? e) d!
-                      <> title-text $ {} (:font-family ui/font-fancy) (:font-size |14px) (:font-weight |300)
-                        :color $ hsl 0 0 60
-                      span $ {} (:class-name |right-corner) (:inner-text "| ")
-                    =< nil 8
-                    if (option:none? info)
-                      <> $ str "|Unknown data: " key
+                      {} (:class-name css-card)
+                        :style $ {}
+                          :left $ str
+                            * (+ card-width 12) idx
+                            , |px
+                          :height |640px
+                          :top |-320px
+                          :width $ str card-width |px
                       div
-                        {} $ :style $ merge styles/expand
-                          {} (:padding "|0 12px") (:overflow |auto)
-                        =< nil 48
-                        , &
-                          -> directives $ map $ fn (directive)
-                            hint-fn $ {}
-                              :args $ [] 'app.schema/Content
-                              :return 'respo.schema/Element
-                            render-content directive $ fn (key d!)
-                              on-open (Option :some idx) key d!
-                          =< nil 120
+                        {} $ :style $ merge styles/row-parted
+                          {} (:position |absolute) (:top |0px) (:left |0px) (:width |100%) (:padding |4px) (:backdrop-filter "|blur(2px)")
+                        span
+                          {} (:class-name |show-on-hover)
+                            :style $ {} (:line-height |20px) (:height |20px)
+                            :title "|Command + Click to close all"
+                          comp-icon :x
+                            {}
+                              :color $ hsl 0 0 0
+                              :font-size 20
+                              :cursor :pointer
+                            fn (e d!)
+                              on-close idx
+                                event-has-close-all? $ decode-map-as e $ :: 'Map 'Tag 'Dynamic
+                                , d!
+                        <> title-text $ {} (:font-family ui/font-fancy) (:font-size |14px) (:font-weight |300)
+                          :color $ hsl 0 0 60
+                        span $ {} (:class-name |right-corner) (:inner-text "| ")
+                      =< nil 8
+                      if (option:none? info)
+                        <> $ str "|Unknown data: " key
+                        list->
+                          {} $ :style $ merge styles/expand
+                            {} (:padding "|0 12px") (:overflow |auto)
+                          concat
+                            [] $ [] :top $ =< nil 48
+                            map-indexed directives $ fn (content-index directive)
+                              hint-fn $ {}
+                                :args $ [] 'Number 'app.schema/Content
+                                :return $ :: 'List 'Dynamic
+                              [] content-index $ render-content directive $ fn (key d!)
+                                on-open (Option :some idx) key d!
+                            [] $ [] :bottom $ =< nil 120
               , |comp-card
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
@@ -486,7 +491,7 @@
     'app.main $ %{} 'FileEntry
       :defs $ {}
         '*reel $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defatom *reel (typed-reel/new-reel schema/store)
+          :code $ quote $ defref *reel (typed-reel/new-reel schema/store)
           :examples $ []
           :schema $ :: 'Ref $ :: 'reel.typed/State 'app.schema/Action 'app.schema/Store
         'dispatch! $ %{} 'CodeEntry (:doc |)
@@ -509,7 +514,7 @@
             println "|Running mode:" $ if config/dev? |dev |release
             if config/dev? $ load-console-formatter!
             render-app!
-            add-watch *reel :changes $ fn (r p) (render-app!)
+            add-watch! *reel :changes $ fn (r p) (render-app!)
             listen-devtools! |k dispatch!
             host/add-event-listener! |keydown $ fn (event)
               when (browser/escape? event)
@@ -529,9 +534,9 @@
             :features $ #{} :js-ffi
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
-            if (some? build-errors) (tip! |error build-errors)
-              do (clear-cache!) (remove-watch *reel :changes)
-                add-watch *reel :changes $ fn (r p) (render-app!)
+            if (non-nil? build-errors) (tip! |error build-errors)
+              do (clear-cache!) (remove-watch! *reel :changes)
+                add-watch! *reel :changes $ fn (r p) (render-app!)
                 reset! *reel $ typed-reel/refresh updater @*reel schema/store
                 println "|Code updated."
                 tip! |ok~ |Ok
@@ -541,7 +546,15 @@
             :features $ #{} :js-ffi
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
-            render! (mount-target) (comp-container @*reel) dispatch!
+            render!
+              respo.ffi.browser/narrow-element $ mount-target
+              comp-container @*reel
+              fn (op)
+                hint-fn $ {}
+                  :args $ [] 'Dynamic
+                  :return 'Unit
+                  :features $ #{} :js-ffi
+                if (enum? op) (dispatch! op) (raise |invalid-render-action)
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ []
@@ -566,8 +579,8 @@
         'base-info $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def base-info
             {}
-              :title $ :title config/site
-              :icon $ :icon config/site
+              :title $ .unwrap $ get config/site :title
+              :icon $ .unwrap $ get config/site :icon
               :ssr nil
               :inline-html nil
           :examples $ []
@@ -575,7 +588,9 @@
         'ssr-processing! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn ssr-processing! ()
             let
-                reel $ assert-type (typed-reel/new-reel schema/store) (:: 'reel.typed/State 'app.schema/Action 'app.schema/Store)
+                reel $ decode-map-as
+                  &struct:to-map $ typed-reel/new-reel schema/store
+                  :: 'reel.typed/State 'app.schema/Action 'app.schema/Store
                 file |dist/index.html
                 html-content $ make-string $ comp-container reel
                 content $ fs/readFileSync file |utf8
@@ -627,10 +642,7 @@
           :examples $ []
           :schema $ :: 'StructDef
         'find-page $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn find-page (key)
-            if (&map:contains? site-map key)
-              Option :some $ &map:get site-map key
-              Option :none
+          :code $ quote $ defn find-page (key) (get site-map key)
           :examples $ []
           :schema $ :: 'Fn $ {}
             :args $ [] 'Tag
@@ -726,7 +738,9 @@
           :code $ quote $ defn updater (store op op-id op-time)
             match op
               (:states cursor state)
-                assoc store :states $ update-state-tree (:states store) cursor state
+                assoc store :states $ decode-map-as
+                  update-state-tree (:states store) cursor state
+                  :: 'Map 'Tag 'Dynamic
               (:push-page idx page)
                 assoc store :router $ match idx
                   (:none)

@@ -12,7 +12,7 @@ const { event__GT_edn } = await import("../js-out/respo.util.format.mjs");
 const tag = core.turn_tag;
 const map = core._$n__$M_;
 const op = (name, ...args) => core._$o__$o_(tag(name), ...args);
-const read = (value, key) => core.struct_$q_(value) ? core._$n_struct_$o_get(value, tag(key)) : core._$n_map_$o_get(value, tag(key));
+const read = (value, key) => core.option_$o_unwrap(core.get(value, tag(key)));
 const noop = () => {};
 const { _$s_style_list_in_nodejs } = await import("../js-out/respo.css.mjs");
 const styles = core.listToArray(core.deref(_$s_style_list_in_nodejs));
@@ -26,7 +26,7 @@ assert(!containerCss.includes("%::"), "Option values must not leak into CSS decl
 assert(core.map_$q_(site_map), "site-map must contain evaluated data, not Cirru syntax");
 let reel = new_reel(initialStore);
 let sequence = 0;
-const route = () => core.listToArray(read(read(reel, "store"), "router")).map(core.turn_string);
+const route = () => core.listToArray(read(read(reel, "store"), "router")).map((key) => core.turn_string(key));
 const dispatch = (...args) => { reel = record_op(updater, reel, normalize_action(op(...args)), `test-${++sequence}`, sequence); };
 const render = () => make_string(comp_container(reel));
 assert.match(render(), /题叶/);

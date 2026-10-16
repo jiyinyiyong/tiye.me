@@ -83,11 +83,18 @@ and background iframe URLs are preserved.
 Feather 0.4.28、UI 0.7.40、Respo 0.16.120 与 js-ffi 0.2.3，不使用 alpha/hash
 模块依赖。原主页内容、路由行为、COS 前缀及服务器路径不在本次重设计范围内。
 
-原 0.27.0 入口检查通过；候选目前全量定义 253/256 通过，尚有挂载 DOM 类型、
-动态子节点展开及上游 SSR attrs 类型问题，完整 strict 尚未通过。
+原 0.27.0 入口检查通过；候选目前全量定义 256/256 通过，挂载 DOM 类型、
+动态子节点展开和退役 `some?` 已处理。原 runtime smoke 的全部断言保留，23 页面、
+导航/关闭修饰键/空路由/非法操作/typed history 回放及生产构建通过，
+但完整 strict 仍受正式 Respo 0.16.120 的 SSR attrs 类型问题阻塞。
 上游 SSR 问题记录于 https://github.com/Respo/respo.calcit/issues/274 。
-不得将这一候选视为可合并或可部署；原 runtime smoke、构建、fresh Caps/CI
-及实际页面验收仍待完成。既有 check 脚本里的旧分析命令也尚未迁移。
+不得将这一候选视为可合并或可部署；fresh Caps/CI、实际页面及原完整门禁
+仍待验收。既有 check 脚本里的旧分析命令也尚未迁移，旧质量预算没有删除或放宽。
+
+前向只读探测使用精确 Respo 0.16.122 源码：alpha.4 下全部 256 定义通过、strict
+源码诊断为空，但声明/安装/lock 仍为 0.30.0，所以版本 preflight 失败；
+不把它称为正式依赖图或 JS runtime 验收，也未将 alpha 写入项目依赖。
+同一新源码在 0.30.0 下仍有泛型 key 证明错误，不能只升级 Respo tag 解决。
 
 已处理的源码范围：公开 `get` / Option、当前 Ref/watch 入口、受检状态树与
 事件 Map、具名 RenderNode 包装，以及对 SSR Reel 实际字段的解码，

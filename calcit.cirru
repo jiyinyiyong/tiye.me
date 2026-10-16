@@ -238,18 +238,18 @@
                       =< nil 8
                       if (option:none? info)
                         <> $ str "|Unknown data: " key
-                        div
+                        list->
                           {} $ :style $ merge styles/expand
                             {} (:padding "|0 12px") (:overflow |auto)
-                          =< nil 48
-                          , &
-                            -> directives $ map $ fn (directive)
+                          concat
+                            [] $ [] :top $ =< nil 48
+                            map-indexed directives $ fn (content-index directive)
                               hint-fn $ {}
-                                :args $ [] 'app.schema/Content
-                                :return 'respo.schema/Element
-                              render-content directive $ fn (key d!)
+                                :args $ [] 'Number 'app.schema/Content
+                                :return $ :: 'List 'Dynamic
+                              [] content-index $ render-content directive $ fn (key d!)
                                 on-open (Option :some idx) key d!
-                            =< nil 120
+                            [] $ [] :bottom $ =< nil 120
               , |comp-card
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
@@ -533,7 +533,7 @@
             :features $ #{} :js-ffi
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
-            if (some? build-errors) (tip! |error build-errors)
+            if (non-nil? build-errors) (tip! |error build-errors)
               do (clear-cache!) (remove-watch! *reel :changes)
                 add-watch! *reel :changes $ fn (r p) (render-app!)
                 reset! *reel $ typed-reel/refresh updater @*reel schema/store
@@ -545,7 +545,15 @@
             :features $ #{} :js-ffi
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
-            render! (mount-target) (comp-container @*reel) dispatch!
+            render!
+              respo.ffi.browser/narrow-element $ mount-target
+              comp-container @*reel
+              fn (op)
+                hint-fn $ {}
+                  :args $ [] 'Dynamic
+                  :return 'Unit
+                  :features $ #{} :js-ffi
+                if (enum? op) (dispatch! op) (raise |invalid-render-action)
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ []

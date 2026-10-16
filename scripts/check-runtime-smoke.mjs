@@ -26,7 +26,7 @@ assert(!containerCss.includes("%::"), "Option values must not leak into CSS decl
 assert(core.map_$q_(site_map), "site-map must contain evaluated data, not Cirru syntax");
 let reel = new_reel(initialStore);
 let sequence = 0;
-const route = () => core.listToArray(read(read(reel, "store"), "router")).map(core.turn_string);
+const route = () => core.listToArray(read(read(reel, "store"), "router")).map((key) => core.turn_string(key));
 const dispatch = (...args) => { reel = record_op(updater, reel, normalize_action(op(...args)), `test-${++sequence}`, sequence); };
 const render = () => make_string(comp_container(reel));
 assert.match(render(), /题叶/);

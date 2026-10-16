@@ -180,11 +180,12 @@
               %{} Component (:name :comp-avatar)
                 :effects $ [] $ effect-bump
                 :listeners $ []
-                :tree $ Option :some $ div
-                  {} (:class-name css-avatar)
-                    :on-click $ fn (e d!)
-                      on-home (Option :none) :home d!
-                  div $ {} $ :class-name css-avatar-outline
+                :tree $ Option :some $ respo.schema/RenderNode :element
+                  div
+                    {} (:class-name css-avatar)
+                      :on-click $ fn (e d!)
+                        on-home (Option :none) :home d!
+                    div $ {} $ :class-name css-avatar-outline
               , |comp-avatar
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
@@ -195,57 +196,60 @@
               %{} Component (:name :comp-card)
                 :effects $ [] $ effect-fading
                 :listeners $ []
-                :tree $ Option :some $ let
-                    info $ find-page key
-                    title-text $ match info
-                      (:some page) (:title page)
-                      (:none) "|Unknown page"
-                    directives $ assert-type
-                      match info
-                        (:some page) (:content page)
-                        (:none) ([])
-                      :: 'List 'app.schema/Content
-                  div
-                    {} (:class-name css-card)
-                      :style $ {}
-                        :left $ str
-                          * (+ card-width 12) idx
-                          , |px
-                        :height |640px
-                        :top |-320px
-                        :width $ str card-width |px
+                :tree $ Option :some $ respo.schema/RenderNode :element
+                  let
+                      info $ find-page key
+                      title-text $ match info
+                        (:some page) (:title page)
+                        (:none) "|Unknown page"
+                      directives $ assert-type
+                        match info
+                          (:some page) (:content page)
+                          (:none) ([])
+                        :: 'List 'app.schema/Content
                     div
-                      {} $ :style $ merge styles/row-parted
-                        {} (:position |absolute) (:top |0px) (:left |0px) (:width |100%) (:padding |4px) (:backdrop-filter "|blur(2px)")
-                      span
-                        {} (:class-name |show-on-hover)
-                          :style $ {} (:line-height |20px) (:height |20px)
-                          :title "|Command + Click to close all"
-                        comp-icon :x
-                          {}
-                            :color $ hsl 0 0 0
-                            :font-size 20
-                            :cursor :pointer
-                          fn (e d!)
-                            on-close idx (event-has-close-all? e) d!
-                      <> title-text $ {} (:font-family ui/font-fancy) (:font-size |14px) (:font-weight |300)
-                        :color $ hsl 0 0 60
-                      span $ {} (:class-name |right-corner) (:inner-text "| ")
-                    =< nil 8
-                    if (option:none? info)
-                      <> $ str "|Unknown data: " key
+                      {} (:class-name css-card)
+                        :style $ {}
+                          :left $ str
+                            * (+ card-width 12) idx
+                            , |px
+                          :height |640px
+                          :top |-320px
+                          :width $ str card-width |px
                       div
-                        {} $ :style $ merge styles/expand
-                          {} (:padding "|0 12px") (:overflow |auto)
-                        =< nil 48
-                        , &
-                          -> directives $ map $ fn (directive)
-                            hint-fn $ {}
-                              :args $ [] 'app.schema/Content
-                              :return 'respo.schema/Element
-                            render-content directive $ fn (key d!)
-                              on-open (Option :some idx) key d!
-                          =< nil 120
+                        {} $ :style $ merge styles/row-parted
+                          {} (:position |absolute) (:top |0px) (:left |0px) (:width |100%) (:padding |4px) (:backdrop-filter "|blur(2px)")
+                        span
+                          {} (:class-name |show-on-hover)
+                            :style $ {} (:line-height |20px) (:height |20px)
+                            :title "|Command + Click to close all"
+                          comp-icon :x
+                            {}
+                              :color $ hsl 0 0 0
+                              :font-size 20
+                              :cursor :pointer
+                            fn (e d!)
+                              on-close idx
+                                event-has-close-all? $ decode-map-as e $ :: 'Map 'Tag 'Dynamic
+                                , d!
+                        <> title-text $ {} (:font-family ui/font-fancy) (:font-size |14px) (:font-weight |300)
+                          :color $ hsl 0 0 60
+                        span $ {} (:class-name |right-corner) (:inner-text "| ")
+                      =< nil 8
+                      if (option:none? info)
+                        <> $ str "|Unknown data: " key
+                        div
+                          {} $ :style $ merge styles/expand
+                            {} (:padding "|0 12px") (:overflow |auto)
+                          =< nil 48
+                          , &
+                            -> directives $ map $ fn (directive)
+                              hint-fn $ {}
+                                :args $ [] 'app.schema/Content
+                                :return 'respo.schema/Element
+                              render-content directive $ fn (key d!)
+                                on-open (Option :some idx) key d!
+                            =< nil 120
               , |comp-card
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
@@ -486,7 +490,7 @@
     'app.main $ %{} 'FileEntry
       :defs $ {}
         '*reel $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defatom *reel (typed-reel/new-reel schema/store)
+          :code $ quote $ defref *reel (typed-reel/new-reel schema/store)
           :examples $ []
           :schema $ :: 'Ref $ :: 'reel.typed/State 'app.schema/Action 'app.schema/Store
         'dispatch! $ %{} 'CodeEntry (:doc |)
@@ -509,7 +513,7 @@
             println "|Running mode:" $ if config/dev? |dev |release
             if config/dev? $ load-console-formatter!
             render-app!
-            add-watch *reel :changes $ fn (r p) (render-app!)
+            add-watch! *reel :changes $ fn (r p) (render-app!)
             listen-devtools! |k dispatch!
             host/add-event-listener! |keydown $ fn (event)
               when (browser/escape? event)
@@ -530,8 +534,8 @@
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             if (some? build-errors) (tip! |error build-errors)
-              do (clear-cache!) (remove-watch *reel :changes)
-                add-watch *reel :changes $ fn (r p) (render-app!)
+              do (clear-cache!) (remove-watch! *reel :changes)
+                add-watch! *reel :changes $ fn (r p) (render-app!)
                 reset! *reel $ typed-reel/refresh updater @*reel schema/store
                 println "|Code updated."
                 tip! |ok~ |Ok
@@ -566,8 +570,8 @@
         'base-info $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def base-info
             {}
-              :title $ :title config/site
-              :icon $ :icon config/site
+              :title $ .unwrap $ get config/site :title
+              :icon $ .unwrap $ get config/site :icon
               :ssr nil
               :inline-html nil
           :examples $ []
@@ -575,7 +579,9 @@
         'ssr-processing! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn ssr-processing! ()
             let
-                reel $ assert-type (typed-reel/new-reel schema/store) (:: 'reel.typed/State 'app.schema/Action 'app.schema/Store)
+                reel $ decode-map-as
+                  &struct:to-map $ typed-reel/new-reel schema/store
+                  :: 'reel.typed/State 'app.schema/Action 'app.schema/Store
                 file |dist/index.html
                 html-content $ make-string $ comp-container reel
                 content $ fs/readFileSync file |utf8
@@ -627,10 +633,7 @@
           :examples $ []
           :schema $ :: 'StructDef
         'find-page $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn find-page (key)
-            if (&map:contains? site-map key)
-              Option :some $ &map:get site-map key
-              Option :none
+          :code $ quote $ defn find-page (key) (get site-map key)
           :examples $ []
           :schema $ :: 'Fn $ {}
             :args $ [] 'Tag
@@ -726,7 +729,9 @@
           :code $ quote $ defn updater (store op op-id op-time)
             match op
               (:states cursor state)
-                assoc store :states $ update-state-tree (:states store) cursor state
+                assoc store :states $ decode-map-as
+                  update-state-tree (:states store) cursor state
+                  :: 'Map 'Tag 'Dynamic
               (:push-page idx page)
                 assoc store :router $ match idx
                   (:none)

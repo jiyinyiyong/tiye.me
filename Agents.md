@@ -1,4 +1,6 @@
-Developer runs `cr js` to watch build JavaScript, and `yarn vite` to start a local server. LLMs edits program by running `cr` commands, and then triggers re-compiling.
+当前迁移使用正式 `calcit` CLI；源码只维护 `calcit.cirru` / `deps.cirru`，仅用官方 query/edit/tree/config 命令操作 Snapshot。一次编译用 `calcit js`；按已配置 JS entry 持续编译用 `calcit -w calcit.cirru`，CLI 修改后用 `calcit edit inc` 通知实际变更。另开终端运行 `yarn vite`，不增加 concurrently。
+
+先阅读当前 CLI 的 `calcit docs read upgrade --full`。下列本地 llms 文档保留作历史背景，其中 cr、compact、旧参数及类型写法不再作为当前迁移依据；具体命令以本机正式版本 `--help` 为准，不运行宽松兼容门禁。
 
 - make sure reading `llms/Calcit.md` for Calcit language tools, aka `cr` command.
 - read `llms/Respo.md` for UI library usages.

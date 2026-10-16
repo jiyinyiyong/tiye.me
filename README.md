@@ -76,3 +76,19 @@ External fonts, logos, page content
 and background iframe URLs are preserved.
 
 本轮仅精简部署配置，Calcit/procs 仍为正式 0.27.0，不把 COS 改造当作 0.28 升级完成。PR CDN 前缀包含编号/run/attempt，队列按 PR 隔离；生产 prefix 不变。安装器读取 `deps.cirru`，已有 toolchain 核验负责版本一致性。移除重复构建哈希比对及逐文件下载的生产校验（可由 Git 恢复），上传只使用 Action 自身的 `public-base-url` verify；不宣称这验证了服务器现场行为。原业务测试、严格入口、质量预算、HEAD 过期门禁及 rsync 同步保留，不新增脚本或进程管理工具。
+### Calcit 迁移候选（未验收）
+
+本地候选将 CLI / `@calcit/procs` 配对到正式 0.30.0，协调 Reel 0.6.38、
+Feather 0.4.28、UI 0.7.40、Respo 0.16.120 与 js-ffi 0.2.3，不使用 alpha/hash
+模块依赖。原主页内容、路由行为、COS 前缀及服务器路径不在本次重设计范围内。
+
+原 0.27.0 入口检查通过；候选目前全量定义 253/256 通过，尚有挂载 DOM 类型、
+动态子节点展开及上游 SSR attrs 类型问题，完整 strict 尚未通过。
+上游 SSR 问题记录于 https://github.com/Respo/respo.calcit/issues/274 。
+不得将这一候选视为可合并或可部署；原 runtime smoke、构建、fresh Caps/CI
+及实际页面验收仍待完成。既有 check 脚本里的旧分析命令也尚未迁移。
+
+已处理的源码范围：公开 `get` / Option、当前 Ref/watch 入口、受检状态树与
+事件 Map、具名 RenderNode 包装，以及对 SSR Reel 实际字段的解码，
+不以新的强转或宽松预算绕过检查。只维护 `calcit.cirru` / `deps.cirru`。
+

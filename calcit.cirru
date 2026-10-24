@@ -218,7 +218,7 @@
                           :top |-320px
                           :width $ str card-width |px
                       div
-                        {} $ :style $ merge styles/row-parted
+                        {} $ :style $ .merge styles/row-parted
                           {} (:position |absolute) (:top |0px) (:left |0px) (:width |100%) (:padding |4px) (:backdrop-filter "|blur(2px)")
                         span
                           {} (:class-name |show-on-hover)
@@ -237,10 +237,10 @@
                           :color $ hsl 0 0 60
                         span $ {} (:class-name |right-corner) (:inner-text "| ")
                       =< nil 8
-                      if (option:none? info)
+                      if (.none? info)
                         <> $ str "|Unknown data: " key
                         list->
-                          {} $ :style $ merge styles/expand
+                          {} $ :style $ .merge styles/expand
                             {} (:padding "|0 12px") (:overflow |auto)
                           concat
                             [] $ [] :top $ =< nil 48
@@ -258,7 +258,7 @@
         'comp-cards $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-cards (router on-open on-close)
             list->
-              {} $ :style $ merge styles/row
+              {} $ :style $ .merge styles/row
                 {} (:margin "|auto 0")
                   :width $ str
                     * (+ card-width 4) (count router)
@@ -306,7 +306,7 @@
                 comp-avatar on-home
               =< nil 32
               div
-                {} $ :style $ merge styles/center
+                {} $ :style $ .merge styles/center
                   {} (:color |white) (:font-size |20px) (:line-height |28px) (:text-shadow "|1px 1px 4px black")
                 <> "|题叶"
           :examples $ []
@@ -346,13 +346,13 @@
           :schema $ :: 'String
         'css-bg $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-bg
-            {} $ |$0 $ merge styles/base styles/fullscreen
+            {} $ |$0 $ .merge styles/base styles/fullscreen
               {} (:background-image "|url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size |cover) (:background-position |center) (:position |fixed) (:top |0px) (:left |0px) (:width |100%) (:height |100%) (:z-index |-1) (:opacity |0.7) (:filter "|grayscale(0.5)")
           :examples $ []
           :schema $ :: 'String
         'css-card $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-card
-            {} $ |$0 $ merge styles/column
+            {} $ |$0 $ .merge styles/column
               {} (:padding |4px) (:box-shadow "|1px 1px 4px black") (:border-radius |2px) (:border "|2px solid white") (:margin-right |4px) (:transition-duration |300ms) (:position |absolute) (:border-radius |6px) (:transform-origin "|-10% 33.3%")
                 :box-shadow $ str "|0 0 10px 4px " $ hsl 200 60 90 0.3
                 :background-color $ hsl 0 0 100 0.96
@@ -365,7 +365,7 @@
           :schema $ :: 'String
         'css-profile $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-profile
-            {} $ |$0 $ merge styles/center
+            {} $ |$0 $ .merge styles/center
               {} (:margin |auto) (:position |fixed) (:top |0px) (:left |0px) (:width |100%) (:height |100%) (:opacity |0.01) (:transition-duration |300ms) (:transform "|translate(12vw,0px)") (:-webkit-tap-highlight-color |transparent) (:transition-delay |120ms) (:animation-name |entering) (:animation-duration |800ms)
           :examples $ []
           :schema $ :: 'String
@@ -446,7 +446,7 @@
             :args $ [] 'app.schema/Content 'Fn
         'style-container $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-container
-            {} $ |$0 $ merge styles/base styles/fullscreen
+            {} $ |$0 $ .merge styles/base styles/fullscreen
               {} (:display |flex) (:font-size |20px) (; :backdrop-filter "|blur(2px)") (:padding "|0 12px 0 12vw") (:scroll-behavior |smooth)
                 :box-shadow $ str "|inset 0 -40px 1200px " $ hsl 0 0 0
                 ; :background-color $ hsl 180 60 20 0.01
@@ -527,7 +527,7 @@
             :features $ #{} :js-ffi
         'mount-target $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn mount-target ()
-            option:unwrap $ host/query-selector |.app
+            .unwrap $ host/query-selector |.app
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'js-ffi.browser/DomElementHost)
             :args $ []

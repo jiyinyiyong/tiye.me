@@ -1,14 +1,21 @@
 # Calcit strict-type migration
 
-## Current status — Calcit 0.30.1-alpha.4
+## Current status — formal Calcit 0.30.1
 
 The full application passes ordinary `--check-only` and JavaScript codegen
 without `--compat-types`, as well as the original typed updater/decoder check.
 CLI and npm runtime are actually paired, with exact formal module releases
-Reel 0.6.39 / Respo 0.16.122 / UI 0.7.41 / Feather 0.4.29 / js-ffi 0.2.3.
+Reel 0.6.41 / Respo 0.16.124 / UI 0.8.0 / Feather 0.4.30 / js-ffi 0.2.5.
 The full strict workflow now passes; the old stable 0.30.0 SSR blocker is not
 misrepresented as fixed on that older compiler. Fresh Caps acceptance is left
-to the exact PR CI; local verification uses readonly exact-tag sources.
+to the exact PR CI. Snapshot edits are a reviewed, atomic official Linux
+0.30.1 transaction; local CLI access is read-only.
+
+This formal follow-up migrates eight known homogeneous style Map merges and
+one DOM query Option unwrap and one card Option predicate to receiver methods. All 58 definitions, their
+schemas and metadata remain; the original page assertions and legacy quality
+budgets are retained. The real `bottom-tip` success/error UI remains in
+`reload!`; it is not replaced by `raise`.
 
 Migration changes include direct Option/Store constructors, typed DOM mount
 lookup, the actual published Respo event Map/native modifier boundary, and an explicit content-list type

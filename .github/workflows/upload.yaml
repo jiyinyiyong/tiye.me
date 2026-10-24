@@ -11,6 +11,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     outputs:
       prefix: ${{ steps.asset-path.outputs.prefix }}
       base-url: ${{ steps.asset-path.outputs.base-url }}
@@ -90,6 +91,7 @@ jobs:
   upload:
     needs: test
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     concurrency:
       group: cos-upload-${{ github.repository }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || 'production' }}
       cancel-in-progress: false

@@ -42,7 +42,7 @@ jobs:
           set -euo pipefail
           calcit calcit.cirru edit format
           yarn check
-          calcit calcit.cirru --check-only --ns 'app.*' --summary-only
+          calcit calcit.cirru --check-only --ns 'app.$meta' --ns app.browser --ns app.comp.container --ns app.config --ns app.main --ns app.page --ns app.schema --ns app.style --ns app.updater --summary-only
           calcit calcit.cirru fix --workflow strict --verify --format json | tee acceptance/strict.json | jq -e '.data.workflow.status == "passed" and .diagnostics == []'
           yarn build
           yarn vite build --base=./

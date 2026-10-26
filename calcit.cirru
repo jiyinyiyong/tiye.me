@@ -261,7 +261,7 @@
               {} $ :style $ .merge styles/row
                 {} (:margin "|auto 0")
                   :width $ str
-                    * (+ card-width 4) (count router)
+                    * (+ card-width 4) (.len router)
                     , |px
                   :position |relative
                   :transition-duration |300ms

@@ -6,14 +6,15 @@ http://tiye.me
 
 > Waiting to be refactored.
 
-本轮升级面向维护者：CLI 与 JS runtime 配对到正式 **0.30.1**，不再使用
-alpha.4。主页内容、卡片路由、关闭修饰键、动画及已有页面报错提示保持不变。
+本轮升级面向维护者：CLI 与 JS runtime 配对到正式 **0.31.0**。主页内容、卡片路由、关闭修饰键、动画及已有页面报错提示保持不变。
 部署仍只上传前端资源，COS 前缀和原服务器目录不变；升级 PR 不自动部署生产。
 
-后续源码清理继续保持正式 0.30.1：卡片宽度计算对已声明为 `List<Tag>` 的 router
-使用 `.len`，只替换一个调用头，参数、宽度公式和页面内容不变。官方 Linux CI
-前后均通过原完整门禁及 23 页生成 JS smoke；115 个生成模块逐字节相同。
-这不是新增版本升级或真实浏览器交互验收，不改依赖、质量预算、HUD 或上传配置。
+依赖采用已发布的 Reel 0.7.0-alpha.4、Feather 0.5.0-alpha.5、UI 0.9.0-alpha.4、
+Respo 0.17.0-alpha.4、js-ffi 0.2.7 和传递 Router 0.9.0-alpha.3；其中 UI 库仍在 alpha 线，不能与旧 0.30.x 图混装。
+默认入口绑定 Enum 事件合同，保留原事件守卫；头像隐藏分支显式返回空样式 Map，由原 CSS 控制显示。
+原 23 页回归、完整 strict、质量预算及 HUD 均保留，不增加验证脚本。
+
+此前 `.len` 清理已完成，本轮沿用原卡片宽度公式。
 
 [Kuazu]: http://weibo.com/vvvvvhuahua
 [leaf]: http://lxtvvv.tuchong.com/2159629/
@@ -40,8 +41,8 @@ Workflow https://github.com/mvc-works/calcit-workflow
 
 ### Local development
 
-Use Node.js 24 (see `.node-version`), formal Calcit **0.30.1**, matching
-`@calcit/procs` **0.30.1**, and Yarn 4.18.0.
+Use Node.js 24 (see `.node-version`), formal Calcit **0.31.0**, matching
+`@calcit/procs` **0.31.0**, and Yarn 4.18.0.
 
 ```bash
 caps --strict --ci
@@ -93,7 +94,7 @@ and background iframe URLs are preserved.
 
 此前 COS 改造仅精简部署配置，当时 Calcit/procs 仍为正式 0.27.0，不把 COS 改造当作 0.28 升级完成。PR CDN 前缀包含编号/run/attempt，队列按 PR 隔离；生产 prefix 不变。安装器读取 `deps.cirru`，已有 toolchain 核验负责版本一致性。移除重复构建哈希比对及逐文件下载的生产校验（可由 Git 恢复），上传只使用 Action 自身的 `public-base-url` verify；不宣称这验证了服务器现场行为。原业务测试、严格入口、质量预算、HEAD 过期门禁及 rsync 同步保留，不新增脚本或进程管理工具。
 
-### 正式 0.30.1 配对迁移
+### 历史：正式 0.30.1 配对迁移
 
 CLI / runtime 精确配对 0.30.1；模块使用正式 Reel 0.6.41、Feather 0.4.30、
 UI 0.8.0、Respo 0.16.124、js-ffi 0.2.5 和传递 Router 0.8.37，不用 hash/main。

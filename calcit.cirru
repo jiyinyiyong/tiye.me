@@ -6,7 +6,7 @@
     {} (:description |) (:init-fn 'app.main/main!) (:mode :js) (:reload-fn 'app.main/reload!) (:target :browser)
       :feature-policy $ {}
       :modules $ [] |respo.calcit/ |respo-ui.calcit/ |reel.calcit/ |respo-feather.calcit/ |js-ffi/
-      :type-slots $ {}
+      :type-slots $ {} $ :dispatch-op |app.schema/DispatchOp
   :files $ {}
     'app.browser $ %{} 'FileEntry
       :defs $ {}
@@ -300,7 +300,9 @@
           :code $ quote $ defcomp comp-empty (visible? on-home)
             div
               {} (:class-name css-profile)
-                :style $ if visible? $ {} (:opacity |1) (:transform "|translate(0,0px)")
+                :style $ if visible?
+                  {} (:opacity |1) (:transform "|translate(0,0px)")
+                  {}
               div
                 {} $ :style $ assoc styles/center :pointer-events |auto
                 comp-avatar on-home
@@ -630,6 +632,10 @@
             :image 'String 'String
           :examples $ []
           :schema $ :: 'EnumDef
+        'DispatchOp $ %{} 'CodeEntry (:doc "|Respo 入口事件合同，容纳应用和 Reel 控制事件；代表值不发送。")
+          :code $ quote $ def DispatchOp (:: :unhandled)
+          :examples $ []
+          :schema $ :: 'Enum
         'Page $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct Page (:title 'String)
             :content $ :: 'List 'app.schema/Content

@@ -6,6 +6,21 @@ http://tiye.me
 
 > Waiting to be refactored.
 
+### 0.32.0 迁移候选
+
+维护者需配对使用正式 Calcit / `@calcit/procs` **0.32.0**，重新生成 JS 并刷新页面。
+Reel `0.7.0`、Feather `0.5.0`、UI `0.9.0`、Respo `0.17.0` 当前以本地候选图验收，
+JS-FFI 为正式 `0.2.8`；正式依赖整图及 PR CI 尚待验证，不能据此部署。
+
+官方工具转换 22 处类型写法，57 个定义 schema 不变。全定义、完整 strict、原质量预算、
+零弃用调用、不可变安装、原 23 页运行回归及构建通过。实际浏览器核对首页、Calcit 卡片
+导航、关闭与刷新，控制台无警告或错误；未重新执行全部修饰键及 HMR 的浏览器验收。
+原内容文件、HUD、部署条件与路径保持不变。七处 action SHA 改用已核对的精确正式 tag，
+npm 包年龄门禁为一小时；无新增校验脚本、类型预算或强转。构建仍提示单个压缩包超过
+500 kB，该提示未被隐藏或调整阈值。
+
+### 历史：0.31.0 迁移
+
 本轮升级面向维护者：CLI 与 JS runtime 配对到正式 **0.31.0**。主页内容、卡片路由、关闭修饰键、动画及已有页面报错提示保持不变。
 部署仍只上传前端资源，COS 前缀和原服务器目录不变；升级 PR 不自动部署生产。
 
@@ -41,8 +56,8 @@ Workflow https://github.com/mvc-works/calcit-workflow
 
 ### Local development
 
-Use Node.js 24 (see `.node-version`), formal Calcit **0.31.0**, matching
-`@calcit/procs` **0.31.0**, and Yarn 4.18.0.
+Use Node.js 24 (see `.node-version`), formal Calcit **0.32.0**, matching
+`@calcit/procs` **0.32.0**, and Yarn 4.18.0.
 
 ```bash
 caps --strict --ci

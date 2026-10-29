@@ -12,38 +12,29 @@
       :defs $ {}
         'Element $ %{} 'CodeEntry (:doc |)
           :code $ quote $ deftrait Element (:style 'app.browser/Style)
-            :parent-element $ :: 'JsNullish 'app.browser/Element
-            .clone-node $ :: 'Fn $ {}
-              :args $ [] 'app.browser/Element 'Bool
-              :return 'app.browser/Element
-            .append-child! $ :: 'Fn $ {}
-              :args $ [] 'app.browser/Element 'app.browser/Element
-              :return 'app.browser/Element
-            .query-selector $ :: 'Fn $ {}
-              :args $ [] 'app.browser/Element 'String
-              :return $ :: 'JsNullish 'app.browser/Element
-            .scroll-into-view $ :: 'Fn $ {}
-              :args $ [] 'app.browser/Element 'JsObject
-              :return 'Unit
-            .remove! $ :: 'Fn $ {}
-              :args $ [] 'app.browser/Element
-              :return 'Unit
+            :parent-element $ quote $ JsNullish app.browser/Element
+            .clone-node $ quote $ Fn app.browser/Element Bool (-> app.browser/Element)
+            .append-child! $ quote $ Fn app.browser/Element app.browser/Element (-> app.browser/Element)
+            .query-selector $ quote $ Fn app.browser/Element String
+              -> $ JsNullish app.browser/Element
+            .scroll-into-view $ quote $ Fn app.browser/Element JsObject (-> Unit)
+            .remove! $ quote $ Fn app.browser/Element (-> Unit)
           :examples $ []
           :ffi $ {} (:backend :js) (:kind :external-object)
             :names $ {} (:append-child! |appendChild) (:clone-node |cloneNode) (:parent-element |parentElement) (:query-selector |querySelector) (:remove! |remove) (:scroll-into-view |scrollIntoView)
-          :schema $ :: 'Trait
+          :schema $ quote Trait
         'Navigator $ %{} 'CodeEntry (:doc |)
           :code $ quote $ deftrait Navigator
-            :gpu $ :: 'JsNullish 'JsObject
+            :gpu $ quote $ JsNullish JsObject
           :examples $ []
           :ffi $ {} (:backend :js) (:kind :external-object)
-          :schema $ :: 'Trait
+          :schema $ quote Trait
         'Style $ %{} 'CodeEntry (:doc |)
           :code $ quote $ deftrait Style (:scale 'String) (:opacity 'String) (:transform 'String) (:width 'String)
           :examples $ []
           :ffi $ {} (:backend :js) (:kind :external-object)
             :writable $ #{} :opacity :scale :transform :width
-          :schema $ :: 'Trait
+          :schema $ quote Trait
         'bump! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn bump! (raw)
             let
@@ -52,25 +43,18 @@
               set! (.-scale style) |0.6
               host/set-timeout!
                 fn ()
-                  hint-fn $ {}
-                    :args $ []
-                    :return 'Unit
-                    :features $ #{} :js-ffi
+                  hint-fn $ Fn (-> Unit) (:features :js-ffi)
                   set! (.-scale style) |1
                   , &unit
                 , 0
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] 'Dynamic
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn Dynamic (-> Unit) (:features :js-ffi)
         'card-width $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn card-width ()
             &min 480 $ - (host/viewport-width) 24
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Number)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Number) (:features :js-ffi)
         'close-all? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn close-all? (event)
             let
@@ -81,18 +65,14 @@
                 contract/expect-bool "|close-all metaKey" $ contract/object-field "|close-all event" raw |metaKey
                 contract/expect-bool "|close-all ctrlKey" $ contract/object-field "|close-all event" raw |ctrlKey
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Bool)
-            :args $ [] $ :: 'Map 'Tag 'Dynamic
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (Map Tag Dynamic) (-> Bool) (:features :js-ffi)
         'escape? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn escape? (raw)
             let
                 event $ host/keyboard-event-host raw
               = |Escape $ event :key
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Bool)
-            :args $ [] 'Dynamic
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn Dynamic (-> Bool) (:features :js-ffi)
         'fade-in! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn fade-in! (raw)
             let
@@ -102,20 +82,14 @@
               set! (.-transform style) "|scale(0.6) translate(-80px,0px)"
               host/set-timeout!
                 fn ()
-                  hint-fn $ {}
-                    :args $ []
-                    :return 'Unit
-                    :features $ #{} :js-ffi
+                  hint-fn $ Fn (-> Unit) (:features :js-ffi)
                   set! (.-opacity style) |1
                   set! (.-transform style) "|scale(1) translate(0,0)"
                   , &unit
                 , 0
               host/set-timeout!
                 fn ()
-                  hint-fn $ {}
-                    :args $ []
-                    :return 'Unit
-                    :features $ #{} :js-ffi
+                  hint-fn $ Fn (-> Unit) (:features :js-ffi)
                   let
                       corner $ .query-selector element |.right-corner
                     when (js-present? corner)
@@ -124,9 +98,7 @@
                 , 240
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] 'Dynamic
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn Dynamic (-> Unit) (:features :js-ffi)
         'fade-out! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn fade-out! (raw)
             let
@@ -137,10 +109,7 @@
               when (js-present? parent) (.append-child! parent clone)
               host/set-timeout!
                 fn ()
-                  hint-fn $ {}
-                    :args $ []
-                    :return 'Unit
-                    :features $ #{} :js-ffi
+                  hint-fn $ Fn (-> Unit) (:features :js-ffi)
                   set! (.-opacity style) |0.01
                   set! (.-transform style) "|scale(0.8) translate(-24px,0)"
                   set! (.-width style) |0
@@ -148,24 +117,17 @@
                 , 10
               host/set-timeout!
                 fn ()
-                  hint-fn $ {}
-                    :args $ []
-                    :return 'Unit
-                    :features $ #{} :js-ffi
+                  hint-fn $ Fn (-> Unit) (:features :js-ffi)
                   .remove! clone
                 , 300
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] 'Dynamic
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn Dynamic (-> Unit) (:features :js-ffi)
         'gpu-supported? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn gpu-supported? ()
             js-present? $ contract/object-field |navigator js/navigator |gpu
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Bool)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Bool) (:features :js-ffi)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.browser
           :require (js-ffi.browser :as host) (js-ffi.contract :as contract)
@@ -174,7 +136,7 @@
         'card-width $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def card-width (browser/card-width)
           :examples $ []
-          :schema $ :: 'Number
+          :schema $ quote Number
         'comp-avatar $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-avatar (on-home)
             decorate-defcomp
@@ -189,8 +151,7 @@
                     div $ {} $ :class-name css-avatar-outline
               , |comp-avatar
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] 'Fn
+          :schema $ quote $ Fn Fn (-> respo.schema/Component)
         'comp-card $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-card (idx key on-open on-close)
             decorate-defcomp
@@ -207,7 +168,7 @@
                         match info
                           (:some page) (:content page)
                           (:none) ([])
-                        :: 'List 'app.schema/Content
+                        quote $ List app.schema/Content
                     div
                       {} (:class-name css-card)
                         :style $ {}
@@ -245,16 +206,13 @@
                           concat
                             [] $ [] :top $ =< nil 48
                             map-indexed directives $ fn (content-index directive)
-                              hint-fn $ {}
-                                :args $ [] 'Number 'app.schema/Content
-                                :return $ :: 'List 'Dynamic
+                              hint-fn $ Fn Number app.schema/Content $ -> (List Dynamic)
                               [] content-index $ render-content directive $ fn (key d!)
                                 on-open (Option :some idx) key d!
                             [] $ [] :bottom $ =< nil 120
               , |comp-card
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] 'Number 'Tag 'Fn 'Fn
+          :schema $ quote $ Fn Number Tag Fn Fn (-> respo.schema/Component)
         'comp-cards $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-cards (router on-open on-close)
             list->
@@ -270,8 +228,7 @@
               -> router $ map-indexed $ fn (idx key)
                 [] key $ comp-card idx key on-open on-close
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] (:: 'List 'Tag) 'Fn 'Fn
+          :schema $ quote $ Fn (List Tag) Fn Fn (-> respo.schema/Component)
         'comp-container $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-container (reel)
             let
@@ -294,8 +251,7 @@
                   comp-cards router push-tab close-tab
                   when dev? $ comp-reel (>> states :reel) (reel-view/view-data reel) ({})
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] $ :: 'reel.typed/State 'app.schema/Action 'app.schema/Store
+          :schema $ quote $ Fn (reel.typed/State app.schema/Action app.schema/Store) (-> respo.schema/Component)
         'comp-empty $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-empty (visible? on-home)
             div
@@ -312,8 +268,7 @@
                   {} (:color |white) (:font-size |20px) (:line-height |28px) (:text-shadow "|1px 1px 4px black")
                 <> "|题叶"
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] 'Bool 'Fn
+          :schema $ quote $ Fn Bool Fn (-> respo.schema/Component)
         'css-avatar $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-avatar
             {}
@@ -339,19 +294,19 @@
               (str "|$0:active ." css-avatar-outline)
                 {} $ :border-width |5px
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'css-avatar-outline $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-avatar-outline
             {} $ |$0 $ {} (:position |absolute) (:width |100%) (:height |100%) (:border-radius |50%)
               :border $ str-spaced "|5px solid" $ hsl 0 0 100 0.9
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'css-bg $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-bg
             {} $ |$0 $ .merge styles/base styles/fullscreen
               {} (:background-image "|url(https://r.tiye.me/tiye/logo/leaf.jpg)") (:background-size |cover) (:background-position |center) (:position |fixed) (:top |0px) (:left |0px) (:width |100%) (:height |100%) (:z-index |-1) (:opacity |0.7) (:filter "|grayscale(0.5)")
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'css-card $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-card
             {} $ |$0 $ .merge styles/column
@@ -359,41 +314,35 @@
                 :box-shadow $ str "|0 0 10px 4px " $ hsl 200 60 90 0.3
                 :background-color $ hsl 0 0 100 0.96
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'css-iframe $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-iframe
             {} $ |$0 $ {} (:width |100%) (:height |100%)
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'css-profile $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-profile
             {} $ |$0 $ .merge styles/center
               {} (:margin |auto) (:position |fixed) (:top |0px) (:left |0px) (:width |100%) (:height |100%) (:opacity |0.01) (:transition-duration |300ms) (:transform "|translate(12vw,0px)") (:-webkit-tap-highlight-color |transparent) (:transition-delay |120ms) (:animation-name |entering) (:animation-duration |800ms)
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'effect-bump $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn effect-bump () (effect-on-mount browser/bump!)
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Effect)
-            :args $ []
+          :schema $ quote $ Fn (-> respo.schema/Effect)
         'effect-fading $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn effect-fading ()
             effect-watch ([]) browser/fade-in! $ Option :some browser/fade-out!
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Effect)
-            :args $ []
+          :schema $ quote $ Fn (-> respo.schema/Effect)
         'event-has-close-all? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn event-has-close-all? (event) (browser/close-all? event)
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Bool)
-            :args $ [] $ :: 'Map 'Tag 'Dynamic
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (Map Tag Dynamic) (-> Bool) (:features :js-ffi)
         'gpu-supported? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn gpu-supported? () (browser/gpu-supported?)
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Bool)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Bool) (:features :js-ffi)
         'render-content $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-content (directive on-open)
             match directive
@@ -410,9 +359,7 @@
                   {} $ :style $ {} (:margin "|8px 0px")
                   , & $ -> links $ map
                     fn (xs)
-                      hint-fn $ {}
-                        :args $ [] 'app.schema/Content
-                        :return 'respo.schema/Element
+                      hint-fn $ Fn app.schema/Content $ -> respo.schema/Element
                       render-content xs on-open
               (:route target title)
                 div
@@ -444,8 +391,7 @@
               _ $ div ({})
                 <> $ str "|Unknown kind: " directive
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Element)
-            :args $ [] 'app.schema/Content 'Fn
+          :schema $ quote $ Fn app.schema/Content Fn (-> respo.schema/Element)
         'style-container $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-container
             {} $ |$0 $ .merge styles/base styles/fullscreen
@@ -455,12 +401,12 @@
                 :font-family $ str |Buda, ui/default-fonts
                 :pointer-events |none
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'style-embed-image $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-embed-image
             {} $ |& $ {} (:max-width |100%)
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.comp.container
           :require
@@ -482,12 +428,12 @@
         'dev? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def dev? true
           :examples $ []
-          :schema $ :: 'Bool
+          :schema $ quote Bool
         'site $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def site
             {} (:storage |tiye-site) (:dev-ui |http://localhost:8100/main.css) (:release-ui |http://cdn.tiye.me/favored-fonts/main.css) (:cdn-url |http://cdn.tiye.me/tiye-site/) (:cdn-folder |tiye.me:cdn/tiye-site) (:title "|题叶@jiyinyiyong") (:icon |http://cdn.tiye.me/logo/tiye.jpg) (:storage-key |tiye-site) (:upload-folder |tiye.me:repo/tiye/tiye.me/)
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ quote Dynamic
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.config
     'app.main $ %{} 'FileEntry
@@ -495,7 +441,7 @@
         '*reel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *reel (typed-reel/new-reel schema/store)
           :examples $ []
-          :schema $ :: 'Ref $ :: 'reel.typed/State 'app.schema/Action 'app.schema/Store
+          :schema $ quote $ Ref (reel.typed/State app.schema/Action app.schema/Store)
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
             when config/dev? $ println |Dispatch: op
@@ -508,9 +454,7 @@
                     expect-number |Date.now $ js/Date.now
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] 'Enum
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn Enum (-> Unit) (:features :js-ffi)
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! ()
             println "|Running mode:" $ if config/dev? |dev |release
@@ -524,16 +468,12 @@
               , &unit
             println "|App started."
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'mount-target $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn mount-target ()
             .unwrap $ host/query-selector |.app
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'js-ffi.browser/DomElementHost)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> js-ffi.browser/DomElementHost) (:features :js-ffi)
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             if (non-nil? build-errors) (tip! |error build-errors)
@@ -543,24 +483,17 @@
                 println "|Code updated."
                 tip! |ok~ |Ok
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Dynamic)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Dynamic) (:features :js-ffi)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
             render!
               respo.ffi.browser/narrow-element $ mount-target
               comp-container @*reel
               fn (op)
-                hint-fn $ {}
-                  :args $ [] 'Dynamic
-                  :return 'Unit
-                  :features $ #{} :js-ffi
+                hint-fn $ Fn Dynamic (-> Unit) (:features :js-ffi)
                 if (enum? op) (dispatch! op) (raise |invalid-render-action)
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require
@@ -586,7 +519,7 @@
               :ssr nil
               :inline-html nil
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ quote Dynamic
         'ssr-processing! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn ssr-processing! ()
             let
@@ -599,9 +532,7 @@
               fs/writeFileSync file $ '.replace content "|<div class=\"app\" ></div>" $ str "|<div class=\"app\" data-ssr=\"true\" >" html-content |</div>
               echo |replaced file
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.page
           :require
@@ -615,44 +546,47 @@
       :defs $ {}
         'Action $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Action
-            :push-page (:: 'Option 'Number) 'Tag
+            :push-page
+              quote $ Option Number
+              , 'Tag
             :close-page 'Bool 'Number
             :reduce-page
-            :states (:: 'List 'Tag) 'Dynamic
+            :states
+              quote $ List Tag
+              , 'Dynamic
             :hydrate-storage 'app.schema/Store
           :examples $ []
-          :schema $ :: 'EnumDef
+          :schema $ quote EnumDef
         'Content $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Content (:title 'String) (:text 'String)
-            :links $ :: 'List 'app.schema/Content
+            :links $ quote $ List app.schema/Content
             :route 'Tag 'String
             :url 'String 'String
             :html 'String
             :xigua 'String
             :image 'String 'String
           :examples $ []
-          :schema $ :: 'EnumDef
+          :schema $ quote EnumDef
         'DispatchOp $ %{} 'CodeEntry (:doc "|Respo 入口事件合同，容纳应用和 Reel 控制事件；代表值不发送。")
           :code $ quote $ def DispatchOp (:: :unhandled)
           :examples $ []
-          :schema $ :: 'Enum
+          :schema $ quote Enum
         'Page $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct Page (:title 'String)
-            :content $ :: 'List 'app.schema/Content
+            :content $ quote $ List app.schema/Content
           :examples $ []
-          :schema $ :: 'StructDef
+          :schema $ quote StructDef
         'Store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct Store
-            :router $ :: 'List 'Tag
-            :states $ :: 'Map 'Tag 'Dynamic
+            :router $ quote $ List Tag
+            :states $ quote $ Map Tag Dynamic
           :examples $ []
-          :schema $ :: 'StructDef
+          :schema $ quote StructDef
         'find-page $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn find-page (key) (get site-map key)
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] 'Tag
-            :return $ :: 'Option 'app.schema/Page
+          :schema $ quote $ Fn Tag
+            -> $ Option app.schema/Page
         'load-as-code $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defmacro load-as-code (file)
             if (string? file)
@@ -661,10 +595,9 @@
                 :: 'Map 'Tag 'app.schema/Page
               raise |Expected-a-literal-file-path
           :examples $ []
-          :schema $ :: 'Macro $ {}
-            :capabilities $ #{} :fs-read
-            :expansion $ :: 'Expr $ :: 'Map 'Tag 'app.schema/Page
-            :required $ [] 'Syntax
+          :schema $ quote $ Macro Syntax
+            -> $ Expr $ Map Tag app.schema/Page
+            :capabilities :fs-read
         'normalize-action $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn normalize-action (op)
             match op
@@ -683,17 +616,16 @@
                 Action :hydrate-storage $ decode-map-as data 'app.schema/Store
               _ $ raise |Unknown-application-action
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'app.schema/Action)
-            :args $ [] 'Enum
+          :schema $ quote $ Fn Enum (-> app.schema/Action)
         'site-map $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def site-map (load-as-code |data/meta.cirru)
           :examples $ []
-          :schema $ :: 'Map 'Tag 'app.schema/Page
+          :schema $ quote $ Map Tag app.schema/Page
         'store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def store
             Store :router ([]) :states $ {}
           :examples $ []
-          :schema $ :: 'app.schema/Store
+          :schema $ quote app.schema/Store
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.schema
     'app.style $ %{} 'FileEntry
@@ -704,37 +636,37 @@
               :font-family "|Hind,Verdana,'Hiragino Sans GB','WenQuanYi Micro Hei','Microsoft Yahei',sans-serif"
               :color "|hsl(0,0%,20%)"
           :examples $ []
-          :schema $ :: 'Map 'Tag 'String
+          :schema $ quote $ Map Tag String
         'center $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def center
             {} (:display |flex) (:flex-direction |column) (:justify-content |center) (:align-items |center)
           :examples $ []
-          :schema $ :: 'Map 'Tag 'String
+          :schema $ quote $ Map Tag String
         'column $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def column
             {} (:display |flex) (:align-items |stretch) (:flex-direction |column)
           :examples $ []
-          :schema $ :: 'Map 'Tag 'String
+          :schema $ quote $ Map Tag String
         'expand $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def expand
             {} (:flex |1) (:overflow |auto)
           :examples $ []
-          :schema $ :: 'Map 'Tag 'String
+          :schema $ quote $ Map Tag String
         'fullscreen $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def fullscreen
             {} (:position |absolute) (:left |0px) (:top |0px) (:width |100%) (:height |100%) (:overflow |auto)
           :examples $ []
-          :schema $ :: 'Map 'Tag 'String
+          :schema $ quote $ Map Tag String
         'row $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def row
             {} (:display |flex) (:align-items |stretch) (:flex-direction |row)
           :examples $ []
-          :schema $ :: 'Map 'Tag 'String
+          :schema $ quote $ Map Tag String
         'row-parted $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def row-parted
             {} (:display |flex) (:align-items |center) (:justify-content |space-between) (:flex-direction |row)
           :examples $ []
-          :schema $ :: 'Map 'Tag 'String
+          :schema $ quote $ Map Tag String
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.style
     'app.updater $ %{} 'FileEntry
@@ -761,8 +693,7 @@
                 assoc store :router $ rest $ :router store
               (:hydrate-storage data) data
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'app.schema/Store)
-            :args $ [] 'app.schema/Store 'app.schema/Action 'String 'Number
+          :schema $ quote $ Fn app.schema/Store app.schema/Action String Number (-> app.schema/Store)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater
           :require

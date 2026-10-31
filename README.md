@@ -6,31 +6,13 @@ http://tiye.me
 
 > Waiting to be refactored.
 
-### 0.32.1 迁移候选
+### 使用者影响：Calcit 0.32.1
 
-维护者需配对使用正式 Calcit / `@calcit/procs` **0.32.1**，重新生成 JS 并刷新页面。
-Respo `0.17.1` 使用已合并 main 候选，JS-FFI 为正式 `0.2.9`；Reel `0.7.0`、
-Feather `0.5.0`、UI `0.9.0` 仍为本地配套候选。正式依赖整图及 PR CI 尚待验证，不能据此部署。
+开发与 CI 配对升级为正式 Calcit / `@calcit/procs` **0.32.1**，需重新严格安装模块并生成 JS、刷新页面。直接依赖已发布 Reel 0.7.0、Feather 0.5.0、UI 0.9.0、Respo 0.17.1、JS-FFI 0.2.9；传递 Router 仍为 0.9.0-alpha.4，不混装旧模块图。此 PR 不合并或生产部署。
 
-官方工具此前转换 22 处类型写法，57 个定义 schema 不变。SSR 复核使用 Respo main 已有的
-`self-closing: Set<String>` 合同，解除旧候选缺少 Set 参数证明的阻塞；无需修改应用 SSR 或放宽门禁。
-全定义、完整 strict、原质量预算、零弃用调用、原 23 页运行回归及构建通过。
-实际浏览器已复验首页、Calcit 卡片导航、逐张 Escape 关闭与刷新，控制台无警告或错误；
-所有修饰键和 HMR 的浏览器路径未重新执行。
-HUD、原内容数据及部署条件和路径保留。七处 action SHA 使用已核对的精确正式 tag，
-npm 包年龄门禁为一小时。构建仍提示单包超过 500 kB，没有隐藏提示或修改阈值。
+官方工具转换 22 处类型写法，57 个定义 schema 不变，保留原内容、卡片路由、修饰键行为、HUD、类型与逐定义质量预算。Respo 正式版本已有 `self-closing: Set<String>` 合同，解除此前 SSR 阻塞，不需要修改应用 SSR 或放宽门禁。此前 `.len` 清理和卡片宽度公式沿用。
 
-### 历史：0.31.0 迁移
-
-本轮升级面向维护者：CLI 与 JS runtime 配对到正式 **0.31.0**。主页内容、卡片路由、关闭修饰键、动画及已有页面报错提示保持不变。
-部署仍只上传前端资源，COS 前缀和原服务器目录不变；升级 PR 不自动部署生产。
-
-依赖采用已发布的 Reel 0.7.0-alpha.4、Feather 0.5.0-alpha.5、UI 0.9.0-alpha.4、
-Respo 0.17.0-alpha.4、js-ffi 0.2.7 和传递 Router 0.9.0-alpha.3；其中 UI 库仍在 alpha 线，不能与旧 0.30.x 图混装。
-默认入口绑定 Enum 事件合同，保留原事件守卫；头像隐藏分支显式返回空样式 Map，由原 CSS 控制显示。
-原 23 页回归、完整 strict、质量预算及 HUD 均保留，不增加验证脚本。
-
-此前 `.len` 清理已完成，本轮沿用原卡片宽度公式。
+已在发布图上重新运行 Caps 严格解析和 Calcit/procs 配对校验。原检查、23 页运行回归和构建保留；此前浏览器验收覆盖首页、Calcit 卡片导航、逐张 Escape 关闭和刷新，未复验所有修饰键或 HMR。七处 Action 使用精确正式 tag，接受 tag 可移动风险。新解析出的 npm 版本需已发布至少 60 分钟，无单包豁免；已有 immutable 锁版本不重新计算年龄。单包超过 500 kB 的原构建提示保留。
 
 [Kuazu]: http://weibo.com/vvvvvhuahua
 [leaf]: http://lxtvvv.tuchong.com/2159629/

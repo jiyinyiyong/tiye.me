@@ -1,6 +1,17 @@
 # Calcit strict-type migration
 
-## Current status — formal Calcit 0.30.1
+## Current candidate — Calcit 0.32.1
+
+The CLI/runtime pair is 0.32.1. Official formatting converted 22 type forms;
+57 current definition schemas remain identical. Full strict, the original
+quality baseline, zero deprecated calls, original 23-page runtime tests and
+build pass with local candidate UI dependencies. Respo main 0.17.1 supplies the
+explicit Set<String> SSR constant contract missing from the earlier candidate;
+JS-FFI 0.2.9 is published. The full published Caps graph and
+PR/Linux CI remain pending. No budget is increased. See the README for exact
+browser acceptance scope and candidate dependency versions.
+
+## Historical status — formal Calcit 0.30.1
 
 The full application passes ordinary `--check-only` and JavaScript codegen
 without `--compat-types`, as well as the original typed updater/decoder check.

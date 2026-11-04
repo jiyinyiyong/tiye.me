@@ -58,14 +58,12 @@
         'close-all? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn close-all? (event)
             let
-                raw $
-                  get event :event
-                  , .unwrap
+                raw $ :event event
               or
                 contract/expect-bool "|close-all metaKey" $ contract/object-field "|close-all event" raw |metaKey
                 contract/expect-bool "|close-all ctrlKey" $ contract/object-field "|close-all event" raw |ctrlKey
           :examples $ []
-          :schema $ quote $ Fn (Map Tag Dynamic) (-> Bool) (:features :js-ffi)
+          :schema $ quote $ Fn respo.schema/RespoEvent (-> Bool) (:features :js-ffi)
         'escape? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn escape? (raw)
             let
@@ -147,11 +145,18 @@
                   div
                     {} (:class-name css-avatar)
                       :on-click $ fn (e d!)
+                        hint-fn $ Fn respo.schema/RespoEvent
+                          Fn Enum $ -> Unit
+                          -> Unit
                         on-home (Option :none) :home d!
                     div $ {} $ :class-name css-avatar-outline
               , |comp-avatar
           :examples $ []
-          :schema $ quote $ Fn Fn (-> respo.schema/Component)
+          :schema $ quote $ Fn
+            Fn (Option Number) Tag
+              Fn Enum $ -> Unit
+              -> Unit
+            -> respo.schema/Component
         'comp-card $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-card (idx key on-open on-close)
             decorate-defcomp
@@ -191,28 +196,39 @@
                               :font-size 20
                               :cursor :pointer
                             fn (e d!)
-                              on-close idx
-                                event-has-close-all? $ decode-map-as e $ :: 'Map 'Tag 'Dynamic
-                                , d!
+                              hint-fn $ Fn respo.schema/RespoEvent
+                                Fn Enum $ -> Unit
+                                -> Unit
+                              on-close idx (event-has-close-all? e) d!
                         <> title-text $ {} (:font-family ui/font-fancy) (:font-size |14px) (:font-weight |300)
                           :color $ hsl 0 0 60
                         span $ {} (:class-name |right-corner) (:inner-text "| ")
-                      =< nil 8
+                      space-y 8
                       if (.none? info)
                         <> $ str "|Unknown data: " key
                         list->
                           {} $ :style $ .merge styles/expand
                             {} (:padding "|0 12px") (:overflow |auto)
                           concat
-                            [] $ [] :top $ =< nil 48
+                            [] $ [] :top $ space-y 48
                             map-indexed directives $ fn (content-index directive)
                               hint-fn $ Fn Number app.schema/Content $ -> (List Dynamic)
                               [] content-index $ render-content directive $ fn (key d!)
+                                hint-fn $ Fn Tag
+                                  Fn Enum $ -> Unit
+                                  -> Unit
                                 on-open (Option :some idx) key d!
-                            [] $ [] :bottom $ =< nil 120
+                            [] $ [] :bottom $ space-y 120
               , |comp-card
           :examples $ []
-          :schema $ quote $ Fn Number Tag Fn Fn (-> respo.schema/Component)
+          :schema $ quote $ Fn Number Tag
+            Fn (Option Number) Tag
+              Fn Enum $ -> Unit
+              -> Unit
+            Fn Number Bool
+              Fn Enum $ -> Unit
+              -> Unit
+            -> respo.schema/Component
         'comp-cards $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-cards (router on-open on-close)
             list->
@@ -228,7 +244,14 @@
               -> router $ map-indexed $ fn (idx key)
                 [] key $ comp-card idx key on-open on-close
           :examples $ []
-          :schema $ quote $ Fn (List Tag) Fn Fn (-> respo.schema/Component)
+          :schema $ quote $ Fn (List Tag)
+            Fn (Option Number) Tag
+              Fn Enum $ -> Unit
+              -> Unit
+            Fn Number Bool
+              Fn Enum $ -> Unit
+              -> Unit
+            -> respo.schema/Component
         'comp-container $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-container (reel)
             let
@@ -236,8 +259,14 @@
                 states $ :states store
                 router $ :router store
                 push-tab $ fn (idx x d!)
+                  hint-fn $ Fn (Option Number) Tag
+                    Fn Enum $ -> Unit
+                    -> Unit
                   d! $ :: :push-page idx x
                 close-tab $ fn (idx all? d!)
+                  hint-fn $ Fn Number Bool
+                    Fn Enum $ -> Unit
+                    -> Unit
                   d! $ :: :close-page all? idx
               div ({})
                 div
@@ -249,7 +278,9 @@
                   {} $ :class-name style-container
                   comp-empty (empty? router) push-tab
                   comp-cards router push-tab close-tab
-                  when dev? $ comp-reel (>> states :reel) (reel-view/view-data reel) ({})
+                  if dev?
+                    Option :some $ comp-reel (>> states :reel) (reel-view/view-data reel) ({})
+                    Option :none
           :examples $ []
           :schema $ quote $ Fn (reel.typed/State app.schema/Action app.schema/Store) (-> respo.schema/Component)
         'comp-empty $ %{} 'CodeEntry (:doc |)
@@ -262,13 +293,17 @@
               div
                 {} $ :style $ assoc styles/center :pointer-events |auto
                 comp-avatar on-home
-              =< nil 32
+              space-y 32
               div
                 {} $ :style $ .merge styles/center
                   {} (:color |white) (:font-size |20px) (:line-height |28px) (:text-shadow "|1px 1px 4px black")
                 <> "|题叶"
           :examples $ []
-          :schema $ quote $ Fn Bool Fn (-> respo.schema/Component)
+          :schema $ quote $ Fn Bool
+            Fn (Option Number) Tag
+              Fn Enum $ -> Unit
+              -> Unit
+            -> respo.schema/Component
         'css-avatar $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-avatar
             {}
@@ -338,7 +373,7 @@
         'event-has-close-all? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn event-has-close-all? (event) (browser/close-all? event)
           :examples $ []
-          :schema $ quote $ Fn (Map Tag Dynamic) (-> Bool) (:features :js-ffi)
+          :schema $ quote $ Fn respo.schema/RespoEvent (-> Bool) (:features :js-ffi)
         'gpu-supported? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn gpu-supported? () (browser/gpu-supported?)
           :examples $ []
@@ -365,14 +400,18 @@
                 div
                   {} (:class-name |hover-scale)
                     :style $ {} (:display |inline-block) (:min-width |40px) (:border "|1px solid #ddf") (:padding "|0 8px") (:margin-right |8px) (:margin-bottom |8px) (:cursor |pointer)
-                    :on-click $ fn (e d!) (on-open target d!)
+                    :on-click $ fn (e d!)
+                      hint-fn $ Fn respo.schema/RespoEvent
+                        Fn Enum $ -> Unit
+                        -> Unit
+                      on-open target d!
                   <> title
               (:url target title)
                 div ({})
                   <> "|🌐" $ {}
                     :color $ hsl 200 80 70
                     :font-size |14px
-                  =< 6 nil
+                  space-x 6
                   a $ {}
                     :style $ {} (:font-size |16px) (:line-height |20px)
                     :href target
@@ -391,7 +430,11 @@
               _ $ div ({})
                 <> $ str "|Unknown kind: " directive
           :examples $ []
-          :schema $ quote $ Fn app.schema/Content Fn (-> respo.schema/Element)
+          :schema $ quote $ Fn app.schema/Content
+            Fn Tag
+              Fn Enum $ -> Unit
+              -> Unit
+            -> respo.schema/Element
         'style-container $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-container
             {} $ |$0 $ .merge styles/base styles/fullscreen
@@ -413,7 +456,7 @@
             respo.util.format :refer $ hsl
             respo-ui.core :as ui
             respo.core :refer $ defcomp >> <> div button textarea span a list-> create-element img effect-on-mount effect-watch decorate-defcomp
-            respo.comp.space :refer $ =<
+            respo.comp.space :refer $ space-x space-y
             reel.comp.reel :refer $ comp-reel
             app.config :refer $ dev?
             feather.core :refer $ comp-icon
@@ -433,7 +476,7 @@
           :code $ quote $ def site
             {} (:storage |tiye-site) (:dev-ui |http://localhost:8100/main.css) (:release-ui |http://cdn.tiye.me/favored-fonts/main.css) (:cdn-url |http://cdn.tiye.me/tiye-site/) (:cdn-folder |tiye.me:cdn/tiye-site) (:title "|题叶@jiyinyiyong") (:icon |http://cdn.tiye.me/logo/tiye.jpg) (:storage-key |tiye-site) (:upload-folder |tiye.me:repo/tiye/tiye.me/)
           :examples $ []
-          :schema $ quote Dynamic
+          :schema $ quote $ Map Tag String
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.config
     'app.main $ %{} 'FileEntry
@@ -442,16 +485,17 @@
           :code $ quote $ defref *reel (typed-reel/new-reel schema/store)
           :examples $ []
           :schema $ quote $ Ref (reel.typed/State app.schema/Action app.schema/Store)
+        'decode-dispatch $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn decode-dispatch (op)
+            match (typed-reel/decode-control op)
+              (:some command) command
+              (:none) (schema/normalize-action op)
+          :examples $ []
+          :schema $ quote $ Fn Enum (-> app.schema/ResolvedAction)
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
             when config/dev? $ println |Dispatch: op
-            let
-                control $ typed-reel/decode-control op
-              reset! *reel $ match control
-                (:some command) (typed-reel/apply-control updater @*reel command)
-                (:none)
-                  typed-reel/record-op updater @*reel (schema/normalize-action op) (generate-id!)
-                    expect-number |Date.now $ js/Date.now
+            reset! *reel $ next-reel $ decode-dispatch op
             , &unit
           :examples $ []
           :schema $ quote $ Fn Enum (-> Unit) (:features :js-ffi)
@@ -474,6 +518,17 @@
             .unwrap $ host/query-selector |.app
           :examples $ []
           :schema $ quote $ Fn (-> js-ffi.browser/DomElementHost) (:features :js-ffi)
+        'next-reel $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn next-reel (action)
+            match action
+              (reel.typed/Control command) (typed-reel/apply-control updater @*reel command)
+              (app.schema/Action op)
+                typed-reel/record-op updater @*reel op (generate-id!)
+                  expect-number |Date.now $ js/Date.now
+          :examples $ []
+          :schema $ quote $ Fn app.schema/ResolvedAction
+            -> $ reel.typed/State app.schema/Action app.schema/Store
+            :features :js-ffi
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             if (non-nil? build-errors) (tip! |error build-errors)
@@ -486,9 +541,9 @@
           :schema $ quote $ Fn (-> Dynamic) (:features :js-ffi)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
-            render!
+            render-with!
               respo.ffi.browser/narrow-element $ mount-target
-              comp-container @*reel
+              fn () $ comp-container @*reel
               fn (op)
                 hint-fn $ Fn Dynamic (-> Unit) (:features :js-ffi)
                 if (enum? op) (dispatch! op) (raise |invalid-render-action)
@@ -497,7 +552,7 @@
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require
-            respo.core :refer $ render! clear-cache! realize-ssr!
+            respo.core :refer $ render-with! clear-cache! realize-ssr!
             app.comp.container :refer $ comp-container
             app.updater :refer $ updater
             app.schema :as schema
@@ -525,9 +580,10 @@
             let
                 reel $ decode-map-as
                   &struct:to-map $ typed-reel/new-reel schema/store
-                  :: 'reel.typed/State 'app.schema/Action 'app.schema/Store
+                  quote $ reel.typed/State app.schema/Action app.schema/Store
                 file |dist/index.html
-                html-content $ make-string $ comp-container reel
+                html-content $ respo.memo/with-memo-frame $ fn ()
+                  make-string $ comp-container reel
                 content $ fs/readFileSync file |utf8
               fs/writeFileSync file $ '.replace content "|<div class=\"app\" ></div>" $ str "|<div class=\"app\" data-ssr=\"true\" >" html-content |</div>
               echo |replaced file
@@ -548,23 +604,23 @@
           :code $ quote $ defenum Action
             :push-page
               quote $ Option Number
-              , 'Tag
-            :close-page 'Bool 'Number
+              , Tag
+            :close-page Bool Number
             :reduce-page
             :states
               quote $ List Tag
-              , 'Dynamic
-            :hydrate-storage 'app.schema/Store
+              , Dynamic
+            :hydrate-storage app.schema/Store
           :examples $ []
           :schema $ quote EnumDef
         'Content $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defenum Content (:title 'String) (:text 'String)
+          :code $ quote $ defenum Content (:title String) (:text String)
             :links $ quote $ List app.schema/Content
-            :route 'Tag 'String
-            :url 'String 'String
-            :html 'String
-            :xigua 'String
-            :image 'String 'String
+            :route Tag String
+            :url String String
+            :html String
+            :xigua String
+            :image String String
           :examples $ []
           :schema $ quote EnumDef
         'DispatchOp $ %{} 'CodeEntry (:doc "|Respo 入口事件合同，容纳应用和 Reel 控制事件；代表值不发送。")
@@ -572,10 +628,14 @@
           :examples $ []
           :schema $ quote Enum
         'Page $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defstruct Page (:title 'String)
+          :code $ quote $ defstruct Page (:title String)
             :content $ quote $ List app.schema/Content
           :examples $ []
           :schema $ quote StructDef
+        'ResolvedAction $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defunion ResolvedAction app.schema/Action reel.typed/Control
+          :examples $ []
+          :schema $ quote UnionDef
         'Store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct Store
             :router $ quote $ List Tag
@@ -592,7 +652,7 @@
             if (string? file)
               quasiquote $ parse-cirru-edn-as
                 ~ $ read-file file
-                :: 'Map 'Tag 'app.schema/Page
+                quote $ Map Tag app.schema/Page
               raise |Expected-a-literal-file-path
           :examples $ []
           :schema $ quote $ Macro Syntax
@@ -603,14 +663,14 @@
             match op
               (:push-page idx page)
                 Action :push-page
-                  decode-map-as idx $ :: 'Option 'Number
+                  decode-map-as idx $ quote $ Option Number
                   decode-map-as page 'Tag
               (:close-page all? idx)
                 Action :close-page (decode-map-as all? 'Bool) (decode-map-as idx 'Number)
               (:reduce-page) (Action :reduce-page)
               (:states cursor state)
                 Action :states
-                  decode-map-as cursor $ :: 'List 'Tag
+                  decode-map-as cursor $ quote $ List Tag
                   , state
               (:hydrate-storage data)
                 Action :hydrate-storage $ decode-map-as data 'app.schema/Store
@@ -678,7 +738,7 @@
               (:states cursor state)
                 assoc store :states $ decode-map-as
                   update-state-tree (:states store) cursor state
-                  :: 'Map 'Tag 'Dynamic
+                  quote $ Map Tag Dynamic
               (:push-page idx page)
                 assoc store :router $ match idx
                   (:none)

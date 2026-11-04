@@ -9,6 +9,8 @@ const { store: initialStore, site_map, normalize_action } = await import("../js-
 const { new_reel, record_op, decode_control, apply_control, refresh } = await import("../js-out/reel.typed.mjs");
 const { updater } = await import("../js-out/app.updater.mjs");
 const { make_string } = await import("../js-out/respo.render.html.mjs");
+const { with_memo_frame } = await import("../js-out/respo.memo.mjs");
+const renderComponent = (build) => with_memo_frame(() => make_string(build()));
 const { event__GT_edn } = await import("../js-out/respo.util.format.mjs");
 const tag = core.to_tag;
 const map = core._$n__$M_;
@@ -32,7 +34,7 @@ let reel = new_reel(initialStore);
 let sequence = 0;
 const route = () => core.listToArray(read(read(reel, "store"), "router")).map((key) => core.to_string(key));
 const dispatch = (...args) => { reel = record_op(updater, reel, normalize_action(op(...args)), `test-${++sequence}`, sequence); };
-const render = () => make_string(comp_container(reel));
+const render = () => renderComponent(() => comp_container(reel));
 assert.match(render(), /题叶/);
 dispatch("push-page", none(), tag("home"));
 assert.deepEqual(route(), ["home"]);
@@ -52,10 +54,10 @@ assert.deepEqual(route(), []);
 
 const pages = core.listToArray(invoke_method("to-list", core.keys(site_map)));
 for (const key of pages) {
-  const html = make_string(comp_card(0, key, noop, noop));
+  const html = renderComponent(() => comp_card(0, key, noop, noop));
   assert(html.length > 0, `Page ${core.to_string(key)} should render`);
 }
-assert.match(make_string(comp_card(0, tag("missing-page"), noop, noop)), /Unknown data/);
+assert.match(renderComponent(() => comp_card(0, tag("missing-page"), noop, noop)), /Unknown data/);
 for (const [nativeEvent, expected] of [
   [{ metaKey: false, ctrlKey: false }, false], [{ metaKey: true, ctrlKey: false }, true], [{ metaKey: false, ctrlKey: true }, true],
 ]) {

@@ -1,15 +1,41 @@
 # Calcit strict-type migration
 
-## Current candidate — Calcit 0.32.1
+## Current candidate — Calcit 0.34.2
 
-The CLI/runtime pair is 0.32.1. Official formatting converted 22 type forms;
-57 current definition schemas remain identical. Full strict, the original
-quality baseline, zero deprecated calls, original 23-page runtime tests and
-build pass with local candidate UI dependencies. Respo main 0.17.1 supplies the
-explicit Set<String> SSR constant contract missing from the earlier candidate;
-JS-FFI 0.2.9 is published. The full published Caps graph and
-PR/Linux CI remain pending. No budget is increased. See the README for exact
-browser acceptance scope and candidate dependency versions.
+The CLI/runtime pair is 0.34.2 with formal Reel 0.9.0, Feather 0.6.0,
+UI 0.14.1, Respo 0.19.2, JS-FFI 0.2.10 and transitive Router 0.11.2.
+The original 57 definitions are retained. Formatting migrates declaration
+names and decoder targets through the official CLI.
+
+The anonymous Enum dispatch boundary remains checked by the existing decoders.
+Their result is the genuine nominal `ResolvedAction = Action | reel.typed/Control`
+union; the internal update function matches both members exhaustively. Content,
+Store, accepted operations and history semantics remain unchanged. Existing
+card callbacks now declare their complete argument and Unit result contracts;
+Respo handlers consume RespoEvent, including the native modifier event.
+The configuration Map contains only strings. No unsafe coercion is introduced.
+
+Five directional spacers replace the old nil dimension API. The developer panel
+uses an Option child. Browser root rendering, SSR and the existing HTML test harness construct and
+render the tree inside the same managed memo frame. The test inputs and assertions
+are unchanged. The real bottom-tip success/error HUD is retained.
+
+Full strict, all 270 definitions, focused updater/decoder check, the original
+23-page generated-JS regression and build pass locally. The unchanged legacy
+quality baseline passes: schemaDynamic 1, unresolved 3, typeNone 0,
+typeNotFull 5, codeNil 2, unsafeCoerce/deprecatedCalls/codeDynamic 0.
+Before source changes, the same new toolchain/dependency graph reported
+schemaDynamic 2, unresolved 9 and codeNil 7. This is not a zero-debt claim.
+The original quality command remains supported in 0.34.2 despite its deprecation;
+no baseline entry or CI gate is waived. The two remaining nil values and broad
+metadata map are in the unchanged legacy SSR `base-info` definition.
+
+Independent Chrome acceptance covers home and Calcit navigation, Escape removing
+the first card, normal/Meta close, actual Reel control dispatch and refresh.
+The original card layout transition must finish before clicking a moving button.
+All checks use the original data; no clipboard, credentials or stored user data
+are touched. PR CI/COS preview is verified separately; no production deployment
+is authorized by this migration.
 
 ## Historical status — formal Calcit 0.30.1
 

@@ -6,13 +6,15 @@ http://tiye.me
 
 > Waiting to be refactored.
 
-### 使用者影响：Calcit 0.32.1
+### 使用者影响：Calcit 0.34.2
 
-开发与 CI 配对升级为正式 Calcit / `@calcit/procs` **0.32.1**，需重新严格安装模块并生成 JS、刷新页面。直接依赖已发布 Reel 0.7.0、Feather 0.5.0、UI 0.9.0、Respo 0.17.1、JS-FFI 0.2.9；传递 Router 仍为 0.9.0-alpha.4，不混装旧模块图。此 PR 不合并或生产部署。
+开发与 CI 配对升级为正式 Calcit / `@calcit/procs` **0.34.2**，需重新严格安装模块并生成 JS、刷新页面。正式依赖为 Reel 0.9.0、Feather 0.6.0、UI 0.14.1、Respo 0.19.2、JS-FFI 0.2.10，传递 Router 0.11.2，不混装旧模块图。此迁移不合并或生产部署。
 
-官方工具转换 22 处类型写法，57 个定义 schema 不变，保留原内容、卡片路由、修饰键行为、HUD、类型与逐定义质量预算。Respo 正式版本已有 `self-closing: Set<String>` 合同，解除此前 SSR 阻塞，不需要修改应用 SSR 或放宽门禁。此前 `.len` 清理和卡片宽度公式沿用。
+原内容、卡片路由、修饰键关闭、Escape 删除首张卡片、HUD 和部署路径保留。回调改用真实 RespoEvent，五处单方向间距使用 space-x / space-y，开发面板的可选子节点使用 Option；浏览器、SSR 和原 HTML 回归的组件构建与渲染位于同一个 managed memo frame。
 
-已在发布图上重新运行 Caps 严格解析和 Calcit/procs 配对校验。原检查、23 页运行回归和构建保留；此前浏览器验收覆盖首页、Calcit 卡片导航、逐张 Escape 关闭和刷新，未复验所有修饰键或 HMR。七处 Action 使用精确正式 tag，接受 tag 可移动风险。新解析出的 npm 版本需已发布至少 60 分钟，无单包豁免；已有 immutable 锁版本不重新计算年龄。单包超过 500 kB 的原构建提示保留。
+派发入口仍检查匿名 Enum；通过原 decoder 后，`ResolvedAction = Action | reel.typed/Control` 明确区分业务操作和历史控制，由穷尽 match 更新 Reel。卡片回调有具体参数/返回合同，配置为真实 `Map<Tag,String>`。原 57 个定义均保留，新增 union 和两个内部派发函数。原质量基线不变，unsafe 仍为 0；同一 0.34.2 正式依赖图下，schemaDynamic 2→1、unresolved 9→3、codeNil 7→2。
+
+本地完整 strict、270 个定义、原 23 页运行回归、严格依赖/工具链配对、immutable 安装和构建通过。独立 Chrome 验证首页、Calcit 卡片导航、Escape、实际 Meta 关闭、Reel Reset 及刷新后导航，无页面异常；未复验所有页面的外链或 HMR。单包超过 500 kB 的原构建提示保留。原工作流仅通过 action 内置 verify 上传独立 PR 前端预览；不修改生产路径。
 
 [Kuazu]: http://weibo.com/vvvvvhuahua
 [leaf]: http://lxtvvv.tuchong.com/2159629/
@@ -39,8 +41,8 @@ Workflow https://github.com/mvc-works/calcit-workflow
 
 ### Local development
 
-Use Node.js 24 (see `.node-version`), formal Calcit **0.32.1**, matching
-`@calcit/procs` **0.32.1**, and Yarn 4.18.0.
+Use Node.js 24 (see `.node-version`), formal Calcit **0.34.2**, matching
+`@calcit/procs` **0.34.2**, and Yarn 4.18.0.
 
 ```bash
 caps --strict --ci

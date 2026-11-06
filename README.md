@@ -6,7 +6,11 @@ http://tiye.me
 
 > Waiting to be refactored.
 
-### 使用者影响：Calcit 0.34.2
+### 使用者影响
+
+开发使用正式 Calcit 与 `@calcit/procs` **0.35.1**。升级后重新安装依赖并构建。首页、卡片导航与页面 HUD 保持原用法。独立 SSR 辅助函数可以在 Node 中处理构建后的 HTML，服务器渲染以 480 像素作为卡片初始宽度，浏览器继续按视口计算。
+
+### 0.34.2 迁移记录
 
 开发与 CI 配对升级为正式 Calcit / `@calcit/procs` **0.34.2**，需重新严格安装模块并生成 JS、刷新页面。正式依赖为 Reel 0.9.0、Feather 0.6.0、UI 0.14.1、Respo 0.19.2、JS-FFI 0.2.10，传递 Router 0.11.2，不混装旧模块图。此迁移不合并或生产部署。
 
@@ -41,7 +45,7 @@ Workflow https://github.com/mvc-works/calcit-workflow
 
 ### Local development
 
-Use Node.js 24 (see `.node-version`), formal Calcit **0.34.2**, matching
+Use Node.js 24 (see `.node-version`), formal Calcit **0.35.1**, matching
 `@calcit/procs` **0.34.2**, and Yarn 4.18.0.
 
 ```bash

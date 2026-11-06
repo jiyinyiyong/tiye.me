@@ -12,20 +12,19 @@
       :defs $ {}
         'Element $ %{} 'CodeEntry (:doc |)
           :code $ quote $ deftrait Element (:style 'app.browser/Style)
-            :parent-element $ quote $ JsNullish app.browser/Element
-            .clone-node $ quote $ Fn app.browser/Element Bool (-> app.browser/Element)
-            .append-child! $ quote $ Fn app.browser/Element app.browser/Element (-> app.browser/Element)
-            .query-selector $ quote $ Fn app.browser/Element String
-              -> $ JsNullish app.browser/Element
-            .scroll-into-view $ quote $ Fn app.browser/Element JsObject (-> Unit)
-            .remove! $ quote $ Fn app.browser/Element (-> Unit)
+            :parent-element $ JsNullish app.browser/Element
+            .clone-node $ Fn app.browser/Element Bool $ -> app.browser/Element
+            .append-child! $ Fn app.browser/Element app.browser/Element $ -> app.browser/Element
+            .query-selector $ Fn app.browser/Element String $ -> (JsNullish app.browser/Element)
+            .scroll-into-view $ Fn app.browser/Element JsObject $ -> Unit
+            .remove! $ Fn app.browser/Element $ -> Unit
           :examples $ []
           :ffi $ {} (:backend :js) (:kind :external-object)
             :names $ {} (:append-child! |appendChild) (:clone-node |cloneNode) (:parent-element |parentElement) (:query-selector |querySelector) (:remove! |remove) (:scroll-into-view |scrollIntoView)
           :schema $ quote Trait
         'Navigator $ %{} 'CodeEntry (:doc |)
           :code $ quote $ deftrait Navigator
-            :gpu $ quote $ JsNullish JsObject
+            :gpu $ JsNullish JsObject
           :examples $ []
           :ffi $ {} (:backend :js) (:kind :external-object)
           :schema $ quote Trait
@@ -52,7 +51,9 @@
           :schema $ quote $ Fn Dynamic (-> Unit) (:features :js-ffi)
         'card-width $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn card-width ()
-            &min 480 $ - (host/viewport-width) 24
+            if (exists? js/window)
+              &min 480 $ - (host/viewport-width) 24
+              , 480
           :examples $ []
           :schema $ quote $ Fn (-> Number) (:features :js-ffi)
         'close-all? $ %{} 'CodeEntry (:doc |)
@@ -146,7 +147,7 @@
                     {} (:class-name css-avatar)
                       :on-click $ fn (e d!)
                         hint-fn $ Fn respo.schema/RespoEvent
-                          Fn Enum $ -> Unit
+                          Fn AnyEnum $ -> Unit
                           -> Unit
                         on-home (Option :none) :home d!
                     div $ {} $ :class-name css-avatar-outline
@@ -154,7 +155,7 @@
           :examples $ []
           :schema $ quote $ Fn
             Fn (Option Number) Tag
-              Fn Enum $ -> Unit
+              Fn AnyEnum $ -> Unit
               -> Unit
             -> respo.schema/Component
         'comp-card $ %{} 'CodeEntry (:doc |)
@@ -173,7 +174,7 @@
                         match info
                           (:some page) (:content page)
                           (:none) ([])
-                        quote $ List app.schema/Content
+                        List app.schema/Content
                     div
                       {} (:class-name css-card)
                         :style $ {}
@@ -197,7 +198,7 @@
                               :cursor :pointer
                             fn (e d!)
                               hint-fn $ Fn respo.schema/RespoEvent
-                                Fn Enum $ -> Unit
+                                Fn AnyEnum $ -> Unit
                                 -> Unit
                               on-close idx (event-has-close-all? e) d!
                         <> title-text $ {} (:font-family ui/font-fancy) (:font-size |14px) (:font-weight |300)
@@ -215,7 +216,7 @@
                               hint-fn $ Fn Number app.schema/Content $ -> (List Dynamic)
                               [] content-index $ render-content directive $ fn (key d!)
                                 hint-fn $ Fn Tag
-                                  Fn Enum $ -> Unit
+                                  Fn AnyEnum $ -> Unit
                                   -> Unit
                                 on-open (Option :some idx) key d!
                             [] $ [] :bottom $ space-y 120
@@ -223,10 +224,10 @@
           :examples $ []
           :schema $ quote $ Fn Number Tag
             Fn (Option Number) Tag
-              Fn Enum $ -> Unit
+              Fn AnyEnum $ -> Unit
               -> Unit
             Fn Number Bool
-              Fn Enum $ -> Unit
+              Fn AnyEnum $ -> Unit
               -> Unit
             -> respo.schema/Component
         'comp-cards $ %{} 'CodeEntry (:doc |)
@@ -246,10 +247,10 @@
           :examples $ []
           :schema $ quote $ Fn (List Tag)
             Fn (Option Number) Tag
-              Fn Enum $ -> Unit
+              Fn AnyEnum $ -> Unit
               -> Unit
             Fn Number Bool
-              Fn Enum $ -> Unit
+              Fn AnyEnum $ -> Unit
               -> Unit
             -> respo.schema/Component
         'comp-container $ %{} 'CodeEntry (:doc |)
@@ -260,12 +261,12 @@
                 router $ :router store
                 push-tab $ fn (idx x d!)
                   hint-fn $ Fn (Option Number) Tag
-                    Fn Enum $ -> Unit
+                    Fn AnyEnum $ -> Unit
                     -> Unit
                   d! $ :: :push-page idx x
                 close-tab $ fn (idx all? d!)
                   hint-fn $ Fn Number Bool
-                    Fn Enum $ -> Unit
+                    Fn AnyEnum $ -> Unit
                     -> Unit
                   d! $ :: :close-page all? idx
               div ({})
@@ -301,7 +302,7 @@
           :examples $ []
           :schema $ quote $ Fn Bool
             Fn (Option Number) Tag
-              Fn Enum $ -> Unit
+              Fn AnyEnum $ -> Unit
               -> Unit
             -> respo.schema/Component
         'css-avatar $ %{} 'CodeEntry (:doc |)
@@ -402,7 +403,7 @@
                     :style $ {} (:display |inline-block) (:min-width |40px) (:border "|1px solid #ddf") (:padding "|0 8px") (:margin-right |8px) (:margin-bottom |8px) (:cursor |pointer)
                     :on-click $ fn (e d!)
                       hint-fn $ Fn respo.schema/RespoEvent
-                        Fn Enum $ -> Unit
+                        Fn AnyEnum $ -> Unit
                         -> Unit
                       on-open target d!
                   <> title
@@ -432,7 +433,7 @@
           :examples $ []
           :schema $ quote $ Fn app.schema/Content
             Fn Tag
-              Fn Enum $ -> Unit
+              Fn AnyEnum $ -> Unit
               -> Unit
             -> respo.schema/Element
         'style-container $ %{} 'CodeEntry (:doc |)
@@ -491,14 +492,14 @@
               (:some command) command
               (:none) (schema/normalize-action op)
           :examples $ []
-          :schema $ quote $ Fn Enum (-> app.schema/ResolvedAction)
+          :schema $ quote $ Fn AnyEnum (-> app.schema/ResolvedAction)
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
             when config/dev? $ println |Dispatch: op
             reset! *reel $ next-reel $ decode-dispatch op
             , &unit
           :examples $ []
-          :schema $ quote $ Fn Enum (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn AnyEnum (-> Unit) (:features :js-ffi)
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! ()
             println "|Running mode:" $ if config/dev? |dev |release
@@ -580,12 +581,12 @@
             let
                 reel $ decode-map-as
                   &struct:to-map $ typed-reel/new-reel schema/store
-                  quote $ reel.typed/State app.schema/Action app.schema/Store
+                  reel.typed/State app.schema/Action app.schema/Store
                 file |dist/index.html
                 html-content $ respo.memo/with-memo-frame $ fn ()
                   make-string $ comp-container reel
-                content $ fs/readFileSync file |utf8
-              fs/writeFileSync file $ '.replace content "|<div class=\"app\" ></div>" $ str "|<div class=\"app\" data-ssr=\"true\" >" html-content |</div>
+                content $ decode-map-as (fs/readFileSync file |utf8) String
+              fs/writeFileSync file $ &str:replace content "|<div class=\"app\"></div>" $ str "|<div class=\"app\" data-ssr=\"true\" >" html-content |</div>
               echo |replaced file
           :examples $ []
           :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
@@ -602,20 +603,16 @@
       :defs $ {}
         'Action $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Action
-            :push-page
-              quote $ Option Number
-              , Tag
+            :push-page (Option Number) Tag
             :close-page Bool Number
             :reduce-page
-            :states
-              quote $ List Tag
-              , Dynamic
+            :states (List Tag) Dynamic
             :hydrate-storage app.schema/Store
           :examples $ []
           :schema $ quote EnumDef
         'Content $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Content (:title String) (:text String)
-            :links $ quote $ List app.schema/Content
+            :links $ List app.schema/Content
             :route Tag String
             :url String String
             :html String
@@ -626,10 +623,10 @@
         'DispatchOp $ %{} 'CodeEntry (:doc "|Respo 入口事件合同，容纳应用和 Reel 控制事件；代表值不发送。")
           :code $ quote $ def DispatchOp (:: :unhandled)
           :examples $ []
-          :schema $ quote Enum
+          :schema $ quote AnyEnum
         'Page $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct Page (:title String)
-            :content $ quote $ List app.schema/Content
+            :content $ List app.schema/Content
           :examples $ []
           :schema $ quote StructDef
         'ResolvedAction $ %{} 'CodeEntry (:doc |)
@@ -638,8 +635,8 @@
           :schema $ quote UnionDef
         'Store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct Store
-            :router $ quote $ List Tag
-            :states $ quote $ Map Tag Dynamic
+            :router $ List Tag
+            :states $ Map Tag Dynamic
           :examples $ []
           :schema $ quote StructDef
         'find-page $ %{} 'CodeEntry (:doc |)
@@ -652,7 +649,7 @@
             if (string? file)
               quasiquote $ parse-cirru-edn-as
                 ~ $ read-file file
-                quote $ Map Tag app.schema/Page
+                Map Tag app.schema/Page
               raise |Expected-a-literal-file-path
           :examples $ []
           :schema $ quote $ Macro Syntax
@@ -663,20 +660,20 @@
             match op
               (:push-page idx page)
                 Action :push-page
-                  decode-map-as idx $ quote $ Option Number
+                  decode-map-as idx $ Option Number
                   decode-map-as page 'Tag
               (:close-page all? idx)
                 Action :close-page (decode-map-as all? 'Bool) (decode-map-as idx 'Number)
               (:reduce-page) (Action :reduce-page)
               (:states cursor state)
                 Action :states
-                  decode-map-as cursor $ quote $ List Tag
+                  decode-map-as cursor $ List Tag
                   , state
               (:hydrate-storage data)
                 Action :hydrate-storage $ decode-map-as data 'app.schema/Store
               _ $ raise |Unknown-application-action
           :examples $ []
-          :schema $ quote $ Fn Enum (-> app.schema/Action)
+          :schema $ quote $ Fn AnyEnum (-> app.schema/Action)
         'site-map $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def site-map (load-as-code |data/meta.cirru)
           :examples $ []
@@ -738,7 +735,7 @@
               (:states cursor state)
                 assoc store :states $ decode-map-as
                   update-state-tree (:states store) cursor state
-                  quote $ Map Tag Dynamic
+                  Map Tag Dynamic
               (:push-page idx page)
                 assoc store :router $ match idx
                   (:none)

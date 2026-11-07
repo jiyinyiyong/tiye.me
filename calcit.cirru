@@ -6,7 +6,7 @@
     {} (:description |) (:init-fn 'app.main/main!) (:mode :js) (:reload-fn 'app.main/reload!) (:target :browser)
       :feature-policy $ {}
       :modules $ [] |respo.calcit/ |respo-ui.calcit/ |reel.calcit/ |respo-feather.calcit/ |js-ffi/
-      :type-slots $ {} $ :dispatch-op |app.schema/DispatchOp
+      :type-slots $ {} $ :dispatch-op 'app.schema/Action
   :files $ {}
     'app.browser $ %{} 'FileEntry
       :defs $ {}
@@ -147,7 +147,7 @@
                     {} (:class-name css-avatar)
                       :on-click $ fn (e d!)
                         hint-fn $ Fn respo.schema/RespoEvent
-                          Fn AnyEnum $ -> Unit
+                          Fn app.schema/Action $ -> Unit
                           -> Unit
                         on-home (Option :none) :home d!
                     div $ {} $ :class-name css-avatar-outline
@@ -155,7 +155,7 @@
           :examples $ []
           :schema $ quote $ Fn
             Fn (Option Number) Tag
-              Fn AnyEnum $ -> Unit
+              Fn app.schema/Action $ -> Unit
               -> Unit
             -> respo.schema/Component
         'comp-card $ %{} 'CodeEntry (:doc |)
@@ -198,7 +198,7 @@
                               :cursor :pointer
                             fn (e d!)
                               hint-fn $ Fn respo.schema/RespoEvent
-                                Fn AnyEnum $ -> Unit
+                                Fn app.schema/Action $ -> Unit
                                 -> Unit
                               on-close idx (event-has-close-all? e) d!
                         <> title-text $ {} (:font-family ui/font-fancy) (:font-size |14px) (:font-weight |300)
@@ -216,7 +216,7 @@
                               hint-fn $ Fn Number app.schema/Content $ -> (List Dynamic)
                               [] content-index $ render-content directive $ fn (key d!)
                                 hint-fn $ Fn Tag
-                                  Fn AnyEnum $ -> Unit
+                                  Fn app.schema/Action $ -> Unit
                                   -> Unit
                                 on-open (Option :some idx) key d!
                             [] $ [] :bottom $ space-y 120
@@ -224,10 +224,10 @@
           :examples $ []
           :schema $ quote $ Fn Number Tag
             Fn (Option Number) Tag
-              Fn AnyEnum $ -> Unit
+              Fn app.schema/Action $ -> Unit
               -> Unit
             Fn Number Bool
-              Fn AnyEnum $ -> Unit
+              Fn app.schema/Action $ -> Unit
               -> Unit
             -> respo.schema/Component
         'comp-cards $ %{} 'CodeEntry (:doc |)
@@ -247,10 +247,10 @@
           :examples $ []
           :schema $ quote $ Fn (List Tag)
             Fn (Option Number) Tag
-              Fn AnyEnum $ -> Unit
+              Fn app.schema/Action $ -> Unit
               -> Unit
             Fn Number Bool
-              Fn AnyEnum $ -> Unit
+              Fn app.schema/Action $ -> Unit
               -> Unit
             -> respo.schema/Component
         'comp-container $ %{} 'CodeEntry (:doc |)
@@ -261,14 +261,14 @@
                 router $ :router store
                 push-tab $ fn (idx x d!)
                   hint-fn $ Fn (Option Number) Tag
-                    Fn AnyEnum $ -> Unit
+                    Fn app.schema/Action $ -> Unit
                     -> Unit
-                  d! $ :: :push-page idx x
+                  d! $ app.schema/Action :push-page idx x
                 close-tab $ fn (idx all? d!)
                   hint-fn $ Fn Number Bool
-                    Fn AnyEnum $ -> Unit
+                    Fn app.schema/Action $ -> Unit
                     -> Unit
-                  d! $ :: :close-page all? idx
+                  d! $ app.schema/Action :close-page all? idx
               div ({})
                 div
                   {} $ :class-name css-bg
@@ -302,7 +302,7 @@
           :examples $ []
           :schema $ quote $ Fn Bool
             Fn (Option Number) Tag
-              Fn AnyEnum $ -> Unit
+              Fn app.schema/Action $ -> Unit
               -> Unit
             -> respo.schema/Component
         'css-avatar $ %{} 'CodeEntry (:doc |)
@@ -403,7 +403,7 @@
                     :style $ {} (:display |inline-block) (:min-width |40px) (:border "|1px solid #ddf") (:padding "|0 8px") (:margin-right |8px) (:margin-bottom |8px) (:cursor |pointer)
                     :on-click $ fn (e d!)
                       hint-fn $ Fn respo.schema/RespoEvent
-                        Fn AnyEnum $ -> Unit
+                        Fn app.schema/Action $ -> Unit
                         -> Unit
                       on-open target d!
                   <> title
@@ -433,7 +433,7 @@
           :examples $ []
           :schema $ quote $ Fn app.schema/Content
             Fn Tag
-              Fn AnyEnum $ -> Unit
+              Fn app.schema/Action $ -> Unit
               -> Unit
             -> respo.schema/Element
         'style-container $ %{} 'CodeEntry (:doc |)
@@ -492,24 +492,26 @@
               (:some command) command
               (:none) (schema/normalize-action op)
           :examples $ []
-          :schema $ quote $ Fn AnyEnum (-> app.schema/ResolvedAction)
+          :schema $ quote $ Fn app.schema/Action (-> app.schema/ResolvedAction)
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
             when config/dev? $ println |Dispatch: op
             reset! *reel $ next-reel $ decode-dispatch op
             , &unit
           :examples $ []
-          :schema $ quote $ Fn AnyEnum (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn app.schema/Action (-> Unit) (:features :js-ffi)
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! ()
             println "|Running mode:" $ if config/dev? |dev |release
             if config/dev? $ load-console-formatter!
             render-app!
             add-watch! *reel :changes $ fn (r p) (render-app!)
-            listen-devtools! |k dispatch!
+            listen-devtools-toggle! |k $ fn ()
+              reset! *reel $ next-reel $ reel.typed/Control :toggle
+              , &unit
             host/add-event-listener! |keydown $ fn (event)
               when (browser/escape? event)
-                dispatch! $ :: :reduce-page
+                dispatch! $ app.schema/Action :reduce-page
               , &unit
             println "|App started."
           :examples $ []
@@ -545,9 +547,7 @@
             render-with!
               respo.ffi.browser/narrow-element $ mount-target
               fn () $ comp-container @*reel
-              fn (op)
-                hint-fn $ Fn Dynamic (-> Unit) (:features :js-ffi)
-                if (enum? op) (dispatch! op) (raise |invalid-render-action)
+              , dispatch!
           :examples $ []
           :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
       :ns $ %{} 'NsEntry (:doc |)
@@ -557,7 +557,7 @@
             app.comp.container :refer $ comp-container
             app.updater :refer $ updater
             app.schema :as schema
-            reel.util :refer $ listen-devtools!
+            reel.util :refer $ listen-devtools-toggle!
             app.config :as config
             |bottom-tip :default tip!
             |./calcit.build-errors :default build-errors
@@ -620,10 +620,6 @@
             :image String String
           :examples $ []
           :schema $ quote EnumDef
-        'DispatchOp $ %{} 'CodeEntry (:doc "|Respo 入口事件合同，容纳应用和 Reel 控制事件；代表值不发送。")
-          :code $ quote $ def DispatchOp (:: :unhandled)
-          :examples $ []
-          :schema $ quote AnyEnum
         'Page $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct Page (:title String)
             :content $ List app.schema/Content

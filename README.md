@@ -8,7 +8,7 @@ http://tiye.me
 
 ### 使用者影响
 
-开发使用正式 Calcit 与 `@calcit/procs` **0.35.1**。升级后重新安装依赖并构建。首页、卡片导航与页面 HUD 保持原用法。独立 SSR 辅助函数可以在 Node 中处理构建后的 HTML，服务器渲染以 480 像素作为卡片初始宽度，浏览器继续按视口计算。
+开发使用正式 Calcit 与 `@calcit/procs` **0.37.0**。升级后重新安装依赖并构建。首页、卡片导航与页面 HUD 保持原用法。界面使用具名 `Action`，应用操作和 Reel 控制继续通过 `ResolvedAction` union 进入各自的分支。独立 SSR 辅助函数可以在 Node 中处理构建后的 HTML，服务器渲染以 480 像素作为卡片初始宽度，浏览器继续按视口计算。
 
 ### 0.34.2 迁移记录
 
@@ -45,7 +45,7 @@ Workflow https://github.com/mvc-works/calcit-workflow
 
 ### Local development
 
-Use Node.js 24 (see `.node-version`), formal Calcit **0.35.1**, matching
+Use Node.js 24 (see `.node-version`), formal Calcit **0.37.0**, matching
 `@calcit/procs` **0.34.2**, and Yarn 4.18.0.
 
 ```bash

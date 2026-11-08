@@ -1,14 +1,14 @@
 {
   "packageManager": "yarn@4.18.0",
   "dependencies": {
-    "@calcit/procs": "0.35.1",
+    "@calcit/procs": "0.37.0",
     "feather-icons": "^4.29.2"
   },
   "devDependencies": {
     "bottom-tip": "^0.1.5",
     "vite": "8.3.3"
   },
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "scripts": {
     "dev": "vite",

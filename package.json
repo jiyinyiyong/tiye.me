@@ -1,7 +1,7 @@
 {
   "packageManager": "yarn@4.18.0",
   "dependencies": {
-    "@calcit/procs": "0.37.0",
+    "@calcit/procs": "0.38.0",
     "feather-icons": "^4.29.2"
   },
   "devDependencies": {
@@ -16,6 +16,6 @@
     "check": "calcit calcit.cirru --check-only --all-defs && calcit calcit.cirru fix --workflow strict --verify --format json | jq -e '.data.workflow.status == \"passed\" and .diagnostics == []' && calcit calcit.cirru analyze weak-types --only deprecated-call --summary-only --format json | jq -e '.data.summary.calls == 0' && calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru",
     "test": "node scripts/check-runtime-smoke.mjs",
     "build": "yarn compile && yarn test && vite build",
-    "check:typed": "calcit calcit.cirru --check-only --init-fn app.updater/updater --reload-fn app.schema/normalize-action"
+    "check:typed": "calcit calcit.cirru --check-only --init-fn app.updater/updater --reload-fn app.main/dispatch!"
   }
 }

@@ -48,7 +48,7 @@
                 , 0
             , &unit
           :examples $ []
-          :schema $ quote $ Fn Dynamic (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn respo.dom/DomElement (-> Unit) (:features :js-ffi)
         'card-width $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn card-width ()
             if (exists? js/window)
@@ -71,7 +71,7 @@
                 event $ host/keyboard-event-host raw
               = |Escape $ event :key
           :examples $ []
-          :schema $ quote $ Fn Dynamic (-> Bool) (:features :js-ffi)
+          :schema $ quote $ Fn js-ffi.browser/EventHost (-> Bool) (:features :js-ffi)
         'fade-in! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn fade-in! (raw)
             let
@@ -97,7 +97,7 @@
                 , 240
             , &unit
           :examples $ []
-          :schema $ quote $ Fn Dynamic (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn respo.dom/DomElement (-> Unit) (:features :js-ffi)
         'fade-out! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn fade-out! (raw)
             let
@@ -121,7 +121,7 @@
                 , 300
             , &unit
           :examples $ []
-          :schema $ quote $ Fn Dynamic (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn respo.dom/DomElement (-> Unit) (:features :js-ffi)
         'gpu-supported? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn gpu-supported? ()
             js-present? $ contract/object-field |navigator js/navigator |gpu
@@ -254,7 +254,7 @@
               -> Unit
             -> respo.schema/Component
         'comp-container $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defcomp comp-container (reel)
+          :code $ quote $ defcomp comp-container (reel on-control!)
             let
                 store $ :store reel
                 states $ :states store
@@ -280,10 +280,14 @@
                   comp-empty (empty? router) push-tab
                   comp-cards router push-tab close-tab
                   if dev?
-                    Option :some $ comp-reel (>> states :reel) (reel-view/view-data reel) ({})
+                    Option :some $ comp-typed-reel (>> states :reel) reel
+                      {} $ :pointer-events |auto
+                      , on-control!
                     Option :none
           :examples $ []
-          :schema $ quote $ Fn (reel.typed/State app.schema/Action app.schema/Store) (-> respo.schema/Component)
+          :schema $ quote $ Fn (reel.typed/State app.schema/Action app.schema/Store)
+            Fn reel.typed/Control $ -> Unit
+            -> respo.schema/Component
         'comp-empty $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-empty (visible? on-home)
             div
@@ -458,12 +462,11 @@
             respo-ui.core :as ui
             respo.core :refer $ defcomp >> <> div button textarea span a list-> create-element img effect-on-mount effect-watch decorate-defcomp
             respo.comp.space :refer $ space-x space-y
-            reel.comp.reel :refer $ comp-reel
+            reel.comp.reel :refer $ comp-typed-reel
             app.config :refer $ dev?
             feather.core :refer $ comp-icon
             respo.css :refer $ defstyle
             app.schema :refer $ site-map find-page
-            reel.typed-compat :as reel-view
             app.style :as styles
             app.browser :as browser
             respo.schema :refer $ Component
@@ -486,17 +489,10 @@
           :code $ quote $ defref *reel (typed-reel/new-reel schema/store)
           :examples $ []
           :schema $ quote $ Ref (reel.typed/State app.schema/Action app.schema/Store)
-        'decode-dispatch $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn decode-dispatch (op)
-            match (typed-reel/decode-control op)
-              (:some command) command
-              (:none) (schema/normalize-action op)
-          :examples $ []
-          :schema $ quote $ Fn app.schema/Action (-> app.schema/ResolvedAction)
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
             when config/dev? $ println |Dispatch: op
-            reset! *reel $ next-reel $ decode-dispatch op
+            reset! *reel $ next-reel op
             , &unit
           :examples $ []
           :schema $ quote $ Fn app.schema/Action (-> Unit) (:features :js-ffi)
@@ -506,9 +502,7 @@
             if config/dev? $ load-console-formatter!
             render-app!
             add-watch! *reel :changes $ fn (r p) (render-app!)
-            listen-devtools-toggle! |k $ fn ()
-              reset! *reel $ next-reel $ reel.typed/Control :toggle
-              , &unit
+            listen-devtools! |k on-control!
             host/add-event-listener! |keydown $ fn (event)
               when (browser/escape? event)
                 dispatch! $ app.schema/Action :reduce-page
@@ -532,6 +526,12 @@
           :schema $ quote $ Fn app.schema/ResolvedAction
             -> $ reel.typed/State app.schema/Action app.schema/Store
             :features :js-ffi
+        'on-control! $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn on-control! (control)
+            reset! *reel $ next-reel control
+            , &unit
+          :examples $ []
+          :schema $ quote $ Fn reel.typed/Control (-> Unit) (:features :js-ffi)
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             if (non-nil? build-errors) (tip! |error build-errors)
@@ -540,13 +540,14 @@
                 reset! *reel $ typed-reel/refresh updater @*reel schema/store
                 println "|Code updated."
                 tip! |ok~ |Ok
+            , &unit
           :examples $ []
-          :schema $ quote $ Fn (-> Dynamic) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
             render-with!
               respo.ffi.browser/narrow-element $ mount-target
-              fn () $ comp-container @*reel
+              fn () $ comp-container @*reel on-control!
               , dispatch!
           :examples $ []
           :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
@@ -557,7 +558,7 @@
             app.comp.container :refer $ comp-container
             app.updater :refer $ updater
             app.schema :as schema
-            reel.util :refer $ listen-devtools-toggle!
+            reel.util :refer $ listen-devtools!
             app.config :as config
             |bottom-tip :default tip!
             |./calcit.build-errors :default build-errors
@@ -566,17 +567,8 @@
             app.browser :as browser
             js-ffi.browser :as host
     'app.page $ %{} 'FileEntry
-      :defs $ {}
-        'base-info $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ def base-info
-            {}
-              :title $ .unwrap $ get config/site :title
-              :icon $ .unwrap $ get config/site :icon
-              :ssr nil
-              :inline-html nil
-          :examples $ []
-          :schema $ quote Dynamic
-        'ssr-processing! $ %{} 'CodeEntry (:doc |)
+      :defs $ {} $ 'ssr-processing!
+        %{} 'CodeEntry (:doc |)
           :code $ quote $ defn ssr-processing! ()
             let
                 reel $ decode-map-as
@@ -584,7 +576,7 @@
                   reel.typed/State app.schema/Action app.schema/Store
                 file |dist/index.html
                 html-content $ respo.memo/with-memo-frame $ fn ()
-                  make-string $ comp-container reel
+                  make-string $ comp-container reel $ fn (_) &unit
                 content $ decode-map-as (fs/readFileSync file |utf8) String
               fs/writeFileSync file $ &str:replace content "|<div class=\"app\"></div>" $ str "|<div class=\"app\" data-ssr=\"true\" >" html-content |</div>
               echo |replaced file
@@ -651,25 +643,6 @@
           :schema $ quote $ Macro Syntax
             -> $ Expr $ Map Tag app.schema/Page
             :capabilities :fs-read
-        'normalize-action $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn normalize-action (op)
-            match op
-              (:push-page idx page)
-                Action :push-page
-                  decode-map-as idx $ Option Number
-                  decode-map-as page 'Tag
-              (:close-page all? idx)
-                Action :close-page (decode-map-as all? 'Bool) (decode-map-as idx 'Number)
-              (:reduce-page) (Action :reduce-page)
-              (:states cursor state)
-                Action :states
-                  decode-map-as cursor $ List Tag
-                  , state
-              (:hydrate-storage data)
-                Action :hydrate-storage $ decode-map-as data 'app.schema/Store
-              _ $ raise |Unknown-application-action
-          :examples $ []
-          :schema $ quote $ Fn AnyEnum (-> app.schema/Action)
         'site-map $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def site-map (load-as-code |data/meta.cirru)
           :examples $ []

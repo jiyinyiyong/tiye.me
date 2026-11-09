@@ -1,6 +1,14 @@
 # Calcit strict-type migration
 
-## Current candidate — Calcit 0.34.2
+## Calcit 0.38.0
+
+The page emits nominal `Action` values. The Reel panel and keyboard shortcut
+send nominal `Control` values through a separate callback. Both reach
+`ResolvedAction`, which keeps application history separate from replay controls.
+The DOM animation callbacks accept Respo elements, and the Escape handler
+accepts a browser event. The real bottom-tip HUD still handles reload messages.
+
+## Historical candidate — Calcit 0.34.2
 
 The CLI/runtime pair is 0.34.2 with formal Reel 0.9.0, Feather 0.6.0,
 UI 0.14.1, Respo 0.19.2, JS-FFI 0.2.10 and transitive Router 0.11.2.
@@ -111,6 +119,6 @@ The per-definition baseline was regenerated after reviewing the moved browser bo
 `yarn check` validates all definitions, complete strict, deprecated APIs and the
 tightened original quality budget. `yarn build` compiles and
 executes the existing generated-JS regression suite before bundling. It covers
-all 23 pages, navigation, modifiers, empty routes, malformed operations, history
+all 23 pages, navigation, modifiers, empty routes, history
 recall/resume/reset and hot-reload replay. This script uses host stubs and HTML
 rendering; it does not prove real-browser DOM effects or screenshot fidelity.

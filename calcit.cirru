@@ -207,19 +207,19 @@
                       space-y 8
                       if (.none? info)
                         <> $ str "|Unknown data: " key
-                        list->
+                        keyed->
                           {} $ :style $ .merge styles/expand
                             {} (:padding "|0 12px") (:overflow |auto)
                           concat
-                            [] $ [] :top $ space-y 48
+                            [] $ keyed-component :top $ space-y 48
                             map-indexed directives $ fn (content-index directive)
-                              hint-fn $ Fn Number app.schema/Content $ -> (List Dynamic)
-                              [] content-index $ render-content directive $ fn (key d!)
+                              hint-fn $ Fn Number app.schema/Content $ -> respo.schema/ChildPair
+                              keyed-element content-index $ render-content directive $ fn (key d!)
                                 hint-fn $ Fn Tag
                                   Fn app.schema/Action $ -> Unit
                                   -> Unit
                                 on-open (Option :some idx) key d!
-                            [] $ [] :bottom $ space-y 120
+                            [] $ keyed-component :bottom $ space-y 120
               , |comp-card
           :examples $ []
           :schema $ quote $ Fn Number Tag
@@ -232,7 +232,7 @@
             -> respo.schema/Component
         'comp-cards $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-cards (router on-open on-close)
-            list->
+            keyed->
               {} $ :style $ .merge styles/row
                 {} (:margin "|auto 0")
                   :width $ str
@@ -242,8 +242,9 @@
                   :transition-duration |300ms
                   :transition-property |width
                   :pointer-events |auto
-              -> router $ map-indexed $ fn (idx key)
-                [] key $ comp-card idx key on-open on-close
+              map-indexed router $ fn (idx key)
+                hint-fn $ Fn Number Tag $ -> respo.schema/ChildPair
+                keyed-component key $ comp-card idx key on-open on-close
           :examples $ []
           :schema $ quote $ Fn (List Tag)
             Fn (Option Number) Tag
@@ -460,7 +461,7 @@
           :require
             respo.util.format :refer $ hsl
             respo-ui.core :as ui
-            respo.core :refer $ defcomp >> <> div button textarea span a list-> create-element img effect-on-mount effect-watch decorate-defcomp
+            respo.core :refer $ defcomp >> <> div button textarea span a keyed-> keyed-element keyed-component create-element img effect-on-mount effect-watch decorate-defcomp
             respo.comp.space :refer $ space-x space-y
             reel.comp.reel :refer $ comp-typed-reel
             app.config :refer $ dev?

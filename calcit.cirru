@@ -71,7 +71,7 @@
                 event $ host/keyboard-event-host raw
               = |Escape $ event :key
           :examples $ []
-          :schema $ quote $ Fn js-ffi.browser/EventHost (-> Bool) (:features :js-ffi)
+          :schema $ quote $ Fn host/EventHost (-> Bool) (:features :js-ffi)
         'fade-in! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn fade-in! (raw)
             let
@@ -139,17 +139,16 @@
         'comp-avatar $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-avatar (on-home)
             decorate-defcomp
-              %{} Component (:name :comp-avatar)
-                :effects $ [] $ effect-bump
-                :listeners $ []
-                :tree $ Option :some $ respo.schema/RenderNode :element
+              Component :name :comp-avatar :effects
+                [] $ effect-bump
+                , :listeners ([]) :tree $ Some $ respo.schema/RenderNode :element
                   div
                     {} (:class-name css-avatar)
                       :on-click $ fn (e d!)
                         hint-fn $ Fn respo.schema/RespoEvent
                           Fn app.schema/Action $ -> Unit
                           -> Unit
-                        on-home (Option :none) :home d!
+                        on-home None :home d!
                     div $ {} $ :class-name css-avatar-outline
               , |comp-avatar
           :examples $ []
@@ -157,14 +156,13 @@
             Fn (Option Number) Tag
               Fn app.schema/Action $ -> Unit
               -> Unit
-            -> respo.schema/Component
+            -> Component
         'comp-card $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn comp-card (idx key on-open on-close)
             decorate-defcomp
-              %{} Component (:name :comp-card)
-                :effects $ [] $ effect-fading
-                :listeners $ []
-                :tree $ Option :some $ respo.schema/RenderNode :element
+              Component :name :comp-card :effects
+                [] $ effect-fading
+                , :listeners ([]) :tree $ Some $ respo.schema/RenderNode :element
                   let
                       info $ find-page key
                       title-text $ match info
@@ -218,7 +216,7 @@
                                 hint-fn $ Fn Tag
                                   Fn app.schema/Action $ -> Unit
                                   -> Unit
-                                on-open (Option :some idx) key d!
+                                on-open (Some idx) key d!
                             [] $ keyed-component :bottom $ space-y 120
               , |comp-card
           :examples $ []
@@ -229,7 +227,7 @@
             Fn Number Bool
               Fn app.schema/Action $ -> Unit
               -> Unit
-            -> respo.schema/Component
+            -> Component
         'comp-cards $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-cards (router on-open on-close)
             keyed->
@@ -253,7 +251,7 @@
             Fn Number Bool
               Fn app.schema/Action $ -> Unit
               -> Unit
-            -> respo.schema/Component
+            -> Component
         'comp-container $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-container (reel on-control!)
             let
@@ -281,14 +279,14 @@
                   comp-empty (empty? router) push-tab
                   comp-cards router push-tab close-tab
                   if dev?
-                    Option :some $ comp-typed-reel (>> states :reel) reel
+                    Some $ comp-typed-reel (>> states :reel) reel
                       {} $ :pointer-events |auto
                       , on-control!
-                    Option :none
+                    , None
           :examples $ []
           :schema $ quote $ Fn (reel.typed/State app.schema/Action app.schema/Store)
             Fn reel.typed/Control $ -> Unit
-            -> respo.schema/Component
+            -> Component
         'comp-empty $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-empty (visible? on-home)
             div
@@ -309,7 +307,7 @@
             Fn (Option Number) Tag
               Fn app.schema/Action $ -> Unit
               -> Unit
-            -> respo.schema/Component
+            -> Component
         'css-avatar $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-avatar
             {}
@@ -373,7 +371,7 @@
           :schema $ quote $ Fn (-> respo.schema/Effect)
         'effect-fading $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn effect-fading ()
-            effect-watch ([]) browser/fade-in! $ Option :some browser/fade-out!
+            effect-watch ([]) browser/fade-in! $ Some browser/fade-out!
           :examples $ []
           :schema $ quote $ Fn (-> respo.schema/Effect)
         'event-has-close-all? $ %{} 'CodeEntry (:doc |)
@@ -489,14 +487,14 @@
         '*reel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *reel (typed-reel/new-reel schema/store)
           :examples $ []
-          :schema $ quote $ Ref (reel.typed/State app.schema/Action app.schema/Store)
+          :schema $ quote $ Ref (reel.typed/State schema/Action schema/Store)
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
             when config/dev? $ println |Dispatch: op
             reset! *reel $ next-reel op
             , &unit
           :examples $ []
-          :schema $ quote $ Fn app.schema/Action (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn schema/Action (-> Unit) (:features :js-ffi)
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! ()
             println "|Running mode:" $ if config/dev? |dev |release
@@ -515,7 +513,7 @@
           :code $ quote $ defn mount-target ()
             .unwrap $ host/query-selector |.app
           :examples $ []
-          :schema $ quote $ Fn (-> js-ffi.browser/DomElementHost) (:features :js-ffi)
+          :schema $ quote $ Fn (-> host/DomElementHost) (:features :js-ffi)
         'next-reel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn next-reel (action)
             match action
@@ -524,8 +522,8 @@
                 typed-reel/record-op updater @*reel op (generate-id!)
                   expect-number |Date.now $ js/Date.now
           :examples $ []
-          :schema $ quote $ Fn app.schema/ResolvedAction
-            -> $ reel.typed/State app.schema/Action app.schema/Store
+          :schema $ quote $ Fn schema/ResolvedAction
+            -> $ reel.typed/State schema/Action schema/Store
             :features :js-ffi
         'on-control! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn on-control! (control)
@@ -599,7 +597,6 @@
             :push-page (Option Number) Tag
             :close-page Bool Number
             :reduce-page
-            :states (List Tag) Dynamic
             :hydrate-storage app.schema/Store
           :examples $ []
           :schema $ quote EnumDef
@@ -632,7 +629,7 @@
           :code $ quote $ defn find-page (key) (get site-map key)
           :examples $ []
           :schema $ quote $ Fn Tag
-            -> $ Option app.schema/Page
+            -> $ Option Page
         'load-as-code $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defmacro load-as-code (file)
             if (string? file)
@@ -642,17 +639,17 @@
               raise |Expected-a-literal-file-path
           :examples $ []
           :schema $ quote $ Macro Syntax
-            -> $ Expr $ Map Tag app.schema/Page
+            -> $ Expr $ Map Tag Page
             :capabilities :fs-read
         'site-map $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def site-map (load-as-code |data/meta.cirru)
           :examples $ []
-          :schema $ quote $ Map Tag app.schema/Page
+          :schema $ quote $ Map Tag Page
         'store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def store
             Store :router ([]) :states $ {}
           :examples $ []
-          :schema $ quote app.schema/Store
+          :schema $ quote Store
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.schema
     'app.style $ %{} 'FileEntry
@@ -702,10 +699,6 @@
           :doc "|Handles state updates based on dispatched operations"
           :code $ quote $ defn updater (store op op-id op-time)
             match op
-              (:states cursor state)
-                assoc store :states $ decode-map-as
-                  update-state-tree (:states store) cursor state
-                  Map Tag Dynamic
               (:push-page idx page)
                 assoc store :router $ match idx
                   (:none)
@@ -720,9 +713,7 @@
                 assoc store :router $ rest $ :router store
               (:hydrate-storage data) data
           :examples $ []
-          :schema $ quote $ Fn app.schema/Store app.schema/Action String Number (-> app.schema/Store)
+          :schema $ quote $ Fn Store Action String Number (-> Store)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.updater
-          :require
-            app.schema :refer $ Store Action
-            respo.cursor :refer $ update-state-tree
+          :require $ app.schema :refer $ Store Action

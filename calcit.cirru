@@ -494,7 +494,7 @@
             reset! *reel $ next-reel op
             , &unit
           :examples $ []
-          :schema $ quote $ Fn schema/Action (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn schema/Action (-> Unit) (:features :io :js-ffi :state)
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! ()
             println "|Running mode:" $ if config/dev? |dev |release
@@ -508,7 +508,7 @@
               , &unit
             println "|App started."
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :io :js-ffi :state)
         'mount-target $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn mount-target ()
             .unwrap $ host/query-selector |.app
@@ -524,13 +524,13 @@
           :examples $ []
           :schema $ quote $ Fn schema/ResolvedAction
             -> $ reel.typed/State schema/Action schema/Store
-            :features :js-ffi
+            :features :js-ffi :state
         'on-control! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn on-control! (control)
             reset! *reel $ next-reel control
             , &unit
           :examples $ []
-          :schema $ quote $ Fn reel.typed/Control (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn reel.typed/Control (-> Unit) (:features :js-ffi :state)
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             if (non-nil? build-errors) (tip! |error build-errors)
@@ -541,7 +541,7 @@
                 tip! |ok~ |Ok
             , &unit
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :io :js-ffi :state)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
             render-with!
@@ -549,7 +549,7 @@
               fn () $ comp-container @*reel on-control!
               , dispatch!
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :io :js-ffi :state)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.main
           :require
@@ -580,7 +580,7 @@
               fs/writeFileSync file $ &str:replace content "|<div class=\"app\"></div>" $ str "|<div class=\"app\" data-ssr=\"true\" >" html-content |</div>
               echo |replaced file
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :io :js-ffi)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.page
           :require
@@ -619,10 +619,14 @@
           :code $ quote $ defunion ResolvedAction app.schema/Action reel.typed/Control
           :examples $ []
           :schema $ quote UnionDef
+        'StateValue $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defunion StateValue Bool Number String Tag (List StateValue) (Map respo.schema/CoordKey StateValue)
+          :examples $ []
+          :schema $ quote UnionDef
         'Store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct Store
             :router $ List Tag
-            :states $ Map Tag Dynamic
+            :states $ Map respo.schema/CoordKey StateValue
           :examples $ []
           :schema $ quote StructDef
         'find-page $ %{} 'CodeEntry (:doc |)

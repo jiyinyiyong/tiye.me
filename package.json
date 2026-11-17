@@ -14,7 +14,7 @@
     "dev": "vite",
     "compile": "calcit calcit.cirru js",
     "check": "calcit calcit.cirru --check-only --all-defs && calcit calcit.cirru fix --workflow strict --verify --format json | jq -e '.data.workflow.status == \"passed\" and .diagnostics == []' && calcit calcit.cirru analyze weak-types --only deprecated-call --summary-only --format json | jq -e '.data.summary.calls == 0' && yarn check:weak-types",
-    "test": "node scripts/check-runtime-smoke.mjs",
+    "test": "calcit calcit.cirru --reload-fn respo.render.html/make-string js && node scripts/check-runtime-smoke.mjs",
     "build": "yarn compile && yarn test && vite build",
     "check:typed": "calcit calcit.cirru --check-only --init-fn app.updater/updater --reload-fn app.main/dispatch!",
     "check:weak-types": "calcit analyze weak-types --only coverage --coverage-level none,partial --format json | jq -e '.data.definitions | length == 0' && calcit analyze weak-types --only schema-dynamic,unresolved-type-slot,code-dynamic,code-nil,unsafe-coerce,data-dynamic --format json | jq -e 'all(.data.definitions[]; .id == \"app.schema/Store\" and (.occurrences | length <= 1 and all(.[]; .kind == \"data-dynamic\")))'"

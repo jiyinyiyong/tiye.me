@@ -287,6 +287,7 @@
           :schema $ quote $ Fn (reel.typed/State app.schema/Action app.schema/Store)
             Fn reel.typed/Control $ -> Unit
             -> Component
+            :features :state
         'comp-empty $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-empty (visible? on-home)
             div
@@ -546,7 +547,7 @@
           :code $ quote $ defn render-app! ()
             render-with!
               respo.ffi.browser/narrow-element $ mount-target
-              fn () $ comp-container @*reel on-control!
+              fn () $ comp-container @*reel $ fn (op) (on-control! op)
               , dispatch!
           :examples $ []
           :schema $ quote $ Fn (-> Unit) (:features :io :js-ffi :state)
@@ -580,7 +581,7 @@
               fs/writeFileSync file $ &str:replace content "|<div class=\"app\"></div>" $ str "|<div class=\"app\" data-ssr=\"true\" >" html-content |</div>
               echo |replaced file
           :examples $ []
-          :schema $ quote $ Fn (-> Unit) (:features :io :js-ffi)
+          :schema $ quote $ Fn (-> Unit) (:features :io :js-ffi :state)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns app.page
           :require

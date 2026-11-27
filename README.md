@@ -8,7 +8,7 @@ http://tiye.me
 
 ### 使用者影响
 
-开发使用正式 Calcit 与 `@calcit/procs` **0.45.1** 和 Reel **0.11.9**、Respo **0.19.18**、UI **0.16.5**、Feather **0.6.13** 和 JS-FFI **0.2.24**。升级后重新安装依赖并构建。首页、卡片导航与页面 HUD 保持原用法。页面直接派发具名 `Action`，Reel 快捷键走独立的具名 `Control` 回调，两路通过 `ResolvedAction` union 进入各自的分支。独立 SSR 辅助函数可以在 Node 中处理构建后的 HTML，服务器渲染以 480 像素作为卡片初始宽度，浏览器继续按视口计算。
+开发使用正式 Calcit 与 `@calcit/procs` **0.46.0** 和 Reel **0.11.10**、Respo **0.20.0**、UI **0.16.6**、Feather **0.6.14** 和 JS-FFI **0.2.26**。升级后重新安装依赖并构建。首页、卡片导航与页面 HUD 保持原用法。页面直接派发具名 `Action`，Reel 快捷键走独立的具名 `Control` 回调，两路通过 `ResolvedAction` union 进入各自的分支。独立 SSR 辅助函数可以在 Node 中处理构建后的 HTML，服务器渲染以 480 像素作为卡片初始宽度，浏览器继续按视口计算。
 
 ### 0.34.2 迁移记录
 
@@ -45,8 +45,8 @@ Workflow https://github.com/mvc-works/calcit-workflow
 
 ### Local development
 
-Use Node.js 24 (see `.node-version`), formal Calcit **0.44.0**, matching
-`@calcit/procs` **0.44.0**, and Yarn 4.18.0.
+Use Node.js 24 (see `.node-version`), formal Calcit **0.46.0**, matching
+`@calcit/procs` **0.46.0**, and Yarn 4.18.0.
 
 ```bash
 caps --strict --ci
@@ -87,7 +87,7 @@ VITE_BASE_URL=https://cos-sh.tiye.me/jiyinyiyong/tiye.me/pr/68/local/1/ yarn bui
 CI uses that preview prefix for PRs and
 `https://cos-sh.tiye.me/jiyinyiyong/tiye.me/` for main pushes. Only frontend
 `dist/` is uploaded to COS; public verification lives in `cos-upload-action`
-v1.2.0. Configure `COS_BUCKET`, `COS_SECRET_ID` and `COS_SECRET_KEY`.
+v1.3.0. Configure `COS_BUCKET`, `COS_SECRET_ID` and `COS_SECRET_KEY`.
 Existing runtime tests and one production build remain enabled. Uploads use
 the built artifact, queue separately from builds, and skip superseded commits.
 
